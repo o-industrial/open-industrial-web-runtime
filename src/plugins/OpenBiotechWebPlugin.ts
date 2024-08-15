@@ -267,7 +267,7 @@ export default class OpenBiotechWebPlugin implements EaCRuntimePlugin {
             },
             Processor: {
               Type: 'Proxy',
-              ProxyRoot: 'https://www.openbiotech.co',
+              ProxyRoot: 'https://www.openindustrial.co',
             } as EaCProxyProcessor,
           },
           msal: {
