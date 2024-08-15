@@ -59,7 +59,7 @@ export default class OpenBiotechWebPlugin implements EaCRuntimePlugin {
             },
             ResolverConfigs: {
               azure: {
-                Hostname: 'open-biotech-web-runtime.azurewebsites.net',
+                Hostname: 'open-industrial-web-runtime.azurewebsites.net',
               },
               dev: {
                 Hostname: 'localhost',
@@ -70,10 +70,10 @@ export default class OpenBiotechWebPlugin implements EaCRuntimePlugin {
                 Port: config.Server.port || 8000,
               },
               eac: {
-                Hostname: 'openbiotech.co',
+                Hostname: 'openindustrial.co',
               },
               runtime: {
-                Hostname: 'runtime.openbiotech.co',
+                Hostname: 'runtime.openindustrial.co',
               },
             },
             ModifierResolvers: {
@@ -156,8 +156,8 @@ export default class OpenBiotechWebPlugin implements EaCRuntimePlugin {
         Applications: {
           assets: {
             Details: {
-              Name: 'Open Biotech Assets',
-              Description: 'The static assets for use with Open Biotech.',
+              Name: 'Open Industrial Assets',
+              Description: 'The static assets for use with Open Industrial.',
             },
             ModifierResolvers: {},
             Processor: {
@@ -332,8 +332,8 @@ export default class OpenBiotechWebPlugin implements EaCRuntimePlugin {
           },
           oBiotechDataApi: {
             Details: {
-              Name: 'Open Biotech Data API',
-              Description: 'The local Data API calls for Open Biotech',
+              Name: 'Open Industrial Data API',
+              Description: 'The local Data API calls for Open Industrial',
             },
             ModifierResolvers: {
               jwtValidate: {
@@ -348,8 +348,8 @@ export default class OpenBiotechWebPlugin implements EaCRuntimePlugin {
           },
           oBiotechEaCApi: {
             Details: {
-              Name: 'Open Biotech EaC API',
-              Description: 'The local EaC API calls for Open Biotech',
+              Name: 'Open Industrial EaC API',
+              Description: 'The local EaC API calls for Open Industrial',
             },
             ModifierResolvers: { currentEaC: { Priority: 9000 } },
             Processor: {

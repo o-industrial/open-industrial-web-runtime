@@ -49,7 +49,7 @@ export function APIsForm(props: APIsFormProps) {
             for='device'
             class='block uppercase tracking-wide font-bold mb-0 text-xl'
           >
-            Open Biotech Data APIs
+            Open Industrial Data APIs
           </label>
 
           <p class='block text-md mb-8'>

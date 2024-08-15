@@ -14,8 +14,8 @@ export default class OpenBiotechLicensingPlugin implements EaCRuntimePlugin {
         Applications: {
           licensingApi: {
             Details: {
-              Name: 'Open Biotech Licensing API',
-              Description: 'The licensing API for Open Biotech.',
+              Name: 'Open Industrial Licensing API',
+              Description: 'The licensing API for Open Industrial.',
             },
             ModifierResolvers: {},
             Processor: {
