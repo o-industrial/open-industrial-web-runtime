@@ -72,7 +72,7 @@ export default function MainLayout({
         <meta charset='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
 
-        <title>Open Biotech</title>
+        <title>Open Industrial</title>
 
         <link
           rel='shortcut icon'

@@ -60,7 +60,7 @@ export default class OpenIndustrialWebPlugin implements EaCRuntimePlugin {
             },
             ResolverConfigs: {
               azure: {
-                Hostname: 'open-biotech-web-runtime.azurewebsites.net',
+                Hostname: 'open-industrial-web-runtime.azurewebsites.net',
               },
               dev: {
                 Hostname: 'localhost',
@@ -74,7 +74,7 @@ export default class OpenIndustrialWebPlugin implements EaCRuntimePlugin {
                 Hostname: 'openindustrial.co',
               },
               runtime: {
-                Hostname: 'runtime.openbiotech.co',
+                Hostname: 'runtime.openindustrial.co',
               },
               www: {
                 Hostname: 'www.openbiotech.co',
@@ -160,8 +160,8 @@ export default class OpenIndustrialWebPlugin implements EaCRuntimePlugin {
         Applications: {
           assets: {
             Details: {
-              Name: 'Open Biotech Assets',
-              Description: 'The static assets for use with Open Biotech.',
+              Name: 'Open Industrial Assets',
+              Description: 'The static assets for use with Open Industrial.',
             },
             ModifierResolvers: {},
             Processor: {
@@ -336,8 +336,8 @@ export default class OpenIndustrialWebPlugin implements EaCRuntimePlugin {
           },
           oBiotechDataApi: {
             Details: {
-              Name: 'Open Biotech Data API',
-              Description: 'The local Data API calls for Open Biotech',
+              Name: 'Open Industrial Data API',
+              Description: 'The local Data API calls for Open Industrial',
             },
             ModifierResolvers: {
               jwtValidate: {
@@ -352,8 +352,8 @@ export default class OpenIndustrialWebPlugin implements EaCRuntimePlugin {
           },
           oBiotechEaCApi: {
             Details: {
-              Name: 'Open Biotech EaC API',
-              Description: 'The local EaC API calls for Open Biotech',
+              Name: 'Open Industrial EaC API',
+              Description: 'The local EaC API calls for Open Industrial',
             },
             ModifierResolvers: { currentEaC: { Priority: 9000 } },
             Processor: {
@@ -388,38 +388,61 @@ export default class OpenIndustrialWebPlugin implements EaCRuntimePlugin {
           'local:apps/assets': {
             Type: 'Local',
             FileRoot: './apps/assets/',
+            WorkerPath: import.meta.resolve(
+              '@fathym/eac/runtime/src/runtime/dfs/workers/EaCLocalDistributedFileSystemWorker.ts',
+            ),
           } as EaCLocalDistributedFileSystem,
           'local:apps/api/data': {
             Type: 'Local',
             FileRoot: './apps/api/data/',
             DefaultFile: 'index.ts',
             Extensions: ['ts'],
+            WorkerPath: import.meta.resolve(
+              '@fathym/eac/runtime/src/runtime/dfs/workers/EaCLocalDistributedFileSystemWorker.ts',
+            ),
           } as EaCLocalDistributedFileSystem,
           'local:apps/api/eac': {
             Type: 'Local',
             FileRoot: './apps/api/eac/',
             DefaultFile: 'index.ts',
             Extensions: ['ts'],
+            WorkerPath: import.meta.resolve(
+              '@fathym/eac/runtime/src/runtime/dfs/workers/EaCLocalDistributedFileSystemWorker.ts',
+            ),
           } as EaCLocalDistributedFileSystem,
           'local:apps/components': {
             Type: 'Local',
             FileRoot: './apps/components/',
+            Extensions: ['tsx'],
+            WorkerPath: import.meta.resolve(
+              '@fathym/eac/runtime/src/runtime/dfs/workers/EaCLocalDistributedFileSystemWorker.ts',
+            ),
           } as EaCLocalDistributedFileSystem,
           'local:apps/dashboard': {
             Type: 'Local',
             FileRoot: './apps/dashboard/',
             DefaultFile: 'index.tsx',
             Extensions: ['tsx'],
+            WorkerPath: import.meta.resolve(
+              '@fathym/eac/runtime/src/runtime/dfs/workers/EaCLocalDistributedFileSystemWorker.ts',
+            ),
           } as EaCLocalDistributedFileSystem,
           'local:apps/islands': {
             Type: 'Local',
             FileRoot: './apps/islands/',
+            Extensions: ['tsx'],
+            WorkerPath: import.meta.resolve(
+              '@fathym/eac/runtime/src/runtime/dfs/workers/EaCLocalDistributedFileSystemWorker.ts',
+            ),
           } as EaCLocalDistributedFileSystem,
           'esm:fathym_open_biotech_atomic': {
             Type: 'ESM',
             Root: '@o-biotech/atomic/',
             EntryPoints: ['mod.ts'],
             IncludeDependencies: true,
+            WorkerPath: import.meta.resolve(
+              '@fathym/eac/runtime/src/runtime/dfs/workers/EaCESMDistributedFileSystemWorker.ts',
+            ),
           } as EaCESMDistributedFileSystem,
         },
         Modifiers: {

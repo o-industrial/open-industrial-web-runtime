@@ -72,7 +72,7 @@ export default function Index({ Data }: PageProps<HomePageData>) {
         explainerData.Title = 'Cloud Configuration';
 
         explainerData.Descriptions = [
-          `Establish an Azure cloud connection so OpenIndustrial can set up a complete IoT cloud infrastructure for collecting, processing, exploring and sharing device data.`,
+          `Establish an Azure cloud connection so OpenBiotech can set up a complete IoT cloud infrastructure for collecting, processing, exploring and sharing device data.`,
         ];
 
         explainerData.VideoURL = 'https://www.youtube.com/embed/tprpd02a0mg?si=bnXDMsuj1MWdcCk4';
@@ -109,7 +109,7 @@ export default function Index({ Data }: PageProps<HomePageData>) {
               <div class='flex-none md:w-100 px-5 py-10 mx-5 md:py-10 md:px-20 md:my-10 text-2xl md:text-3xl'>
                 <h1 class='text-[#4a918e]'>Welcome to</h1>
 
-                <h1 class=''>Open Biotech</h1>
+                <h1 class=''>Open Industrial</h1>
               </div>
 
               <div class='flex-1 px-5 py-10 mx-5 md:py-10 md:px-20 md:my-10'>
