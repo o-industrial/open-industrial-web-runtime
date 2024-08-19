@@ -8,7 +8,7 @@ import {
 } from '@o-biotech/atomic';
 import ProfileMenu from '../../islands/common/ProfileMenu.tsx';
 import { SetupPhaseTypes } from '../../../src/state/SetupPhaseTypes.ts';
-import { Logo } from '../atoms/Logo.tsx';
+import { IndustrialLogo } from '../atoms/IndustrialLogo.tsx';
 
 export type BiotechHeaderProps = HeaderProps & {
   currentUrl: URL;
@@ -32,7 +32,7 @@ export function BiotechHeader(props: BiotechHeaderProps) {
           href='/'
           actionStyle={ActionStyleTypes.Link | ActionStyleTypes.Rounded}
         >
-          <Logo />
+          <IndustrialLogo />
         </Action>
       }
       nav={
