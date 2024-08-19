@@ -179,18 +179,18 @@ export function establishOpenBiotechWebStateMiddleware(): EaCRuntimeHandler<Open
       const licRes = await parentEaCSvc.GetLicense(
         ctx.Runtime.EaC.EnterpriseLookup!,
         ctx.State.Username,
-        'o-industrial',
+        'o-biotech',
       );
 
       if (licRes.Active) {
         ctx.State.UserLicenses = {
-          'o-industrial': licRes.License,
+          'o-biotech': licRes.License,
         };
       }
     }
 
     if (ctx.State.Username) {
-      const providerLookup = 'o-industrial-github-app';
+      const providerLookup = 'o-biotech-github-app';
 
       const provider = ctx.Runtime.EaC!.Providers![providerLookup]!;
 

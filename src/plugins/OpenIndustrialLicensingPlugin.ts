@@ -20,14 +20,14 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
             ModifierResolvers: {},
             Processor: {
               Type: 'Stripe',
-              DatabaseLookup: 'o-industrial',
-              LicenseLookup: 'o-industrial',
+              DatabaseLookup: 'o-biotech',
+              LicenseLookup: 'o-biotech',
             } as EaCStripeProcessor,
           },
         },
         Licenses: {
-          'o-industrial': {
-            DatabaseLookup: 'o-industrial',
+          'o-biotech': {
+            DatabaseLookup: 'o-biotech',
             Details: {
               Name: 'OpenBiotech',
               Description: 'The main access license for OpenBiotech',
