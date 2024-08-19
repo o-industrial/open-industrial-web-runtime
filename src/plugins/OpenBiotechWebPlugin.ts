@@ -70,7 +70,7 @@ export default class OpenBiotechWebPlugin implements EaCRuntimePlugin {
                 Port: config.Server.port || 8000,
               },
               eac: {
-                Hostname: 'openindustrial.co',
+                Hostname: 'www.openindustrial.co',
               },
               runtime: {
                 Hostname: 'runtime.openindustrial.co',
