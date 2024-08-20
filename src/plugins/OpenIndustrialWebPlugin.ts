@@ -70,15 +70,9 @@ export default class OpenIndustrialWebPlugin implements EaCRuntimePlugin {
                 Hostname: '127.0.0.1',
                 Port: config.Server.port || 8000,
               },
-              eac: {
+              www: {
                 Hostname: 'www.openindustrial.co',
               },
-              runtime: {
-                Hostname: 'runtime.openindustrial.co',
-              },
-              // www: {
-              //   Hostname: 'www.openbiotech.co',
-              // },
             },
             ModifierResolvers: {
               keepAlive: {
