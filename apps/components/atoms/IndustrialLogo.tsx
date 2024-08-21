@@ -3,7 +3,7 @@ import { JSX } from 'preact';
 
 export type LogoProps = JSX.HTMLAttributes<SVGSVGElement>;
 
-export function IndustrialLogo(_props: LogoProps): JSX.Element {
+export function IndustrialLogo(props: LogoProps): JSX.Element {
   return (
     <svg
       version='1.1'
