@@ -265,7 +265,7 @@ export default class OpenIndustrialWebPlugin implements EaCRuntimePlugin {
             },
             Processor: {
               Type: 'Proxy',
-              ProxyRoot: 'a90dbdb984cd-shared.lowcodeunit.com',
+              ProxyRoot: 'https://a90dbdb984cd-shared.lowcodeunit.com',
             } as EaCProxyProcessor,
           },
           msal: {
