@@ -49,7 +49,7 @@ export default function HotFlowInput(props: HotFlowInputProps) {
               href='https://github.com/apps/open-biotech-web-manager'
               target='_blank'
             >
-              OpenBiotech App
+              Device Flow App
             </Action>
           </p>
         </div>
