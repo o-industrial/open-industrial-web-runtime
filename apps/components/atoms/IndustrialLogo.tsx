@@ -1,5 +1,5 @@
 import { JSX } from 'preact';
-//import { classSet } from '@o-biotech/atomic';
+import { classSet } from '@o-biotech/atomic';
 
 export type LogoProps = JSX.HTMLAttributes<SVGSVGElement>;
 
@@ -15,6 +15,11 @@ export function IndustrialLogo(props: LogoProps): JSX.Element {
       viewBox='0 0 356 68'
       style='enable-background:new 0 0 356 68;'
       xml:space='preserve'
+      {...props}
+      class={classSet(
+        ['-:w-48 -:sm:w-32 -:fill-black -:dark:fill-white'],
+        props,
+      )}
     >
       {
         /* <style type="text/css">
