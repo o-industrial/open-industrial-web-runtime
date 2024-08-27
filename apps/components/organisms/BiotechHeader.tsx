@@ -28,7 +28,7 @@ export function BiotechHeader(props: BiotechHeaderProps) {
   return (
     <Header
       logo={
-        <Action class= 'w-[250px]'
+        <Action //class= 'w-[250px]'
           href='/'
           actionStyle={ActionStyleTypes.Link | ActionStyleTypes.Rounded}
         >
