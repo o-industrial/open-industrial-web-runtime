@@ -12,7 +12,7 @@ export function IndustrialLogo(props: LogoProps): JSX.Element {
       xmlns:xlink='http://www.w3.org/1999/xlink'
       x='0px'
       y='0px'
-      viewBox='0 0 356 68'
+      viewBox='0 0 300 68'
       style='enable-background:new 0 0 356 68;'
       xml:space='preserve'
       {...props}
