@@ -2,6 +2,8 @@ import { JSX } from 'preact';
 import { Action, CopyInput, Display } from '@o-biotech/atomic';
 import APIDevelopForm from '../../islands/organisms/data/api-develop-form.tsx';
 
+export const IsIsland = true;
+
 export type StorageAPIsDisplayProps = {
   hasStorageCold: boolean;
 
@@ -14,16 +16,16 @@ export type StorageAPIsDisplayProps = {
 
 export function StorageAPIsDisplay(props: StorageAPIsDisplayProps) {
   const { hasStorageCold, hasStorageHot, hasStorageWarm, jwt, ...divProps } = props;
-
+  
   return (
     <div {...divProps}>
       <h1 class='text-3xl max-w-[500px] mx-auto'>Storage APIs</h1>
-
+      
       <p class='text-lg max-w-[500px] mx-auto'>
         Storage APIs are used to work with your data across your cold, warm, and hot storage flows.
         Use the following JWT to access your APIs.
       </p>
-
+      
       <div class='mb-16 mt-8 max-w-sm mx-auto'>
         <label
           for='connStr'
@@ -36,7 +38,7 @@ export function StorageAPIsDisplay(props: StorageAPIsDisplayProps) {
 
         <CopyInput id='jwt' name='jwt' type='text' class='mt-2' value={jwt} />
       </div>
-
+      
       <div class='flex flex-col md:flex-row gap-4 my-8'>
         {hasStorageCold && (
           <Display class='flex-1 p-2 bg-slate-50 dark:bg-slate-800 shadow-slate-500 dark:shadow-black'>
@@ -47,7 +49,7 @@ export function StorageAPIsDisplay(props: StorageAPIsDisplayProps) {
               timeframe, in CSV, JSONLines, and JSON format.
             </p>
 
-            <APIDevelopForm apiPath='/api/o-biotech/data/cold/execute' // jwt={jwt}
+            <APIDevelopForm apiPath='/api/o-biotech/data/cold/execute'  jwt={jwt}
             />
 
             <div class='w-full mb-8 px-8'>
@@ -74,7 +76,7 @@ export function StorageAPIsDisplay(props: StorageAPIsDisplayProps) {
               allowing for the development of complex data management downstream.
             </p>
 
-            <APIDevelopForm apiPath='/api/o-biotech/data/warm/explorer' // jwt={jwt}
+            <APIDevelopForm apiPath='/api/o-biotech/data/warm/explorer'  jwt={jwt}
             />
 
             <div class='w-full mb-8 px-8'>
@@ -88,7 +90,7 @@ export function StorageAPIsDisplay(props: StorageAPIsDisplayProps) {
             </div>
           </Display>
         )}
-
+        
         {hasStorageHot && (
           <Display class='flex-1 p-2 bg-slate-50 dark:bg-slate-800 shadow-slate-500 dark:shadow-black'>
             <h2 class='text-xl'>Hot Storage APIs</h2>
@@ -98,7 +100,7 @@ export function StorageAPIsDisplay(props: StorageAPIsDisplayProps) {
               create custom data ingestion and processing logic.
             </p>
 
-            <APIDevelopForm apiPath='/api/o-biotech/data/hot/connect' // jwt={jwt}
+            <APIDevelopForm apiPath='/api/o-biotech/data/hot/connect' jwt={jwt}
             />
 
             <div class='w-full mb-8 px-8'>

@@ -8,7 +8,7 @@ export const IsIsland = true;
 export type APIDevelopFormProps = JSX.HTMLAttributes<HTMLFormElement> & {
   apiPath: string;
 
-  jwt?: string;
+  jwt: string;
 };
 
 export default function APIDevelopForm(props: APIDevelopFormProps) {
@@ -21,7 +21,7 @@ export default function APIDevelopForm(props: APIDevelopFormProps) {
   }
 
   const apiPath = new URL(props.apiPath, location.origin);
-
+  
   return (
     <div class='w-full p-3'>
       <div class='w-full mb-8'>

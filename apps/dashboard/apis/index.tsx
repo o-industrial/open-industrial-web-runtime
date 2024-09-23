@@ -14,6 +14,8 @@ interface APIsPageData {
   jwt: string;
 }
 
+export const IsIsland = true;
+
 export const handler: EaCRuntimeHandlerResult<
   OpenBiotechWebState,
   APIsPageData
@@ -32,7 +34,6 @@ export const handler: EaCRuntimeHandlerResult<
       hasStorageWarm: !!ctx.State.Cloud.Storage?.Warm,
       jwt: jwt,
     };
-
     return ctx.Render(data);
   },
 };
