@@ -9,7 +9,7 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
 
   public Setup(_config: EaCRuntimeConfig): Promise<EaCRuntimePluginConfig> {
     const pluginConfig: EaCRuntimePluginConfig = {
-      Name: 'OpenBiotechLicensingPlugin',
+      Name: 'OpenIndustrialLicensingPlugin',
       EaC: {
         Applications: {
           licensingApi: {
@@ -20,17 +20,17 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
             ModifierResolvers: {},
             Processor: {
               Type: 'Stripe',
-              DatabaseLookup: 'o-biotech',
-              LicenseLookup: 'o-biotech',
+              DatabaseLookup: 'o-industrial',
+              LicenseLookup: 'o-industrial',
             } as EaCStripeProcessor,
           },
         },
         Licenses: {
-          'o-biotech': {
-            DatabaseLookup: 'o-biotech',
+          'o-industrial': {
+            DatabaseLookup: 'o-industrial',
             Details: {
-              Name: 'OpenBiotech',
-              Description: 'The main access license for OpenBiotech',
+              Name: 'OpenIndustrial',
+              Description: 'The main access license for OpenIndustrial',
               Enabled: true,
               PublishableKey: Deno.env.get('STRIPE_PUBLISHABLE_KEY')!,
               SecretKey: Deno.env.get('STRIPE_SECRET_KEY')!,

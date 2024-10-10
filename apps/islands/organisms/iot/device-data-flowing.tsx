@@ -37,8 +37,9 @@ export default function DeviceDataFlowing(props: DeviceDataFlowingProps) {
 
   useEffect(() => {
     const checkForDeviceData = async (): Promise<boolean> => {
-      const dataUrl = `${location.origin}/api/o-biotech/data/warm/explorer`;
+      const dataUrl = `${location.origin}/api/o-industrial/data/warm/explorer`;
 
+      debugger;
       const response = await fetch(dataUrl, {
         headers: {
           Authorization: `Bearer ${props.jwt}`,
