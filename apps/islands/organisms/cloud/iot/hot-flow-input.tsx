@@ -73,7 +73,7 @@ export default function HotFlowInput(props: HotFlowInputProps) {
         </div>
       </>
     )
-    : <GitHubAccessAction>Sign in to GitHub and Install App</GitHubAccessAction>;
+    : <GitHubAccessAction>Sign in to GitHub</GitHubAccessAction>;
   return (
     <div>
       <div>
