@@ -46,7 +46,7 @@ export default function HotFlowInput(props: HotFlowInputProps) {
             <Action
               actionStyle={ActionStyleTypes.Link | ActionStyleTypes.Rounded}
               class='inline-block text-blue-500 hover:text-white py-0 px-1'
-              href='https://github.com/apps/open-biotech-web-manager'
+              href='https://github.com/apps/open-industrial-web-manager'
               target='_blank'
             >
               Device Flow App
@@ -73,7 +73,7 @@ export default function HotFlowInput(props: HotFlowInputProps) {
         </div>
       </>
     )
-    : <GitHubAccessAction>Sign in to GitHub</GitHubAccessAction>;
+    : <GitHubAccessAction>Sign in to GitHub and Install App</GitHubAccessAction>;
   return (
     <div>
       <div>
