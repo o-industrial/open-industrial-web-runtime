@@ -16,8 +16,6 @@ interface APIsPageData {
   jwt: string;
 }
 
-export const IsIsland = true;
-
 export const handler: EaCRuntimeHandlerResult<
   OpenBiotechWebState,
   APIsPageData
