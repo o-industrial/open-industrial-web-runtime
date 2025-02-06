@@ -31,7 +31,6 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ env.AZURE_CREDENTIALS }}
-          allow-no-subscriptions: true
 
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v1
