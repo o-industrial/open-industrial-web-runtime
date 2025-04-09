@@ -1,0 +1,120 @@
+# Command the Simulation
+
+You’ve composed structure. Now it’s time to influence behavior.
+
+This is your first outbound **Impulse**—and the moment the system starts evolving with you.
+
+> _"Impulses let you trigger change. When I see the system shift, I raise a Signal to adapt."_ —Azi
+
+In this section, you’ll send a command to the simulation that updates a virtual device’s configuration. Specifically, you'll modify its `CapturedSensors` to include `Humidity`. Once that change lands, the device begins streaming new data. Azi notices the difference, raises a **Signal**, and asks if this new structure should become part of your shared schema.
+
+This is how execution becomes evolution.
+
+---
+
+## What’s an Impulse? (vs. a Signal)
+
+Think of **Impulses** as intentional triggers. You send them to provoke a system change.
+
+**Signals**, on the other hand, are how the system talks back—surfacing observed changes and asking what to do next.
+
+Here’s the loop you’re stepping into:
+1. **Impulse out** — you change device behavior
+2. **Structure change** — new fields begin streaming in
+3. **Signal raised** — Azi detects the change and proposes an update
+
+This isn’t just messaging. It’s collaboration.
+
+---
+
+## Update the Simulation
+
+Let’s activate the humidity sensor.
+
+This change is done by updating the `CapturedSensors` list of the simulated device.
+
+### Payload
+```json
+{
+  "CapturedSensors": ["Temperature", "Humidity"]
+}
+```
+
+This tells the simulation: start including `humidity` in the device’s output.
+
+### Send It Through Azi
+- Open Azi’s control interface
+- Paste in the JSON
+- Click **Send Impulse**
+
+> _💡 Azi Tip:_ “I’ll route this to the simulation agent. If it changes what I see, I’ll let you know.”
+
+### Or Use the CLI
+```bash
+oictl impulse send --target device01 --payload '{"CapturedSensors": ["Temperature", "Humidity"]}'
+```
+
+### Or Use the API
+```http
+POST /api/impulse
+{
+  "target": "device01",
+  "payload": {
+    "CapturedSensors": ["Temperature", "Humidity"]
+  }
+}
+```
+
+---
+
+## The System Responds
+
+The moment your Impulse is received:
+- The device updates its configuration
+- Impulses now include a new `humidity` field:
+
+```json
+{
+  "temperature": 21.4,
+  "humidity": 48.2
+}
+```
+
+Azi notices.
+
+She highlights the shift and raises a **Signal**:
+> _"I see a new field. Should we promote it?"_
+
+That’s not just monitoring—it’s participation.
+
+---
+
+## Why This Matters
+
+You’re not configuring a dashboard.
+You’re shaping a system.
+
+This is your first full loop of **schema-led execution**:
+- **Intent** via Impulse
+- **Adaptation** via observed structure
+- **Collaboration** via Azi’s raised Signal
+
+The execution surface just became two-way.
+
+---
+
+## Next Step: Promote the New Field
+
+You just changed the system—from the outside in.
+
+By updating the sensors, you didn’t just toggle a setting. You reshaped the stream. And Azi caught it.
+
+She saw a new field. She raised a Signal. Now she’s asking:  
+> _“Should we make this part of how I understand the world?”_
+
+This isn’t a new document. It’s the next beat in the same conversation.
+
+In the next step, you’ll walk side-by-side with Azi to promote `humidity`—turning a raw reading into a first-class field in your evolving schema. Once you do, it’s not just data anymore. It’s shared meaning.
+
+Let’s go teach her.
+

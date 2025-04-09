@@ -25,6 +25,8 @@ function loadDocsConfig(): Promise<DocsConfig> {
           { Title: 'Ask a Question', Path: '/meet-azi/ask-a-question' },
           { Title: 'Reference Data', Path: '/meet-azi/reference-data' },
           { Title: 'Composite Schema', Path: '/meet-azi/composite-schema' },
+          { Title: 'Command the Sim', Path: '/meet-azi/command-the-sim' },
+          { Title: 'Teach', Path: '/meet-azi/teach' },
         ],
       },
     ],
