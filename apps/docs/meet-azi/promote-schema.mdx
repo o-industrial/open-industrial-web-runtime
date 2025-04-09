@@ -1,0 +1,108 @@
+# Promote Your First Schema
+
+You just hit **Promote Schema**. That wasn’t a setting—it was a **Signal** in your system.
+
+You told Azi: “This structure matters.” That signal now echoes across your execution surface—informing validation, guiding suggestions, and shaping how your system adapts.
+
+Let’s walk through what you’ve unlocked—and how to build on it right now.
+
+---
+
+### 🧠 Step 1: See What You Just Promoted
+
+Azi now treats this structure as canonical. That means she’s no longer inferring—she’s understanding. This schema is now a recognized entity in your system, with a name, a version, and a purpose.
+
+> 🖼️ *Screenshot Placeholder: Schema Summary Card – versioned name, field list, edit option*
+
+👆 **What you do:**
+- Click **Edit** to adjust field names, data types, or add descriptions
+- Use the **Metadata** tab to annotate each field with domain-specific context: what it represents, why it matters, or what values to expect
+
+> ✨ _Try it now: Add a description to `status_code` like “Device health indicator, where 0 = OK and 1 = Warning.”_
+
+Adding metadata helps Azi:
+- Answer questions more precisely
+- Offer smarter suggestions for views, filters, and agents
+- Explain results in your own domain terms
+
+✳️ This is your first formal schema. Versioned. Trustable. Shared—and ready to evolve.
+
+---
+
+### ✳️ Step 2: What Promotion Unlocks
+
+Promoting a schema turns draft understanding into operational truth.
+
+> 🖼️ *Screenshot Placeholder: Promote Confirmation Modal with schema name + summary*
+
+Now Azi will:
+- Validate incoming data against this schema
+- Detect structural drift over time
+- Suggest visualizations, logic flows, and monitoring options
+
+📌 Schema is now language—something your system can speak, verify, and act upon.
+
+---
+
+👨‍🔬 **Try This: Trigger a Schema Violation**
+
+Open the **HTTP Interface Form** and submit data with a mismatched field—like sending `timestamp: "yesterday"` instead of an ISO date.
+
+> 🖼️ *Screenshot Placeholder: HTTP form with invalid payload and Azi response*
+
+Azi will surface the issue immediately:
+- Highlighting the violation in the payload
+- Referencing the promoted schema
+- Offering guidance (e.g., "Expected a valid ISO date")
+
+💡 *Azi Tip:* "If something breaks schema, I’ll let you know right away. That’s how we keep execution clean—and learning sharp."
+
+---
+
+### 🔗 Step 3: Explore Next Actions
+
+With your schema promoted, you’ll see new options immediately:
+
+> 🖼️ *Screenshot Placeholder: "What can I do next?" panel with Suggested View, New Agent, Monitor Drift options*
+
+👆 **What you do:**
+- Click **Suggest a View** to explore chart and table layouts
+- Click **New Agent** to define logic powered by this shape
+- Click **Monitor Stream** to start watching for anomalies or drift
+
+💡 *Azi Tip:* “Schemas help me reason about change. Want me to alert you if this structure shifts?”
+
+---
+
+### 💬 Step 4: Ask a Real Question
+
+Now that Azi understands the shape of your world, ask a question.
+
+> “What’s the average pressure on Line B this week?”
+
+✅ If you got an answer back—congrats. Schema promotion worked.
+
+👆 **What happens:**
+- Azi maps `pressure_kpa` as a metric
+- Filters by `line == "B"`
+- Time-slices using `timestamp`
+
+She responds—like someone fluent in your domain.
+
+---
+
+### ✨ What You Just Did
+
+🎯 Your next moves:
+- Save a visual view
+- Define a new agent
+- Watch for structure drift
+- Or just keep streaming—Azi’s learning every second
+
+📌 Why this matters:
+- You formalized structure without writing a line of code
+- Azi’s no longer guessing—she’s interpreting
+- You’ve created a foundation for execution, not just insight
+
+**Let’s keep going. Azi’s ready.**
+

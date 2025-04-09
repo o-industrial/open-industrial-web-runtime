@@ -1,0 +1,128 @@
+# Build Your First Composite Schema
+
+You’ve already promoted a few schemas—that’s a solid milestone. Azi now understands the key structures flowing through your environment. But what if you want to reason *across* devices, not just within them?
+
+That’s where **Composite Schemas** come in.
+
+> _"A Composite Schema is how you and I define higher-order meaning together. We take what we’ve learned, and combine it into something smarter."_ —Azi
+
+## What’s a Composite Schema?
+
+A Composite Schema is a structure that groups multiple promoted schemas into one. Think of it like a `MachineSnapshot`: a single, cohesive model that lets you see all relevant data for a machine—temperature, pressure, motor state, metadata—aligned by time and ID.
+
+It unlocks:
+- Cross-device understanding
+- Time-aligned correlation
+- Grouped insights with no ETL or joins
+
+Instead of modeling your world from scratch, you build meaning by combining what you and Azi already know.
+
+## Let’s Build One Together
+
+This is where the system starts to feel real. You’re not writing logic—you’re designing insight.
+
+### 1. Open the Impulse Stream You Started With
+
+![Azi’s impulse stream interface showing active stream and structure preview](#screenshot-placeholder)
+> _Caption: “Azi detects structure and patterns from your impulse stream in real time.”_
+Head to the impulse stream you’ve been tracking—maybe `sensorReading`, `lineStatus`, or something you promoted earlier.
+
+_Azi is already listening. She’s noticed repeated keys, consistent structure, and data flow._
+
+### 2. Pin a Promoted Schema from the Reference Data Panel
+
+![Reference Data panel with pinned schema](#screenshot-placeholder)
+> _Caption: “Pin promoted schemas that contain metadata or supporting context.”_
+Click into the **Reference Data** tab. This shows any schemas you’ve promoted from static sources (e.g. `deviceInfo`, `shiftMetadata`).
+
+Pin the one that matches your impulse stream by a shared key—often `deviceId`, `timestamp`, or both.
+
+> _Azi Tip:_ “Schemas that align on time and ID are great candidates for Composite Schema composition.”
+
+### 3. Click “Compose New Schema” → Name It `MachineSnapshot`
+
+![Schema composition panel with 'MachineSnapshot'](#screenshot-placeholder)
+> _Caption: “Create your first Composite Schema—Azi suggests alignments based on shared keys.”_
+You’ll see an action bar option to **Compose New Schema**.
+
+Give it a name that reflects the grouped structure—`MachineSnapshot` is a good starting point.
+
+Azi will immediately suggest candidate joins:
+
+> _"These schemas share `deviceId` and `timestamp`. Should I align them that way?"_
+
+Say yes. Or tweak the alignment keys if you prefer.
+
+### 4. (Optional) Set a Tumbling Window
+
+![Tumbling window input field](#screenshot-placeholder)
+> _Caption: “Use tumbling windows to group data over time—perfect for aligning bursty signals.”_
+If your events don’t arrive in perfect sync, use a **tumbling window** to bucket them by time.
+
+For example, setting a window of `1s` tells Azi to group all data that arrives within the same one-second interval.
+
+It’s perfect for smoothing sensor data, aligning bursty signals, and ensuring structure even in noisy environments.
+
+> _💡 Azi Tip:_ “Tumbling windows help me reason in time. Without them, things get fuzzy.”
+
+### 5. Review the Draft Schema
+
+![Schema preview UI with merged fields](#screenshot-placeholder)
+> _Caption: “Preview and refine the merged schema before you promote it.”_
+Azi generates a preview of the combined schema—fields from both sources, aligned and grouped.
+
+- You’ll see merged properties like `temperature`, `pressure`, `deviceType`, `shiftId`
+- You can rename fields or remove any you don’t want
+
+It’s your system. Azi just builds the first draft.
+
+### 6. Click Promote
+
+![Promoted Composite Schema view](#screenshot-placeholder)
+> _Caption: “Once promoted, your Composite Schema becomes a reusable model—ask questions, build views, and evolve it over time.”_
+This step turns your Composite Schema into a reusable model.
+
+Now you can:
+- Ask: _“What happened during the last pressure spike?”_
+- Visualize: grouped timelines that span multiple inputs
+- Save: surfaces that roll up complex behavior into a single view
+
+Azi treats the Composite Schema just like any other—only smarter.
+
+---
+
+## Why It Matters
+
+Composite Schemas let you:
+- **Compose without coding**: There’s no SQL, no join statements, no pipelines
+- **Align streams over time**: With tumbling windows, you get structure without rigid sync
+- **Model behavior, not just data**: The system adapts as you group meaning together
+
+You’re not describing your system to Azi—you’re designing how she understands it.
+
+---
+
+## Next Step: Evolve It Midstream
+
+Once you’ve built a Composite Schema, you don’t have to start over when things change.
+
+Try saying:
+> _“Let’s extend MachineSnapshot with a new field.”_
+
+Azi will walk you through adapting the schema:
+- Add a new sensor
+- Bring in a fresh impulse stream
+- Modify the grouping window
+
+No migrations. No rebuilds. Just evolution, in place.
+
+> _Azi Tip:_ “Composite Schemas let me reason like an engineer. You teach me the parts. I learn the system.”
+
+---
+
+**You just built your first Composite Schema.**
+
+That’s more than a structure. It’s a system-level insight—created with zero modeling overhead.
+
+Let’s keep going. Azi’s ready when you are.
+

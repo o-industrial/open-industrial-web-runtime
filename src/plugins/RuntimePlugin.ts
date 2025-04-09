@@ -6,7 +6,7 @@ import { EaCRuntimeConfig, EaCRuntimePluginConfig } from '@fathym/eac/runtime/co
 import { EaCRuntimePlugin } from '@fathym/eac/runtime/plugins';
 import { EverythingAsCode } from '@fathym/eac';
 import { EverythingAsCodeApplications } from '@fathym/eac-applications';
-import { EaCPreactAppProcessor, EaCTailwindProcessor } from '@fathym/eac-applications/processors';
+import { EaCMDXProcessor, EaCPreactAppProcessor, EaCTailwindProcessor } from '@fathym/eac-applications/processors';
 import { EaCDenoKVDetails, EverythingAsCodeDenoKV } from '@fathym/eac-deno-kv';
 import {
   EaCJSRDistributedFileSystemDetails,
@@ -38,11 +38,11 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             ResolverConfigs: {
               localhost: {
                 Hostname: 'localhost',
-                Port: config.Server.port || 8000,
+                Port: config.Servers?.[0].port || 8000,
               },
               '127.0.0.1': {
                 Hostname: '127.0.0.1',
-                Port: config.Server.port || 8000,
+                Port: config.Servers?.[0].port || 8000,
               },
             },
             ModifierResolvers: {
@@ -58,6 +58,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               dashboard: {
                 PathPattern: '/dashboard*',
                 Priority: 300,
+              },
+              docs: {
+                PathPattern: '/docs*',
+                Priority: 500,
               },
               home: {
                 PathPattern: '*',
@@ -109,6 +113,21 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 ['jsr:@fathym/atomic-design-kit', ['tsx']],
               ],
             } as EaCPreactAppProcessor,
+          },
+          docs: {
+            Details: {
+              Name: 'Documentation Site',
+              Description: 'Documentation site.',
+            },
+            ModifierResolvers: {
+              baseHref: {
+                Priority: 10000,
+              },
+            },
+            Processor: {
+              Type: 'MDX',
+              DFSLookup: 'local:apps/docs',
+            } as EaCMDXProcessor,
           },
           home: {
             Details: {
@@ -178,6 +197,14 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               FileRoot: './apps/dashboard/',
               DefaultFile: 'index.tsx',
               Extensions: ['tsx'],
+            } as EaCLocalDistributedFileSystemDetails,
+          },
+          'local:apps/docs': {
+            Details: {
+              Type: 'Local',
+              FileRoot: './apps/docs/',
+              DefaultFile: 'index.mdx',
+              Extensions: ['mdx', 'md'],
             } as EaCLocalDistributedFileSystemDetails,
           },
           'local:apps/home': {
