@@ -6,7 +6,7 @@ import { EaCRuntimeConfig, EaCRuntimePluginConfig } from '@fathym/eac/runtime/co
 import { EaCRuntimePlugin } from '@fathym/eac/runtime/plugins';
 import { EverythingAsCode } from '@fathym/eac';
 import { EverythingAsCodeApplications } from '@fathym/eac-applications';
-import { EaCMDXProcessor, EaCPreactAppProcessor, EaCTailwindProcessor } from '@fathym/eac-applications/processors';
+import { EaCDFSProcessor, EaCMDXProcessor, EaCPreactAppProcessor, EaCTailwindProcessor } from '@fathym/eac-applications/processors';
 import { EaCDenoKVDetails, EverythingAsCodeDenoKV } from '@fathym/eac-deno-kv';
 import {
   EaCJSRDistributedFileSystemDetails,
@@ -16,6 +16,7 @@ import {
   EaCBaseHREFModifierDetails,
   EaCKeepAliveModifierDetails,
 } from '@fathym/eac-applications/modifiers';
+import { EaCAzureBlobStorageDistributedFileSystemDetails } from '@fathym/eac/dfs';
 
 export default class RuntimePlugin implements EaCRuntimePlugin {
   constructor() {}
@@ -141,8 +142,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
           },
           home: {
             Details: {
-              Name: 'Home Site',
-              Description: 'Home site.',
+              Name: 'Marketing Plasmic Site',
+              Description: 'Marketing Plasmic Home site.',
             },
             ModifierResolvers: {
               baseHref: {
@@ -150,17 +151,39 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             },
             Processor: {
-              Type: 'PreactApp',
-              AppDFSLookup: 'local:apps/home',
-              ComponentDFSLookups: [
-                ['local:apps/components', ['tsx']],
-                ['local:apps/home', ['tsx']],
-                ['local:apps/islands', ['tsx']],
-                ['jsr:@fathym/atomic', ['tsx']],
-                ['jsr:@fathym/atomic-design-kit', ['tsx']],
-              ],
-            } as EaCPreactAppProcessor,
+              Type: 'DFS',
+              DFSLookup: 'abs:public-web',
+              CacheControl: {
+                'text\\/html': `private, max-age=${60 * 5}`,
+                'image\\/': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'application\\/javascript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'application\\/typescript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+              },
+            } as EaCDFSProcessor,
           },
+          // home: {
+          //   Details: {
+          //     Name: 'Home Site',
+          //     Description: 'Home site.',
+          //   },
+          //   ModifierResolvers: {
+          //     baseHref: {
+          //       Priority: 10000,
+          //     },
+          //   },
+          //   Processor: {
+          //     Type: 'PreactApp',
+          //     AppDFSLookup: 'local:apps/home',
+          //     ComponentDFSLookups: [
+          //       ['local:apps/components', ['tsx']],
+          //       ['local:apps/home', ['tsx']],
+          //       ['local:apps/islands', ['tsx']],
+          //       ['jsr:@fathym/atomic', ['tsx']],
+          //       ['jsr:@fathym/atomic-design-kit', ['tsx']],
+          //     ],
+          //   } as EaCPreactAppProcessor,
+          // },
           tailwind: {
             Details: {
               Name: 'Tailwind for the Site',
@@ -194,6 +217,15 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
           },
         },
         DFSs: {
+          'abs:public-web': {
+            Details: {
+              Type: 'AzureBlobStorage',
+              Container: 'deployments',
+              FileRoot: 'fathym/v1-fathym-public-web-openindustrial/latest',
+              DefaultFile: 'index.html',
+              ConnectionString: Deno.env.get('AZURE_STORAGE_CONNECTION_STRING'),
+            } as EaCAzureBlobStorageDistributedFileSystemDetails,
+          },
           'local:apps/components': {
             Details: {
               Type: 'Local',
