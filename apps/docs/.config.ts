@@ -12,7 +12,7 @@ function loadDocsConfig(): Promise<DocsConfig> {
         Title: 'Overview',
         Path: '/',
         Children: [
-          { Title: 'Why AAIDEN?', Path: '/why-aaiden' },
+          { Title: 'Why Open Industrial?', Path: '/why-oi' },
           { Title: 'Manifesto', Path: '/manifesto' },
         ],
       },
