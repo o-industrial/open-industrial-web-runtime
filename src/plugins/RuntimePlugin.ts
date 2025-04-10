@@ -44,6 +44,16 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 Hostname: '127.0.0.1',
                 Port: config.Servers?.[0].port || 8000,
               },
+              'host.docker.internal': {
+                Hostname: 'host.docker.internal',
+                Port: config.Servers![0].port || 8000,
+              },
+              'open-industrial.fathym.com': {
+                Hostname: 'open-industrial.fathym.com',
+              },
+              'www.openindustrial.co': {
+                Hostname: 'www.openindustrial.co',
+              },
             },
             ModifierResolvers: {
               keepAlive: {
