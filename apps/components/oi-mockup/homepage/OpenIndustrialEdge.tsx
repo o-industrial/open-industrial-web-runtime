@@ -1,4 +1,4 @@
-export default function Open IndustrialEdge() {
+export default function OpenIndustrialEdge() {
   return (
     <section class='py-16 px-6 bg-[#0E2A5A] text-white'>
       <div class='max-w-4xl mx-auto text-center'>

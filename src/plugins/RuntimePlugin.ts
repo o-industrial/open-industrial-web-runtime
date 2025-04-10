@@ -52,8 +52,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               'open-industrial.fathym.com': {
                 Hostname: 'open-industrial.fathym.com',
               },
-              'www.Open Industrial.co': {
-                Hostname: 'www.Open Industrial.co',
+              'www.openindustrial.co': {
+                Hostname: 'www.openindustrial.co',
               },
             },
             ModifierResolvers: {
@@ -221,7 +221,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'AzureBlobStorage',
               Container: 'deployments',
-              FileRoot: 'fathym/v1-fathym-public-web-Open Industrial/latest',
+              FileRoot: 'fathym/v1-fathym-public-web-openindustrial/latest',
               DefaultFile: 'index.html',
               ConnectionString: Deno.env.get('AZURE_STORAGE_CONNECTION_STRING'),
             } as EaCAzureBlobStorageDistributedFileSystemDetails,
