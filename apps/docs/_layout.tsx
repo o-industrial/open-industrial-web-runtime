@@ -13,7 +13,7 @@ export function Header({
     <header class='relative z-40 border-b border-slate-800 px-6 py-4 bg-slate-900 text-white'>
       <div class='flex items-center justify-between'>
         <div class='text-xl font-semibold tracking-wide'>
-          Fathym AAIDEN Documentation
+          Open Industrial Documentation
         </div>
 
         <details class='sm:hidden relative'>
@@ -229,7 +229,7 @@ export default function Layout({ Data, Component, Revision }: PageProps) {
         <link
           rel='shortcut icon'
           type='image/png'
-          href='/assets/thinky.png'
+          href='/favicon.ico'
           data-eac-bypass-base
         />
 

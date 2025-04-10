@@ -1,0 +1,111 @@
+# Impulse & Signal: The Execution Loop
+
+A humidity sensor updates. Azi sees the Impulse. Your logic fires. Then she raises a Signal.
+
+That’s the heartbeat of OpenIndustrial.
+
+This isn’t a fire-and-forget system. It’s a reflective loop—designed for real-time execution that evolves with you, not around you.
+
+---
+
+## The Reflective Loop: Step-by-Step
+
+Here’s how the adaptive execution loop works every time an input enters the system:
+
+1. **Impulse arrives**  
+   A time-bound event is received: `humidity: 45`. It’s typed, structured, and ready to run.
+
+2. **Execution happens**  
+   Azi interprets the Impulse using your promoted schema. Logic executes on the surface, outputs update, agents respond.
+
+3. **Signal is raised (if needed)**  
+   If the Impulse contains unfamiliar structure—a new field, a changed shape—Azi raises a Signal:  
+   _“This looks like a new field. Want to promote it so we can track it?”_
+
+4. **You decide**  
+   Confirm it, fork it, or ignore it. Promotion is permission—not automation.
+
+5. **Schema evolves (if promoted)**  
+   The new field becomes part of your schema. Now it's trackable, queryable, and reusable in logic.
+
+6. **The loop continues**  
+   Every Impulse deepens the system’s understanding. Azi remembers what you’ve confirmed—and forgets what you haven’t.
+
+> _Execution isn’t just reactive. It’s reflective—always with you in the loop._
+
+---
+
+## Textual Diagram: Execution in Motion
+
+```
+Impulse
+   ↓
+Surface
+   ↓
+Execution
+   ↓
+Signal (optional)
+   ↓
+Schema Promotion (optional)
+```
+
+This is the loop that runs across edge, cloud, and simulation.
+It’s how the system breathes.
+
+---
+
+## Impulse vs. Signal: Know the Difference
+
+- **Impulse** → Runs logic. It’s an execution event.
+- **Signal** → Suggests change. It never acts alone.
+- **You** → Always decide what becomes real.
+
+Azi doesn’t override logic. She doesn’t rewrite schema behind your back. She flags patterns and proposes structure—but only you can say yes.
+
+That’s how trust is built.
+
+---
+
+## Forks Keep You Safe
+
+Every part of OpenIndustrial is forkable—from surfaces to schemas to logic. That means you can:
+
+- Try a new logic path without touching production
+- Test a new field in a parallel schema
+- Train an agent on one branch, then merge back
+
+If you’re not ready to promote a Signal, fork it. Safe evolution is built into the system.
+
+---
+
+## Real Example: Bioreactor Telemetry
+
+Your bioreactor starts streaming:
+
+- `temperature`
+- `co2`
+- `humidity`
+
+Azi already understands the first two. `humidity` is unfamiliar. So she raises a Signal:
+
+> _“This looks like a new field. Want to promote it so we can track it?”_
+
+You confirm. The schema updates. `humidity` is now part of your execution surface. Logic runs on it. Agents observe it. The system adapts—with your consent.
+
+---
+
+## This Is How the System Breathes
+
+The loop of Impulse → Execution → Signal → Promotion is the rhythm of adaptive execution.
+
+It happens at the edge, in the cloud, inside simulation—anywhere your system runs. Azi keeps the loop turning. You stay in control.
+
+Want to go deeper?
+- **[Schema Promotion]** – What happens when you confirm a Signal
+- **[Execution Surfaces]** – Where your logic runs and evolves
+- **[Forking]** – Safe branching for structure and behavior
+- **[Trust & Autonomy]** – Guarantees that Azi works for you
+- **[First Execution]** – Try this loop live in a simulation
+
+> _“You’re never guessing. You’re never locked in. You’re in the loop—always.”_
+

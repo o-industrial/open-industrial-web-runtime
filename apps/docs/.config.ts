@@ -6,27 +6,41 @@ import { DocsConfig } from '@fathym/eac-applications/runtime/processors';
  */
 function loadDocsConfig(): Promise<DocsConfig> {
   return Promise.resolve({
-    Title: 'AAIDEN - Documentation',
+    Title: 'Open Industrial - Documentation',
     Nav: [
       {
         Title: 'Overview',
         Path: '/',
         Children: [
-          { Title: 'Why Open Industrial?', Path: '/why-oi' },
+          { Title: 'Why Open Industrial', Path: '/why-oi' },
+          { Title: 'Meet Azi', Path: '/meet-azi' },
           { Title: 'Manifesto', Path: '/manifesto' },
         ],
       },
       {
-        Title: 'Meet Azi',
-        Path: '/meet-azi',
+        Title: 'The Execution Model',
+        Path: '/execution-model',
         Children: [
-          { Title: 'Observe First Impulse', Path: '/meet-azi/observe-first-impulse' },
-          { Title: 'Promote Schema', Path: '/meet-azi/promote-schema' },
-          { Title: 'Ask a Question', Path: '/meet-azi/ask-a-question' },
-          { Title: 'Reference Data', Path: '/meet-azi/reference-data' },
-          { Title: 'Composite Schema', Path: '/meet-azi/composite-schema' },
-          { Title: 'Command the Sim', Path: '/meet-azi/command-the-sim' },
-          { Title: 'Teach', Path: '/meet-azi/teach' },
+          { Title: 'Key Concepts', Path: '/execution-model/key-concepts' },
+          { Title: 'Execution Loop', Path: '/execution-model/execution-loop' },
+          { Title: 'Schema Promotion', Path: '/execution-model/schema-promotion' },
+          { Title: 'Surfaces', Path: '/execution-model/surfaces' },
+          { Title: 'Forking', Path: '/execution-model/forking' },
+          { Title: 'Workforce', Path: '/execution-model/workforce' },
+          { Title: 'Workspaces', Path: '/execution-model/workspaces' },
+        ],
+      },
+      {
+        Title: 'Your First Execution',
+        Path: '/first-execution',
+        Children: [
+          { Title: 'Observe First Impulse', Path: '/first-execution/observe-first-impulse' },
+          { Title: 'Promote Schema', Path: '/first-execution/promote-schema' },
+          { Title: 'Ask a Question', Path: '/first-execution/ask-a-question' },
+          { Title: 'Reference Data', Path: '/first-execution/reference-data' },
+          { Title: 'Composite Schema', Path: '/first-execution/composite-schema' },
+          { Title: 'Command the Sim', Path: '/first-execution/command-the-sim' },
+          { Title: 'Teach', Path: '/first-execution/teach' },
         ],
       },
     ],
