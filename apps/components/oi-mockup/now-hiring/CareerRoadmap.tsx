@@ -6,7 +6,7 @@ export default function CareerRoadmap() {
           Be Part of the Next Generation of Industrial AI Talent
         </h2>
         <p class='text-lg text-gray-300'>
-          OpenIndustrial is hiring for AI engineers, solution architects, AI execution researchers,
+          Open Industrial is hiring for AI engineers, solution architects, AI execution researchers,
           and integration specialists.
         </p>
       </div>
@@ -27,7 +27,7 @@ export default function CareerRoadmap() {
           href='/careers'
           class='px-6 py-3 bg-neon-blue text-white font-semibold rounded-lg shadow-md hover:bg-neon-green transition duration-300'
         >
-          Explore OpenIndustrial Career Paths
+          Explore Open Industrial Career Paths
         </a>
       </div>
     </section>

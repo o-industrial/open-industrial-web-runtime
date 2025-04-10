@@ -4,7 +4,7 @@ export default function EnterpriseUseCases() {
       <div class='max-w-4xl mx-auto text-center'>
         <h2 class='text-3xl font-bold text-neon-blue mb-4'>Enterprise Use Cases</h2>
         <p class='text-lg text-gray-300'>
-          How Enterprises Are Using OpenIndustrial Today
+          How Enterprises Are Using Open Industrial Today
         </p>
       </div>
       <div class='mt-10 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto'>
@@ -28,7 +28,7 @@ export default function EnterpriseUseCases() {
           href='/use-cases'
           class='px-6 py-3 bg-neon-blue text-white font-semibold rounded-lg shadow-md hover:bg-neon-green transition duration-300'
         >
-          See OpenIndustrial in Action
+          See Open Industrial in Action
         </a>
       </div>
     </section>

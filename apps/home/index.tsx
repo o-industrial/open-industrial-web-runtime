@@ -3,9 +3,9 @@ import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { CompanyWebState } from '../../src/state/CompanyWebState.ts';
 import HeroSection from '../components/oi-mockup/homepage/HeroSection.tsx';
-import WhyOpenIndustrial from '../components/oi-mockup/homepage/WhyOpenIndustrial.tsx';
+import WhyOpen Industrial from '../components/oi-mockup/homepage/WhyOpen Industrial.tsx';
 import VirtualWorkforceShowcase from '../components/oi-mockup/homepage/VirtualWorkforceShowcase.tsx';
-import OpenIndustrialEdge from '../components/oi-mockup/homepage/OpenIndustrialEdge.tsx';
+import Open IndustrialEdge from '../components/oi-mockup/homepage/Open IndustrialEdge.tsx';
 import EnterpriseUseCases from '../components/oi-mockup/homepage/EnterpriseUseCases.tsx';
 import AIGovernance from '../components/oi-mockup/homepage/AIGovernance.tsx';
 
@@ -22,9 +22,9 @@ export default function Homepage({}: PageProps<HomepageData>) {
   return (
     <div class='flex flex-col space-y-12 bg-[#0A1F44] text-white'>
       <HeroSection />
-      <WhyOpenIndustrial />
+      <WhyOpen Industrial />
       <VirtualWorkforceShowcase />
-      <OpenIndustrialEdge />
+      <Open IndustrialEdge />
       <EnterpriseUseCases />
       <AIGovernance />
     </div>

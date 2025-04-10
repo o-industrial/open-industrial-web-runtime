@@ -8,16 +8,16 @@ import CustomizingAI from '../components/oi-mockup/framework/CustomizingAI.tsx';
 import APIResources from '../components/oi-mockup/framework/APIResources.tsx';
 import GovernanceSecurity from '../components/oi-mockup/framework/GovernanceSecurity.tsx';
 
-export type FrameworkOpenIndustrialData = {};
+export type FrameworkOpen IndustrialData = {};
 
-export const handler: EaCRuntimeHandlerSet<CompanyWebState, FrameworkOpenIndustrialData> = {
+export const handler: EaCRuntimeHandlerSet<CompanyWebState, FrameworkOpen IndustrialData> = {
   GET: (_req, ctx) => {
-    const data: FrameworkOpenIndustrialData = {};
+    const data: FrameworkOpen IndustrialData = {};
     return ctx.Render(data);
   },
 };
 
-export default function FrameworkOpenIndustrial({}: PageProps<FrameworkOpenIndustrialData>) {
+export default function FrameworkOpen Industrial({}: PageProps<FrameworkOpen IndustrialData>) {
   return (
     <div class='flex flex-col space-y-12 bg-[#0A1F44] text-white'>
       <HeroSection />

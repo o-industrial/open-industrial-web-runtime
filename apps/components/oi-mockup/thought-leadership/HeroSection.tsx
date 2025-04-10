@@ -5,7 +5,7 @@ export default function HeroSection() {
         Innovating Industrial AI Execution—Insights from Industry Leaders
       </h1>
       <p class='mt-4 text-lg text-gray-300 max-w-2xl'>
-        OpenIndustrial’s Thought Leadership Hub features cutting-edge research, expert analysis, and
+        Open Industrial’s Thought Leadership Hub features cutting-edge research, expert analysis, and
         advancements in industrial AI execution.
       </p>
       <div class='mt-6 flex space-x-4'>

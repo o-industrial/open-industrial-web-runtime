@@ -6,7 +6,7 @@ export default function DeployExecution() {
           Implement AI-Powered Execution in Your Industrial Workflows
         </h2>
         <p class='text-lg text-gray-300'>
-          OpenIndustrial provides seamless AI execution deployment across cloud and edge
+          Open Industrial provides seamless AI execution deployment across cloud and edge
           environments, ensuring scalability and efficiency.
         </p>
       </div>

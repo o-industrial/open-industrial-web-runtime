@@ -3,10 +3,10 @@ export default function APIResources() {
     <section class='py-16 px-6 bg-[#0E2A5A] text-white'>
       <div class='max-w-4xl mx-auto text-center'>
         <h2 class='text-3xl font-bold text-neon-blue mb-4'>
-          Seamlessly Integrate AI Execution with OpenIndustrial’s APIs
+          Seamlessly Integrate AI Execution with Open Industrial’s APIs
         </h2>
         <p class='text-lg text-gray-300'>
-          OpenIndustrial offers robust APIs for AI model deployment, execution monitoring, and
+          Open Industrial offers robust APIs for AI model deployment, execution monitoring, and
           system integration.
         </p>
       </div>
@@ -29,7 +29,7 @@ export default function APIResources() {
           href='/api-documentation'
           class='px-6 py-3 bg-neon-blue text-white font-semibold rounded-lg shadow-md hover:bg-neon-green transition duration-300'
         >
-          Explore the OpenIndustrial API Documentation
+          Explore the Open Industrial API Documentation
         </a>
       </div>
     </section>

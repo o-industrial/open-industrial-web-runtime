@@ -6,7 +6,7 @@ export default function GovernanceSecurity() {
           Ensuring Trust & Security in AI Execution
         </h2>
         <p class='text-lg text-gray-300'>
-          OpenIndustrial follows Zero Trust security models, AI governance frameworks, and industry
+          Open Industrial follows Zero Trust security models, AI governance frameworks, and industry
           compliance standards.
         </p>
       </div>

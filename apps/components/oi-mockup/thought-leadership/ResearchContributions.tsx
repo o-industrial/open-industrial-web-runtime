@@ -3,10 +3,10 @@ export default function ResearchContributions() {
     <section class='py-16 px-6 bg-[#0A1F44] text-white'>
       <div class='max-w-4xl mx-auto text-center'>
         <h2 class='text-3xl font-bold text-neon-blue mb-4'>
-          Join the OpenIndustrial Innovation Network
+          Join the Open Industrial Innovation Network
         </h2>
         <p class='text-lg text-gray-300'>
-          Contribute to OpenIndustrial's research program by developing models, algorithms, and AI
+          Contribute to Open Industrial's research program by developing models, algorithms, and AI
           governance frameworks.
         </p>
       </div>
@@ -20,7 +20,7 @@ export default function ResearchContributions() {
         <div class='p-6 bg-[#112E60] rounded-lg shadow-md text-center'>
           <h3 class='text-xl font-semibold text-neon-blue'>Open Source Contributions</h3>
           <p class='mt-2 text-gray-300'>
-            Help build and improve OpenIndustrial’s open-source AI execution platform.
+            Help build and improve Open Industrial’s open-source AI execution platform.
           </p>
         </div>
       </div>
@@ -29,7 +29,7 @@ export default function ResearchContributions() {
           href='/research'
           class='px-6 py-3 bg-neon-blue text-white font-semibold rounded-lg shadow-md hover:bg-neon-green transition duration-300'
         >
-          Become an OpenIndustrial AI Research Partner
+          Become an Open Industrial AI Research Partner
         </a>
       </div>
     </section>

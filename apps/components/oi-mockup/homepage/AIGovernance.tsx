@@ -24,7 +24,7 @@ export default function AIGovernance() {
           href='/security'
           class='px-6 py-3 bg-neon-blue text-white font-semibold rounded-lg shadow-md hover:bg-neon-green transition duration-300'
         >
-          Explore OpenIndustrial Security & Compliance
+          Explore Open Industrial Security & Compliance
         </a>
       </div>
     </section>

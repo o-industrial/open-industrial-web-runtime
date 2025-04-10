@@ -19,7 +19,7 @@ export default function HeroSection() {
           href='/demo'
           class='px-6 py-3 border border-neon-blue text-neon-blue font-semibold rounded-lg shadow-md hover:border-neon-green hover:text-neon-green transition duration-300'
         >
-          See OpenIndustrial in Action
+          See Open Industrial in Action
         </a>
       </div>
     </section>

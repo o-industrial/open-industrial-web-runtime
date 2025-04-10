@@ -6,7 +6,7 @@ export default function SuccessStories() {
           Real-World AI Execution Powered by Industry Partnerships
         </h2>
         <p class='text-lg text-gray-300'>
-          See how industry leaders are leveraging OpenIndustrial partnerships to optimize execution.
+          See how industry leaders are leveraging Open Industrial partnerships to optimize execution.
         </p>
       </div>
       <div class='mt-10 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto'>
@@ -30,7 +30,7 @@ export default function SuccessStories() {
           href='/partner-success'
           class='px-6 py-3 bg-neon-blue text-white font-semibold rounded-lg shadow-md hover:bg-neon-green transition duration-300'
         >
-          See OpenIndustrial Partners in Action
+          See Open Industrial Partners in Action
         </a>
       </div>
     </section>

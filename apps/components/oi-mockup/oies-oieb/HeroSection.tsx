@@ -5,7 +5,7 @@ export default function HeroSection() {
         AI Execution, Optimized in Real-Time at the Edge
       </h1>
       <p class='mt-4 text-lg text-gray-300 max-w-2xl'>
-        OpenIndustrial optimizes industrial execution with AI-powered real-time decision-making at
+        Open Industrial optimizes industrial execution with AI-powered real-time decision-making at
         the edge.
       </p>
       <div class='mt-6 flex space-x-4'>
@@ -13,7 +13,7 @@ export default function HeroSection() {
           href='/deploy-edge'
           class='px-6 py-3 bg-neon-blue text-white font-semibold rounded-lg shadow-md hover:bg-neon-green transition duration-300'
         >
-          Deploy OpenIndustrial Edge
+          Deploy Open Industrial Edge
         </a>
         <a
           href='/demo'

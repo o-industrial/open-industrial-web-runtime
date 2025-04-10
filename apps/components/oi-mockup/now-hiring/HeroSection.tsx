@@ -5,7 +5,7 @@ export default function HeroSection() {
         Shape the Future of AI-Powered Industrial Execution
       </h1>
       <p class='mt-4 text-lg text-gray-300 max-w-2xl'>
-        OpenIndustrial is hiring AI engineers, solution architects, and automation innovators to
+        Open Industrial is hiring AI engineers, solution architects, and automation innovators to
         build the next generation of AI execution.
       </p>
       <div class='mt-6 flex space-x-4'>
@@ -19,7 +19,7 @@ export default function HeroSection() {
           href='/partners'
           class='px-6 py-3 border border-neon-blue text-neon-blue font-semibold rounded-lg shadow-md hover:border-neon-green hover:text-neon-green transition duration-300'
         >
-          Partner with OpenIndustrial
+          Partner with Open Industrial
         </a>
       </div>
     </section>

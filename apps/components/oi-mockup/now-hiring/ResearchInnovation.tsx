@@ -6,7 +6,7 @@ export default function ResearchInnovation() {
           Research, Experiment, and Push the Boundaries of AI Execution
         </h2>
         <p class='text-lg text-gray-300'>
-          Join OpenIndustrial’s research collaborations, hackathons, and innovation challenges
+          Join Open Industrial’s research collaborations, hackathons, and innovation challenges
           focused on industrial AI automation.
         </p>
       </div>
@@ -29,7 +29,7 @@ export default function ResearchInnovation() {
           href='/research'
           class='px-6 py-3 bg-neon-blue text-white font-semibold rounded-lg shadow-md hover:bg-neon-green transition duration-300'
         >
-          Join OpenIndustrial’s Research & Innovation Network
+          Join Open Industrial’s Research & Innovation Network
         </a>
       </div>
     </section>

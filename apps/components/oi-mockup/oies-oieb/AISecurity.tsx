@@ -25,7 +25,7 @@ export default function AISecurity() {
           href='/ai-security'
           class='px-6 py-3 bg-neon-blue text-white font-semibold rounded-lg shadow-md hover:bg-neon-green transition duration-300'
         >
-          Explore OpenIndustrial Security Model
+          Explore Open Industrial Security Model
         </a>
       </div>
     </section>

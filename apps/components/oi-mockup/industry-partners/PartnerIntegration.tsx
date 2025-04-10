@@ -6,7 +6,7 @@ export default function PartnerIntegration() {
           Seamless Integration for AI Execution & Industrial Automation
         </h2>
         <p class='text-lg text-gray-300'>
-          OpenIndustrial offers APIs, SDKs, and plug-and-play integrations for AI execution and
+          Open Industrial offers APIs, SDKs, and plug-and-play integrations for AI execution and
           automation workflows.
         </p>
       </div>

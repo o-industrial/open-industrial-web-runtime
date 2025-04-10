@@ -18,7 +18,7 @@ export default function AIExecutionBlog() {
         <div class='p-6 bg-[#112E60] rounded-lg shadow-md text-center'>
           <h3 class='text-xl font-semibold text-neon-blue'>Community Insights</h3>
           <p class='mt-2 text-gray-300'>
-            Learn from developers, researchers, and AI professionals contributing to OpenIndustrial.
+            Learn from developers, researchers, and AI professionals contributing to Open Industrial.
           </p>
         </div>
       </div>

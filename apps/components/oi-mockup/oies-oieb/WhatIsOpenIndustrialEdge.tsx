@@ -1,8 +1,8 @@
-export default function WhatIsOpenIndustrialEdge() {
+export default function WhatIsOpen IndustrialEdge() {
   return (
     <section class='py-16 px-6 bg-[#0E2A5A] text-white'>
       <div class='max-w-4xl mx-auto text-center'>
-        <h2 class='text-3xl font-bold text-neon-blue mb-4'>What is OpenIndustrial Edge?</h2>
+        <h2 class='text-3xl font-bold text-neon-blue mb-4'>What is Open Industrial Edge?</h2>
         <p class='text-lg text-gray-300'>
           AI-powered execution and workload optimization at the edge ensures minimal latency and
           seamless task distribution.
@@ -27,7 +27,7 @@ export default function WhatIsOpenIndustrialEdge() {
           href='/edge-ai-execution'
           class='px-6 py-3 bg-neon-blue text-white font-semibold rounded-lg shadow-md hover:bg-neon-green transition duration-300'
         >
-          Learn More About OpenIndustrial Edge AI Execution
+          Learn More About Open Industrial Edge AI Execution
         </a>
       </div>
     </section>

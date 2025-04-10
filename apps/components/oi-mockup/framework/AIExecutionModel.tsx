@@ -6,7 +6,7 @@ export default function AIExecutionModel() {
           The AI-Driven Execution Model for Industrial Automation
         </h2>
         <p class='text-lg text-gray-300'>
-          OpenIndustrial’s AI execution agents run real-time industrial workloads while continuously
+          Open Industrial’s AI execution agents run real-time industrial workloads while continuously
           optimizing their decision-making.
         </p>
       </div>

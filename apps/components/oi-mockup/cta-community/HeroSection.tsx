@@ -19,7 +19,7 @@ export default function HeroSection() {
           href='/community'
           class='px-6 py-3 border border-neon-blue text-neon-blue font-semibold rounded-lg shadow-md hover:border-neon-green hover:text-neon-green transition duration-300'
         >
-          Join the OpenIndustrial Community
+          Join the Open Industrial Community
         </a>
       </div>
     </section>

@@ -7,7 +7,7 @@ export default function ExpertInsights() {
         </h2>
         <p class='text-lg text-gray-300'>
           Explore thought leadership articles, keynote presentations, and expert panels featuring
-          OpenIndustrial executives and industry pioneers.
+          Open Industrial executives and industry pioneers.
         </p>
       </div>
       <div class='mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto'>
@@ -29,7 +29,7 @@ export default function ExpertInsights() {
           href='/expert-insights'
           class='px-6 py-3 bg-neon-blue text-white font-semibold rounded-lg shadow-md hover:bg-neon-green transition duration-300'
         >
-          Meet OpenIndustrial’s AI Execution Experts
+          Meet Open Industrial’s AI Execution Experts
         </a>
       </div>
     </section>
