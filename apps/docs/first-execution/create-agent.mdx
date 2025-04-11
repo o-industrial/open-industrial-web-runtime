@@ -1,0 +1,77 @@
+# Create the Agent
+
+> *"You define logic bound to structure."*
+
+You’ve just promoted your first schema. Now let’s turn it into action.
+
+## What Is an Agent?
+
+An agent is a logic unit. It listens for impulses that match a schema and runs your code in response. Nothing runs until your structure is present.
+
+This is how execution stays safe—and how behavior becomes teachable.
+
+## Build on Structure
+
+Your `TemperatureSensor` schema defines:
+- `ID` — the emitting sensor
+- `Temperature` — the latest observed value
+
+Let’s also promote a schema for your fan controller:
+
+```json
+{
+  "ID": { "source": "connectionId", "type": "string", "primary": true },
+  "Power": { "type": "string", "enum": ["on", "off"] }
+}
+```
+
+This lets your logic reason about the current power state of the fan.
+
+## Write the Agent
+
+Using the SDK, define your agent like this:
+
+```ts
+export default Agent()
+  .Impulse(TemperatureSensorSchema)
+  .Schemas(ctx => ({
+    Fan: ctx.Connect(FanControllerSchema, "fan-controller-001", State.Current)
+  }))
+  .OnImpulse(async (impulse, ctx) => {
+    const fan = ctx.Schemas.Fan;
+
+    if (impulse.Temperature > 80 && fan.Power !== "on") {
+      await fan.Commands.Power("on");
+      return ctx.Status.Success("Fan turned on");
+    }
+
+    if (impulse.Temperature <= 80 && fan.Power !== "off") {
+      await fan.Commands.Power("off");
+      return ctx.Status.Success("Fan turned off");
+    }
+
+    return ctx.Status.Success("No action needed");
+  });
+```
+
+Each block maps to something real:
+- `.Impulse(...)` → listens for promoted data
+- `.Schemas(...)` → binds supporting context
+- `.OnImpulse(...)` → expresses logic that runs on match
+
+> *💡 Thinky Tip: Logic always flows from structure. If there’s no match, nothing runs.*
+
+## Save Your Agent
+
+Save your new agent as `FanControlAgent`.
+
+> ⚠️ **Note:** This agent is currently hardcoded to respond to a single fan—`fan-controller-001`. That’s okay for now. You haven’t yet taught the system how to generalize across rooms or multiple devices. That comes next, as you introduce metadata and thresholds that allow agents to reason more flexibly.
+
+Right now, the agent is scoped and specific—by design. Azi will validate it and prepare it for deployment.
+
+---
+
+Next: [Deploy the Agent + React to Flow] → You’ll deploy your agent to a surface and observe it reacting to live impulses.
+
+---
+

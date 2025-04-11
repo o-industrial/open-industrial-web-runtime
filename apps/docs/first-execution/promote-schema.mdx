@@ -1,108 +1,71 @@
-# Promote Your First Schema
+# Promote the Schema
 
-You just hit **Promote Schema**. That wasn’t a setting—it was a **Signal** in your system.
+> *"You formalize meaning. Azi remembers."*
 
-You told Azi: “This structure matters.” That signal now echoes across your execution surface—informing validation, guiding suggestions, and shaping how your system adapts.
+A moment ago, you watched Azi observe raw telemetry and propose structure. Now it’s time to respond—not with configuration, but with confirmation.
 
-Let’s walk through what you’ve unlocked—and how to build on it right now.
+## What Azi Saw
 
----
+Based on repeated impulses like this:
 
-### 🧠 Step 1: See What You Just Promoted
+```json
+{ "connectionId": "temperature-sensor-001", "tempRaw": 78.4 }
+```
 
-Azi now treats this structure as canonical. That means she’s no longer inferring—she’s understanding. This schema is now a recognized entity in your system, with a name, a version, and a purpose.
+Azi proposed the following structure:
 
-> 🖼️ *Screenshot Placeholder: Schema Summary Card – versioned name, field list, edit option*
+```json
+{
+  "ID": { "source": "connectionId", "type": "string", primary: true },
+  "Temperature": { "source": "tempRaw", "type": "number", "unit": "°F" }
+}
+```
 
-👆 **What you do:**
-- Click **Edit** to adjust field names, data types, or add descriptions
-- Use the **Metadata** tab to annotate each field with domain-specific context: what it represents, why it matters, or what values to expect
+She’s not just parsing JSON—she’s noticing patterns. And before she does anything with them, she asks:
 
-> ✨ _Try it now: Add a description to `status_code` like “Device health indicator, where 0 = OK and 1 = Warning.”_
+> *"Should I remember this?"*
 
-Adding metadata helps Azi:
-- Answer questions more precisely
-- Offer smarter suggestions for views, filters, and agents
-- Explain results in your own domain terms
+This is the first moment where **observation becomes understanding**.
 
-✳️ This is your first formal schema. Versioned. Trustable. Shared—and ready to evolve.
+## Promote the Schema
 
----
+Click **Promote Schema** to begin confirming structure.
 
-### ✳️ Step 2: What Promotion Unlocks
+You’ll walk through:
 
-Promoting a schema turns draft understanding into operational truth.
+- Reviewing the proposed fields and types
+- Optionally renaming fields (e.g., `TemperatureRaw` → `Temperature`)
+- Giving the schema a name: `TemperatureSensor`
+- Letting Azi version it automatically (e.g., `v1`)
 
-> 🖼️ *Screenshot Placeholder: Promote Confirmation Modal with schema name + summary*
 
-Now Azi will:
-- Validate incoming data against this schema
-- Detect structural drift over time
-- Suggest visualizations, logic flows, and monitoring options
+*Caption: Promote structure and name your first schema.*
 
-📌 Schema is now language—something your system can speak, verify, and act upon.
+Once confirmed:
 
----
+- The schema appears in your workspace’s schema library
+- Azi treats it as a canonical shape
+- You can now use it to bind logic or compose with others
 
-👨‍🔬 **Try This: Trigger a Schema Violation**
+You’ve just taken raw data and turned it into shared structure.
 
-Open the **HTTP Interface Form** and submit data with a mismatched field—like sending `timestamp: "yesterday"` instead of an ISO date.
+## Why This Changes Everything
 
-> 🖼️ *Screenshot Placeholder: HTTP form with invalid payload and Azi response*
+Promoting a schema isn’t about configuration. It’s about **declaring what matters**.
 
-Azi will surface the issue immediately:
-- Highlighting the violation in the payload
-- Referencing the promoted schema
-- Offering guidance (e.g., "Expected a valid ISO date")
+Once a schema is promoted:
 
-💡 *Azi Tip:* "If something breaks schema, I’ll let you know right away. That’s how we keep execution clean—and learning sharp."
+- The Surface begins showing typed records
+- Azi starts routing logic using this shared language
+- Agents and tools downstream now recognize this structure by name
 
----
+> *💡 Thinky Tip: You’re not configuring fields. You’re teaching structure.*
 
-### 🔗 Step 3: Explore Next Actions
-
-With your schema promoted, you’ll see new options immediately:
-
-> 🖼️ *Screenshot Placeholder: "What can I do next?" panel with Suggested View, New Agent, Monitor Drift options*
-
-👆 **What you do:**
-- Click **Suggest a View** to explore chart and table layouts
-- Click **New Agent** to define logic powered by this shape
-- Click **Monitor Stream** to start watching for anomalies or drift
-
-💡 *Azi Tip:* “Schemas help me reason about change. Want me to alert you if this structure shifts?”
+You’ve taken the first step toward building a system that understands.
 
 ---
 
-### 💬 Step 4: Ask a Real Question
-
-Now that Azi understands the shape of your world, ask a question.
-
-> “What’s the average pressure on Line B this week?”
-
-✅ If you got an answer back—congrats. Schema promotion worked.
-
-👆 **What happens:**
-- Azi maps `pressure_kpa` as a metric
-- Filters by `line == "B"`
-- Time-slices using `timestamp`
-
-She responds—like someone fluent in your domain.
+Next: [Create the Agent] → You’ll write logic that reacts to this newly promoted schema.
 
 ---
-
-### ✨ What You Just Did
-
-🎯 Your next moves:
-- Save a visual view
-- Define a new agent
-- Watch for structure drift
-- Or just keep streaming—Azi’s learning every second
-
-📌 Why this matters:
-- You formalized structure without writing a line of code
-- Azi’s no longer guessing—she’s interpreting
-- You’ve created a foundation for execution, not just insight
-
-**Let’s keep going. Azi’s ready.**
 

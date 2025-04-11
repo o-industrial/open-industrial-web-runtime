@@ -1,0 +1,143 @@
+# Evolve Together
+
+> *"You version your agent. The system adapts."*
+
+You’ve promoted a smarter schema. Now it’s time to upgrade your logic to match—and evolve without breaking what already works.
+
+## Fork the Agent
+
+Forking is how you test improvements, compare outcomes, and merge changes safely.
+
+From your Agent panel, click **Fork Agent** on `FanControlAgent`. Name the new fork `FanControlAgent v2`.
+
+This fork will run alongside the original until you're ready to promote it.
+
+> *Forking doesn’t break history. It gives you safe space to grow.*
+
+## Bind to RoomState
+
+Update your agent to respond to the latest version of `RoomState`. Azi will bind you to `RoomState v1.2`, which now includes:
+- Temperature + DesiredTemp
+- Humidity + HumidityThreshold
+- FanPower
+- Room context
+
+This lets your agent reason in full environmental context—across multiple rooms. No hardcoding required.
+
+```ts
+export default Agent()
+  .Impulse(RoomStateSchema)
+  .Tools({
+    Explain: async (room, powerMode) => {
+      const openai = new OpenAI();
+
+      return await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "user",
+            content: `Explain why the fan was turned ${powerMode}. Temperature was ${room.Temperature}°F (threshold ${room.DesiredTemp}), humidity was ${room.Humidity}% (threshold ${room.HumidityThreshold}), room was ${room.Room}.`
+          }
+        ]
+      });
+    }
+  })
+  .OnImpulse(async (room, ctx) => {
+    if (
+      room.Temperature > room.DesiredTemp &&
+      room.Humidity > room.HumidityThreshold &&
+      room.FanPower !== "on"
+    ) {
+      await room.Commands.Fan.Power("on");
+      const explanation = await ctx.Tools.Explain(room, "on");
+      return ctx.Status.Success(explanation);
+    }
+
+    if (
+      room.Temperature < room.DesiredTemp * 0.9 &&
+      room.Humidity < room.HumidityThreshold * 0.9 &&
+      room.FanPower !== "off"
+    ) {
+      await room.Commands.Fan.Power("off");
+      const explanation = await ctx.Tools.Explain(room, "off");
+      return ctx.Status.Success(explanation);
+    }
+
+    return ctx.Status.Success("No action needed");
+  });
+```
+
+This logic:
+- Responds to live composite state
+- Runs across **any room**
+- Adds multi-dimensional logic for temperature + humidity
+- Explains its actions in natural language via OpenAI
+
+> *💡 Thinky Tip: You’re not hardcoding responses—you’re shaping behavior with structure.*
+
+## Safely Compare Agents
+
+Deploying both agents to the same surface would cause execution conflicts—two logic units trying to control the same fan. Instead, you’ll compare `v2` in a controlled, observable way.
+
+### Create a SubSurface for Evaluation
+
+From your `Main` surface, create a **SubSurface**.
+- Inherit all three connections from Main
+- Reconfigure `fan-controller-001` in this SubSurface:
+  - Set **Command Mode** to **Mocked**
+  - Azi will record what the agent *would* have done, without sending real commands
+
+![Screenshot: SubSurface Setup](PLACEHOLDER_subsurface-setup.png)
+*Caption: A forked SubSurface for testing new agent logic safely.*
+
+### Deploy `FanControlAgent v2` to SubSurface
+
+Now add your new agent to the SubSurface.
+It will run normally, respond to real impulses, and log its intent—without affecting real-world behavior.
+
+> *💡 Thinky Tip: A mocked command still reflects real logic. Azi just doesn’t act on it... yet.*
+
+### Observe and Compare
+
+Azi shows you:
+- When `v2` would have acted
+- What explanation it generated
+- How that compares to what `v1` actually did
+
+You can also add a helper agent to the SubSurface that:
+- Observes both agent outputs
+- Highlights decision differences
+- Logs a side-by-side impulse result comparison
+
+> *💡 Thinky Tip: Real evolution isn’t guessing—it’s guided observation.*
+
+## Promote the Evolution
+
+Once you’re confident `v2` behaves correctly:
+- Retire `v1` from the `Main` surface
+- Reconfigure `fan-controller-001` back to **real command mode**
+- Deploy `v2` to Main
+
+Now, the surface runs only the evolved logic—with confidence.
+
+Azi keeps the full history—so you can fork again, roll back, or evolve further.
+
+Once you’re confident `v2` behaves correctly:
+- Unassign `FanControlAgent`
+- Promote `v2` to mainline
+
+The surface now runs only the evolved agent.
+
+Azi keeps the full history—so you can fork again, roll back, or evolve further.
+
+---
+
+🎉 You’ve built a system that sees, reasons, responds, and evolves. On structure. In real time.
+
+Next up:
+- Add more sensors
+- Fork RoomState
+- Launch your Simulation Journeys
+
+---
+

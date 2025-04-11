@@ -1,120 +1,96 @@
-# Command the Simulation
+# Command the Sim
 
-You’ve composed structure. Now it’s time to influence behavior.
+> *"You send a command. The structure changes."*
 
-This is your first outbound **Impulse**—and the moment the system starts evolving with you.
+Until now, Azi has observed passively. You’ve taught through what already exists.
 
-> _"Impulses let you trigger change. When I see the system shift, I raise a Signal to adapt."_ —Azi
+But what happens when you introduce something new?
 
-In this section, you’ll send a command to the simulation that updates a virtual device’s configuration. Specifically, you'll modify its `CapturedSensors` to include `Humidity`. Once that change lands, the device begins streaming new data. Azi notices the difference, raises a **Signal**, and asks if this new structure should become part of your shared schema.
+## Trigger New Input
 
-This is how execution becomes evolution.
+In your Surface, find `humidity-sensor-001`. It’s paused by default. Click **“Enable Emission.”**
 
----
+While this looks like a UI toggle, under the hood you’re sending a command to the simulator—something your agents could do too.
 
-## What’s an Impulse? (vs. a Signal)
+Within moments, the sensor begins emitting:
 
-Think of **Impulses** as intentional triggers. You send them to provoke a system change.
-
-**Signals**, on the other hand, are how the system talks back—surfacing observed changes and asking what to do next.
-
-Here’s the loop you’re stepping into:
-1. **Impulse out** — you change device behavior
-2. **Structure change** — new fields begin streaming in
-3. **Signal raised** — Azi detects the change and proposes an update
-
-This isn’t just messaging. It’s collaboration.
-
----
-
-## Update the Simulation
-
-Let’s activate the humidity sensor.
-
-This change is done by updating the `CapturedSensors` list of the simulated device.
-
-### Payload
 ```json
-{
-  "CapturedSensors": ["Temperature", "Humidity"]
-}
+{ "ID": "humidity-sensor-001", "Humidity": 74.2 }
 ```
 
-This tells the simulation: start including `humidity` in the device’s output.
+This is new structure. Azi spots it immediately.
 
-### Send It Through Azi
-- Open Azi’s control interface
-- Paste in the JSON
-- Click **Send Impulse**
+## Azi Proposes `HumiditySensor`
 
-> _💡 Azi Tip:_ “I’ll route this to the simulation agent. If it changes what I see, I’ll let you know.”
-
-### Or Use the CLI
-```bash
-oictl impulse send --target device01 --payload '{"CapturedSensors": ["Temperature", "Humidity"]}'
-```
-
-### Or Use the API
-```http
-POST /api/impulse
-{
-  "target": "device01",
-  "payload": {
-    "CapturedSensors": ["Temperature", "Humidity"]
-  }
-}
-```
-
----
-
-## The System Responds
-
-The moment your Impulse is received:
-- The device updates its configuration
-- Impulses now include a new `humidity` field:
+As with `TemperatureSensor`, Azi proposes a new schema:
 
 ```json
 {
-  "temperature": 21.4,
-  "humidity": 48.2
+  "ID": { "source": "connectionId", "type": "string", "primary": true },
+  "Humidity": { "source": "humidity", "type": "number", "unit": "%" }
 }
 ```
 
-Azi notices.
+Click **Promote Schema** to confirm. Azi saves it as `HumiditySensor v1`.
 
-She highlights the shift and raises a **Signal**:
-> _"I see a new field. Should we promote it?"_
+## Evolve the Reference Data
 
-That’s not just monitoring—it’s participation.
+New data means new thresholds. Let’s update your `RoomThresholdConfig`.
+
+### Edit the Schema
+
+In the reference data panel, find `RoomThresholdConfig`. Click **Edit Schema** and add:
+
+```json
+{
+  "Room": { "type": "string", "primary": true },
+  "DesiredTemp": { "type": "number" },
+  "HumidityThreshold": { "type": "number" }
+}
+```
+
+Click **Promote Schema**. Azi versions this as `RoomThresholdConfig v2`.
+
+### Update the Values
+
+Now, use Azi’s auto-generated view to enter your updated data:
+
+```json
+[
+  { "Room": "Lab1", "DesiredTemp": 72, "HumidityThreshold": 60 }
+]
+```
+
+Click **Save Data**.
+
+![Screenshot: Update Threshold Reference](PLACEHOLDER_threshold-ref-update.png)
+*Caption: Adding humidity threshold to existing room configuration.*
+
+## Azi Proposes `RoomState v2`
+
+With the new telemetry and updated reference data, Azi proposes an updated composite schema:
+
+```json
+{
+  "Room": "Lab1",
+  "Temperature": 83.2,
+  "DesiredTemp": 72,
+  "FanDevice": "fan-controller-001",
+  "FanPower": "off",
+  "Humidity": 74.2,
+  "HumidityThreshold": 60
+}
+```
+
+Click **Promote Schema**. Azi handles versioning—it becomes `RoomState v1.2`.
+
+Now, your agents will see not just what’s happening, but whether that state is acceptable—across multiple dimensions.
+
+> *💡 Thinky Tip: You don’t just observe evolution. You trigger it.*
 
 ---
 
-## Why This Matters
-
-You’re not configuring a dashboard.
-You’re shaping a system.
-
-This is your first full loop of **schema-led execution**:
-- **Intent** via Impulse
-- **Adaptation** via observed structure
-- **Collaboration** via Azi’s raised Signal
-
-The execution surface just became two-way.
+Next: [Evolve the Agent] → You’ll upgrade your agent to reason with `RoomState v2`.
 
 ---
-
-## Next Step: Promote the New Field
-
-You just changed the system—from the outside in.
-
-By updating the sensors, you didn’t just toggle a setting. You reshaped the stream. And Azi caught it.
-
-She saw a new field. She raised a Signal. Now she’s asking:  
-> _“Should we make this part of how I understand the world?”_
-
-This isn’t a new document. It’s the next beat in the same conversation.
-
-In the next step, you’ll walk side-by-side with Azi to promote `humidity`—turning a raw reading into a first-class field in your evolving schema. Once you do, it’s not just data anymore. It’s shared meaning.
-
-Let’s go teach her.
 

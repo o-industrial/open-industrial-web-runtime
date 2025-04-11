@@ -1,0 +1,45 @@
+# Deploy the Agent + React to Flow
+
+> *"You deploy. The fan responds."*
+
+You’ve defined the structure. You’ve written the logic. Now it’s time to run it.
+
+## Deploy Your Agent
+
+Open your `Main` surface and click **“Add Agent”**. Select your `FanControlAgent` and assign it to the surface.
+
+That’s it. No wiring. No scheduling. You’ve deployed logic into a live execution lattice.
+
+![Screenshot: Deploy Agent to Surface](PLACEHOLDER_deploy-agent.png)
+*Caption: Deploy your agent to begin responding to live impulses.*
+
+## The Moment of Execution
+
+Once deployed, your agent listens for impulses that match the `TemperatureSensor` schema. When one like this flows in:
+
+```json
+{ "ID": "temperature-sensor-001", "Temperature": 84.2 }
+```
+
+The agent executes immediately. Azi confirms the logic fired:
+
+> *"Agent executed. Command sent to turn on the fan."*
+
+## System Response
+
+The fan controller reacts in real time:
+
+```json
+{ "ID": "fan-controller-001", "Power": "on" }
+```
+
+No button was clicked. No pipeline was run. The system observed, matched, executed, and adapted—all through the structure you defined.
+
+> *💡 Thinky Tip: Execution is the product. Schema is the trigger. You are the architect.*
+
+---
+
+Next: [Add Reference Data] → You’ll give your agent more context and improve its reasoning.
+
+---
+

@@ -1,104 +1,104 @@
-# Add Simple Reference Data
+# Add Reference Data
 
-You just asked your first real question—and Azi turned it into live execution. But what if she could go even deeper?
+> *"You add context. The agent gets smarter."*
 
-This step teaches Azi the *meaning* behind your structure. With just a small table or two, she’ll start recognizing names, spotting anomalies, and asking better questions.
+Your agent responded to raw telemetry. Now it’s time to give that data **meaning**.
 
-You’re not just refining the model. You’re giving her a shared sense of what “normal” looks like.
+By introducing reference data, you give Azi—and your agents—a way to understand the world behind the numbers. Devices belong to rooms. Rooms have target conditions. These relationships create context. And context powers reasoning.
 
----
+## Define the Device Directory Schema
 
-## 📚 What Is Reference Data?
+Start by creating a new **reference schema** named `DeviceDirectorySchema`. This defines the structure for describing where devices live and what they represent:
 
-Reference data is static, structured context. It’s not a live Impulse stream—it’s the background knowledge Azi can use to make smarter decisions.
-
-Think of it like a glossary, a list of expected ranges, or a map that links internal codes to human meaning. It might include:
-
-- A table mapping `device_id` to `room_name`
-- Expected thresholds for each `sensor_type`
-- Shift schedules that define what "daytime" and "overnight" mean
-
-> _"If Impulses are what’s happening, reference data is how to make sense of it."_
-
-When you promote a reference table, you’re handing Azi a page of your system’s playbook.
-
----
-
-## 🛠️ Create Your First Reference Table
-
-Let’s build a quick reference table right in place.
-
-In your shared environment:
-
-1. Click **“Add Reference Data”**
-2. Choose **“Create Inline”**
-3. Name your table — e.g. `device_directory`
-4. Define the columns:
-   - `device_id` (string)
-   - `room_name` (string)
-   - `type` (string)
-5. Add a few rows like this:
-
-```
-| device_id | room_name | type      |
-|-----------|-----------|-----------|
-| pump01    | Room 7    | Pump      |
-| sensor22  | Line B    | Pressure  |
-| fan09     | Hallway   | Cooling   |
+```json
+{
+  "ID": { "type": "string", "primary": true },
+  "FriendlyName": { "type": "string" },
+  "Room": { "type": "string" }
+}
 ```
 
-6. Review the inferred schema
-7. Click **“Promote”** to confirm it
+Click **Promote Schema**.
 
-That’s it—you’ve just taught Azi how to read device IDs in a way that actually means something.
+Azi versions this structure automatically and makes it available in your workspace.
+
+![Screenshot: Promote DeviceDirectory Schema](PLACEHOLDER_device-directory-schema.png)
+*Caption: Promoting the schema for your Device Directory.*
+
+## Use Azi’s Auto-Generated View
+
+Once the schema is promoted, Azi creates a fully editable table view:
+
+![Screenshot: DeviceDirectory Table View](PLACEHOLDER_device-directory-view.png)
+*Caption: A structured interface to manage room and device assignments.*
+
+Now add your reference data:
+
+```json
+[
+  { "ID": "temperature-sensor-001", "FriendlyName": "Temp Sensor - Lab1", "Room": "Lab1" },
+  { "ID": "fan-controller-001", "FriendlyName": "Exhaust Fan - Lab1", "Room": "Lab1" }
+]
+```
+
+> *💡 Thinky Tip: You define the schema once. Azi gives you the tools to manage it forever.*
+
+## Define the RoomThresholdConfig Schema
+
+Next, define a schema to represent environmental targets per room:
+
+```json
+{
+  "Room": { "type": "string", "primary": true },
+  "DesiredTemp": { "type": "number" }
+}
+```
+
+Promote this as `RoomThresholdConfigSchema`. Again, Azi versions the structure.
+
+![Screenshot: Promote ThresholdConfig Schema](PLACEHOLDER-threshold-schema.png)
+*Caption: Defining what “ideal” looks like, structurally.*
+
+## Populate the RoomThresholdConfig Table
+
+Azi generates a view here too. Enter your data inline:
+
+```json
+[
+  { "Room": "Lab1", "DesiredTemp": 72 }
+]
+```
+
+![Screenshot: RoomThresholdConfig Table View](PLACEHOLDER-threshold-view.png)
+*Caption: A UI for managing the goals your logic should aim for.*
+
+## Why Reference Data Matters
+
+Promoting reference schemas turns structure into something agents can reason with:
+
+- Join telemetry to context: sensors → rooms
+- Link rooms to expectations: rooms → thresholds
+- Track and version it all: structure + data
+
+Once promoted:
+- Azi begins composing schema across data and reference
+- Your agents can see more than just numbers—they can see situations
+
+> *💡 Thinky Tip: Reference data is structure. And structure drives behavior.*
+
+## What Azi Starts to See
+
+With these two tables in place, Azi begins noticing relationships:
+
+- That multiple devices belong to the same room
+- That thresholds apply per room—not per sensor
+- That this context can now be merged into future schema proposals
+
+She doesn’t act yet. But the dots are starting to connect.
 
 ---
 
-## 🧠 How Azi Gets Smarter
-
-When you promote reference data, Azi starts forming hypotheses about how your world fits together.
-
-She doesn’t yet know the rules—but now she has building blocks to work with:
-
-- ✅ She uses friendly names in results
-- ✅ She flags values outside expected thresholds
-- ✅ She recognizes time-based patterns, like shifts or outages
-
-But what about **joins**? What if you ask:
-
-> *“Show me average pressure by room.”*
-
-Azi will **attempt** to relate your Impulse data to the new reference table using column names like `device_id`—but it’s still a guess. She might need your help.
-
-This is a moment of co-evolution: you coach Azi into deeper understanding, and those lessons stick.
+Next: [Composite Schema] → You’ll promote a `RoomState` that combines telemetry with thresholds and metadata.
 
 ---
-
-## 💡 Why It Matters
-
-This is your first real act of **teaching meaning**.
-
-You’re not just piping in data. You’re telling Azi what your codes, units, and structures represent.
-
-That meaning might be simple today—but it unlocks:
-
-- Better answers in natural queries
-- Smart formatting in summaries and views
-- Anomaly detection grounded in real context
-
-And soon? It will unlock full composition.
-
----
-
-## ➡️ What’s Next: Combine and Compose
-
-You’ve got streams. You’ve got reference meaning. Now, let’s wire them together.
-
-In the next step, you’ll learn how to define relationships explicitly. You’ll:
-
-- Join tables using promoted schema
-- Save common logic as reusable Functions
-- Build a live surface that updates in real time
-
-Let’s turn fragments of structure into a full conversation model.
 
