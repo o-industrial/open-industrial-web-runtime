@@ -1,7 +1,6 @@
 import { ChatSet } from '@fathym/atomic-design-kit';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
-import Counter from '../islands/Counter.tsx';
 import CompanyThinky from '../islands/organisms/CompanyThinky.tsx';
 import { CompanyWebState } from '../../src/state/CompanyWebState.ts';
 
@@ -23,7 +22,7 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
           <h1 class='text-4xl'>Dashboard</h1>
 
           <div class='flex flex-row py-8'>
-            <Counter />
+            {/* <Counter /> */}
           </div>
         </div>
       </div>
