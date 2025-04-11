@@ -2,11 +2,19 @@ import { EaCAtomicIconsProcessor } from '@fathym/atomic-icons';
 import { FathymAtomicIconsPlugin } from '@fathym/atomic-icons/plugin';
 import { DefaultMyCoreProcessorHandlerResolver } from './DefaultMyCoreProcessorHandlerResolver.ts';
 import { IoCContainer } from '@fathym/ioc';
-import { EaCRuntimeConfig, EaCRuntimePluginConfig } from '@fathym/eac/runtime/config';
+import {
+  EaCRuntimeConfig,
+  EaCRuntimePluginConfig,
+} from '@fathym/eac/runtime/config';
 import { EaCRuntimePlugin } from '@fathym/eac/runtime/plugins';
 import { EverythingAsCode } from '@fathym/eac';
 import { EverythingAsCodeApplications } from '@fathym/eac-applications';
-import { EaCDFSProcessor, EaCMDXProcessor, EaCPreactAppProcessor, EaCTailwindProcessor } from '@fathym/eac-applications/processors';
+import {
+  EaCDFSProcessor,
+  EaCMDXProcessor,
+  EaCPreactAppProcessor,
+  EaCTailwindProcessor,
+} from '@fathym/eac-applications/processors';
 import { EaCDenoKVDetails, EverythingAsCodeDenoKV } from '@fathym/eac-deno-kv';
 import {
   EaCJSRDistributedFileSystemDetails,
@@ -62,6 +70,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             },
             ApplicationResolvers: {
+              assets: {
+                PathPattern: '/assets*',
+                Priority: 500,
+              },
               atomicIcons: {
                 PathPattern: '/icons*',
                 Priority: 200,
@@ -86,6 +98,30 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
           },
         },
         Applications: {
+          assets: {
+            Details: {
+              Name: 'Assets',
+              Description: 'The static assets to use.',
+            },
+            ModifierResolvers: {},
+            Processor: {
+              Type: 'DFS',
+              DFSLookup: 'local:apps/assets',
+              CacheControl: {
+                'text\\/html': `private, max-age=${60 * 5}`,
+                'image\\/': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'application\\/javascript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'application\\/typescript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'text\\/css': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+              },
+            } as EaCDFSProcessor,
+          },
           atomicIcons: {
             Details: {
               Name: 'Atomic Icons',
@@ -156,9 +192,15 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               CacheControl: {
                 'text\\/html': `private, max-age=${60 * 5}`,
                 'image\\/': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/javascript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/typescript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'application\\/javascript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'application\\/typescript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'text\\/css': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
               },
             } as EaCDFSProcessor,
           },
@@ -193,6 +235,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Type: 'Tailwind',
               DFSLookups: [
                 'local:apps/components',
+                'local:apps/docs',
                 'local:apps/home',
                 'local:apps/islands',
                 'jsr:@fathym/atomic',
@@ -201,7 +244,9 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               ConfigPath: './tailwind.config.ts',
               StylesTemplatePath: './apps/tailwind/styles.css',
               CacheControl: {
-                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'text\\/css': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
               },
             } as EaCTailwindProcessor,
           },
@@ -225,6 +270,12 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               DefaultFile: 'index.html',
               ConnectionString: Deno.env.get('AZURE_STORAGE_CONNECTION_STRING'),
             } as EaCAzureBlobStorageDistributedFileSystemDetails,
+          },
+          'local:apps/assets': {
+            Details: {
+              Type: 'Local',
+              FileRoot: './apps/assets/',
+            } as EaCLocalDistributedFileSystemDetails,
           },
           'local:apps/components': {
             Details: {
@@ -286,14 +337,16 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'BaseHREF',
               Name: 'Base HREF',
-              Description: 'Adjusts the base HREF of a response based on configureation.',
+              Description:
+                'Adjusts the base HREF of a response based on configureation.',
             } as EaCBaseHREFModifierDetails,
           },
           keepAlive: {
             Details: {
               Type: 'KeepAlive',
               Name: 'Deno KV Cache',
-              Description: 'Lightweight cache to use that stores data in a DenoKV database.',
+              Description:
+                'Lightweight cache to use that stores data in a DenoKV database.',
               KeepAlivePath: '/_eac/alive',
             } as EaCKeepAliveModifierDetails,
           },
