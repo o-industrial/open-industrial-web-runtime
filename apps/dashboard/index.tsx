@@ -1,14 +1,10 @@
-import { ChatSet } from '@fathym/atomic-design-kit';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
-import CompanyThinky from '../islands/organisms/CompanyThinky.tsx';
-import { CompanyWebState } from '../../src/state/CompanyWebState.ts';
-
-export const IsIsland = true;
+import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 
 type IndexPageData = {};
 
-export const handler: EaCRuntimeHandlerSet<CompanyWebState, IndexPageData> = {
+export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, IndexPageData> = {
   GET: (_req, ctx) => {
     return ctx.Render({});
   },

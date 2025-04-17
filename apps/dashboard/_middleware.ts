@@ -1,8 +1,12 @@
 import { EaCRuntimeHandler } from '@fathym/eac/runtime/pipelines';
-import { CompanyWebState } from '../../src/state/CompanyWebState.ts';
+import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
+import { loadJwtConfig } from '@fathym/common';
 
-export default ((_req, ctx) => {
-  ctx.State.CurrentDate = new Date(Date.now());
+export default (async (_req, ctx) => {
+  ctx.State.OIJWT = await loadJwtConfig().Create({
+    EnterpriseLookup: ctx.State.EnterpriseLookup,
+    Username: ctx.State.Username,
+  });
 
   return ctx.Next();
-}) as EaCRuntimeHandler<CompanyWebState>;
+}) as EaCRuntimeHandler<OpenIndustrialWebState>;

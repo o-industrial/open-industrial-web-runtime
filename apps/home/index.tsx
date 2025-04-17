@@ -1,7 +1,7 @@
 // deno-lint-ignore-file ban-types
 import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
-import { CompanyWebState } from '../../src/state/CompanyWebState.ts';
+import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import HeroSection from '../components/oi-mockup/homepage/HeroSection.tsx';
 import WhyOpenIndustrial from '../components/oi-mockup/homepage/WhyOpenIndustrial.tsx';
 import VirtualWorkforceShowcase from '../components/oi-mockup/homepage/VirtualWorkforceShowcase.tsx';
@@ -11,7 +11,7 @@ import AIGovernance from '../components/oi-mockup/homepage/AIGovernance.tsx';
 
 export type HomepageData = {};
 
-export const handler: EaCRuntimeHandlerSet<CompanyWebState, HomepageData> = {
+export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, HomepageData> = {
   GET: (_req, ctx) => {
     const data: HomepageData = {};
     return ctx.Render(data);

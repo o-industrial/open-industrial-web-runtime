@@ -1,7 +1,7 @@
 // deno-lint-ignore-file ban-types
 import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
-import { CompanyWebState } from '../../src/state/CompanyWebState.ts';
+import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import HeroSection from '../components/oi-mockup/oies-oieb/HeroSection.tsx';
 import WhatIsOpenIndustrialEdge from '../components/oi-mockup/oies-oieb/WhatIsOpenIndustrialEdge.tsx';
 import MultiEnvironmentFlow from '../components/oi-mockup/oies-oieb/MultiEnvironmentFlow.tsx';
@@ -9,7 +9,7 @@ import AISecurity from '../components/oi-mockup/oies-oieb/AISecurity.tsx';
 
 export type OIESOIEBData = {};
 
-export const handler: EaCRuntimeHandlerSet<CompanyWebState, OIESOIEBData> = {
+export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, OIESOIEBData> = {
   GET: (_req, ctx) => {
     const data: OIESOIEBData = {};
     return ctx.Render(data);

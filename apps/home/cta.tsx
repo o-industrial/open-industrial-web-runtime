@@ -1,7 +1,7 @@
 // deno-lint-ignore-file ban-types
 import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
-import { CompanyWebState } from '../../src/state/CompanyWebState.ts';
+import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import HeroSection from '../components/oi-mockup/cta-community/HeroSection.tsx';
 import DeployExecution from '../components/oi-mockup/cta-community/DeployExecution.tsx';
 import DeveloperEngagement from '../components/oi-mockup/cta-community/DeveloperEngagement.tsx';
@@ -9,7 +9,7 @@ import CommunityCollaboration from '../components/oi-mockup/cta-community/Commun
 
 export type CTACommunityData = {};
 
-export const handler: EaCRuntimeHandlerSet<CompanyWebState, CTACommunityData> = {
+export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, CTACommunityData> = {
   GET: (_req, ctx) => {
     const data: CTACommunityData = {};
     return ctx.Render(data);
