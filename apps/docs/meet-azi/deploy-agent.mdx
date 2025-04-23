@@ -9,9 +9,49 @@ Your schema is live. Now let’s make the system respond to it.
 
 ---
 
+## Understand the Agent’s Job
+
+You just promoted a schema. Now it’s time to test whether the system truly listens.
+
+An agent is a unit of logic that responds to structure — not just data:
+
+- It listens for specific **impulses** (from promoted schemas)
+- It connects to external **state** (through other schemas)
+- It only acts when meaning is clear
+
+Let’s break that down.
+
+Your promoted `TemperatureSensor` schema looks like this:
+
+```json
+{
+  "ID": "temperature-sensor-001",
+  "Temperature": 84.2
+}
+```
+
+Now we’ll promote a schema for your fan controller:
+
+```json
+{
+  "ID": { "source": "connectionId", "type": "string", "primary": true },
+  "Power": { "type": "string", "enum": ["on", "off"] }
+}
+```
+
+This lets your agent understand not just what the temperature *is* — but what the fan is *already doing*.
+
+That’s how logic becomes **context-aware**.
+
+> You’re not writing an if-statement.
+> You’re defining a reflex — scoped by structure, governed by schema.
+
+---
+
 ## Define Your First Agent
 
-We're going to create a logic unit that listens to `TemperatureSensor` impulses and controls a fan. Logic is now tied to meaning — not just data.
+Let’s build your first agent — one that listens to your schema and responds in real time.
+You’ve already defined the structure. Now, let’s define the behavior.
 
 ```ts
 export default Agent()
@@ -48,17 +88,40 @@ You’ve built a single-schema reflex. Next, you’ll compose behavior across co
 
 ---
 
-## Deploy the Agent
+## This Is When the System Listens
 
-1. Go to your **Agents** tab  
-2. Click **Create New Agent** → name it `FanControlAgent`  
-3. Paste the logic above  
-4. Bind it to `TemperatureSensor`  
-5. Choose your execution surface (e.g., `dev-surface-01`)  
-6. Hit **Deploy**  
+You’ve defined structure. You’ve written logic. Now it’s time to find out if the system truly respects both.
+
+This is your first deployment — the moment when authored meaning becomes **active behavior**.
+
+But it’s not a function. Not a poller. Not a service waiting in a loop.
+
+An agent only activates when:
+- The **structure is promoted**
+- The **impulse matches**
+- The **execution surface is listening**
+
+This is what makes the system **governed, intentional, and safe**.
+
+> If nothing matches, nothing runs.  
+> If meaning is confirmed — the system acts.
+
+---
+
+## Activate the Agent
+
+Open your **Agents** tab and click **Create New Agent**.
+
+- Name it `FanControlAgent`
+- Paste in your logic
+- Bind it to `TemperatureSensor`
+- Choose your surface (e.g., `dev-surface-01`)
+- Click **Deploy**
+
+That’s it — no wiring, no polling, no pipelines. You’ve just activated structure-bound behavior.  
 That’s it — no wiring, no polling, no pipelines. Logic is now live.
 
-<aside class="border-l-4 border-gray-300 dark:border-gray-500 pl-4 italic text-gray-600 dark:text-gray-400">
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
 ✅ <code>FanControlAgent</code> deployed to <code>dev-surface-01</code>. I’ll track each time it runs — and why.
 </aside>
 
@@ -66,9 +129,9 @@ An execution surface is more than a runtime — it’s a scope of intent. You de
 
 ---
 
-## Trigger an Impulse
+## Observe the System Respond
 
-Let’s simulate a sensor input:
+Now let’s test the reflex. When a real `TemperatureSensor` input flows in:
 
 ```json
 {
@@ -77,7 +140,7 @@ Let’s simulate a sensor input:
 }
 ```
 
-This will trigger the agent and result in a fan toggle.
+This matches your agent’s declared logic. Azi reacts — visibly and precisely.
 
 <figure class="my-16 flex flex-col items-center text-center max-w-xl w-full">
   <img
@@ -97,11 +160,20 @@ This will trigger the agent and result in a fan toggle.
 ✅ Result: Fan turned on
 ```
 
-<aside class="border-l-4 border-gray-300 dark:border-gray-500 pl-4 italic text-gray-600 dark:text-gray-400">
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
 “Agent executed. Command sent to turn on the fan.”
 </aside>
 
 Every agent response is visible in your run logs. You can explore inputs, decisions, and outcomes.
+
+---
+
+### ✅ System Check
+
+- ✅ Agent matched: `TemperatureSensor`
+- ✅ Context fetched: `fan-controller-001`
+- ✅ Action taken: `Power = on`
+- ✅ Outcome logged and visible
 
 ---
 
@@ -111,7 +183,7 @@ Every agent response is visible in your run logs. You can explore inputs, decisi
 - It ran logic and issued a real command
 - Azi tracked everything end-to-end
 
-<aside class="border-l-4 border-gray-300 dark:border-gray-500 pl-4 italic text-gray-600 dark:text-gray-400">
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
 If no schema match occurs, nothing runs. Azi logs the impulse — but your agent stays silent. That’s how we protect intent.
 </aside>
 
@@ -120,12 +192,13 @@ If no schema match occurs, nothing runs. Azi logs the impulse — but your agent
   Every execution is traceable. Every decision is explainable.
 </div>
 
-<aside class="border-l-4 border-gray-300 dark:border-gray-500 pl-4 italic text-gray-600 dark:text-gray-400">
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
 Only <strong>promoted schemas</strong> can trigger logic. That’s how we maintain meaning — and precision.
 </aside>
 
 Execution didn’t happen because code was present — it happened because **structure matched**.
-<aside class="border-l-4 border-gray-300 dark:border-gray-500 pl-4 italic text-gray-600 dark:text-gray-400">
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
 FanControlAgent doesn’t loop or watch a queue. It waits silently — until structure confirms it’s valid. That’s how the system ensures execution only happens when meaning is clear.
 </aside>
 
@@ -133,7 +206,14 @@ FanControlAgent doesn’t loop or watch a queue. It waits silently — until str
 
 ## What’s Next
 
-This was your first working agent. From here, you can:
+This was your first working agent. But agents are just the beginning.
+
+Soon, you'll:
+- Link multiple schemas with `RoomState` or `Schedule`
+- Add reasoning or OpenAI explanations to logic
+- Deploy to SubSurfaces for scoped test/observe flows
+
+From here, you can:
 
 - Fork agents to test new logic
 - Version and preview changes safely

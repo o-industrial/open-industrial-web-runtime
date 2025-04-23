@@ -1,0 +1,195 @@
+# Evolve Together
+
+> *"You version your agent. The system adapts."*
+
+In most systems, changing behavior is risky. In Open Industrial, it's safe — because every decision is versioned, observable, and forkable.
+
+Until now, your logic responded to structure. Now it learns from situations — and explains itself.
+
+## Fork the Agent
+
+Forking is how you test improvements, compare outcomes, and merge changes safely.
+
+From your Agent panel, click **Fork Agent** on `FanControlAgent`. Name the new fork `FanControlAgent v2`.
+
+This fork will run alongside the original until you're ready to promote it.
+
+> *Forking doesn’t break history. It gives you safe space to grow.*
+
+## Bind to RoomState
+
+Update your agent to respond to the latest version of `RoomState`. Azi will bind you to `RoomState v1.2`, which now includes:
+- Temperature + DesiredTemp
+- Humidity + HumidityThreshold
+- FanPower
+- Room context
+
+This lets your agent reason in full environmental context—across multiple rooms. No hardcoding required.
+
+> *This is your first reflective agent. It doesn’t just respond — it narrates, justifies, and adapts across rooms. You’re not just deploying code. You’re shaping behavior.*
+
+```ts
+export default Agent()
+  .Impulse(RoomStateSchema)
+  .Tools({
+    Explain: async (room, powerMode) => {
+      const openai = new OpenAI();
+
+      return await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "user",
+            content: `Explain why the fan was turned ${powerMode}. Temperature was ${room.Temperature}°F (threshold ${room.DesiredTemp}), humidity was ${room.Humidity}% (threshold ${room.HumidityThreshold}), room was ${room.Room}.`
+          }
+        ]
+      });
+    }
+  })
+  .OnImpulse(async (room, ctx) => {
+    if (
+      room.Temperature > room.DesiredTemp &&
+      room.Humidity > room.HumidityThreshold &&
+      room.FanPower !== "on"
+    ) {
+      await room.Commands.Fan.Power("on");
+      const explanation = await ctx.Tools.Explain(room, "on");
+      return ctx.Status.Success(explanation);
+    }
+
+    if (
+      room.Temperature < room.DesiredTemp * 0.9 &&
+      room.Humidity < room.HumidityThreshold * 0.9 &&
+      room.FanPower !== "off"
+    ) {
+      await room.Commands.Fan.Power("off");
+      const explanation = await ctx.Tools.Explain(room, "off");
+      return ctx.Status.Success(explanation);
+    }
+
+    return ctx.Status.Success("No action needed");
+  });
+```
+
+This logic:
+- Responds to live composite state
+- Runs across **any room**
+- Adds multi-dimensional logic for temperature + humidity
+- Explains its actions in natural language via OpenAI
+
+> *💡 Thinky Tip: You’re not hardcoding responses—you’re shaping behavior with structure.*
+
+## Safely Compare Agents
+
+Deploying both agents to the same surface would cause execution conflicts—two logic units trying to control the same fan. Instead, you’ll compare `v2` in a controlled, observable way.
+
+### Create a SubSurface for Evaluation
+
+From your `Main` surface, create a **SubSurface**.
+- Inherit all three connections from Main
+- Reconfigure `fan-controller-001` in this SubSurface:
+  - Set **Command Mode** to **Mocked**
+  - Azi will record what the agent *would* have done, without sending real commands
+
+<figure class="my-16 flex flex-col items-center text-center max-w-xl w-full">
+  <img
+    src="/assets/docs/subsurface-setup.png"
+    alt="Screenshot showing configuration of a SubSurface with mocked command mode enabled."
+    class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full"
+  />
+  <figcaption class="mt-4 text-sm text-gray-400 tracking-wide uppercase">
+    A forked SubSurface for testing new agent logic safely.
+  </figcaption>
+</figure>
+
+### Deploy `FanControlAgent v2` to SubSurface
+
+Now add your new agent to the SubSurface.
+It will run normally, respond to real impulses, and log its intent—without affecting real-world behavior.
+
+> *💡 Thinky Tip: A mocked command still reflects real logic. Azi just doesn’t act on it... yet.*
+
+> ⚠️ *Note: Mocked agents can still produce side effects like logs, diagnostics, and downstream triggers. Use scoped execution if isolation is critical.*
+
+### Observe and Compare
+
+Azi shows you:
+- When `v2` would have acted
+- What explanation it generated
+- How that compares to what `v1` actually did
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+FanControlAgent v2 triggered 2 fewer commands than v1 across identical inputs. Promote it?
+</aside>
+
+You can also add a helper agent to the SubSurface that:
+- Observes both agent outputs
+- Highlights decision differences
+- Logs a side-by-side impulse result comparison
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Want to visualize both agent paths on the last impulse?
+</aside>
+
+<figure class="my-16 flex flex-col items-center text-center max-w-xl w-full">
+  <img
+    src="/assets/docs/agent-diff-v1-v2.png"
+    alt="Side-by-side agent decision comparison showing different actions from v1 and v2 on the same RoomState input."
+    class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full"
+  />
+  <figcaption class="mt-4 text-sm text-gray-400 tracking-wide uppercase">
+    Agent divergence: v1 turned the fan on. v2 withheld action based on humidity. Guided evolution through observed behavior.
+  </figcaption>
+</figure>
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Want me to surface the top divergence moments across all agent forks?
+</aside>
+
+> *💡 Thinky Tip: Real evolution isn’t guessing—it’s guided observation.*
+
+## Promote the Evolution
+
+Once you’re confident `v2` behaves correctly:
+- Unassign `FanControlAgent`
+- Promote `v2` to mainline
+- Reconfigure `fan-controller-001` back to **real command mode**
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Want to run both agents live for a while? Use surface filters and version pinning to split execution.
+</aside>
+
+Azi tracks all variants, across all surfaces.
+
+The surface now runs only the evolved agent — or both, if you choose.
+
+## Reflect and Roll Forward
+
+Azi keeps the full history — so you can fork again, roll back, or evolve further.
+
+In Open Industrial, your system doesn’t just change. It evolves — with traceable structure, explainable logic, and reversible paths.
+
+You can fork any time. You can promote only when ready. Azi keeps every version — just in case.
+
+> *💡 Thinky Tip: In future steps, you’ll bind agents across structure versions and let Azi arbitrate preference.*
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+This isn’t just an upgrade. It’s a shift in authorship. You don’t write for machines anymore. You guide systems that explain themselves.
+</aside>
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+In the agent registry, every forked version, SubSurface result, and comparison delta is logged. The system becomes your lab notebook — and your flight recorder.
+</aside>
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+You just authored a system that explains itself. Want to let it teach others? Turn your fork into a public Simulation Journey.
+</aside>
+
+---
+
+🎉 You’ve built a system that sees, reasons, responds, and evolves. On structure. In real time.
+
+Next up:
+- Add more sensors
+- Fork RoomState
+- Launch your Simulation Journeys

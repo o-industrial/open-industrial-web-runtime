@@ -1,0 +1,153 @@
+## Add Reference Data
+
+Before Azi can think — she has to know where she is.
+
+In the last step, we built a reflex: if `TemperatureSensor` reads over 80, turn on the fan. Simple, direct... but blind.
+
+This page introduces **reference data**: user-defined schemas that **give structure to context**.
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Is this temperature… or voltage? Azi isn’t sure — yet.
+</aside>
+
+We call these **Reference Schemas** — structures that define expectations, not events. They enable logic that adapts based on room, schedule, or system condition.
+
+### Teach Azi About Devices
+
+We’ll start by teaching Azi what devices exist in our environment, and where they live.
+
+This is your **DeviceDirectorySchema**:
+
+```json
+{
+  "ID": { "type": "string", "primary": true },
+  "FriendlyName": { "type": "string" },
+  "Room": { "type": "string" }
+}
+```
+
+Just like with `TemperatureSensor`, these schemas are versioned. Changes can be tracked, forked, and rolled forward safely.
+
+Use Azi’s schema editor to promote this structure.
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Azi doesn’t assume what matters. You teach her, field by field.
+</aside>
+
+Then, enter two rows of data:
+
+```json
+[
+  { "ID": "temperature-sensor-001", "FriendlyName": "Temp Sensor - Lab1", "Room": "Lab1" },
+  { "ID": "fan-controller-001", "FriendlyName": "Exhaust Fan - Lab1", "Room": "Lab1" }
+]
+```
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+This is like a directory of devices — but versioned, forkable, and collaborative.
+</aside>
+
+### Teach Azi What "Good" Means
+
+Now we’ll define your **RoomThresholdConfigSchema** — expectations per room.
+
+```json
+{
+  "Room": { "type": "string", "primary": true },
+  "DesiredTemp": { "type": "number" }
+}
+```
+
+Promote this schema, then add a single entry:
+
+```json
+[
+  { "Room": "Lab1", "DesiredTemp": 72 }
+]
+```
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Until now, your system has been reacting in the dark. This is the first time it sees a room — and understands what “comfortable” means.
+</aside>
+
+### Azi Sees the Table
+
+Azi auto-generates a table UI for each promoted schema. You can sort, edit, and filter directly — but more importantly, Azi now understands this structure.
+
+> This isn’t new data — it’s new meaning.
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Azi now understands the *relationship* between data streams and reference expectations. This unlocks her ability to propose composite views — like `RoomState v1`.
+</aside>
+
+She can now **join** real-time telemetry against this reference:
+- Is this device in Lab1?
+- What’s Lab1’s preferred temperature?
+- Is the room within range — or not?
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+What if a device moves rooms? What if two schemas disagree? Azi will flag conflicts — but **you define resolution**.
+</aside>
+
+### Structure Becomes State
+
+In Open Industrial, a state schema reflects current conditions — like telemetry joined with targets.
+
+RoomState v1 will let agents check: “Is this room within range?” — and decide what to do next.
+
+Here’s what a simplified joined structure might look like:
+
+```json
+{
+  "DeviceID": "temperature-sensor-001",
+  "Room": "Lab1",
+  "CurrentTemp": 80,
+  "DesiredTemp": 72
+}
+```
+
+To visualize how these schemas relate:
+
+```
+[TemperatureSensor] --(ID)--> [DeviceDirectory] --(Room)--> [RoomThresholdConfig]
+                                       ↓
+                                   [RoomState]
+```
+
+Here’s what reasoning can look like in action:
+
+```json
+{
+  "if": {
+    "RoomState.CurrentTemp > RoomState.DesiredTemp + 3"
+  },
+  "then": {
+    "Activate": "fan-controller-001"
+  }
+}
+```
+
+> Azi proposes a derived view: `RoomState` — showing current + target per room, live.
+
+In the UI, Azi renders:
+```json
+{
+  "Room": "Lab1",
+  "CurrentTemp": 80,
+  "DesiredTemp": 72,
+  "InRange": false
+}
+```
+And flags: _"Lab1 is 8 degrees above target. Would you like to add a rule?”_
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+As data accumulates, Azi can propose evolved schemas — like `RoomState v2`, separating weekday vs weekend targets.
+</aside>
+
+In the next step, you’ll promote a composite schema: `RoomState`. It combines telemetry and reference into a single, observable structure.
+
+> From here on, Azi doesn’t just react. She **reasons**.
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Dev Tip: All schema operations can also be scripted via the Open Industrial CLI or SDK.
+</aside>

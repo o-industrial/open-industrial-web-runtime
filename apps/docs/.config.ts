@@ -21,10 +21,10 @@ function loadDocsConfig(): Promise<DocsConfig> {
         Title: 'Why Open Industrial',
         Path: '/why-oi',
         Children: [
-          { Title: 'Add Reference Data', Path: '/why-oi/reference-data' },
-          { Title: 'Promote Composite Schema', Path: '/why-oi/composite-schema' },
+          { Title: 'Reference Data', Path: '/why-oi/reference-data' },
+          { Title: 'Composite Schema', Path: '/why-oi/composite-schema' },
           { Title: 'Command the Sim', Path: '/why-oi/command-the-sim' },
-          { Title: 'Evolve Your Agent', Path: '/why-oi/evolve-agent' },
+          { Title: 'Evolve Together', Path: '/why-oi/evolve-together' },
         ],
       },
       {

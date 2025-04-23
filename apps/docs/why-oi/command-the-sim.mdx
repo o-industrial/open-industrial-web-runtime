@@ -1,0 +1,177 @@
+# Command the Sim
+
+> *"You send a command. The structure changes."*
+
+Until now, Azi has observed passively. You’ve taught through what already exists.
+
+But what happens when you introduce something new?
+
+## Trigger a New Input
+
+In your Surface, locate `humidity-sensor-001`. It’s paused by default. Click **Enable Emission**.
+
+Though it looks like a toggle, this is actually a command — one your agents could issue too. Within seconds, the simulator emits a new structure:
+
+```json
+{ "ID": "humidity-sensor-001", "humidity": 74.2 }
+```
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+This looks like a new field: <code>humidity</code>. Want to promote it as <code>Humidity</code>?
+</aside>
+
+## Promote the `HumiditySensor` Schema
+
+Azi detects the new field and proposes a schema:
+
+```json
+{
+  "ID": { "source": "connectionId", "type": "string", "primary": true },
+  "Humidity": { "source": "humidity", "type": "number", "unit": "%" }
+}
+```
+
+Click **Promote Schema** to confirm. Azi saves it as `HumiditySensor v1`.
+
+> The raw field is lowercase: `humidity`. Azi normalizes it to title-case in schema promotion — you can override this if needed.
+
+## Update the Device Directory
+
+For composite logic to track humidity devices, the `DeviceDirectorySchema` must also evolve. Previously, it looked like this:
+
+```json
+{
+  "ID": { "type": "string", "primary": true },
+  "FriendlyName": { "type": "string" },
+  "Room": { "type": "string" }
+}
+```
+
+Now, edit it to include the type of each device:
+
+```json
+{
+  "ID": { "type": "string", "primary": true },
+  "FriendlyName": { "type": "string" },
+  "Room": { "type": "string" },
+  "DeviceType": { "type": "string" }
+}
+```
+
+Promote this schema version — Azi saves it as `DeviceDirectorySchema v2`.
+
+Then, add a new row for the humidity sensor:
+
+```json
+{
+  "ID": "humidity-sensor-001",
+  "FriendlyName": "Humidity Sensor - Lab1",
+  "Room": "Lab1",
+  "DeviceType": "humidity"
+}
+```
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+This keeps Azi’s joins sharp. She knows exactly what each device does — and where.
+</aside>
+
+Once the schema is promoted, Azi reviews existing records. Because <code>DeviceType</code> is a new required field, she highlights any entries that need a backfill:
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+I noticed some records in <code>DeviceDirectory</code> are missing a <code>DeviceType</code>. Want to patch them now?
+</aside>
+
+Use the quick-edit UI or batch input to add missing values. Azi will validate them as updates are saved.
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+When required fields are missing, Azi automatically renders an inline quick-edit view — no need to scan logs or manually validate.
+</aside>
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Dev Tip: Use <code>openindustrial schemas update</code> or <code>schemas diff</code> in the CLI to compare versions or backfill data programmatically.
+</aside>
+
+## Update the Threshold Configuration
+
+New structure means new context. Update your reference config to support humidity-based logic.
+
+### Edit the Schema
+
+Find `RoomThresholdConfig`, then click **Edit Schema**. Add a new field:
+
+```json
+{ "HumidityThreshold": "number" }
+```
+
+Promote this update — Azi versions it as `RoomThresholdConfig v2`.
+
+### Input the Updated Values
+
+Use Azi’s auto-generated view to provide new configuration values:
+
+```json
+[
+  { "Room": "Lab1", "DesiredTemp": 72, "HumidityThreshold": 60 }
+]
+```
+
+Click **Save Data**.
+
+<figure class="my-16 flex flex-col items-center text-center max-w-xl w-full">
+  <img
+    src="/assets/docs/threshold-ref-update.png"
+    alt="User updating RoomThresholdConfig to include humidity threshold."
+    class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full"
+  />
+  <figcaption class="mt-4 text-sm text-gray-400 tracking-wide uppercase">
+    Adding humidity threshold to an existing room configuration.
+  </figcaption>
+</figure>
+
+## Azi Proposes `RoomState v2`
+
+With the updated reference schema and new telemetry, Azi assembles a recomposed composite:
+
+```json
+{
+  "Room": "Lab1",
+  "Temperature": 83.2,
+  "DesiredTemp": 72,
+  "FanDevice": "fan-controller-001",
+  "FanPower": "off",
+  "Humidity": 74.2,
+  "HumidityThreshold": 60
+}
+```
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+RoomState has evolved — should I propose <code>RoomState v2</code>?
+</aside>
+
+Click **Promote Schema**. Azi handles versioning and preserves lineage. Your system now interprets not just what’s happening — but whether that state is acceptable across multiple dimensions.
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Agents using <code>RoomState</code> continue functioning — they’ll now receive additional context, like humidity and thresholds, unless locked to a specific version.
+</aside>
+
+## Before & After
+
+**Previous Structure:**
+```
+[TemperatureSensor] → [DeviceDirectory] → [RoomThresholdConfig]
+                                      ↓
+                                [RoomState v1]
+```
+
+**After Adding Humidity:**
+```
+[HumiditySensor] ─┐
+                  ↓
+[TemperatureSensor] → [DeviceDirectory v2] → [RoomThresholdConfig v2]
+                                      ↓
+                                [RoomState v2]
+```
+
+> *💡 Thinky Tip: You don’t just observe evolution. You trigger it.*
+
+---

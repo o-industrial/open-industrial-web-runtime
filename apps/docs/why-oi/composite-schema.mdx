@@ -1,0 +1,84 @@
+# Promote Composite Schema
+
+_If your logic depends on individual readings, it will always be brittle. But when the system sees the full room — it adapts._
+
+You’ve taught the system what each device means and where it lives. You’ve defined targets for the environment. Now, Azi is ready to take the next step: composing a full view of a room’s state.
+
+_This unified view is what we’ll call `RoomState` — a semantic structure that reflects what’s happening in a space, and whether it’s in target._
+
+> You’re not just connecting fields — you’re teaching the system how to reason about a situation.
+
+You taught Azi which device is where. You taught her what “good” means for each room. Now you’ll see those teachings **merged into a single, shared worldview** — one the system can respond to, subscribe to, and evolve.
+
+### From Data to Domain
+
+Three structures, one worldview:  
+Azi now proposes a single schema that combines what’s happening, where it’s happening, and how it compares to your expectations.
+
+```json
+{
+  "Room": "Lab1",
+  "CurrentTemp": 84.2,
+  "DesiredTemp": 72,
+  "FanPower": "off",
+  "DeviceID": "temperature-sensor-001"
+}
+```
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+This looks like RoomState. Want to promote it?
+</aside>
+
+### Promote the Structure
+
+When Azi proposes `RoomState`, you’ll:
+- Review the schema preview
+- Confirm or rename any fields
+- Approve the name: `RoomState`
+- The system versions it automatically: `RoomState v1`
+
+<figure class="my-16 flex flex-col items-center text-center max-w-xl w-full">
+  <img
+    src="/assets/docs/promote-roomstate.png"
+    alt="Azi’s proposed RoomState schema with field origins highlighted."
+    class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full"
+  />
+  <figcaption class="mt-4 text-sm text-gray-400 tracking-wide uppercase">
+    Azi’s proposed schema becomes yours once you name and confirm it.
+  </figcaption>
+</figure>
+
+Once promoted, `RoomState` becomes a durable context object in your system:
+- Agents can subscribe to it
+- Logic can be declarative and policy-driven
+- Future versions (`RoomState v2`, `v3`, etc.) can evolve cleanly without breaking the past
+
+### The Structure Graph
+
+```
+[TemperatureSensor] --(ID)--> [DeviceDirectorySchema] --(Room)--> [RoomThresholdConfigSchema]
+                                     ↓
+                                [RoomState]
+```
+
+This is how structure becomes understanding.
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Looks like `temperature-sensor-001` belongs to Lab1. Should I join it with that room’s target temp?
+</aside>
+
+### What Comes Next
+
+Once you’ve promoted `RoomState v1`, your agents won’t just react to isolated readings — they’ll respond to a full situation:
+
+```ts
+if (RoomState.Room == "Lab1" && RoomState.CurrentTemp > RoomState.DesiredTemp) {
+  if (RoomState.FanPower == "off") escalate("cooling-policy")
+}
+```
+
+_It doesn’t just react._  
+_It doesn’t just compare._  
+**It evaluates. Because it knows where it is — and what should be happening.**
+
+> *Structure becomes understanding. Understanding becomes logic.*
