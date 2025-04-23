@@ -1,0 +1,213 @@
+# Spin Up the Sim
+
+> _This isn’t a dashboard. This is your first co-created system._
+
+You’re sitting in your `hello‑azi` workspace—clean, live, and waiting for your signal.  
+No prebuilt dashboards. No magic wizards. Just you, Azi, and the raw flow of data.
+
+---
+
+## Welcome to Your Workspace
+
+<figure class="my-8 flex flex-col items-start text-left">
+  <img
+    data-eac-bypass-base
+    src="/assets/first-execution-hello-azi-welcome.png"
+    alt="hello-azi workspace"
+    class="rounded-xl shadow-xl ring-1 ring-indigo-400/30 w-full max-w-md"
+  />
+  <figcaption class="mt-4 text-sm text-indigo-300 tracking-wide uppercase">
+    The clean, pre‑provisioned <code>hello-azi</code> workspace—ready for you to
+    begin
+  </figcaption>
+</figure>
+
+This is your personal sandbox—**no** dashboards, **no** scripts, **all** potential.
+
+---
+
+## Add Your First Data Connections
+
+Click **Add Connection** to open the simulator bank:
+
+<figure class="my-8 flex flex-col items-start text-left">
+  <img
+    data-eac-bypass-base
+    src="/assets/first-execution-add-connection.png"
+    alt="Add Connection Dialog showing simulator bank"
+    class="rounded-2xl shadow-xl ring-1 ring-pink-400/30 w-full max-w-md"
+  />
+  <figcaption class="mt-4 text-sm text-pink-300 tracking-wide uppercase">
+    Use the Add Connection dialog to simulate temperature, humidity, and control
+    devices
+  </figcaption>
+</figure>
+
+1. Temperature Simulator → **ID:** `temperature-sensor-001`
+2. Humidity Simulator → **ID:** `humidity-sensor-001` (leave paused)
+3. Fan Controller → **ID:** `fan-controller-001`
+
+> 💡 **Thinky Tip:** You’re not inventing data—you’re naming what you connect. Schema is how Azi understands them.
+
+---
+
+## Create Your First Surface
+
+A Surface is a live execution lens — a named window into selected connections where Azi observes, proposes, and eventually acts.
+
+Now that your simulators are connected, it's time to give Azi a place to observe them.
+
+Click **Create Surface**, name it something like `climate-control`, and select the devices you want to observe:
+
+1. `temperature-sensor-001`
+2. `fan-controller-001`
+
+As soon as you confirm, Azi begins listening.
+
+Data will start **spilling onto your surface in real time**, no additional setup required.
+
+You’re not scripting behavior. You’re crafting a space where behavior begins to emerge.
+
+---
+
+## Watch Live Impulses
+
+<figure class="my-8 flex flex-col items-start text-left">
+  <img
+    data-eac-bypass-base
+    src="/assets/first-execution-live-connections.png"
+    alt="Azi chat interface showing live streaming data on a surface"
+    class="rounded-xl shadow-xl ring-1 ring-indigo-400/30 w-full max-w-md"
+  />
+  <figcaption class="mt-4 text-sm text-indigo-300 tracking-wide uppercase">
+    Live impulses from connected simulators streaming into your surface
+  </figcaption>
+</figure>
+
+In the **Stream View**, you’ll see lines like:
+
+```json
+{
+  "deviceId": "temperature-sensor-001",
+  "temperature": 72.4,
+  "timestamp": "2025-04-22T15:02:00Z"
+}
+```
+
+Each is an **Impulse** — a single signal Azi processes in real time.
+
+But you don’t just watch impulses flow. You can talk to Azi about them.
+
+Ask Azi:
+
+> "What’s changing most frequently on this surface?"  
+> "Which field looks like it might be a status code?"
+
+She won’t just return answers — she’ll dynamically write, execute, and visualize **live probe queries** in response to your questions.
+
+Ask about variability, correlation, or confidence — and Azi might light up a graph, highlight a volatile field, or surface an emergent pattern from the stream.
+
+> _She’s not just reporting. She’s testing hypotheses — and showing you what she sees._
+
+This is dynamic exploration — **conversational, contextual, and visual** — with no SQL or scripting required.
+
+---
+
+## Provisional Structure Emerges
+
+<figure class="my-8 flex flex-col items-start text-left">
+  <img
+    data-eac-bypass-base
+    src="/assets/observe-schema-split.png"
+    alt="Split view of raw JSON and inferred schema panel"
+    class="rounded-xl shadow-xl ring-1 ring-cyan-400/30 w-full max-w-md"
+  />
+  <figcaption class="mt-4 text-sm text-cyan-300 tracking-wide uppercase">
+    Raw JSON on the left. Azi’s evolving schema understanding on the right
+  </figcaption>
+</figure>
+
+As Azi sees more impulses, she begins to sketch her **Provisional Structure**:
+
+```json
+{
+  "deviceId": "string",
+  "temperature": "number",
+  "timestamp": "datetime"
+}
+```
+
+> _Nothing is saved yet. Meaning is taking form._
+
+You can also ask:
+
+> “What fields are you least confident about?”  
+> “Which fields change together most often?”
+
+Azi will begin to surface **structural confidence** and **field correlations** — showing you what she’s still unsure about.
+
+---
+
+## Handling Uncertainty
+
+As more data flows — possibly `status` flipping types or `location` appearing — Azi will prompt:
+
+> “I see a new field: `status`.  
+> Do you want me to track both formats or normalize?”
+
+You’ll see the proposed update appear in the schema preview panel — with a confirm or reject option beside it. Azi won’t commit until you accept the format.
+
+> _And yes, you can ask her directly: “What’s your preferred guess for status?”_
+
+The loop is live, conversational, and always permissioned. You’re still in charge — Azi is just thinking out loud.
+
+---
+
+## Cross the Threshold
+
+Promoting a schema makes it real — it becomes part of your workspace memory.  
+You’ll be able to build logic against it in the next step.
+
+> _Promoted schemas can evolve — you’ll be able to fork, refine, or retire them later._  
+> _Nothing is locked. But everything is tracked._
+
+You could keep watching. Let the structure drift, fade, reform.  
+But nothing becomes memory — until you choose.  
+_Confirmation is authorship._
+
+> _Promote too early, and you might codify noise. Wait too long, and the pattern might shift beyond recognition._  
+> _Azi watches — but only you decide what becomes real._
+
+<figure class="my-8 flex flex-col items-center text-center max-w-xl w-full">
+  <img
+    data-eac-bypass-base
+    src="/assets/docs/promote-schema-button.png"
+    alt="UI showing Promote Schema button ready for confirmation."
+    class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full"
+  />
+  <figcaption class="mt-4 text-sm text-gray-400 tracking-wide uppercase">
+    Confirming the provisional structure turns it into a promoted schema
+  </figcaption>
+</figure>
+
+> _“Observation ends here. You’re authoring what matters.”_
+
+This surface won’t just show data — it will host your behavior.  
+You’ll soon bind logic to these signals and define how your system thinks.
+
+> _This is Signal-Confirmed Execution in motion. Azi observes, proposes, and waits — until you make it real._
+
+> _You’re not writing logic yet — but everything that comes next builds on these impulses. Soon, you’ll declare how your system reacts._
+
+---
+
+You’ve now stepped into the execution loop:  
+**Impulse → Schema →** _(Promotion...)_ **→ Logic → Signal → Evolution**  
+The first two steps are complete. Promotion is next.
+
+You’ve just spun up a real, interactive world — no downloads, no scripts — just you and Azi co-creating a living system.
+
+> _This simulator streams live — but nothing is stored unless you bind it to a memory surface or logic path._
+
+> _You didn’t just connect data. You created a system that waits for your signal._  
+> **This isn’t a dashboard. This is your system, listening.**

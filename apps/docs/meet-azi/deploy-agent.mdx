@@ -1,0 +1,140 @@
+# Deploy Your First Agent
+
+Your schema is live. Now let’s make the system respond to it.
+
+<div class="mt-6 mb-8 px-6 py-4 border-l-4 border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-100 rounded">
+  <strong>Systems are only as meaningful as their ability to act.</strong><br />
+  This is your first moment of <strong>semantic execution</strong>.
+</div>
+
+---
+
+## Define Your First Agent
+
+We're going to create a logic unit that listens to `TemperatureSensor` impulses and controls a fan. Logic is now tied to meaning — not just data.
+
+```ts
+export default Agent()
+  .Impulse(TemperatureSensorSchema)
+  .Schemas(ctx => ({
+    Fan: ctx.Connect(FanControllerSchema, "fan-controller-001", State.Current)
+  }))
+  .OnImpulse(async (impulse, ctx) => {
+    const fan = ctx.Schemas.Fan;
+
+    if (impulse.Temperature > 80 && fan.Power !== "on") {
+      await fan.Commands.Power("on");
+      return ctx.Status.Success("Fan turned on");
+    }
+
+    if (impulse.Temperature <= 80 && fan.Power !== "off") {
+      await fan.Commands.Power("off");
+      return ctx.Status.Success("Fan turned off");
+    }
+
+    return ctx.Status.Success("No action needed");
+  });
+```
+
+This logic isn’t a loop. It’s a reflex.
+Each part binds intent to structure:
+- `.Impulse` listens
+- `.Schemas` connects context
+- `.OnImpulse` defines behavior
+
+You’ve built a single-schema reflex. Next, you’ll compose behavior across context-bound memories.
+
+
+
+---
+
+## Deploy the Agent
+
+1. Go to your **Agents** tab  
+2. Click **Create New Agent** → name it `FanControlAgent`  
+3. Paste the logic above  
+4. Bind it to `TemperatureSensor`  
+5. Choose your execution surface (e.g., `dev-surface-01`)  
+6. Hit **Deploy**  
+That’s it — no wiring, no polling, no pipelines. Logic is now live.
+
+<aside class="border-l-4 border-gray-300 dark:border-gray-500 pl-4 italic text-gray-600 dark:text-gray-400">
+✅ <code>FanControlAgent</code> deployed to <code>dev-surface-01</code>. I’ll track each time it runs — and why.
+</aside>
+
+An execution surface is more than a runtime — it’s a scope of intent. You define structure, bind behavior, and shape what happens inside.
+
+---
+
+## Trigger an Impulse
+
+Let’s simulate a sensor input:
+
+```json
+{
+  "ID": "temperature-sensor-001",
+  "Temperature": 84.2
+}
+```
+
+This will trigger the agent and result in a fan toggle.
+
+<figure class="my-16 flex flex-col items-center text-center max-w-xl w-full">
+  <img
+    src="/assets/docs/fan-agent-log.png"
+    alt="Azi execution log showing FanControlAgent turning on the fan."
+    class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full"
+  />
+  <figcaption class="mt-4 text-sm text-gray-400 dark:text-gray-500 tracking-wide uppercase">
+    Deploy your agent to begin responding to live impulses.
+  </figcaption>
+</figure>
+
+```txt
+🔹 Impulse received: Temperature = 84.2
+🔸 Agent matched: FanControlAgent
+⚙️ Command issued: turn_on → fan-controller-001
+✅ Result: Fan turned on
+```
+
+<aside class="border-l-4 border-gray-300 dark:border-gray-500 pl-4 italic text-gray-600 dark:text-gray-400">
+“Agent executed. Command sent to turn on the fan.”
+</aside>
+
+Every agent response is visible in your run logs. You can explore inputs, decisions, and outcomes.
+
+---
+
+## What Just Happened
+
+- The agent responded to a promoted schema
+- It ran logic and issued a real command
+- Azi tracked everything end-to-end
+
+<aside class="border-l-4 border-gray-300 dark:border-gray-500 pl-4 italic text-gray-600 dark:text-gray-400">
+If no schema match occurs, nothing runs. Azi logs the impulse — but your agent stays silent. That’s how we protect intent.
+</aside>
+
+<div class="mt-6 mb-8 px-6 py-4 border-l-4 border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-100 rounded">
+  <strong>Impulse → Logic → Action.</strong><br />
+  Every execution is traceable. Every decision is explainable.
+</div>
+
+<aside class="border-l-4 border-gray-300 dark:border-gray-500 pl-4 italic text-gray-600 dark:text-gray-400">
+Only <strong>promoted schemas</strong> can trigger logic. That’s how we maintain meaning — and precision.
+</aside>
+
+Execution didn’t happen because code was present — it happened because **structure matched**.
+<aside class="border-l-4 border-gray-300 dark:border-gray-500 pl-4 italic text-gray-600 dark:text-gray-400">
+FanControlAgent doesn’t loop or watch a queue. It waits silently — until structure confirms it’s valid. That’s how the system ensures execution only happens when meaning is clear.
+</aside>
+
+---
+
+## What’s Next
+
+This was your first working agent. From here, you can:
+
+- Fork agents to test new logic
+- Version and preview changes safely
+- Chain behaviors across schemas
