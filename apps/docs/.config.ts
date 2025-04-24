@@ -13,7 +13,10 @@ function loadDocsConfig(): Promise<DocsConfig> {
         Path: '/',
         Children: [
           { Title: 'Spin Up the Sim', Path: '/meet-azi/spin-up-sim' },
-          { Title: 'Promote Your First Schema', Path: '/meet-azi/promote-schema' },
+          {
+            Title: 'Promote Your First Schema',
+            Path: '/meet-azi/promote-schema',
+          },
           { Title: 'Deploy Your First Agent', Path: '/meet-azi/deploy-agent' },
         ],
       },
@@ -31,23 +34,56 @@ function loadDocsConfig(): Promise<DocsConfig> {
         Title: 'Mission-Critical',
         Path: '/mission-critical',
         Children: [
-          { Title: 'Memory You Can Ship', Path: '/mission-critical/memory-you-can-ship' },
-          { Title: 'Forkable Runtime', Path: '/mission-critical/forkable-runtime' },
-          { Title: 'From Sim to Site', Path: '/mission-critical/from-sim-to-site' },
-          { Title: 'Fire Azi (and Keep Running)', Path: '/mission-critical/fire-azi' },
-          { Title: 'Proof of Reflex', Path: '/mission-critical/proof-of-reflex' },
+          {
+            Title: 'Memory You Can Ship',
+            Path: '/mission-critical/memory-you-can-ship',
+          },
+          {
+            Title: 'Forkable Runtime',
+            Path: '/mission-critical/forkable-runtime',
+          },
+          {
+            Title: 'From Sim to Site',
+            Path: '/mission-critical/from-sim-to-site',
+          },
+          {
+            Title: 'Fire Azi (and Keep Running)',
+            Path: '/mission-critical/fire-azi',
+          },
+          {
+            Title: 'Proof of Reflex',
+            Path: '/mission-critical/proof-of-reflex',
+          },
         ],
       },
       {
-        Title: 'System Operations',
-        Path: '/system-ops',
+        Title: 'Extend the Memory',
+        Path: '/extend-memory',
         Children: [
-          { Title: 'Surface Memory & Runtime Scope', Path: '/system-ops/surfaces' },
-          { Title: 'Schema Lineage & Forks', Path: '/system-ops/schemas' },
-          { Title: 'Agent Forks & Promotion', Path: '/system-ops/agents' },
-          { Title: 'CLI & SDK Ops', Path: '/system-ops/cli-sdk' },
-          { Title: 'Deployment Targets & Protocols', Path: '/system-ops/deployment' },
-          { Title: 'Escape Plan & Export Flows', Path: '/system-ops/escape-plan' },
+          {
+            Title: 'Connect the Data Stream',
+            Path: '/extend-memory/data-stream',
+          },
+          {
+            Title: 'See What the Runtime Remembers',
+            Path: '/extend-memory/runtime-memory',
+          },
+          {
+            Title: 'Refine Your Reflexes',
+            Path: '/extend-memory/refine-reflexes',
+          },
+          {
+            Title: 'Teach New Reflex',
+            Path: '/extend-memory/teach-new-reflex',
+          },
+          {
+            Title: 'Recover the Memory',
+            Path: '/extend-memory/recover-runtime',
+          },
+          {
+            Title: 'Decide Where Memory Lives',
+            Path: '/extend-memory/deploy-options',
+          },
         ],
       },
     ],
