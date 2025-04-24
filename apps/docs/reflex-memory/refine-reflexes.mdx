@@ -1,157 +1,82 @@
 # Refine Your Reflexes
 
-You saw what the runtime remembered.  
-Now it’s time to **change how it behaves** — without guessing.
+<div class="mt-6 mb-8 px-6 py-4 border-l-4 border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-100 rounded">
+  <strong>Reflexes are not automation.</strong><br />
+  They are your runtime’s belief system — versioned, observable, and alive.
+</div>
 
-Your logic failed silently — your runtime remembered. But will you?
+RoomState v2 caught what v1 missed—quietly. Legacy pipelines would ship a patch, pray, and wait for staging to catch fire.
 
-RoomState v2 caught what v1 missed. But your agent didn’t respond — maybe it couldn’t yet.
+<aside class="border-l-4 border-rose-600 pl-4 italic text-rose-600">
+Every legacy fix is a guess wrapped in a deployment. Every reflex fork is a proof, grounded in memory.
+</aside>
 
-You didn’t just replay history — you saw it differently. RoomState v2 exposed what your logic missed.
+Here, you fork, mock, and prove it — in memory.
 
-But replay doesn’t fix your reflex. You do. It’s time to shift from observation to intervention — from insight to action.
+This isn’t just replay. It’s intervention. Runtime doesn’t just tell you what happened — it invites you to change what happens next.
 
 Now it’s your turn to fork, evolve, and test your changes **without risk**.
 
-<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
-What if we delay the fan by 1 impulse? What if we suppress it under 65% humidity?  
-You don’t have to guess. You can fork it, mock it, and prove it.
-</aside>
-
 ## Fork and Evolve Without Risk
 
-<aside class="border-l-4 border-yellow-400 bg-yellow-50 pl-4 text-yellow-900">
-🛠 A SubSurface is a cloned execution environment where real telemetry is replayed but device commands are mocked — perfect for testing logic safely.
-</aside>
+Azi noticed FanControlAgent didn’t respond when humidity dipped — but RoomState v2 would have. She offers to fork it for you.
 
-<aside class="border-l-4 border-gray-300 bg-gray-50 text-gray-700 text-sm">
-📎 <strong>Reminder:</strong> RoomState v2 includes: Temperature, Humidity, FanPower, and CO₂Level.
-</aside>
+Open the **Agent Panel** → Click **Fork** → Name it `FanControlAgent v2`. This version will now be available for editing in a safe, testable environment.
 
-<aside class="border-l-4 border-gray-300 bg-gray-50 text-gray-700 text-sm">
-📎 <strong>CLI Tip:</strong> You can pull your agent fork locally to edit in your IDE:
+You’ll edit the reflex logic to add new conditions — for example:
+Only trigger the fan if humidity stays below 65% for two readings in a row.
 
-```bash
-openindustrial agents pull FanControlAgent-v2
-```
-</aside>
+From the **Surface Manager**, choose **LabZone-A**, then:
+- Duplicate to a new SubSurface
+- Enable mocking for `fan-control-001`
+- Deploy `FanControlAgent v2` to this test space
 
-Reflexes aren’t static. You can version them, fork them, and replay their behavior — all without interrupting your live runtime. Here’s how:
+Azi will replay recent impulses on both versions — your original and your fork.
 
-> 🔧 **Run this now:**
-> ```bash
-> openindustrial agents fork FanControlAgent --name FanControlAgent-v2
-> ```
-> ✅ You just forked a live agent. Nothing broke. But something new just became testable.
+She’ll then prompt you: “v1 triggered on impulse #88. v2 didn’t. Want to compare?”
 
-> 🛠️ **Now try this:**
-> Edit the logic in `FanControlAgent v2`. Add a rule like: "only trigger fan if humidity < 65% for 2 readings in a row."
+In the **Impulse Diff View**, you'll see reflex behaviors side-by-side. If your update suppressed noisy signals or added smarter hysteresis — Azi will highlight the change.
 
-> 🚀 **Deploy to mock environment:**
-> ```bash
-> openindustrial surfaces create LabZone-A-Test --mock fan-control-001
-> openindustrial agents deploy FanControlAgent-v2 --surface LabZone-A-Test
-> ```
-> 💡 This SubSurface replays real impulses with safely mocked actuators.
+<p><span class="font-semibold text-indigo-700 dark:text-indigo-300">CLI Tip:</span> Pull and diff your fork from terminal, if needed.</p>
 
-> 🔍 **Compare results:**
-> ```bash
-> openindustrial impulse diff --agent FanControlAgent FanControlAgent-v2
-> ```
-> ```
-> ⚙️  Impulse diff started...
-> 📉  v1 triggered signal on humidity = 62%
-> 🧠  v2 held back (humidity threshold = 65%)
-> 🎯  Result: v2 triggered 6 fewer signals
-> ```
-
-<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
-What would happen if you delayed actuation until two low readings in a row? Try it in `FanControlAgent v2`. Replay and see.
-</aside>
-
-> ✅ **Promotion time?** If v2 proves safer or smarter, promote it:
-> ```bash
-> # Confirm promotion from CLI or UI modal
-> ```
+Once the test results look solid, click **Promote** from the agent dropdown.
 
 <figure class="my-16 flex flex-col items-center text-center max-w-xl w-full">
-  <img
-    src="/assets/docs/fork-modal-ui.png"
-    alt="UI showing the forking of FanControlAgent to create v2."
-    class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full"
-  />
+  <img src="/assets/docs/fork-modal-ui.png" alt="UI showing the forking of FanControlAgent to create v2." class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full" />
   <figcaption class="mt-4 text-sm text-gray-400 tracking-wide uppercase">
     Fork any agent with full version lineage — no guesswork, no risk.
   </figcaption>
 </figure>
 
-> 🛠️ **Now try this:**
-> Edit the logic in `FanControlAgent v2`. Add a rule like: "only trigger fan if humidity < 65% for 2 readings in a row."
+Open the **Agent Panel** → Click **Fork** → Name it `FanControlAgent v2`.
 
 <figure class="my-16 flex flex-col items-center text-center max-w-xl w-full">
-  <img
-    src="/assets/docs/mocked-surface-config.png"
-    alt="Mocked surface configuration panel with actuators disabled."
-    class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full"
-  />
+  <img src="/assets/docs/mocked-surface-config.png" alt="Mocked surface configuration panel with actuators disabled." class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full" />
   <figcaption class="mt-4 text-sm text-gray-400 tracking-wide uppercase">
     Deploy to a SubSurface to replay real history with safe, mocked outputs.
   </figcaption>
 </figure>
 
-> 🔍 **Compare results:**
-> ```bash
-> openindustrial impulse diff --agent FanControlAgent FanControlAgent-v2
-> ```
-> ```
-> ⚙️  Impulse diff started...
-> 📉  v1 triggered signal on humidity = 62%
-> 🧠  v2 held back (humidity threshold = 65%)
-> 🎯  Result: v2 triggered 6 fewer signals
-> ```
+From the **Surface Manager**, choose **LabZone-A**, then:
+- Duplicate to a new SubSurface
+- Enable mocking for `fan-control-001`
+- Deploy `FanControlAgent v2` to this test space
 
 <figure class="my-16 flex flex-col items-center text-center max-w-xl w-full">
-  <img
-    src="/assets/docs/impulse-diff-timeline.png"
-    alt="Side-by-side impulse timeline comparing v1 and v2 agent responses."
-    class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full"
-  />
+  <img src="/assets/docs/impulse-diff-timeline.png" alt="Side-by-side impulse timeline comparing v1 and v2 agent responses." class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full" />
   <figcaption class="mt-4 text-sm text-gray-400 tracking-wide uppercase">
     Diff agent responses across the same replay window — and choose confidently.
   </figcaption>
 </figure>
 
-> ✅ **Promotion time?** If v2 proves safer or smarter, promote it:
-> ```bash
-> # Confirm promotion from CLI or UI modal
-> ```
+Azi will replay recent impulses on both versions — your original and your fork. You’ll see exactly when FanControlAgent v2 held back — and how it reduced 6 unnecessary signals.
 
 <figure class="my-16 flex flex-col items-center text-center max-w-xl w-full">
-  <img
-    src="/assets/docs/promotion-confirmation.png"
-    alt="Confirmation modal for promoting FanControlAgent v2 to production."
-    class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full"
-  />
+  <img src="/assets/docs/promotion-confirmation.png" alt="Confirmation modal for promoting FanControlAgent v2 to production." class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full" />
   <figcaption class="mt-4 text-sm text-gray-400 tracking-wide uppercase">
     When your fork proves itself, promote it — and production adopts proven logic.
   </figcaption>
 </figure>
-
-<aside class="border-l-4 border-yellow-400 bg-yellow-50 pl-4 text-yellow-900">
-Want to run this as a GitHub Action before promotion? Try:
-
-```bash
-openindustrial replay --expect
-```
-</aside>
-
-<aside class="border-l-4 border-electric-purple pl-4 italic text-electric-purple">
-Reflex forking isn’t just safer logic. It’s the basis for adaptive runtime architecture — one where logic evolves in memory, not in pull requests.
-</aside>
-
-<aside class="border-l-4 border-rose-600 pl-4 italic text-rose-600">
-You used to write reflex changes, ship to staging, pray for test coverage, and hope you didn’t break production. Now you just fork, mock, and prove it — in real memory.
-</aside>
 
 ## What Azi Observes
 
@@ -168,6 +93,13 @@ This isn’t unit testing. It’s runtime epistemology. Your logic now lives in 
 Legacy logic waits in staging. Reflexes learn in memory — and evolve in place.
 </aside>
 
+Every fork becomes part of your runtime lineage — traceable, reversible, and reusable.
+
+<div class="mt-6 mb-8 px-6 py-4 border-l-4 border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-100 rounded">
+  <strong>This isn’t a test layer.</strong><br />
+  This is your runtime — forkable, introspectable, and governed by memory.
+</div>
+
 ## Reflex Concepts You Now Own
 
 - **Forks** hold lineage and versioned changes
@@ -177,8 +109,7 @@ Legacy logic waits in staging. Reflexes learn in memory — and evolve in place.
 - **Safe Promotion** lets you upgrade logic without guessing
 
 <aside class="border-l-4 border-electric-purple pl-4 italic text-electric-purple">
-CI/CD didn’t stop at deployment.  
-Now it governs behavior. Reflex by reflex.
+CI/CD didn’t stop at deployment. Now it governs behavior. Reflex by reflex.
 </aside>
 
 <aside class="border-l-4 border-yellow-400 bg-yellow-50 pl-4 text-yellow-900">
@@ -187,15 +118,10 @@ Now it governs behavior. Reflex by reflex.
 
 ## 🧪 Your Turn
 
-<aside class="border-l-4 border-electric-purple pl-4 italic text-electric-purple">
-You’ve proven you can evolve reflexes. Now let’s see if you can invent them — from scratch.
-</aside>
-
-Fork `FanControlAgent` again — but this time, make it suppress the fan **entirely** when CO₂ levels exceed 800ppm.  
-Hint: Use the `RoomState v2` schema. Then mock and diff it like before.
+Fork `FanControlAgent` again — but this time, make it suppress the fan **entirely** when CO₂ levels exceed 800ppm. Use the `RoomState v2` schema. Then mock and diff it like before.
 
 <aside class="border-l-4 border-electric-purple pl-4 italic text-electric-purple">
-Next up: What if this reflex didn’t exist yet? What if Azi didn’t suggest it? What if you authored it entirely yourself?
+You’ve evolved reflexes. Now define the one your system never suggested.
 </aside>
 
 ## What You’ve Proven

@@ -1,0 +1,257 @@
+# Teach New Reflex
+
+You forked a reflex. You tested it live.  
+Now you’re ready to define logic your runtime has never seen — and teach it to remember why it acted.
+
+<aside class="border-l-4 border-yellow-500 pl-4 italic text-yellow-700">
+Legacy systems act. This one explains why.  
+A reflex is not a rule. It’s a reason — stored in memory.
+</aside>
+
+This hands-on page introduces a new reflex that calls into native logic via **Deno FFI** from a **TypeScript agent**, allowing the system to calculate and reason about the **CO₂ rate** in a room.
+
+You'll work alongside Azi in the UI to:
+
+- Create a `surface-local` connection to log results (`co2-room-calc`)
+- Define a lightweight schema for CO₂ rate input (`RoomForCO2RateCalc`)
+- Fork a reflex agent that:
+  - Queries prior schema values using KQL
+  - Invokes native FFI logic for the CO₂ rate calculation
+  - Asks OpenAI for a one-line reasoning
+  - Emits the result into `co2-room-calc`
+- Join this output into a new composite schema, `RoomState v3`, which downstream agents can now react to
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Is this temperature… or voltage? Azi isn’t sure — yet.
+</aside>
+
+## Start with the Data Connection
+
+Creating a surface-local stream is the first signal to the runtime: "I want to remember something new."
+
+Open the Azi interface and say:
+
+> “Create a new surface-local connection to store my CO₂ rate results.”
+
+Name it `co2-room-calc`. Azi will prompt you to scaffold a matching schema:
+
+> “Want to collect Room, CO₂ Rate, and Reason as new entries? I’ll create the schema.”
+
+Approve this, and you'll now have a structured, runtime-local stream where your agent can emit derived logic — without triggering signals or mutating upstream state.
+
+<aside class="border-l-4 border-orange-400 pl-4 italic">
+Need to review what a surface-local connection is? See **4.1 – Unlock Reflex from Memory** for a primer.
+</aside>
+
+## Define the Minimal Schema
+
+Schemas don’t need to be bloated. This step shows how to trim logic inputs down to what the agent actually needs.
+
+Prompt Azi:
+
+> “Make me a new schema based on RoomState, but only include the fields I need for calculating CO₂ rate.”
+
+She’ll select `Room`, `Timestamp`, and `CO2`, and suggest the name `RoomForCO2RateCalc`.
+
+Here’s what that schema looks like behind the scenes:
+
+```json
+{
+  "Room": "string",
+  "Timestamp": "number",
+  "CO2": "number"
+}
+```
+
+> “RoomForCO2RateCalc only includes what your rate logic needs. Want me to bind it to a new reflex?”
+
+This is how you define mid-composite schemas: functional, scoped, and forkable.
+
+<aside class="border-l-4 border-orange-400 pl-4 italic">
+`RoomState` is introduced in **2.3 – Promote Composite Schema**. You can revisit its structure there.
+</aside>
+
+## Teach the Reflex Agent
+
+You’re now building logic that runs _alongside_ Azi — and survives without her.
+
+Fork a new reflex agent from the UI. Azi will scaffold `CO2RateAgent`, bound to `RoomForCO2RateCalc`. Inside the code editor, you'll:
+
+<aside class="border-l-4 border-indigo-500 pl-4 italic text-indigo-700">
+Reflex Pattern: **Memory** (Log-as-Output)
+
+| Pattern | Use Case | Output |
+|--------|----------|--------|
+| **Signal** | Triggers action | Signal emitted |
+| **Memory** | Logs derived state | Impulse emitted |
+| **Hybrid** | Both reason + act | Signal + log |
+</aside>
+
+This reflex is **Memory** — it records meaning, not action.
+
+You’ll now define a new reflex agent that calculates CO₂ rate natively and logs its reasoning to memory. Let’s scaffold the interface for native logic first.
+
+### 1. Define the FFI Interface
+
+```ts
+interface CO2FFISymbols {
+  CalculateCO2Rate: (current: number, previous: number, deltaMinutes: number) => number;
+}
+```
+
+Then, wire up your agent’s runtime context — connecting schema lineage, output memory, and your compiled native function.
+
+### 2. Register Required Components Step-by-Step
+
+```ts
+export default Agent()
+  .Impulse(RoomForCO2RateCalcSchema)
+  .Schemas(ctx => ({
+    History: ctx.Connect(RoomForCO2RateCalcSchema, State.Lineage)
+  }))
+  .DataConnections(ctx => ({
+    CO2RateLog: ctx.DataConnection("co2-room-calc")
+  }))
+  .FFI<CO2FFISymbols>(ctx => ({
+    CalculateCO2Rate: ctx.FFI.Open("./co2.so").Symbol("calculate_co2_rate")
+  }))
+```
+
+<aside class="border-l-4 border-orange-400 pl-4 italic">
+Need to compile `co2.so`? Try this sample C function:
+
+```c
+// co2.c
+#include <stdint.h>
+
+double calculate_co2_rate(double current, double previous, double minutes) {
+  return (current - previous) / minutes;
+}
+```
+
+Compile it with:
+
+```bash
+gcc -shared -o co2.so -fPIC co2.c
+```
+
+Place the compiled `.so` in your agent’s workspace root.
+</aside>
+
+### 3. Add the Reflex Logic
+
+```ts
+  .OnImpulse(async (room, ctx) => {
+    const previous = ctx.Schemas.History[1];
+    if (!previous) return ctx.Status.Warn("Not enough data to calculate CO₂ rate.");
+
+    const rate = await ctx.FFI.CalculateCO2Rate(
+      room.CO2,
+      previous.CO2,
+      (room.Timestamp - previous.Timestamp) / 60000
+    );
+
+    const openai = new OpenAI();
+    const reason = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "user",
+          content: `The CO₂ rate is ${rate.toFixed(1)} ppm/min. Explain what this indicates about the room’s activity.`
+        }
+      ]
+    });
+
+    await ctx.DataConnections.CO2RateLog({
+      Room: room.Room,
+      Rate: rate,
+      Reason: reason.choices[0].message.content
+    });
+
+    return ctx.Status.Success("Rate calculated and logged.");
+  });
+```
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Is this reflex… remembering me? Azi wonders if she's becoming runtime folklore.
+</aside>
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Your system didn’t just emit a number. It explained itself.  
+This reflex doesn’t just act — it remembers why.
+</aside>
+
+## Join the Output Back Into RoomState
+
+```text
+RoomForCO2RateCalc ──> CO2RateAgent ──> co2-room-calc
+                                         ↓
+                                    RoomState v3
+```
+
+> “Join `co2-room-calc` into `RoomState` so the reflexes can act on CO₂ rate.”
+
+Click to approve. You’ve just extended your canonical structure — without mutation.
+
+<aside class="border-l-4 border-orange-400 pl-4 italic">
+No reflex = no rate = no downstream agent. Memory must be made before it can be joined.
+</aside>
+
+## Activate Reflex Logic
+
+```ts
+RoomState.CO2Rate > threshold
+```
+
+This is how structure creates decision boundaries — and runtime agents respond.
+
+> _You didn’t just compute a rate. You taught the system to reflect._  
+> _This is runtime that remembers._
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+RoomState v3 now includes your CO₂ rate logic. Want to see what downstream reflexes are doing with it?
+</aside>
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+This time, the system paused. Because last time, you taught it to explain.
+</aside>
+
+### Alternative Path: RoomState as Input
+
+You can also react to RoomState directly and emit rate into `co2-room-calc`, then rejoin as `RoomStateWithCO2`.
+
+## Run & Observe
+
+```json
+{
+  "Room": "ZoneA",
+  "Rate": 41.2,
+  "Reason": "High CO₂ rate indicates active occupancy or poor ventilation."
+}
+```
+
+```bash
+openindustrial impulses view --stream co2-room-calc --follow
+```
+
+<aside class="border-l-4 border-indigo-500 pl-4 italic text-indigo-700">
+Want proof it worked? Watch the memory log live — as it learns to explain.
+</aside>
+
+## Optional: CLI Parity
+
+```bash
+openindustrial connection create \
+  --name co2-room-calc \
+  --type surface-local
+
+openindustrial schemas create RoomForCO2RateCalc --from RoomState --select CO2, Timestamp
+
+openindustrial agents fork CO2RateAgent
+# Edit to include Deno FFI and KQL
+
+openindustrial surface bind co2-room-calc --schema CO2RateLog
+
+openindustrial schemas promote RoomState-v3 \
+  --join RoomState + CO2RateLog
+```
