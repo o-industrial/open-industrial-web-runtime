@@ -1,0 +1,201 @@
+# Forkable Runtime
+
+<div class="border-l-4 border-electric-purple pl-4 italic text-electric-purple">
+A runtime that can’t be forked is a system that can’t evolve. Forkable memory is how logic becomes legacy.
+</div>
+
+## From Export to Execution
+
+You exported schemas, agents, surfaces, and replay logs.  
+You didn’t just export a system — you captured its first memory.
+
+You built this with Azi beside you. But this memory runs without her.  
+You taught it what to do — now it’s time to see what others can do with it.
+
+> This is your **Forkable Runtime** — a versioned memory that can be cloned, replayed, validated, and evolved.
+
+## Folder Layout
+
+```txt
+roomstate-runtime/
+├── schemas/
+├── agents/
+├── surfaces/
+├── impulses/    # Replayable moments. This is what your agent saw.
+├── openindustrial.config.json
+├── .forkable-runtime.json (optional)
+├── Dockerfile
+└── README.md
+```
+
+Each part serves a purpose:
+- `schemas/`: Versioned structure definitions
+- `agents/`: Logic components tied to schema evolution
+- `surfaces/`: Where logic runs — live or mocked
+- `impulses/`: Timestamped event memory for audit + replay
+- `openindustrial.config.json`: Deployment target hints (e.g. MQTT, staging)
+- `.forkable-runtime.json`: Your runtime’s contract
+- `Dockerfile`: Portable execution base
+- `README.md`: Instructions, lineage notes, restore commands
+
+```txt
+Forkable Runtime
+├── Memory Structure
+│   ├── schemas/
+│   ├── agents/
+│   ├── surfaces/
+│   └── impulses/
+├── Manifest: .forkable-runtime.json
+├── Config: openindustrial.config.json
+└── Operations:
+    ├── replay
+    ├── validate
+    ├── promote
+    └── fork
+```
+
+<aside class="border-l-4 border-yellow-400 pl-4 text-yellow-900 bg-yellow-50">
+⚠️ <strong>What Doesn’t Export:</strong><br/>
+- Transient signals (unconfirmed — must be committed)<br/>
+- Azi’s speculative scaffolds<br/>
+- UI-only drafts<br/>
+- Unpromoted schema or agent drafts<br/>
+- Any runtime secrets or cloud credentials
+</aside>
+
+## Manifest Contract
+
+```json
+{
+  "name": "roomstate-runtime",
+  "createdBy": "you@company.com",
+  "impulseCount": 92,
+  "agentVersions": {
+    "FanControlAgent": "v2"
+  },
+  "forkedFrom": "mainline-sim-export",
+  "env": "sim"
+}
+```
+
+Think of `.forkable-runtime.json` as your runtime’s resume.  
+It tells your system — and your team — what’s included, what’s trusted, and where it came from.
+
+```bash
+# Validate manifest integrity
+openindustrial validate --manifest .forkable-runtime.json
+```
+
+```bash
+$ openindustrial validate --manifest bad-runtime.json
+✖ Missing required field: agentVersions
+✖ Field forkedFrom must be a string
+```
+
+## Replaying and Validating Memory
+
+```bash
+# Replay all impulses (read-only)
+openindustrial replay impulses/impulses.json
+
+# Commit signals (stateful replay)
+openindustrial replay impulses/impulses.json --commit-signals
+
+# Replay outcome snapshot
+✓ Replayed 92 impulses
+✓ FanControlAgent-v2 triggered 3 signals
+✓ No schema drift detected
+✓ Replay duration: 1.4s
+```
+
+```bash
+# Validate before promoting
+openindustrial runtime validate --env staging
+```
+
+```bash
+$ openindustrial runtime validate --env staging
+✓ schemas: all pinned
+✓ agents: bound to surfaces
+✓ surfaces: mock/live separation validated
+✖ impulses: contains 4 untyped entries
+```
+
+<aside class="border-l-4 border-yellow-400 pl-4 text-yellow-900 bg-yellow-50">
+✅ <strong>Pre-deploy Check:</strong><br/>
+All schemas pinned, agents mapped, surfaces valid. Impulses typed. Promotion safe.
+</aside>
+
+<aside class="border-l-4 border-yellow-400 pl-4 text-yellow-900 bg-yellow-50">
+🔜 <strong>Coming Soon:</strong><br/>
+Scoped replay by agent, surface, or time window:<br/>
+<code>replay --from 50 --to 92 --agent FanControlAgent</code>
+</aside>
+
+## Fork, Diff, and Trace Lineage
+
+```bash
+# Fork your runtime
+openindustrial runtime fork ./roomstate-runtime
+
+# Compare agent logic
+openindustrial agents diff FanControlAgent-v1 FanControlAgent-v2
+
+# Trace version lineage
+openindustrial runtime lineage ./roomstate-runtime
+```
+
+```txt
+📦 roomstate-runtime
+├── forkedFrom: mainline-sim-export
+├── created: 2025-04-21T10:41Z
+├── agents:
+│   └── FanControlAgent-v2 (forked from v1)
+└── surfaces:
+    └── Lab1_Mock (diffed from Lab1, signal raised: HumidityThreshold drift)
+```
+
+<aside class="border-l-4 border-indigo-500 pl-4 italic">
+Replay isn’t a post-mortem. It’s a prelude. Your next fork begins with a remembered moment — not a guess.
+</aside>
+
+## Common Use Cases
+
+| Use Case                     | CLI Command                            | Evolves? | Needs Azi? |
+|-----------------------------|----------------------------------------|----------|------------|
+| Replay QA scenario          | `replay impulses/impulses.json`        | No       | No         |
+| Test agent logic fork       | `agents diff`, `replay --agent X`      | Yes      | No         |
+| Staging validation gate     | `validate`, `promote --env staging`    | No       | No         |
+| Audit or fork-by-signal     | `replay --commit-signals`              | Optional | Yes        |
+
+<aside class="border-l-4 border-electric-purple pl-4 italic text-electric-purple">
+✅ Promoted structure  
+✅ Forked logic  
+✅ Replayed memory  
+✅ Diffed behavior  
+✅ CLI-only deployment  
+✅ Runs without UI or AI
+</aside>
+
+## What’s Next?
+
+This isn’t a snapshot. It’s a seed.
+
+QA can simulate it. SREs can diff it. Devs can fork it.  
+Teams can replay what happened — and evolve what comes next.
+
+Run it in a hurricane drill. No UI. No AI. Just memory.
+
+```txt
+🎓 Operator Log:
+- QA forked runtime
+- Replayed with Lab1_Mock surface
+- Detected divergence on HumidityThreshold at impulse #77
+- Signal raised → FanControlAgent-v3 under review
+```
+
+<aside class="border-l-4 border-electric-purple pl-4 italic text-electric-purple">
+You wrote the rules of this runtime. The next system won’t need your syntax — it will start with your memory.
+</aside>
+
+👉 You’ve now exported a runtime memory that can be forked, validated, and promoted.  

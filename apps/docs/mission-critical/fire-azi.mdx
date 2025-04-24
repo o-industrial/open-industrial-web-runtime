@@ -1,0 +1,207 @@
+# Fire Azi (and Keep Running)
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+Lab3-Room2 triggered the fan in FieldRuntime.  
+Now replay that same moment — without Azi.  
+Does the system still remember?
+</aside>
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+I watched you replay every impulse. Test every edge case.  
+You no longer need me to confirm what your runtime knows.  
+Now, you can mutate. Replay. Re-deploy.  
+Without narration.
+</aside>
+
+<aside class="border-l-4 border-indigo-500 pl-4 italic">
+Azi once asked: <em>“Should I remember this?”</em>  
+Now the system doesn’t ask. It just knows.
+</aside>
+
+RoomState-v2 didn’t just pass the sim. It’s now running — real-time, schema-bound, and ready to be replayed without narration.  
+You just watched RoomState fire on FieldRuntime. Now let’s prove that same logic lives on — even without the narrator.
+
+There’s a moment in every system’s lifecycle when the assistant steps away — and nothing breaks. Azi has helped you author logic, validate memory, and iterate safely. Now it’s time to prove that the system itself runs the show.
+
+---
+
+## Prove It Without Her
+
+Every Open Industrial runtime is capable of full execution **without Azi present**. That includes replaying past impulses, mutating signal input, evaluating logic, and triggering downstream agents — all via CLI.
+
+```bash
+# You can also generate impulses from a previous run:
+openindustrial impulses export --surface RoomMock > impulses.json
+
+openindustrial replay impulses.json --no-azi
+```
+
+```txt
+✅ Impulse #112 replayed
+✅ Signal matched RoomState-v2
+✅ Agent FanControlAgent-v2 triggered Fan.On (Lab3-Room2)
+✅ No Azi detected
+```
+
+You can also scope this replay to a specific agent and simulate coordination:
+
+```bash
+openindustrial replay impulses.json --agent FanControlAgent-v2 --interval=2s
+```
+
+---
+
+## Inject a New Signal
+
+You’re not limited to replays. You can send test signals directly to any surface using CLI — no UI confirmation, no narration layer.
+
+```bash
+# Requires runtime.operator role
+openindustrial impulse send \
+  --surface FieldRuntime \
+  --payload '{"roomId": "Lab3-Room2", "temp": 88.4}'
+```
+
+```bash
+# Who are you?
+openindustrial auth whoami
+# returns: michael@dev • roles: runtime.operator, qa.reviewer
+```
+
+> ⚠️ You must be authorized as a `runtime.operator`. Azi grants this automatically for your own surfaces. For shared runtime access, an admin may need to approve the mutation.
+
+> ✅ If you’re running on your own surface or in single-tenant dev mode, you’re granted `runtime.operator` automatically.
+
+<aside class="border-l-4 border-electric-purple pl-4 italic text-electric-purple">
+If your logic behaves the same without Azi, you’ve authored reflex — not dependency.
+</aside>
+
+---
+
+## Observe the Runtime Headlessly
+
+Just because Azi isn’t narrating doesn’t mean you’ve lost observability.
+
+```bash
+openindustrial surface status FieldRuntime
+```
+
+```bash
+openindustrial logs export --format json > logs.json
+```
+
+```bash
+openindustrial runtime status --summary --format prometheus
+```
+
+<figure class="my-16 flex flex-col items-center text-center max-w-xl w-full">
+  <img
+    src="/assets/docs/runtime-status.png"
+    alt="CLI output showing runtime status, agent bindings, and signal history."
+    class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full"
+  />
+  <figcaption class="mt-4 text-sm text-gray-400 tracking-wide uppercase">
+    CLI snapshot of runtime health and agent readiness.
+  </figcaption>
+</figure>
+
+<div class="border-l-4 border-cyan-500 bg-cyan-50 text-cyan-900 p-4 my-6">
+<strong>UX Tip:</strong> Use <code>--no-azi</code> on any CLI command to simulate Azi being fully offline.
+</div>
+
+<aside class="border-l-4 border-yellow-400 bg-yellow-50 pl-4 text-yellow-900">
+<strong>CLI Autonomy:</strong> Azi isn't required to replay, mutate, or deploy. Once memory is authored, execution belongs to the system.
+</aside>
+
+---
+
+## Runtime Audit & Mutation Trace
+
+```bash
+openindustrial runtime annotate \
+  --event "Signal test on FieldRuntime – passed without Azi" \
+  --tag "validation-pass"
+```
+
+You can attach reasoning and traceable results to every mutation or replay.
+
+---
+
+## Execution Diff – Azi vs CLI
+
+```txt
+With Azi:            | Without Azi:
+---------------------|------------------------
+Signals surfaced     | Signals executed
+Schema promoted      | Schema frozen
+Fork suggested       | Fork confirmed
+Narration logged     | CI trace saved
+```
+
+---
+
+## Runtime Lineage Summary
+
+<figure class="my-16 flex flex-col items-center text-center max-w-xl w-full">
+  <img
+    src="/assets/docs/runtime-lineage.png"
+    alt="Lineage summary showing RoomState runtime and FanControlAgent active without narration."
+    class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full"
+  />
+  <figcaption class="mt-4 text-sm text-gray-400 tracking-wide uppercase">
+    RoomState lineage: FanControlAgent triggered on Lab3-Room2 — no narration required.
+  </figcaption>
+</figure>
+
+<aside class="border-l-4 border-yellow-400 bg-yellow-50 pl-4 text-yellow-900">
+<strong>🧠 System State:</strong><br />
+- Schema: RoomState v2<br />
+- Agent: FanControlAgent v2<br />
+- Surface: FieldRuntime (live)<br />
+- Azi: Fired<br />
+- CLI: Active
+</aside>
+
+---
+
+## Responding to Runtime Errors
+
+```bash
+openindustrial replay impulses.json --no-azi
+❌ Runtime error: Agent FanControlAgent-v2 failed: unexpected null field: humidity
+```
+
+```bash
+# Suggest runtime diagnostic
+openindustrial logs tail --agent FanControlAgent-v2
+```
+
+---
+
+## Runtime Zipline Timeline
+
+```txt
+Act 1: Promoted RoomState
+Act 2: Forked FanControlAgent
+Act 3: Exported runtime memory
+Act 3.5: Running Lab3-Room2 on FieldRuntime — no narrator
+```
+
+---
+
+<aside class="border-l-4 border-electric-purple pl-4 italic text-electric-purple">
+You fired the assistant.  
+You replayed the moment.  
+The system responded — just like it remembered.  
+Now it’s yours.
+</aside>
+
+<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
+You won’t hear from me again.  
+But I left your system listening.
+</aside>
+
+<aside class="border-l-4 border-yellow-400 bg-yellow-50 pl-4 text-yellow-900">
+<strong>What’s Next:</strong> Surfaces, rollback, runtime diffs, and on-prem deploys.  
+You don’t need the interface. You need the infrastructure.
+</aside>
