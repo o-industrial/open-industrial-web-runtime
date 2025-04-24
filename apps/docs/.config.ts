@@ -57,7 +57,7 @@ function loadDocsConfig(): Promise<DocsConfig> {
         ],
       },
       {
-        Title: 'Extend the Memory',
+        Title: 'Reflex from Memory',
         Path: '/extend-memory',
         Children: [
           {
