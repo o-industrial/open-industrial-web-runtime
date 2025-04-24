@@ -58,31 +58,31 @@ function loadDocsConfig(): Promise<DocsConfig> {
       },
       {
         Title: 'Reflex from Memory',
-        Path: '/extend-memory',
+        Path: '/reflex-memory',
         Children: [
           {
             Title: 'Connect the Data Stream',
-            Path: '/extend-memory/data-stream',
+            Path: '/reflex-memory/data-stream',
           },
           {
             Title: 'See What the Runtime Remembers',
-            Path: '/extend-memory/runtime-memory',
+            Path: '/reflex-memory/runtime-memory',
           },
           {
             Title: 'Refine Your Reflexes',
-            Path: '/extend-memory/refine-reflexes',
+            Path: '/reflex-memory/refine-reflexes',
           },
           {
             Title: 'Teach New Reflex',
-            Path: '/extend-memory/teach-new-reflex',
+            Path: '/reflex-memory/teach-new-reflex',
           },
           {
             Title: 'Recover the Memory',
-            Path: '/extend-memory/recover-runtime',
+            Path: '/reflex-memory/recover-runtime',
           },
           {
             Title: 'Decide Where Memory Lives',
-            Path: '/extend-memory/deploy-options',
+            Path: '/reflex-memory/deploy-options',
           },
         ],
       },
