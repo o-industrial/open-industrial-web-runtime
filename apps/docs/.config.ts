@@ -128,6 +128,19 @@ function loadDocsConfig(): Promise<DocsConfig> {
           },
         ],
       },
+      {
+        Title: 'The Execution Model',
+        Path: '/execution-model',
+        Children: [
+          { Title: 'Key Concepts', Path: '/execution-model/key-concepts' },
+          { Title: 'Execution Loop', Path: '/execution-model/execution-loop' },
+          { Title: 'Schema Promotion', Path: '/execution-model/schema-promotion' },
+          { Title: 'Surfaces', Path: '/execution-model/surfaces' },
+          { Title: 'Forking', Path: '/execution-model/forking' },
+          { Title: 'Workforce', Path: '/execution-model/workforce' },
+          { Title: 'Workspaces', Path: '/execution-model/workspaces' },
+        ],
+      },
     ],
     MDX: {
       RemarkPlugins: [],
