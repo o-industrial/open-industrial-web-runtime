@@ -261,7 +261,7 @@ export default function Layout({ Data, Component, Revision }: PageProps) {
         />
       </head>
 
-      <body class="bg-slate-50 dark:bg-slate-900 text-black dark:text-white font-sans">
+      <body class="bg-slate-50 dark:bg-slate-900">
         <div class="h-screen flex flex-col">
           <Header config={Data.$Config} activePath={Data.CurrentPath} />
 
@@ -271,9 +271,9 @@ export default function Layout({ Data, Component, Revision }: PageProps) {
 
             {/* Main Content Area */}
             <main class="flex-1 flex flex-col overflow-y-auto">
-              <div class="flex-1 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-8 px-4 md:px-8 py-10 prose dark:prose-invert max-w-none">
+              <div class="flex-1 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-8 px-4 md:px-8 py-10 max-w-none prose dark:prose-dark">
                 {/* MDX Content */}
-                <div>
+                <div class="">
                   <Component />
                 </div>
 
