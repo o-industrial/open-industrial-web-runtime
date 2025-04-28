@@ -5,7 +5,7 @@ export default function DeployExecution() {
         <h2 class='text-3xl font-bold text-neon-blue mb-4'>
           Implement AI-Powered Execution in Your Industrial Workflows
         </h2>
-        <p class='text-lg text-gray-300'>
+        <p class='text-lg text-neutral-300'>
           Open Industrial provides seamless AI execution deployment across cloud and edge
           environments, ensuring scalability and efficiency.
         </p>
@@ -13,13 +13,13 @@ export default function DeployExecution() {
       <div class='mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto'>
         <div class='p-6 bg-[#112E60] rounded-lg shadow-md text-center'>
           <h3 class='text-xl font-semibold text-neon-green'>Scalable AI Models</h3>
-          <p class='mt-2 text-gray-300'>
+          <p class='mt-2 text-neutral-300'>
             Customize and deploy AI execution models tailored to industrial needs.
           </p>
         </div>
         <div class='p-6 bg-[#112E60] rounded-lg shadow-md text-center'>
           <h3 class='text-xl font-semibold text-neon-blue'>Seamless Integration</h3>
-          <p class='mt-2 text-gray-300'>
+          <p class='mt-2 text-neutral-300'>
             Integrate AI workforce solutions into existing automation systems with ease.
           </p>
         </div>

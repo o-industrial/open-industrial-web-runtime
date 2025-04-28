@@ -5,7 +5,7 @@ export default function CommunityCollaboration() {
         <h2 class='text-3xl font-bold text-neon-blue mb-4'>
           Shape the Future of AI Execution—Contribute, Collaborate & Innovate
         </h2>
-        <p class='text-lg text-gray-300'>
+        <p class='text-lg text-neutral-300'>
           Join Open Industrial’s open-source initiatives, research collaborations, and hackathons to
           advance AI execution technology.
         </p>
@@ -15,7 +15,7 @@ export default function CommunityCollaboration() {
           <h3 class='text-xl font-semibold text-neon-green'>
             Open Source Contributions
           </h3>
-          <p class='mt-2 text-gray-300'>
+          <p class='mt-2 text-neutral-300'>
             Help improve and expand Open Industrial’s AI execution models and governance frameworks.
           </p>
         </div>
@@ -23,7 +23,7 @@ export default function CommunityCollaboration() {
           <h3 class='text-xl font-semibold text-neon-blue'>
             Research & Hackathons
           </h3>
-          <p class='mt-2 text-gray-300'>
+          <p class='mt-2 text-neutral-300'>
             Collaborate with developers, researchers, and enterprises to shape the future of AI
             execution.
           </p>

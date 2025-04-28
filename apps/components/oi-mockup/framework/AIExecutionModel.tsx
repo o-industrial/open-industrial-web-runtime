@@ -5,7 +5,7 @@ export default function AIExecutionModel() {
         <h2 class='text-3xl font-bold text-neon-blue mb-4'>
           The AI-Driven Execution Model for Industrial Automation
         </h2>
-        <p class='text-lg text-gray-300'>
+        <p class='text-lg text-neutral-300'>
           Open Industrial’s AI execution agents run real-time industrial workloads while continuously
           optimizing their decision-making.
         </p>
@@ -13,13 +13,13 @@ export default function AIExecutionModel() {
       <div class='mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto'>
         <div class='p-6 bg-[#112E60] rounded-lg shadow-md text-center'>
           <h3 class='text-xl font-semibold text-neon-green'>AI Execution Loop</h3>
-          <p class='mt-2 text-gray-300'>
+          <p class='mt-2 text-neutral-300'>
             Data Ingestion → AI Decisioning → Execution → Continuous Optimization.
           </p>
         </div>
         <div class='p-6 bg-[#112E60] rounded-lg shadow-md text-center'>
           <h3 class='text-xl font-semibold text-neon-blue'>Human-in-the-Loop</h3>
-          <p class='mt-2 text-gray-300'>
+          <p class='mt-2 text-neutral-300'>
             Ensuring transparency and control over AI-powered industrial automation.
           </p>
         </div>

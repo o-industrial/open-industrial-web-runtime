@@ -4,7 +4,7 @@ export default function HeroSection() {
       <h1 class='text-4xl font-extrabold text-neon-blue drop-shadow-lg'>
         AI Execution, Optimized in Real-Time at the Edge
       </h1>
-      <p class='mt-4 text-lg text-gray-300 max-w-2xl'>
+      <p class='mt-4 text-lg text-neutral-300 max-w-2xl'>
         Open Industrial optimizes industrial execution with AI-powered real-time decision-making at
         the edge.
       </p>

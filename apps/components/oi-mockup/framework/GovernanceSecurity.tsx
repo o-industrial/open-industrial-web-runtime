@@ -5,7 +5,7 @@ export default function GovernanceSecurity() {
         <h2 class='text-3xl font-bold text-neon-blue mb-4'>
           Ensuring Trust & Security in AI Execution
         </h2>
-        <p class='text-lg text-gray-300'>
+        <p class='text-lg text-neutral-300'>
           Open Industrial follows Zero Trust security models, AI governance frameworks, and industry
           compliance standards.
         </p>
@@ -13,7 +13,7 @@ export default function GovernanceSecurity() {
       <div class='mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto'>
         <div class='p-6 bg-[#112E60] rounded-lg shadow-md text-center'>
           <h3 class='text-xl font-semibold text-neon-green'>AI Governance</h3>
-          <p class='mt-2 text-gray-300'>
+          <p class='mt-2 text-neutral-300'>
             Maintain full control over AI execution policies, audit trails, and oversight
             mechanisms.
           </p>
@@ -22,7 +22,7 @@ export default function GovernanceSecurity() {
           <h3 class='text-xl font-semibold text-neon-blue'>
             Security & Compliance
           </h3>
-          <p class='mt-2 text-gray-300'>
+          <p class='mt-2 text-neutral-300'>
             Adhering to Zero Trust models and meeting global AI compliance standards.
           </p>
         </div>

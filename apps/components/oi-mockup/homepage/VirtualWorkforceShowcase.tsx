@@ -5,7 +5,7 @@ export default function VirtualWorkforceShowcase() {
         <h2 class='text-3xl font-bold text-neon-blue mb-4'>
           Meet the Virtual Workforce
         </h2>
-        <p class='text-lg text-gray-300'>
+        <p class='text-lg text-neutral-300'>
           AI Execution Agents designed to optimize and manage industrial operations, assisting
           engineers with intelligent decision-making.
         </p>
@@ -15,7 +15,7 @@ export default function VirtualWorkforceShowcase() {
           <h3 class='text-xl font-semibold text-neon-green'>
             Cloud Native Solution Architect
           </h3>
-          <p class='mt-2 text-gray-300'>
+          <p class='mt-2 text-neutral-300'>
             Optimizes cloud-based deployments for industrial AI workflows.
           </p>
         </div>
@@ -23,7 +23,7 @@ export default function VirtualWorkforceShowcase() {
           <h3 class='text-xl font-semibold text-neon-blue'>
             Execution Path Optimizer
           </h3>
-          <p class='mt-2 text-gray-300'>
+          <p class='mt-2 text-neutral-300'>
             Dynamically adjusts industrial workflows for real-time optimization.
           </p>
         </div>
@@ -31,7 +31,7 @@ export default function VirtualWorkforceShowcase() {
           <h3 class='text-xl font-semibold text-neon-green'>
             Security & Compliance Auditor
           </h3>
-          <p class='mt-2 text-gray-300'>
+          <p class='mt-2 text-neutral-300'>
             Ensures AI-driven security enforcement and compliance monitoring.
           </p>
         </div>

@@ -4,7 +4,7 @@ export default function HeroSection() {
       <h1 class='text-4xl font-extrabold text-neon-blue drop-shadow-lg'>
         Customize & Expand Your Virtual Workforce with Open Industrial’s AI Execution Model
       </h1>
-      <p class='mt-4 text-lg text-gray-300 max-w-2xl'>
+      <p class='mt-4 text-lg text-neutral-300 max-w-2xl'>
         Open Industrial’s execution framework enables enterprises and developers to build, train, and
         integrate AI-powered execution agents.
       </p>

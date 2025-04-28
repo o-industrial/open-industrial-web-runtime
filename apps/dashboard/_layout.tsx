@@ -21,9 +21,9 @@ export default function Layout({
         />
       </head>
 
-      <body class='bg-slate-50 dark:bg-slate-900 text-black dark:text-white'>
+      <body class='bg-neutral-50 dark:bg-neutral-900 text-black dark:text-white'>
         <div
-          class='relative w-screen h-screen bg-cover bg-center bg-no-repeat'
+          class='relative w-screen h-screen bg-cover bg-center bg-no-repeat max-w-full'
           style={{
             backgroundImage: `url('/assets/background.png')`,
           }}

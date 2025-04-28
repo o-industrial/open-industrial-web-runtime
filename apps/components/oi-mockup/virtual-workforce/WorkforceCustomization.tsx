@@ -5,7 +5,7 @@ export default function WorkforceCustomization() {
         <h2 class='text-3xl font-bold text-neon-blue mb-4'>
           AI Workforce Integration & Customization
         </h2>
-        <p class='text-lg text-gray-300'>
+        <p class='text-lg text-neutral-300'>
           Customize, train, and deploy AI execution agents tailored to your industry’s needs.
         </p>
       </div>
@@ -15,7 +15,7 @@ export default function WorkforceCustomization() {
           type='range'
           min='1'
           max='100'
-          class='w-1/2 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer'
+          class='w-1/2 h-2 bg-neutral-700 rounded-lg appearance-none cursor-pointer'
         />
         <button
           type='button'

@@ -4,7 +4,7 @@ export default function HeroSection() {
       <h1 class='text-4xl font-extrabold text-neon-blue drop-shadow-lg'>
         From Automation to Autonomy
       </h1>
-      <p class='mt-4 text-lg text-gray-300 max-w-2xl'>
+      <p class='mt-4 text-lg text-neutral-300 max-w-2xl'>
         AI-driven execution revolutionizes industrial automation—going beyond monitoring to
         real-time decision-making and optimization.
       </p>

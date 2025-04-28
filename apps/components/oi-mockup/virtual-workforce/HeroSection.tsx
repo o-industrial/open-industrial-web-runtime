@@ -4,7 +4,7 @@ export default function HeroSection() {
       <h1 class='text-4xl font-extrabold text-neon-blue drop-shadow-lg'>
         Your AI Workforce: Always-On Execution, Human-Curated Control
       </h1>
-      <p class='mt-4 text-lg text-gray-300 max-w-2xl'>
+      <p class='mt-4 text-lg text-neutral-300 max-w-2xl'>
         Open Industrial’s Virtual Workforce augments engineers, optimizing workflows in real time
         while maintaining full oversight and control.
       </p>

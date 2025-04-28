@@ -1,0 +1,171 @@
+import { JSX } from 'preact';
+
+export enum ActionStyleTypes {
+  Solid = 1 << 0,
+  Outline = 1 << 1,
+  Link = 1 << 2,
+  Rounded = 1 << 3,
+  Icon = 1 << 4,
+  None = 1 << 5,
+}
+
+export enum ActionIntentTypes {
+  Primary = 1 << 0,
+  Secondary = 1 << 1,
+  Tertiary = 1 << 2,
+  Warning = 1 << 3,
+  Info = 1 << 4,
+  Error = 1 << 5,
+}
+
+export type ActionBaseProps = {
+  class?: string;
+  styleType?: ActionStyleTypes;
+  intentType?: ActionIntentTypes;
+  children?: JSX.Element | string | (JSX.Element | string)[];
+};
+
+export type ActionButtonProps = JSX.HTMLAttributes<HTMLButtonElement> &
+  ActionBaseProps;
+export type ActionAnchorProps = JSX.HTMLAttributes<HTMLAnchorElement> &
+  ActionBaseProps;
+
+export type ActionProps = (ActionButtonProps | ActionAnchorProps) & {
+  href?: string;
+};
+
+export function Action(props: ActionProps) {
+  const {
+    styleType = ActionStyleTypes.Solid | ActionStyleTypes.Rounded,
+    intentType = ActionIntentTypes.Primary,
+    class: className,
+    href,
+    children,
+    disabled,
+    ...rest
+  } = props;
+
+  const baseClasses =
+    'inline-flex items-center justify-center font-semibold transition-all duration-200 ease-out';
+  let styleClasses = '';
+  let intentClasses = '';
+
+  if (!(styleType & ActionStyleTypes.Icon)) {
+    styleClasses += ' px-4 py-2';
+  }
+
+  if (styleType & ActionStyleTypes.Solid) {
+    styleClasses += ' ';
+  }
+
+  if (styleType & ActionStyleTypes.Outline) {
+    styleClasses += ' border bg-transparent';
+  }
+
+  if (styleType & ActionStyleTypes.Link) {
+    styleClasses += ' bg-transparent underline';
+  }
+
+  if (styleType & ActionStyleTypes.Rounded) {
+    styleClasses += ' rounded-md';
+  }
+
+  if (styleType & ActionStyleTypes.Icon) {
+    styleClasses += ' rounded-full p-2';
+  }
+
+  const solidBackground = (styleType & ActionStyleTypes.Solid) !== 0;
+
+  switch (intentType) {
+    case ActionIntentTypes.Primary:
+      if (solidBackground) {
+        intentClasses =
+          'bg-neon-violet-500 hover:bg-neon-violet-600 text-white border-neon-violet-500';
+      } else {
+        intentClasses =
+          'text-neon-violet-400 hover:text-neon-violet-300 border-neon-violet-400';
+      }
+      break;
+
+    case ActionIntentTypes.Secondary:
+      if (solidBackground) {
+        intentClasses =
+          'bg-neon-indigo-500 hover:bg-neon-indigo-600 text-white border-neon-indigo-500';
+      } else {
+        intentClasses =
+          'text-neon-indigo-400 hover:text-neon-indigo-300 border-neon-indigo-400';
+      }
+      break;
+
+    case ActionIntentTypes.Tertiary:
+      if (solidBackground) {
+        intentClasses =
+          'bg-neon-blue-500 hover:bg-neon-blue-600 text-white border-neon-blue-500';
+      } else {
+        intentClasses =
+          'text-neon-blue-500 hover:text-neon-blue-600 border-neon-blue-500';
+      }
+      break;
+
+    case ActionIntentTypes.Warning:
+      if (solidBackground) {
+        intentClasses =
+          'bg-neon-yellow-400 hover:bg-neon-yellow-500 text-black border-neon-yellow-400';
+      } else {
+        intentClasses =
+          'text-neon-yellow-400 hover:text-neon-yellow-500 border-neon-yellow-400';
+      }
+      break;
+
+    case ActionIntentTypes.Info:
+      if (solidBackground) {
+        intentClasses =
+          'bg-neon-cyan-400 hover:bg-neon-cyan-500 text-white border-neon-cyan-400';
+      } else {
+        intentClasses =
+          'text-neon-cyan-400 hover:text-neon-cyan-300 border-neon-cyan-400';
+      }
+      break;
+
+    case ActionIntentTypes.Error:
+      if (solidBackground) {
+        intentClasses =
+          'bg-neon-red-500 hover:bg-neon-red-600 text-white border-neon-red-500';
+      } else {
+        intentClasses =
+          'text-neon-red-400 hover:text-neon-red-300 border-neon-red-400';
+      }
+      break;
+  }
+
+  const disabledClasses = disabled
+    ? ' opacity-50 pointer-events-none cursor-not-allowed'
+    : '';
+
+  const classes = `${baseClasses}${styleClasses} ${intentClasses} ${disabledClasses} ${
+    className ?? ''
+  }`;
+
+  if (href && !disabled) {
+    return (
+      <a
+        href={href}
+        class={classes}
+        {...(rest as JSX.HTMLAttributes<HTMLAnchorElement>)}
+      >
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      class={classes}
+      {...(rest as JSX.HTMLAttributes<HTMLButtonElement>)}
+    >
+      {children}
+    </button>
+  );
+}

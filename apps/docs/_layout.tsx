@@ -14,7 +14,7 @@ export function Header({
   activePath?: string;
 }) {
   return (
-    <header class="relative z-40 border-b border-slate-800 px-6 py-4 bg-slate-900 text-white">
+    <header class="relative z-40 border-b border-neutral-800 px-6 py-4 bg-neutral-900 text-white">
       <div class="flex items-center justify-between">
         <div class="text-xl font-semibold tracking-wide">
           Fathym AAIDEN Documentation
@@ -22,12 +22,12 @@ export function Header({
 
         <details class="sm:hidden relative">
           <summary class="cursor-pointer list-none">
-            <span class="inline-block px-3 py-1 rounded bg-slate-700 hover:bg-slate-600 text-sm">
+            <span class="inline-block px-3 py-1 rounded bg-neutral-700 hover:bg-neutral-600 text-sm">
               Menu
             </span>
           </summary>
 
-          <div class="absolute top-full right-0 mt-2 z-50 bg-slate-100 dark:bg-slate-950 shadow-lg w-64 h-[300px] overflow-y-auto overflow-x-hidden border border-slate-200 dark:border-slate-800 rounded">
+          <div class="absolute top-full right-0 mt-2 z-50 bg-neutral-100 dark:bg-neutral-950 shadow-lg w-64 h-[300px] overflow-y-auto overflow-x-hidden border border-neutral-200 dark:border-neutral-800 rounded">
             <SidebarNav class="sm:hidden pr-4" config={config} activePath={activePath} />
           </div>
         </details>
@@ -53,16 +53,16 @@ export function SidebarNav(props: { config: DocsConfig; activePath?: string; cla
         : false;
 
       const baseLinkClasses =
-        'block px-2 py-1 rounded hover:bg-slate-200 dark:hover:bg-slate-800';
+        'block px-2 py-1 rounded hover:bg-neutral-200 dark:hover:bg-neutral-800';
       const activeLinkClasses =
-        'bg-slate-300 dark:bg-slate-800 font-bold text-slate-900 dark:text-white';
-      const inactiveLinkClasses = 'text-slate-600 dark:text-white';
+        'bg-neutral-300 dark:bg-neutral-800 font-bold text-neutral-900 dark:text-white';
+      const inactiveLinkClasses = 'text-neutral-600 dark:text-white';
 
       if (hasChildren) {
         return (
           <details class="group" open={isAncestorOfActive || isActive}>
             <summary
-              class={`px-2 py-1 rounded font-semibold hover:bg-slate-200 dark:hover:bg-slate-800 flex items-center justify-between ${
+              class={`px-2 py-1 rounded font-semibold hover:bg-neutral-200 dark:hover:bg-neutral-800 flex items-center justify-between ${
                 level > 0 ? 'ml-2' : item.Children?.length ? '' : 'ml-2'
               }`}
             >
@@ -109,12 +109,12 @@ export function SidebarNav(props: { config: DocsConfig; activePath?: string; cla
   return (
     <aside
       class={classSet([
-        'w-64 bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-white border-r border-slate-200 dark:border-slate-800',
+        'w-64 bg-neutral-100 dark:bg-neutral-950 text-neutral-700 dark:text-white border-r border-neutral-200 dark:border-neutral-800',
       ], props)}
     >
       <div class="h-screen sticky top-0 flex flex-col">
         <div class="overflow-y-auto px-4 py-6 flex-1">
-          <div class="text-sm uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+          <div class="text-sm uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
             {props.config.Title}
           </div>
 
@@ -137,7 +137,7 @@ export function renderTOC(items: DocsNavItem[], level = 0): JSX.Element {
           {level === 0 ? '' : '╰─▶'}
           <a
             href={`./${item.Path}`}
-            class="inline text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:underline transition-colors"
+            class="inline text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 hover:underline transition-colors"
           >
             {item.Title}
           </a>
@@ -153,21 +153,21 @@ export function LocalDocNav({ nav }: { nav: DocsNavItem[] }) {
 
   return (
     <>
-      <aside class="hidden lg:block text-sm text-slate-600 dark:text-slate-400 h-screen sticky top-0">
+      <aside class="hidden lg:block text-sm text-neutral-600 dark:text-neutral-400 h-screen sticky top-0">
         <div class="overflow-y-auto h-full px-4 py-6">
-          <div class="font-semibold text-slate-700 dark:text-slate-500 mb-2 ml-2">
+          <div class="font-semibold text-neutral-700 dark:text-neutral-500 mb-2 ml-2">
             On this page
           </div>
           {renderTOC(nav)}
         </div>
       </aside>
 
-      <details class="lg:hidden sticky bottom-0 bg-slate-50 dark:bg-slate-900 p-4 z-40">
-        <summary class="w-full bg-slate-700 text-white rounded-md text-center py-2 cursor-pointer shadow">
+      <details class="lg:hidden sticky bottom-0 bg-neutral-50 dark:bg-neutral-900 p-4 z-40">
+        <summary class="w-full bg-neutral-700 text-white rounded-md text-center py-2 cursor-pointer shadow">
           On this page
         </summary>
 
-        <div class="mt-2 border border-slate-300 dark:border-slate-700 rounded-md max-h-[60vh] overflow-y-auto px-4 py-2 bg-white dark:bg-slate-950 shadow-lg space-y-2">
+        <div class="mt-2 border border-neutral-300 dark:border-neutral-700 rounded-md max-h-[60vh] overflow-y-auto px-4 py-2 bg-white dark:bg-neutral-950 shadow-lg space-y-2">
           {renderTOC(nav)}
         </div>
       </details>
@@ -185,21 +185,21 @@ export function PrevNextNav({
   const hasBoth = prev && next;
 
   return (
-    <footer class="border-t border-slate-200 dark:border-slate-800 px-8 py-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
+    <footer class="border-t border-neutral-200 dark:border-neutral-800 px-8 py-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
       {/* Previous Page */}
       {prev ? (
         <a
           href={prev.Path}
-          class="group block border border-slate-200 dark:border-slate-800 rounded-lg p-5 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors"
+          class="group block border border-neutral-200 dark:border-neutral-800 rounded-lg p-5 bg-white dark:bg-neutral-950 hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
         >
-          <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">
+          <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">
             ← Previous
           </div>
-          <div class="text-base font-semibold text-slate-800 dark:text-white group-hover:underline">
+          <div class="text-base font-semibold text-neutral-800 dark:text-white group-hover:underline">
             {prev.Title}
           </div>
           {prev.Abstract && (
-            <p class="text-slate-600 dark:text-slate-400 text-sm mt-1 line-clamp-2">
+            <p class="text-neutral-600 dark:text-neutral-400 text-sm mt-1 line-clamp-2">
               {prev.Abstract}
             </p>
           )}
@@ -213,7 +213,7 @@ export function PrevNextNav({
       {next && (
         <a
           href={next.Path}
-          class={`group block border border-slate-200 dark:border-slate-800 rounded-lg p-5 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors
+          class={`group block border border-neutral-200 dark:border-neutral-800 rounded-lg p-5 bg-white dark:bg-neutral-950 hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors
             ${
               !hasBoth
                 ? 'sm:col-start-2 text-left sm:text-right'
@@ -221,14 +221,14 @@ export function PrevNextNav({
             }
           `}
         >
-          <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">
+          <div class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">
             Next →
           </div>
-          <div class="text-base font-semibold text-slate-800 dark:text-white group-hover:underline">
+          <div class="text-base font-semibold text-neutral-800 dark:text-white group-hover:underline">
             {next.Title}
           </div>
           {next.Abstract && (
-            <p class="text-slate-600 dark:text-slate-400 text-sm mt-1 line-clamp-2">
+            <p class="text-neutral-600 dark:text-neutral-400 text-sm mt-1 line-clamp-2">
               {next.Abstract}
             </p>
           )}
@@ -261,7 +261,7 @@ export default function Layout({ Data, Component, Revision }: PageProps) {
         />
       </head>
 
-      <body class="bg-slate-50 dark:bg-slate-900">
+      <body class="bg-neutral-50 dark:bg-neutral-900">
         <div class="h-screen flex flex-col">
           <Header config={Data.$Config} activePath={Data.CurrentPath} />
 

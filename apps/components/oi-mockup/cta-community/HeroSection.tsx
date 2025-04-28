@@ -4,7 +4,7 @@ export default function HeroSection() {
       <h1 class='text-4xl font-extrabold text-neon-blue drop-shadow-lg'>
         Powering Industry 5.0—Start Your AI Execution Journey Today
       </h1>
-      <p class='mt-4 text-lg text-gray-300 max-w-2xl'>
+      <p class='mt-4 text-lg text-neutral-300 max-w-2xl'>
         Join an ecosystem driving the future of industrial AI execution with powerful, real-time
         automation and collaboration.
       </p>

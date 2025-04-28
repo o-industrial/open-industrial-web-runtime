@@ -4,7 +4,7 @@ export default function HeroSection() {
       <h1 class='text-4xl font-extrabold text-neon-blue drop-shadow-lg'>
         A Collaborative Future: AI Execution Powered by Industry Leaders
       </h1>
-      <p class='mt-4 text-lg text-gray-300 max-w-2xl'>
+      <p class='mt-4 text-lg text-neutral-300 max-w-2xl'>
         Open Industrial partners with leading AI, industrial automation, and cloud technology
         providers to deliver AI-powered execution solutions.
       </p>

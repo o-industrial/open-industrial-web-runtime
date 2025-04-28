@@ -28,7 +28,7 @@
   "imports": {
     "@fathym/atomic": "jsr:@fathym/atomic@0",
     "@fathym/atomic-design-kit": "jsr:@fathym/atomic-design-kit@0",
-    "@fathym/atomic-icons": "jsr:@fathym/atomic-icons@0",
+    "@fathym/atomic-icons": "jsr:@fathym/atomic-icons@0.0.88",
     "@fathym/common": "jsr:@fathym/common@0",
     "@fathym/eac": "jsr:@fathym/eac@0",
     "@fathym/eac-applications": "jsr:@fathym/eac-applications@0",
@@ -37,6 +37,7 @@
     "@fathym/ioc": "jsr:@fathym/ioc@0",
     "@o-industrial/common/api": "../open-industrial-reference-architecture/src/api/.exports.ts",
     "@o-industrial/common/sop": "../open-industrial-reference-architecture/src/sop/.exports.ts",
+    "pdfjs-dist": "npm:pdfjs-dist@5.2.133",
     "preact": "npm:preact@10.20.1",
     "@std/assert": "jsr:@std/assert@1.0.6",
     "@std/log": "jsr:@std/log@0.224.6",

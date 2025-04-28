@@ -13,7 +13,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, IndexPageData
 export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
   return (
     <>
-      <div class='py-16 px-4 bg-slate-500/75'>
+      <div class='py-16 px-4 bg-neutral-500/75'>
         <div class='mx-auto block w-[350px] text-center'>
           <h1 class='text-4xl'>Dashboard</h1>
 

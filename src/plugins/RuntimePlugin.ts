@@ -80,11 +80,15 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
               dashboard: {
                 PathPattern: '/dashboard*',
-                Priority: 300,
+                Priority: 500,
+                IsPrivate: true,
+                IsTriggerSignIn: true,
               },
               docs: {
                 PathPattern: '/docs*',
                 Priority: 500,
+                IsPrivate: true,
+                IsTriggerSignIn: true,
               },
               home: {
                 PathPattern: '*',
@@ -132,7 +136,20 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Type: 'AtomicIcons',
               Config: {
                 IconSet: {
-                  IconMap: { add: 'https://api.iconify.design/gg:add.svg' },
+                  IconMap: {
+                    compositeSchema:
+                      'https://api.iconify.design/lucide:layers.svg',
+                    device: 'https://api.iconify.design/mdi:chip.svg',
+                    impulse: 'https://api.iconify.design/mdi:pulse.svg',
+                    referenceSchema:
+                      'https://api.iconify.design/lucide:book-open.svg',
+                    schema: 'https://api.iconify.design/lucide:square.svg',
+                    signal:
+                      'https://api.iconify.design/mdi:alert-decagram-outline.svg',
+                    surface:
+                      'https://api.iconify.design/mdi:layers-outline.svg',
+                    triggerMatch: 'https://api.iconify.design/lucide:zap.svg',
+                  },
                 },
                 Generate: true,
                 SpriteSheet: '/iconset',
@@ -252,12 +269,13 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
           },
         },
         DenoKVs: {
-          thinky: {
+          ['oi']: {
             Details: {
               Type: 'DenoKV',
               Name: 'Thinky',
               Description: 'The Deno KV database to use for thinky',
-              DenoKVPath: Deno.env.get('THINKY_DENO_KV_PATH') || undefined,
+              DenoKVPath:
+                Deno.env.get('OPEN_INDUSTRIAL_DENO_KV_PATH') || undefined,
             } as EaCDenoKVDetails,
           },
         },

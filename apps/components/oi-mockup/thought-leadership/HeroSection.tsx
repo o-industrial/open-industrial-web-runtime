@@ -4,7 +4,7 @@ export default function HeroSection() {
       <h1 class='text-4xl font-extrabold text-neon-blue drop-shadow-lg'>
         Innovating Industrial AI Execution—Insights from Industry Leaders
       </h1>
-      <p class='mt-4 text-lg text-gray-300 max-w-2xl'>
+      <p class='mt-4 text-lg text-neutral-300 max-w-2xl'>
         Open Industrial’s Thought Leadership Hub features cutting-edge research, expert analysis, and
         advancements in industrial AI execution.
       </p>
