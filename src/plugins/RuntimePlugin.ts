@@ -12,6 +12,7 @@ import { EverythingAsCodeApplications } from '@fathym/eac-applications';
 import {
   EaCDFSProcessor,
   EaCMDXProcessor,
+  EaCOAuthProcessor,
   EaCPreactAppProcessor,
   EaCTailwindProcessor,
 } from '@fathym/eac-applications/processors';
@@ -23,8 +24,10 @@ import {
 import {
   EaCBaseHREFModifierDetails,
   EaCKeepAliveModifierDetails,
+  EaCOAuthModifierDetails,
 } from '@fathym/eac-applications/modifiers';
 import { EaCAzureBlobStorageDistributedFileSystemDetails } from '@fathym/eac/dfs';
+import { EaCAzureADB2CProviderDetails } from '@fathym/eac-identity';
 
 export default class RuntimePlugin implements EaCRuntimePlugin {
   constructor() {}
@@ -68,6 +71,9 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               keepAlive: {
                 Priority: 5000,
               },
+              oauth: {
+                Priority: 10000,
+              },
             },
             ApplicationResolvers: {
               assets: {
@@ -93,6 +99,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               home: {
                 PathPattern: '*',
                 Priority: 100,
+              },
+              oauth: {
+                PathPattern: '/oauth/*',
+                Priority: 500,
               },
               tailwind: {
                 PathPattern: '/tailwind*',
@@ -243,6 +253,16 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
           //     ],
           //   } as EaCPreactAppProcessor,
           // },
+          oauth: {
+            Details: {
+              Name: 'OAuth Site',
+              Description: 'The site for use in OAuth workflows for a user',
+            },
+            Processor: {
+              Type: 'OAuth',
+              ProviderLookup: 'adb2c',
+            } as EaCOAuthProcessor,
+          },
           tailwind: {
             Details: {
               Name: 'Tailwind for the Site',
@@ -269,7 +289,15 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
           },
         },
         DenoKVs: {
-          ['oi']: {
+          oauth: {
+            Details: {
+              Type: 'DenoKV',
+              Name: 'Local Cache',
+              Description: 'The Deno KV database to use for local caching',
+              DenoKVPath: Deno.env.get('OAUTH_DENO_KV_PATH') || undefined,
+            } as EaCDenoKVDetails,
+          },
+          oi: {
             Details: {
               Type: 'DenoKV',
               Name: 'Thinky',
@@ -367,6 +395,33 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 'Lightweight cache to use that stores data in a DenoKV database.',
               KeepAlivePath: '/_eac/alive',
             } as EaCKeepAliveModifierDetails,
+          },
+          oauth: {
+            Details: {
+              Type: 'OAuth',
+              Name: 'OAuth',
+              Description:
+                'Used to restrict user access to various applications.',
+              ProviderLookup: 'adb2c',
+              SignInPath: '/oauth/signin',
+            } as EaCOAuthModifierDetails,
+          },
+        },
+        Providers: {
+          adb2c: {
+            DatabaseLookup: 'oauth',
+            Details: {
+              Name: 'Azure ADB2C OAuth Provider',
+              Description:
+                'The provider used to connect with our azure adb2c instance',
+              ClientID: Deno.env.get('AZURE_ADB2C_CLIENT_ID')!,
+              ClientSecret: Deno.env.get('AZURE_ADB2C_CLIENT_SECRET')!,
+              Scopes: ['openid', Deno.env.get('AZURE_ADB2C_CLIENT_ID')!],
+              Domain: Deno.env.get('AZURE_ADB2C_DOMAIN')!,
+              PolicyName: Deno.env.get('AZURE_ADB2C_POLICY')!,
+              TenantID: Deno.env.get('AZURE_ADB2C_TENANT_ID')!,
+              IsPrimary: true,
+            } as EaCAzureADB2CProviderDetails,
           },
         },
         $GlobalOptions: {

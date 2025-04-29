@@ -34,6 +34,7 @@
     "@fathym/eac-applications": "jsr:@fathym/eac-applications@0",
     "@fathym/eac-deno-kv": "jsr:@fathym/eac-deno-kv@0",
     "@fathym/eac-dfs": "jsr:@fathym/eac-dfs@0",
+    "@fathym/eac-identity": "jsr:@fathym/eac-identity@0.0.14",
     "@fathym/ioc": "jsr:@fathym/ioc@0",
     "@o-industrial/common/api": "../open-industrial-reference-architecture/src/api/.exports.ts",
     "@o-industrial/common/sop": "../open-industrial-reference-architecture/src/sop/.exports.ts",
