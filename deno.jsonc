@@ -28,7 +28,7 @@
   "imports": {
     "@fathym/atomic": "jsr:@fathym/atomic@0",
     "@fathym/atomic-design-kit": "jsr:@fathym/atomic-design-kit@0",
-    "@fathym/atomic-icons": "jsr:@fathym/atomic-icons@0.0.88",
+    "@fathym/atomic-icons": "jsr:@fathym/atomic-icons@0.0.89",
     "@fathym/common": "jsr:@fathym/common@0",
     "@fathym/eac": "jsr:@fathym/eac@0",
     "@fathym/eac-applications": "jsr:@fathym/eac-applications@0",

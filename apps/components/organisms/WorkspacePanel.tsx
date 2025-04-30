@@ -23,6 +23,11 @@ import { WorkspaceManager } from '../../../src/managers/WorkspaceManager.ts';
 import SchemaNodeRenderer from './renderers/SchemaNodeRenderer.tsx';
 import WorkspaceNodeRendererBase from './renderers/WorkspaceNodeRendererBase.tsx';
 import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import ConnectionNodeRenderer from './renderers/ConnectionNodeRenderer.tsx';
+import EmptyNodeRenderer from './renderers/EmptyNodeRenderer.tsx';
+import AgentNodeRenderer from './renderers/AgentNodeRenderer.tsx';
+import SurfaceNodeRenderer from './renderers/SurfaceNodeRenderer.tsx';
+import DeviceNodeRenderer from './renderers/DeviceNodeRenderer.tsx';
 
 export const IsIsland = true;
 
@@ -31,10 +36,12 @@ type WorkspacePanelProps = {
 };
 
 const nodeTypes = {
+  agent: memo(AgentNodeRenderer),
+  connection: memo(ConnectionNodeRenderer),
+  device: memo(DeviceNodeRenderer),
+  empty: memo(EmptyNodeRenderer),
   schema: memo(SchemaNodeRenderer),
-  connection: memo(WorkspaceNodeRendererBase),
-  surface: memo(WorkspaceNodeRendererBase),
-  empty: memo(WorkspaceNodeRendererBase),
+  surface: memo(SurfaceNodeRenderer),
 };
 
 function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
@@ -84,14 +91,14 @@ function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
         },
       },
     ]);
-    
+
     setSelectedNodeId(id);
   };
 
   const onConnect = (params: Connection) => {
     setEdges((prevEdges: Edge[]) => {
       const newEdges = addEdge(params, prevEdges);
-      
+
       return newEdges;
     });
   };
@@ -112,7 +119,7 @@ function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
       }))
     );
   }, [selectedNodeId]);
-  
+
   return (
     <WorkspacePanelTemplate
       bank={<WorkspacePanelBank presets={WorkspaceManager.Presets} />}

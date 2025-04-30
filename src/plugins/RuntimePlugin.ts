@@ -147,16 +147,21 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Config: {
                 IconSet: {
                   IconMap: {
+                    agent: 'https://api.iconify.design/mdi:robot-outline.svg',
                     close: 'https://api.iconify.design/lucide:x.svg',
                     compositeSchema:
                       'https://api.iconify.design/lucide:layers.svg',
+                    connection:
+                      'https://api.iconify.design/mdi:link-variant.svg',
                     device: 'https://api.iconify.design/mdi:chip.svg',
-                    empty: 'https://api.iconify.design/lucide:circle.svg',
+                    empty: 'https://api.iconify.design/lucide:square.svg',
                     impulse: 'https://api.iconify.design/mdi:pulse.svg',
                     loading: 'https://api.iconify.design/lucide:loader-2.svg',
                     referenceSchema:
                       'https://api.iconify.design/lucide:book-open.svg',
-                    schema: 'https://api.iconify.design/lucide:square.svg',
+                    // schema: 'https://api.iconify.design/mdi:mdi:table.svg',
+                    schema:
+                      'https://api.iconify.design/mdi:view-grid-outline.svg',
                     signal:
                       'https://api.iconify.design/mdi:alert-decagram-outline.svg',
                     surface:

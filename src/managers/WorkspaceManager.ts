@@ -9,12 +9,12 @@ export class WorkspaceManager {
     empty: {
       Type: 'empty',
       Label: 'Empty Node',
-      IconKey: 'schema',
+      IconKey: 'empty', 
     },
     connection: {
       Type: 'connection',
       Label: 'Connection',
-      IconKey: 'device',
+      IconKey: 'connection', 
     },
     schema: {
       Type: 'schema',
@@ -24,10 +24,20 @@ export class WorkspaceManager {
     surface: {
       Type: 'surface',
       Label: 'Surface',
-      IconKey: 'surface',
+      IconKey: 'surface', 
+    },
+    device: {
+      Type: 'device',
+      Label: 'Device',
+      IconKey: 'device',
+    },
+    agent: {
+      Type: 'agent',
+      Label: 'Agent',
+      IconKey: 'agent', 
     },
   };
-
+  
   public static GetPreset(type: string): NodePreset | undefined {
     return WorkspaceManager.Presets[type];
   }
