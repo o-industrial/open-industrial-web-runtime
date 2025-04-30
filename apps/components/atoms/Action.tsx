@@ -1,4 +1,5 @@
 import { JSX } from 'preact';
+import { IntentTypes } from '../../../src/types/IntentTypes.ts';
 
 export enum ActionStyleTypes {
   Solid = 1 << 0,
@@ -9,19 +10,10 @@ export enum ActionStyleTypes {
   None = 1 << 5,
 }
 
-export enum ActionIntentTypes {
-  Primary = 1 << 0,
-  Secondary = 1 << 1,
-  Tertiary = 1 << 2,
-  Warning = 1 << 3,
-  Info = 1 << 4,
-  Error = 1 << 5,
-}
-
 export type ActionBaseProps = {
   class?: string;
   styleType?: ActionStyleTypes;
-  intentType?: ActionIntentTypes;
+  intentType?: IntentTypes;
   children?: JSX.Element | string | (JSX.Element | string)[];
 };
 
@@ -37,7 +29,7 @@ export type ActionProps = (ActionButtonProps | ActionAnchorProps) & {
 export function Action(props: ActionProps) {
   const {
     styleType = ActionStyleTypes.Solid | ActionStyleTypes.Rounded,
-    intentType = ActionIntentTypes.Primary,
+    intentType = IntentTypes.Primary,
     class: className,
     href,
     children,
@@ -77,7 +69,7 @@ export function Action(props: ActionProps) {
   const solidBackground = (styleType & ActionStyleTypes.Solid) !== 0;
 
   switch (intentType) {
-    case ActionIntentTypes.Primary:
+    case IntentTypes.Primary:
       if (solidBackground) {
         intentClasses =
           'bg-neon-violet-500 hover:bg-neon-violet-600 text-white border-neon-violet-500';
@@ -87,7 +79,7 @@ export function Action(props: ActionProps) {
       }
       break;
 
-    case ActionIntentTypes.Secondary:
+    case IntentTypes.Secondary:
       if (solidBackground) {
         intentClasses =
           'bg-neon-indigo-500 hover:bg-neon-indigo-600 text-white border-neon-indigo-500';
@@ -97,7 +89,7 @@ export function Action(props: ActionProps) {
       }
       break;
 
-    case ActionIntentTypes.Tertiary:
+    case IntentTypes.Tertiary:
       if (solidBackground) {
         intentClasses =
           'bg-neon-blue-500 hover:bg-neon-blue-600 text-white border-neon-blue-500';
@@ -107,7 +99,7 @@ export function Action(props: ActionProps) {
       }
       break;
 
-    case ActionIntentTypes.Warning:
+    case IntentTypes.Warning:
       if (solidBackground) {
         intentClasses =
           'bg-neon-yellow-400 hover:bg-neon-yellow-500 text-black border-neon-yellow-400';
@@ -117,7 +109,7 @@ export function Action(props: ActionProps) {
       }
       break;
 
-    case ActionIntentTypes.Info:
+    case IntentTypes.Info:
       if (solidBackground) {
         intentClasses =
           'bg-neon-cyan-400 hover:bg-neon-cyan-500 text-white border-neon-cyan-400';
@@ -127,7 +119,7 @@ export function Action(props: ActionProps) {
       }
       break;
 
-    case ActionIntentTypes.Error:
+    case IntentTypes.Error:
       if (solidBackground) {
         intentClasses =
           'bg-neon-red-500 hover:bg-neon-red-600 text-white border-neon-red-500';

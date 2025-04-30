@@ -294,6 +294,9 @@ const config: Config = {
       outlineColor: {
         neon: '#93C5FD', // neon-blue-300
       },
+      zIndex: {
+        '-1': '-1',
+      },  
 
       keyframes: { ...keyframes },
       animation: { ...animations },

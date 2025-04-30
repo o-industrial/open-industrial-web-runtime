@@ -1,5 +1,5 @@
 import { merge } from '@fathym/common';
-import { AgreementData } from '../../apps/islands/organisms/AgreementList.tsx';
+import { AgreementData } from '../../apps/components/organisms/AgreementList.tsx';
 import { IoCContainer } from '@fathym/ioc';
 import { saveWithRetry } from '../utils/saveWithRetry.ts';
 

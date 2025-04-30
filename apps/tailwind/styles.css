@@ -66,3 +66,7 @@ img {
 html.dark * {
   scrollbar-color: #EC4899 transparent;
 }
+
+.react-flow__background {
+  z-index: -1 !important;
+}

@@ -5,7 +5,7 @@ import { AgreementManager } from '../../src/agreements/AgreementManager.ts';
 import {
   AgreementData,
   AgreementList,
-} from '../islands/organisms/AgreementList.tsx';
+} from '../components/organisms/AgreementList.tsx';
 
 export const IsIsland = true;
 

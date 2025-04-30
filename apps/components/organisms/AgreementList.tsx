@@ -2,7 +2,8 @@ import { useState } from 'preact/hooks';
 import { JSX } from 'preact';
 import { classSet } from '@fathym/atomic';
 import { AgreementCard } from '../molecules/AgreementCard.tsx';
-import { Action, ActionIntentTypes, ActionStyleTypes } from '../../components/atoms/Action.tsx';
+import { Action, ActionStyleTypes } from '../atoms/Action.tsx';
+import { IntentTypes } from '../../../src/types/IntentTypes.ts';
 
 export const IsIsland = true;
 
@@ -59,7 +60,7 @@ export function AgreementList({
       <div class="flex justify-center">
         <Action
           styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
-          intentType={ActionIntentTypes.Primary}
+          intentType={IntentTypes.Primary}
           disabled={!allAccepted}
           onClick={handleAccept}
         >

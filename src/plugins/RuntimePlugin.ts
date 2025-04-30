@@ -147,10 +147,13 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Config: {
                 IconSet: {
                   IconMap: {
+                    close: 'https://api.iconify.design/lucide:x.svg',
                     compositeSchema:
                       'https://api.iconify.design/lucide:layers.svg',
                     device: 'https://api.iconify.design/mdi:chip.svg',
+                    empty: 'https://api.iconify.design/lucide:circle.svg',
                     impulse: 'https://api.iconify.design/mdi:pulse.svg',
+                    loading: 'https://api.iconify.design/lucide:loader-2.svg',
                     referenceSchema:
                       'https://api.iconify.design/lucide:book-open.svg',
                     schema: 'https://api.iconify.design/lucide:square.svg',
@@ -182,7 +185,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               ComponentDFSLookups: [
                 ['local:apps/components', ['tsx']],
                 ['local:apps/dashboard', ['tsx']],
-                ['local:apps/islands', ['tsx']],
+                // ['local:apps/islands', ['tsx']],
                 ['jsr:@fathym/atomic', ['tsx']],
                 ['jsr:@fathym/atomic-design-kit', ['tsx']],
               ],
@@ -274,7 +277,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 'local:apps/components',
                 'local:apps/docs',
                 'local:apps/home',
-                'local:apps/islands',
+                // 'local:apps/islands',
                 'jsr:@fathym/atomic',
                 'jsr:@fathym/atomic-design-kit',
               ],
@@ -354,13 +357,13 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Extensions: ['tsx'],
             } as EaCLocalDistributedFileSystemDetails,
           },
-          'local:apps/islands': {
-            Details: {
-              Type: 'Local',
-              FileRoot: './apps/islands/',
-              Extensions: ['tsx'],
-            } as EaCLocalDistributedFileSystemDetails,
-          },
+          // 'local:apps/islands': {
+          //   Details: {
+          //     Type: 'Local',
+          //     FileRoot: './apps/islands/',
+          //     Extensions: ['tsx'],
+          //   } as EaCLocalDistributedFileSystemDetails,
+          // },
           'jsr:@fathym/atomic': {
             Details: {
               Type: 'JSR',

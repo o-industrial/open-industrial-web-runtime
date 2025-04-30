@@ -4,6 +4,7 @@ import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.t
 import {
   CompositeSchemaIcon,
   DeviceIcon,
+  EmptyIcon,
   ImpulseIcon,
   ReferenceSchemaIcon,
   SchemaIcon,
@@ -13,9 +14,9 @@ import {
 } from '../../build/iconset/icons/_exports.ts';
 import {
   Action,
-  ActionIntentTypes,
   ActionStyleTypes,
 } from '../components/atoms/Action.tsx';
+import { IntentTypes } from '../../src/types/IntentTypes.ts';
 
 type IndexPageData = {};
 
@@ -40,33 +41,56 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
       </div>
 
       <div class="p-4">
-        <h2 class="text-2xl">
-          <DeviceIcon class="w-5 h-5 text-neon-pink-400 inline" /> Device
-        </h2>
-        <h2 class="text-2xl">
-          <ImpulseIcon class="w-5 h-5 text-neon-pink-400 inline" /> Impulse
-        </h2>
-        <h2 class="text-2xl">
-          <SchemaIcon class="w-5 h-5 text-neon-pink-400 inline" /> Schema
-        </h2>
-        <h2 class="text-2xl">
-          <CompositeSchemaIcon class="w-5 h-5 text-neon-pink-400 inline" />{' '}
-          Composite Schema
-        </h2>
-        <h2 class="text-2xl">
-          <ReferenceSchemaIcon class="w-5 h-5 text-neon-pink-400 inline" />{' '}
-          Reference Schema
-        </h2>
-        <h2 class="text-2xl">
-          <SignalIcon class="w-5 h-5 text-neon-pink-400 inline" /> Signal
-        </h2>
-        <h2 class="text-2xl">
-          <SurfaceIcon class="w-5 h-5 text-neon-pink-400 inline" /> Surface
-        </h2>
-        <h2 class="text-2xl">
-          <TriggerMatchIcon class="w-5 h-5 text-neon-pink-400 inline" /> Trigger
-          Match
-        </h2>
+        <div class="space-y-8">
+          <h1 class="text-2xl font-bold mb-6">Node Type Icons</h1>
+
+          <div class="flex flex-wrap gap-8">
+            <div class="flex flex-col items-center space-y-2">
+              <DeviceIcon class="w-6 h-6 text-neon-pink-400" />
+              <span class="text-sm font-semibold">Device</span>
+            </div>
+
+            <div class="flex flex-col items-center space-y-2">
+              <ImpulseIcon class="w-6 h-6 text-neon-pink-400" />
+              <span class="text-sm font-semibold">Impulse</span>
+            </div>
+
+            <div class="flex flex-col items-center space-y-2">
+              <SchemaIcon class="w-6 h-6 text-neon-pink-400" />
+              <span class="text-sm font-semibold">Schema</span>
+            </div>
+
+            <div class="flex flex-col items-center space-y-2">
+              <CompositeSchemaIcon class="w-6 h-6 text-neon-pink-400" />
+              <span class="text-sm font-semibold">Composite Schema</span>
+            </div>
+
+            <div class="flex flex-col items-center space-y-2">
+              <ReferenceSchemaIcon class="w-6 h-6 text-neon-pink-400" />
+              <span class="text-sm font-semibold">Reference Schema</span>
+            </div>
+
+            <div class="flex flex-col items-center space-y-2">
+              <SignalIcon class="w-6 h-6 text-neon-pink-400" />
+              <span class="text-sm font-semibold">Signal</span>
+            </div>
+
+            <div class="flex flex-col items-center space-y-2">
+              <SurfaceIcon class="w-6 h-6 text-neon-pink-400" />
+              <span class="text-sm font-semibold">Surface</span>
+            </div>
+
+            <div class="flex flex-col items-center space-y-2">
+              <TriggerMatchIcon class="w-6 h-6 text-neon-pink-400" />
+              <span class="text-sm font-semibold">Trigger Match</span>
+            </div>
+
+            <div class="flex flex-col items-center space-y-2">
+              <EmptyIcon class="w-6 h-6 text-neon-pink-400" />
+              <span class="text-sm font-semibold">Empty</span>
+            </div>
+          </div>
+        </div>
 
         <div class="space-y-8">
           <h1 class="text-2xl font-bold mb-6">Action Button Variants</h1>
@@ -76,7 +100,7 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               <h2 class="text-sm font-semibold">Primary Solid</h2>
               <Action
                 styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
-                intentType={ActionIntentTypes.Primary}
+                intentType={IntentTypes.Primary}
               >
                 Launch
               </Action>
@@ -86,7 +110,7 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               <h2 class="text-sm font-semibold">Secondary Outline</h2>
               <Action
                 styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
-                intentType={ActionIntentTypes.Secondary}
+                intentType={IntentTypes.Secondary}
                 href="#"
               >
                 Read Terms
@@ -97,7 +121,7 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               <h2 class="text-sm font-semibold">Tertiary Outline</h2>
               <Action
                 styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
-                intentType={ActionIntentTypes.Tertiary}
+                intentType={IntentTypes.Tertiary}
                 href="#"
               >
                 Read Terms
@@ -108,7 +132,7 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               <h2 class="text-sm font-semibold">Icon Primary</h2>
               <Action
                 styleType={ActionStyleTypes.Icon | ActionStyleTypes.Rounded}
-                intentType={ActionIntentTypes.Primary}
+                intentType={IntentTypes.Primary}
               >
                 <SignalIcon class="w-5 h-5" />
               </Action>
@@ -118,7 +142,7 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               <h2 class="text-sm font-semibold">Info Link</h2>
               <Action
                 styleType={ActionStyleTypes.Link}
-                intentType={ActionIntentTypes.Info}
+                intentType={IntentTypes.Info}
                 href="#"
               >
                 Learn More
@@ -129,7 +153,7 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               <h2 class="text-sm font-semibold">Solid Warning</h2>
               <Action
                 styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
-                intentType={ActionIntentTypes.Warning}
+                intentType={IntentTypes.Warning}
               >
                 Retry Warning
               </Action>
@@ -139,7 +163,7 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               <h2 class="text-sm font-semibold">Outline Warning</h2>
               <Action
                 styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
-                intentType={ActionIntentTypes.Warning}
+                intentType={IntentTypes.Warning}
               >
                 Warning Outline
               </Action>
@@ -149,7 +173,7 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               <h2 class="text-sm font-semibold">Solid Info</h2>
               <Action
                 styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
-                intentType={ActionIntentTypes.Info}
+                intentType={IntentTypes.Info}
               >
                 Info Action
               </Action>
@@ -159,7 +183,7 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               <h2 class="text-sm font-semibold">Outline Info</h2>
               <Action
                 styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
-                intentType={ActionIntentTypes.Info}
+                intentType={IntentTypes.Info}
               >
                 Info Outline
               </Action>
@@ -169,7 +193,7 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               <h2 class="text-sm font-semibold">Solid Error</h2>
               <Action
                 styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
-                intentType={ActionIntentTypes.Error}
+                intentType={IntentTypes.Error}
               >
                 Delete
               </Action>
@@ -179,7 +203,7 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               <h2 class="text-sm font-semibold">Outline Error</h2>
               <Action
                 styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
-                intentType={ActionIntentTypes.Error}
+                intentType={IntentTypes.Error}
               >
                 Danger Outline
               </Action>
@@ -189,7 +213,7 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               <h2 class="text-sm font-semibold">Disabled Primary</h2>
               <Action
                 styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
-                intentType={ActionIntentTypes.Primary}
+                intentType={IntentTypes.Primary}
                 disabled
               >
                 Disabled Primary
@@ -200,7 +224,7 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               <h2 class="text-sm font-semibold">Disabled Link</h2>
               <Action
                 styleType={ActionStyleTypes.Link}
-                intentType={ActionIntentTypes.Info}
+                intentType={IntentTypes.Info}
                 href="#"
                 disabled
               >
