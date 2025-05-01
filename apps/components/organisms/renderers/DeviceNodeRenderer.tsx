@@ -1,45 +1,60 @@
-import { Handle, Position, NodeProps } from 'reactflow';
+import { NodeProps, Position } from 'reactflow';
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
+import NodeHandle from '../../atoms/NodeHandle.tsx';
+import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
+import { WorkspaceNodeData } from '../../../../src/managers/WorkspaceNodeData.ts';
+import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 
-export type DeviceNodeData = {
-  label: string;
-  type: string;
-  isSelected: boolean;
-  onDoubleClick?: () => void;
+type DeviceStats = {
+  impulseRates?: number[];
 };
 
-/**
- * DeviceNodeRenderer
- *
- * Represents an edge or runtime-connected physical device.
- * Uses chip icon, fully connectable, styled with selection state.
- */
-export default function DeviceNodeRenderer({ data }: NodeProps<DeviceNodeData>) {
+export type DeviceNodeData = WorkspaceNodeData<DeviceStats>;
+
+export default function DeviceNodeRenderer({
+  data,
+}: NodeProps<DeviceNodeData>) {
   if (!data) return null;
+
+  const stats = useLiveStats(data.stats, data.getStats);
+  const impulses = stats.impulseRates ?? [];
+  const latest = impulses.at(-1);
 
   return (
     <WorkspaceNodeRendererBase
       iconKey="device"
+      label={data.label}
       onDoubleClick={data.onDoubleClick}
       isSelected={data.isSelected}
+      class="data-[state=expanded]:w-[300px] data-[state=expanded]:h-auto data-[state=expanded]:rounded-md"
       preMain={
-        <Handle
+        <NodeHandle
           type="target"
           position={Position.Left}
-          isConnectable
-          className="!bg-white w-2 h-2 rounded-sm cursor-crosshair z-20"
-          style={{ pointerEvents: 'auto' }}
+          intentType={IntentTypes.Info}
         />
       }
       postMain={
-        <Handle
+        <NodeHandle
           type="source"
           position={Position.Right}
-          isConnectable
-          className="!bg-white w-2 h-2 rounded-sm cursor-crosshair z-20"
-          style={{ pointerEvents: 'auto' }}
+          intentType={IntentTypes.Info}
         />
       }
-    />
+    >
+      {impulses.length > 1 ? (
+        <LinePreviewWithValue
+          label="Impulse"
+          values={impulses}
+          currentValue={latest}
+          intent={IntentTypes.Info}
+          yMin={5}
+          yMax={20}
+        />
+      ) : (
+        <div class="text-sm text-gray-400 italic p-2">Awaiting data…</div>
+      )}
+    </WorkspaceNodeRendererBase>
   );
 }

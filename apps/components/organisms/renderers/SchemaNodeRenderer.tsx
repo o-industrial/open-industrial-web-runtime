@@ -1,55 +1,65 @@
-import { Handle, Position, NodeProps } from 'reactflow';
+import { NodeProps, Position } from 'reactflow';
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
+import NodeHandle from '../../atoms/NodeHandle.tsx';
+import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
+import { WorkspaceNodeData } from '../../../../src/managers/WorkspaceNodeData.ts';
+import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 
-export type SchemaNodeData = {
-  label: string;
-  type: string;
-  isSelected: boolean;
-  onDoubleClick?: () => void;
+type SchemaStats = {
+  impulseRates?: number[];
 };
 
-/**
- * SchemaNodeRenderer
- *
- * Specialized node renderer for schema nodes.
- * Inherits from WorkspaceNodeRendererBase and overrides base visuals:
- * - Expands to a 150x300 square
- * - Removes rounded borders
- * - Supports animated transitions
- */
+export type SchemaNodeData = WorkspaceNodeData<SchemaStats>;
+
 export default function SchemaNodeRenderer({
   data,
 }: NodeProps<SchemaNodeData>) {
   if (!data) return null;
 
+  const stats = useLiveStats(data.stats, data.getStats);
+  const impulseRates = stats.impulseRates ?? [];
+  const latest = impulseRates.at(-1);
+
   const classes = `
-    data-[state=expanded]:w-[300px] data-[state=expanded]:h-[150px] data-[state=expanded]:rounded-md
+    transition-[width,height,border-radius,border-color,background-color]
+    data-[state=expanded]:w-[300px] data-[state=expanded]:h-auto data-[state=expanded]:rounded-md
   `;
 
   return (
     <WorkspaceNodeRendererBase
       iconKey="schema"
+      label={data.label}
       onDoubleClick={data.onDoubleClick}
       class={classes}
       isSelected={data.isSelected}
       preMain={
-        <Handle
+        <NodeHandle
           type="target"
           position={Position.Left}
-          isConnectable
-          className="!bg-white w-2 h-2 rounded-sm cursor-crosshair z-20"
-          style={{ pointerEvents: 'auto' }}
+          intentType={IntentTypes.Secondary}
         />
       }
       postMain={
-        <Handle
+        <NodeHandle
           type="source"
           position={Position.Right}
-          isConnectable
-          className="!bg-white w-2 h-2 rounded-sm cursor-crosshair z-20"
-          style={{ pointerEvents: 'auto' }}
+          intentType={IntentTypes.Secondary}
         />
       }
-    />
+    >
+      {impulseRates.length > 1 ? (
+        <LinePreviewWithValue
+          label="Rate"
+          values={impulseRates}
+          currentValue={latest}
+          intent={IntentTypes.Info}
+          yMin={0}
+          yMax={25}
+        />
+      ) : (
+        <div class="text-sm text-gray-400 italic p-2">No live rate data</div>
+      )}
+    </WorkspaceNodeRendererBase>
   );
 }

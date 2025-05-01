@@ -45,6 +45,7 @@
     "react/jsx-runtime": "npm:preact@10.20.1/jsx-runtime",
     "react/jsx-dev-runtime": "npm:preact@10.20.1/jsx-dev-runtime",
     "reactflow": "npm:reactflow@11.11.4",
+    "recharts": "npm:recharts@2.15.3",
     "@std/assert": "jsr:@std/assert@1.0.6",
     "@std/log": "jsr:@std/log@0.224.6",
     "tailwindcss": "npm:tailwindcss@3.4.1",

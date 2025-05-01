@@ -12,6 +12,7 @@ export type WorkspaceNodeStatus = 'normal' | 'warning' | 'error' | 'proposal';
 
 export type WorkspaceNodeRendererBaseProps = {
   iconKey?: string;
+  label?: string;
   status?: WorkspaceNodeStatus;
   isSelected?: boolean;
 
@@ -36,6 +37,7 @@ export type WorkspaceNodeRendererBaseProps = {
  */
 export default function WorkspaceNodeRendererBase({
   iconKey,
+  label,
   status = 'normal',
   isSelected,
   class: className,
@@ -118,8 +120,8 @@ export default function WorkspaceNodeRendererBase({
         class={classSet(
           [
             '-:transition-all -:duration-300 -:ease-in-out',
-            '-:relative -:rounded-full -:flex -:items-center -:justify-center -:shadow-md -:border',
-            '-:w-14 -:h-14',
+            '-:relative -:rounded-full -:flex -:items-start -:justify-start',
+            state === 'default' ? '-:w-14 -:h-14' : '-:w-[250px] -:h-14',
             statusClasses,
           ],
           { class: className }
@@ -128,16 +130,43 @@ export default function WorkspaceNodeRendererBase({
       >
         {preInner}
 
-        <div class="relative pointer-events-none">
-          {state === 'default' && iconKey ? (
-            <Icon
-              icon={iconKey}
-              src="/icons/iconset"
-              class="w-6 h-6 text-white pointer-events-none"
-            />
-          ) : (
-            children
-          )}
+        <div class={classSet(["relative w-full", state === 'expanded' ? 'h-auto' : 'h-full'])}>
+          <div
+            class={classSet([
+              'pointer-events-none absolute',
+              '-:flex -:flex-row -:items-center -:justify-center',
+              '-:transition-all -:duration-300 -:ease-in-out',
+              state === 'default'
+                ? 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
+                : 'top-2 left-2 translate-x-0 translate-y-0',
+            ])}
+          >
+            {iconKey && (
+              <Icon
+                icon={iconKey}
+                src="/icons/iconset"
+                class={classSet([
+                  '-:transition-all -:duration-300 -:ease-in-out',
+                  state === 'default' ? 'w-6 h-6' : 'w-8 h-8',
+                ])}
+              />
+            )}
+
+            {label && (
+              <span
+                class={classSet([
+                  '-:transition-all -:duration-750 -:ease-in-out',
+                  state === 'default'
+                    ? '-:ml-0 -:opacity-0'
+                    : '-:ml-1 -:opacity-100',
+                ])}
+              >
+                {state !== 'default' && label}
+              </span>
+            )}
+          </div>
+
+          <div class="pt-8">{state !== 'default' && children}</div>
         </div>
 
         {postInner}

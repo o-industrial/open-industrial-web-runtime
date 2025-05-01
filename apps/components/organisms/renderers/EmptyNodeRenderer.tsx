@@ -1,47 +1,60 @@
-import { Handle, Position, NodeProps } from 'reactflow';
+import { NodeProps, Position } from 'reactflow';
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
+import NodeHandle from '../../atoms/NodeHandle.tsx';
+import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
+import { WorkspaceNodeData } from '../../../../src/managers/WorkspaceNodeData.ts';
+import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 
-export type EmptyNodeData = {
-  label: string;
-  type: string;
-  isSelected: boolean;
-  onDoubleClick?: () => void;
+type EmptyStats = {
+  impulseRates?: number[];
 };
 
-/**
- * EmptyNodeRenderer
- *
- * Minimal node used for placeholders, stubs, or visual gaps.
- * Default icon is a faint circle. Fully connectable.
- */
+export type EmptyNodeData = WorkspaceNodeData<EmptyStats>;
+
 export default function EmptyNodeRenderer({
   data,
 }: NodeProps<EmptyNodeData>) {
   if (!data) return null;
 
+  const stats = useLiveStats(data.stats, data.getStats);
+  const impulses = stats.impulseRates ?? [];
+  const latest = impulses.at(-1);
+
   return (
     <WorkspaceNodeRendererBase
       iconKey="empty"
+      label={data.label}
       onDoubleClick={data.onDoubleClick}
       isSelected={data.isSelected}
+      class="data-[state=expanded]:w-[300px] data-[state=expanded]:h-auto data-[state=expanded]:rounded-md"
       preMain={
-        <Handle
+        <NodeHandle
           type="target"
           position={Position.Left}
-          isConnectable
-          className="!bg-white w-2 h-2 rounded-sm cursor-crosshair z-20"
-          style={{ pointerEvents: 'auto' }}
+          intentType={IntentTypes.None}
         />
       }
       postMain={
-        <Handle
+        <NodeHandle
           type="source"
           position={Position.Right}
-          isConnectable
-          className="!bg-white w-2 h-2 rounded-sm cursor-crosshair z-20"
-          style={{ pointerEvents: 'auto' }}
+          intentType={IntentTypes.None}
         />
       }
-    />
+    >
+      {impulses.length > 1 ? (
+        <LinePreviewWithValue
+          label="Impulse"
+          values={impulses}
+          currentValue={latest}
+          intent={IntentTypes.None}
+          yMin={0}
+          yMax={15}
+        />
+      ) : (
+        <div class="text-sm text-gray-500 italic p-2">Idle</div>
+      )}
+    </WorkspaceNodeRendererBase>
   );
 }

@@ -153,6 +153,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                       'https://api.iconify.design/lucide:layers.svg',
                     connection:
                       'https://api.iconify.design/mdi:link-variant.svg',
+                    delete: 'https://api.iconify.design/lucide:trash-2.svg',
                     device: 'https://api.iconify.design/mdi:chip.svg',
                     empty: 'https://api.iconify.design/lucide:square.svg',
                     impulse: 'https://api.iconify.design/mdi:pulse.svg',

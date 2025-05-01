@@ -12,11 +12,9 @@ import {
   SurfaceIcon,
   TriggerMatchIcon,
 } from '../../build/iconset/icons/_exports.ts';
-import {
-  Action,
-  ActionStyleTypes,
-} from '../components/atoms/Action.tsx';
+import { Action, ActionStyleTypes } from '../components/atoms/Action.tsx';
 import { IntentTypes } from '../../src/types/IntentTypes.ts';
+import { LineSparkSVG } from '../components/atoms/LineSparkSVG.tsx';
 
 type IndexPageData = {};
 
@@ -234,47 +232,110 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
           </div>
         </div>
 
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
-        <h2 class="text-2xl">Welcome</h2>
+        <div class="space-y-8 mt-16">
+          <h1 class="text-2xl font-bold mb-6">LineSparkSVG Demo Grid</h1>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* SMOOTH PRIMARY */}
+            <div class="bg-neutral-800 p-4 rounded-md shadow-md">
+              <h2 class="text-sm font-medium mb-2 text-white">
+                Smooth – Primary
+              </h2>
+              <LineSparkSVG
+                lines={[
+                  {
+                    values: [1, 2.5, 1.8, 3, 2.2, 2.8, 3.2],
+                    intent: IntentTypes.Primary,
+                    mode: 'smooth',
+                  },
+                ]}
+              />
+            </div>
+
+            {/* LINEAR INFO */}
+            <div class="bg-neutral-800 p-4 rounded-md shadow-md">
+              <h2 class="text-sm font-medium mb-2 text-white">Linear – Info</h2>
+              <LineSparkSVG
+                lines={[
+                  {
+                    values: [2, 2.5, 2, 2.5, 3, 3.2],
+                    intent: IntentTypes.Info,
+                    mode: 'linear',
+                  },
+                ]}
+              />
+            </div>
+
+            {/* STEP – ERROR */}
+            <div class="bg-neutral-800 p-4 rounded-md shadow-md">
+              <h2 class="text-sm font-medium mb-2 text-white">Step – Error</h2>
+              <LineSparkSVG
+                lines={[
+                  {
+                    values: [2, 1.5, 1.5, 2.2, 3, 2],
+                    intent: IntentTypes.Error,
+                    mode: 'step',
+                  },
+                ]}
+              />
+            </div>
+
+            {/* DUAL LINES – INFO + WARNING */}
+            <div class="bg-neutral-800 p-4 rounded-md shadow-md">
+              <h2 class="text-sm font-medium mb-2 text-white">
+                Multi – Info + Warning
+              </h2>
+              <LineSparkSVG
+                lines={[
+                  {
+                    values: [1, 1.5, 1.2, 1.8, 2],
+                    intent: IntentTypes.Info,
+                    mode: 'smooth',
+                  },
+                  {
+                    values: [2, 2.2, 2.1, 2.5, 3],
+                    intent: IntentTypes.Warning,
+                    mode: 'smooth',
+                  },
+                ]}
+              />
+            </div>
+
+            {/* NO ANIMATION */}
+            <div class="bg-neutral-800 p-4 rounded-md shadow-md">
+              <h2 class="text-sm font-medium mb-2 text-white">
+                Linear – Static
+              </h2>
+              <LineSparkSVG
+                lines={[
+                  {
+                    values: [1, 2, 1.5, 2.2],
+                    intent: IntentTypes.Secondary,
+                    mode: 'linear',
+                  },
+                ]}
+                animate={false}
+              />
+            </div>
+
+            {/* TERTIARY SMOOTH THICKER */}
+            <div class="bg-neutral-800 p-4 rounded-md shadow-md">
+              <h2 class="text-sm font-medium mb-2 text-white">
+                Smooth – Thick
+              </h2>
+              <LineSparkSVG
+                lines={[
+                  {
+                    values: [2, 2.5, 3, 2.5, 2],
+                    intent: IntentTypes.Tertiary,
+                    mode: 'smooth',
+                  },
+                ]}
+                height={60}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

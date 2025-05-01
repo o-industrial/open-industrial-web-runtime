@@ -19,15 +19,9 @@ import { IS_BROWSER } from '@fathym/atomic';
 import { LoadingSpinner } from '../atoms/LoadingSpinner.tsx';
 import WorkspacePanelTemplate from '../templates/WorkspacePanelTemplate.tsx';
 import WorkspacePanelBank from './WorkspacePanelBank.tsx';
-import { WorkspaceManager } from '../../../src/managers/WorkspaceManager.ts';
-import SchemaNodeRenderer from './renderers/SchemaNodeRenderer.tsx';
-import WorkspaceNodeRendererBase from './renderers/WorkspaceNodeRendererBase.tsx';
+import { NodeScopeTypes, WorkspaceManager } from '../../../src/managers/WorkspaceManager.ts';
+import { WorkspaceNodeData } from '../../../src/managers/WorkspaceNodeData.ts';
 import { IntentTypes } from '../../../src/types/IntentTypes.ts';
-import ConnectionNodeRenderer from './renderers/ConnectionNodeRenderer.tsx';
-import EmptyNodeRenderer from './renderers/EmptyNodeRenderer.tsx';
-import AgentNodeRenderer from './renderers/AgentNodeRenderer.tsx';
-import SurfaceNodeRenderer from './renderers/SurfaceNodeRenderer.tsx';
-import DeviceNodeRenderer from './renderers/DeviceNodeRenderer.tsx';
 
 export const IsIsland = true;
 
@@ -35,17 +29,8 @@ type WorkspacePanelProps = {
   onNodeSelect?: (nodeId: string) => void;
 };
 
-const nodeTypes = {
-  agent: memo(AgentNodeRenderer),
-  connection: memo(ConnectionNodeRenderer),
-  device: memo(DeviceNodeRenderer),
-  empty: memo(EmptyNodeRenderer),
-  schema: memo(SchemaNodeRenderer),
-  surface: memo(SurfaceNodeRenderer),
-};
-
 function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<WorkspaceNodeData>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
 
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null); // ✅ Add this
@@ -53,48 +38,23 @@ function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
   const { project } = useReactFlow();
 
   const onDrop = (event: DragEvent) => {
-    event.preventDefault();
-    const transfer = event.dataTransfer;
-    if (!transfer) return;
+    const result = WorkspaceManager.HandleDrop(event, nodes, project);
 
-    const type = transfer.getData('application/node-type');
-    if (!type) return;
+    if (!result) return;
+  
+    const { newNode, selectedId } = result;
+  
+    newNode.data.onDoubleClick = () => {
+      setSelectedNodeId(selectedId);
+      
+      onNodeSelect?.(selectedId);
+    };
+  
+    setNodes((nds: Node[]) => [...nds, newNode]);
 
-    const bounds = (event.currentTarget as HTMLElement).getBoundingClientRect();
-
-    // 🔥 Use project to get correct canvas coordinates
-    const position = project({
-      x: event.clientX - bounds.left,
-      y: event.clientY - bounds.top,
-    });
-
-    const preset = WorkspaceManager.GetPreset(type);
-    if (!preset) return;
-
-    const id = `${type}-${Date.now()}`;
-
-    setNodes((nds: Node[]) => [
-      ...nds,
-      {
-        id,
-        type: preset.Type,
-        position,
-        data: {
-          type: preset.Type,
-          label: preset.Label,
-          iconKey: preset.IconKey,
-          onDoubleClick: () => {
-            setSelectedNodeId(id);
-
-            onNodeSelect?.(id);
-          },
-        },
-      },
-    ]);
-
-    setSelectedNodeId(id);
+    setSelectedNodeId(selectedId);
   };
-
+   
   const onConnect = (params: Connection) => {
     setEdges((prevEdges: Edge[]) => {
       const newEdges = addEdge(params, prevEdges);
@@ -120,9 +80,11 @@ function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
     );
   }, [selectedNodeId]);
 
+  const scope: NodeScopeTypes = 'workspace';
+
   return (
     <WorkspacePanelTemplate
-      bank={<WorkspacePanelBank presets={WorkspaceManager.Presets} />}
+      bank={<WorkspacePanelBank presets={WorkspaceManager.GetAvailablePresets(scope)} />}
       canvas={
         <div
           class="absolute inset-0 w-full h-full"
@@ -136,7 +98,7 @@ function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
             onEdgesChange={onEdgesChange}
             onNodeClick={handleNodeClick}
             onConnect={onConnect}
-            nodeTypes={nodeTypes}
+            nodeTypes={WorkspaceManager.GetAvailableTypes(scope)}
             fitView
           >
             <Background />
