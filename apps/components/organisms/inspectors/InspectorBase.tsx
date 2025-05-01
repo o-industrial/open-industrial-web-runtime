@@ -4,7 +4,7 @@ import { classSet } from '@fathym/atomic';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { DeleteIcon } from '../../../../build/iconset/icons/DeleteIcon.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
-import { ToggleCheckbox } from '../../atoms/ToggleCheckbox.tsx';
+import { ToggleCheckbox } from '../../atoms/forms/ToggleCheckbox.tsx';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 
 export type InspectorBaseProps = {

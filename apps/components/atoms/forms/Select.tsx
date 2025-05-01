@@ -1,6 +1,6 @@
 import { JSX } from 'preact';
 import { ForwardedRef, forwardRef } from 'preact/compat';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { classSet } from '@fathym/atomic';
 
 export type SelectProps = {

@@ -123,7 +123,7 @@ export default function SurfaceNodeRenderer({
             </svg>
           </Action>
 
-          <Action
+          {/* <Action
             title="Test Signal"
             styleType={ActionStyleTypes.Icon}
             intentType={IntentTypes.Tertiary}
@@ -136,7 +136,7 @@ export default function SurfaceNodeRenderer({
                 stroke-width="2"
               />
             </svg>
-          </Action>
+          </Action> */}
         </div>
       </div>
     </WorkspaceNodeRendererBase>

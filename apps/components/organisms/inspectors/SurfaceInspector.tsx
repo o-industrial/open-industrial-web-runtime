@@ -2,7 +2,7 @@ import { Node } from 'reactflow';
 import { useState } from 'preact/hooks';
 import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { InspectorBase } from './InspectorBase.tsx';
-import { Input } from '../../atoms/Input.tsx';
+import { Input } from '../../atoms/forms/Input.tsx';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';

@@ -1,5 +1,5 @@
 import { JSX } from 'preact';
-import { CheckboxRow } from '../atoms/CheckboxRow.tsx';
+import { CheckboxRow } from '../atoms/forms/CheckboxRow.tsx';
 
 export type MultiSelectCheckboxGroupProps = {
   label?: string;

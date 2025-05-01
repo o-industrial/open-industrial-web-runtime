@@ -4,14 +4,14 @@ import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
-import { Input } from '../../atoms/Input.tsx';
+import { Input } from '../../atoms/forms/Input.tsx';
 import { SummaryRowWithAction } from '../../molecules/SummaryRowWithAction.tsx';
 import { InspectorBase } from './InspectorBase.tsx';
 import { MultiSelectCheckboxGroup } from '../../molecules/MultiSelectCheckboxGroup.tsx';
 import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
 import { Modal } from '../../molecules/Modal.tsx';
 import { SimulatorLibraryModal } from '../simulators/SimulatorLibraryModal.tsx';
-import { CheckboxRow } from '../../atoms/CheckboxRow.tsx';
+import { CheckboxRow } from '../../atoms/forms/CheckboxRow.tsx';
 
 const CONNECTION_DETAILS: Record<
   string,

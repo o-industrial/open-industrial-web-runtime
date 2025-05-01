@@ -9,6 +9,7 @@ import { IntentTypes } from '../../../src/types/IntentTypes.ts';
 
 export type RuntimeWorkspaceDashboardTemplateProps = {
   azi?: preact.ComponentChildren;
+  breadcrumb?: preact.ComponentChildren;
   children?: preact.ComponentChildren;
   inspector?: preact.ComponentChildren;
   stream?: preact.ComponentChildren;
@@ -109,6 +110,18 @@ export default function RuntimeWorkspaceDashboardTemplate({
         colSpan={workspaceColSpan}
         class="-:border-x -:bg-neutral-950 -:flex -:flex-col"
       >
+        {props.breadcrumb && (
+          <div
+            class="-:col-span-full -:flex -:items-center"
+            style={{
+              gridColumnStart: workspaceColStart,
+              gridColumnEnd: workspaceColStart + workspaceColSpan,
+              gridRowStart: 1,
+            }}
+          >
+            {props.breadcrumb}
+          </div>
+        )}
         {children}
       </PanelShell>
 

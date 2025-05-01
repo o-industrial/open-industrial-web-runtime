@@ -1,6 +1,6 @@
 import { useState } from 'preact/hooks';
 import AziPanelTemplate from '../templates/AziPanelTemplate.tsx';
-import { Input } from '../atoms/Input.tsx';
+import { Input } from '../atoms/forms/Input.tsx';
 import { Action, ActionStyleTypes } from '../atoms/Action.tsx';
 import { IntentTypes } from '../../../src/types/IntentTypes.ts';
 import { AziChatMessage } from '../molecules/azi/AziChatMessage.tsx';

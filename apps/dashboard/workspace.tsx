@@ -63,9 +63,14 @@ export default function WorkspacePage({ Data }: PageProps<WorkspacePageData>) {
 
   return (
     <RuntimeWorkspaceDashboardTemplate
-      stream={streamSlot}
-      inspector={inspectorSlot}
       azi={aziSlot}
+      breadcrumb={
+        <div class="-:w-full -:text-xs -:text-neutral-400 -:bg-neutral-900 -:tracking-wide -:font-light -:px-4 -:pt-1.5 -:pb-1">
+          hello-azi (Workspace) / <span class="-:text-white">Management</span>
+        </div>
+      }
+      inspector={inspectorSlot}
+      stream={streamSlot}
       timeline={timelineSlot}
     >
       <WorkspacePanel onNodeSelect={setSelectedNode} />

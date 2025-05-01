@@ -1,5 +1,5 @@
 import { JSX } from 'preact';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 
 export type ToggleCheckboxProps = {
   checked: boolean;

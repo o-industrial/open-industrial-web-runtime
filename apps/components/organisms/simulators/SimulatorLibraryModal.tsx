@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 import { useState } from 'preact/hooks';
 import { Modal } from '../../molecules/Modal.tsx';
-import { Input } from '../../atoms/Input.tsx';
+import { Input } from '../../atoms/forms/Input.tsx';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { SearchIcon } from '../../../../build/iconset/icons/SearchIcon.tsx';
 import { SimulatorCard } from './SimulatorCard.tsx';

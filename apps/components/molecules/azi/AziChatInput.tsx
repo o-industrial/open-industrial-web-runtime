@@ -1,9 +1,10 @@
 import { JSX } from 'preact';
-import { useState } from 'preact/hooks';
-import { Input } from '../../atoms/Input.tsx';
+import { useRef, useState, useEffect } from 'preact/hooks';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { SearchIcon } from '../../../../build/iconset/icons/SearchIcon.tsx';
+import { Input } from '../../atoms/forms/Input.tsx';
+import { SendIcon } from '../../../../build/iconset/icons/SendIcon.tsx';
 
 export type AziChatInputProps = {
   placeholder?: string;
@@ -12,6 +13,7 @@ export type AziChatInputProps = {
   inputIntentType?: IntentTypes;
   actionIntentType?: IntentTypes;
   sendIcon?: JSX.Element;
+  maxHeight?: number; // in pixels
 };
 
 export function AziChatInput({
@@ -20,9 +22,27 @@ export function AziChatInput({
   disabled = false,
   inputIntentType = IntentTypes.None,
   actionIntentType = IntentTypes.Primary,
-  sendIcon = <SearchIcon class="w-5 h-5" />,
+  sendIcon = <SendIcon class="w-5 h-5" />,
+  maxHeight = 200,
 }: AziChatInputProps) {
   const [input, setInput] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const resizeTextarea = () => {
+    const el = textareaRef.current;
+    if (!el) return;
+
+    el.style.height = 'auto';
+
+    const newHeight = Math.min(el.scrollHeight, maxHeight);
+    el.style.height = `${newHeight}px`;
+    el.style.overflowY = el.scrollHeight > maxHeight ? 'scroll' : 'hidden';
+  };
+
+  const handleInput = (e: JSX.TargetedEvent<HTMLTextAreaElement, Event>) => {
+    const value = e.currentTarget.value;
+    setInput(value);
+  };
 
   const handleSubmit = (e: JSX.TargetedEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,14 +53,22 @@ export function AziChatInput({
     setInput('');
   };
 
+  useEffect(() => {
+    resizeTextarea();
+  }, [input]);
+
   return (
-    <form onSubmit={handleSubmit} class="flex gap-2">
+    <form onSubmit={handleSubmit} class="flex gap-2 w-full">
       <Input
-        onInput={setInput}
+        ref={textareaRef}
+        multiline
+        rows={1}
+        value={input}
+        onInput={handleInput}
         placeholder={placeholder}
         disabled={disabled}
         intentType={inputIntentType}
-        class="flex-grow"
+        class="flex-grow resize-none overflow-hidden"
       />
 
       <Action
