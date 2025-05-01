@@ -10,7 +10,6 @@ export type InputBaseProps = {
   rows?: number;
 };
 
-// Union of input and textarea props
 export type InputProps = InputBaseProps &
   (
     | (JSX.HTMLAttributes<HTMLInputElement> & { multiline?: false })
@@ -20,13 +19,13 @@ export type InputProps = InputBaseProps &
 function getIntentClasses(intent?: IntentTypes) {
   switch (intent) {
     case IntentTypes.Warning:
-      return 'border-neon-yellow-400 focus:ring-neon-yellow-500';
+      return 'border-neon-yellow-500 focus:ring-neon-yellow-500';
     case IntentTypes.Error:
-      return 'border-neon-red-400 focus:ring-neon-red-500';
+      return 'border-neon-red-500 focus:ring-neon-red-500';
     case IntentTypes.Info:
-      return 'border-neon-cyan-400 focus:ring-neon-cyan-500';
+      return 'border-neon-cyan-500 focus:ring-neon-cyan-500';
     case IntentTypes.Secondary:
-      return 'border-neon-indigo-400 focus:ring-neon-indigo-500';
+      return 'border-neon-indigo-500 focus:ring-neon-indigo-500';
     case IntentTypes.Tertiary:
       return 'border-neon-blue-500 focus:ring-neon-blue-500';
     case IntentTypes.Primary:
@@ -44,14 +43,15 @@ export const Input = forwardRef<
   ref: ForwardedRef<HTMLInputElement | HTMLTextAreaElement>
 ) {
   const baseClasses =
-    'w-full px-2 py-1 rounded text-sm placeholder-slate-400 bg-neutral-700 focus:outline-none focus:ring-2';
+    'w-full px-3 py-2 rounded text-sm bg-neutral-700 text-neutral-100 placeholder:text-neutral-400 placeholder:px-1 focus:outline-none focus:ring-2 transition-all';
+
   const intentClass = getIntentClasses(intentType);
   const disabledClass = disabled
     ? 'opacity-50 cursor-not-allowed pointer-events-none'
     : '';
 
   return (
-    <div class={classSet([`w-full`], rest)}>
+    <>
       {label && (
         <label class="block text-xs font-semibold text-neutral-300 mb-1">
           {label}
@@ -59,20 +59,20 @@ export const Input = forwardRef<
       )}
       {multiline ? (
         <textarea
+          {...(rest as JSX.HTMLAttributes<HTMLTextAreaElement>)}
           ref={ref as ForwardedRef<HTMLTextAreaElement>}
           rows={rows}
           disabled={disabled}
-          class={`${baseClasses} ${intentClass} ${disabledClass}`}
-          {...(rest as JSX.HTMLAttributes<HTMLTextAreaElement>)}
+          class={classSet([baseClasses, intentClass, disabledClass], rest)}
         />
       ) : (
         <input
+          {...(rest as JSX.HTMLAttributes<HTMLInputElement>)}
           ref={ref as ForwardedRef<HTMLInputElement>}
           disabled={disabled}
-          class={`${baseClasses} ${intentClass} ${disabledClass}`}
-          {...(rest as JSX.HTMLAttributes<HTMLInputElement>)}
+          class={classSet([baseClasses, intentClass, disabledClass], rest)}
         />
       )}
-    </div>
+    </>
   );
 });

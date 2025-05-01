@@ -156,6 +156,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                     delete: 'https://api.iconify.design/lucide:trash-2.svg',
                     device: 'https://api.iconify.design/mdi:chip.svg',
                     empty: 'https://api.iconify.design/lucide:square.svg',
+                    expand:
+                      'https://api.iconify.design/lucide:arrow-left-from-line.svg',
                     impulse: 'https://api.iconify.design/mdi:pulse.svg',
                     loading: 'https://api.iconify.design/lucide:loader-2.svg',
                     referenceSchema:
@@ -164,6 +166,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                     schema:
                       'https://api.iconify.design/mdi:view-grid-outline.svg',
                     search: 'https://api.iconify.design/lucide:search.svg',
+                    send: 'https://api.iconify.design/lucide:send.svg',
                     signal:
                       'https://api.iconify.design/mdi:alert-decagram-outline.svg',
                     surface:

@@ -13,11 +13,15 @@ export type TabDefinition = {
 export type TabbedPanelProps = {
   tabs: TabDefinition[];
   initialTab?: string;
+  scrollableContent?: boolean;
+  stickyTabs?: boolean;
 } & JSX.HTMLAttributes<HTMLDivElement>;
 
 export function TabbedPanel({
   tabs,
   initialTab,
+  scrollableContent,
+  stickyTabs,
   ...props
 }: TabbedPanelProps) {
   const [selected, setSelected] = useState<string>(
@@ -27,8 +31,23 @@ export function TabbedPanel({
   const activeTab = tabs.find((t) => t.key === selected);
 
   return (
-    <div class={classSet(['w-full'], props)} {...props}>
-      <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent">
+    <div
+      {...props}
+      class={classSet(
+        [
+          'w-full',
+          scrollableContent ? 'overflow-hidden' : '',
+          stickyTabs ? 'h-full' : '',
+        ],
+        props
+      )}
+    >
+      <div
+        class={classSet([
+          'overflow-x-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-transparent',
+          stickyTabs ? 'sticky top-0 z-10 bg-neutral-900' : '',
+        ])}
+      >
         <div class="inline-flex space-x-2 border-b border-neutral-700 mb-3 whitespace-nowrap min-w-full">
           {tabs.map((tab) => (
             <Action
@@ -36,11 +55,11 @@ export function TabbedPanel({
               onClick={() => setSelected(tab.key)}
               styleType={ActionStyleTypes.Link | ActionStyleTypes.Thin}
               intentType={
-                selected === tab.key ? IntentTypes.Primary : IntentTypes.None
+                selected === tab.key ? IntentTypes.Info : IntentTypes.None
               }
               class={`rounded-t-md border-b-2 ${
                 selected === tab.key
-                  ? 'border-neon-violet-400'
+                  ? 'border-neon-cyan-400'
                   : 'border-transparent hover:border-neutral-500'
               }`}
             >
@@ -50,7 +69,9 @@ export function TabbedPanel({
         </div>
       </div>
 
-      <div>{activeTab?.content}</div>
+      <div class={classSet([scrollableContent ? 'overflow-y-auto' : ''])}>
+        {activeTab?.content}
+      </div>
     </div>
   );
 }

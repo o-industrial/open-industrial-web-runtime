@@ -1,5 +1,6 @@
 import { JSX } from 'preact';
 import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { classSet } from '@fathym/atomic';
 
 export enum ActionStyleTypes {
   Solid = 1 << 0,
@@ -14,7 +15,6 @@ export enum ActionStyleTypes {
 }
 
 export type ActionBaseProps = {
-  class?: string;
   styleType?: ActionStyleTypes;
   intentType?: IntentTypes;
   children?: JSX.Element | string | (JSX.Element | string)[];
@@ -33,7 +33,6 @@ export function Action(props: ActionProps) {
   const {
     styleType = ActionStyleTypes.Solid | ActionStyleTypes.Rounded,
     intentType = IntentTypes.Primary,
-    class: className,
     href,
     children,
     disabled,
@@ -145,16 +144,14 @@ export function Action(props: ActionProps) {
     ? ' opacity-50 pointer-events-none cursor-not-allowed'
     : '';
 
-  const classes = `${baseClasses}${styleClasses} ${intentClasses} ${disabledClasses} ${
-    className ?? ''
-  }`;
+  const classes = `${baseClasses}${styleClasses} ${intentClasses} ${disabledClasses}`;
 
   if (href && !disabled) {
     return (
       <a
-        href={href}
-        class={classes}
         {...(rest as JSX.HTMLAttributes<HTMLAnchorElement>)}
+        href={href}
+        class={classSet([classes], rest)}
       >
         {children}
       </a>
@@ -163,10 +160,10 @@ export function Action(props: ActionProps) {
 
   return (
     <button
+      {...(rest as JSX.HTMLAttributes<HTMLButtonElement>)}
       type="button"
       disabled={disabled}
-      class={classes}
-      {...(rest as JSX.HTMLAttributes<HTMLButtonElement>)}
+      class={classSet([classes], rest)}
     >
       {children}
     </button>

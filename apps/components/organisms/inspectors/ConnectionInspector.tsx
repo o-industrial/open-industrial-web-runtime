@@ -205,20 +205,15 @@ export function ConnectionInspector({ node }: { node: Node }) {
       iconKey="connection"
       label={label}
       enabled={enabled}
+      impulseRates={impulseRates}
       onToggleEnabled={setEnabled}
       onDelete={() => console.log('Delete node')}
     >
-      <LinePreviewWithValue
-        label="Impulse Rate"
-        values={impulseRates}
-        currentValue={currentRate}
-        intent={IntentTypes.Warning}
-        yMin={15}
-        yMax={30}
-      />
-
       <TabbedPanel
         initialTab="settings"
+        // scrollableContent
+        // stickyTabs
+        class="mt-2"
         tabs={[
           {
             key: 'settings',

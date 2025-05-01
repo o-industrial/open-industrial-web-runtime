@@ -32,7 +32,7 @@ export function Modal({
             'relative bg-neutral-900 border border-neutral-700 rounded-md shadow-xl overflow-hidden flex flex-col transition-all',
             fullscreen
               ? 'w-full h-full m-4'
-              : 'w-full max-w-4xl max-h-[90vh] m-4',
+              : 'w-full max-w-5xl max-h-[90vh] m-4',
           ],
           props
         )}

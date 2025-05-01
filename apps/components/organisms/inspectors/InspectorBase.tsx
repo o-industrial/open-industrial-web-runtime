@@ -5,6 +5,7 @@ import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { DeleteIcon } from '../../../../build/iconset/icons/DeleteIcon.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { ToggleCheckbox } from '../../atoms/ToggleCheckbox.tsx';
+import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 
 export type InspectorBaseProps = {
   iconKey?: string;
@@ -13,21 +14,30 @@ export type InspectorBaseProps = {
   class?: string;
   children?: ComponentChildren;
 
+  impulseRates?: number[];
+  impulseRateIntentType?: IntentTypes;
+  yMin?: number;
+  yMax?: number;
+
   enabled?: boolean;
   onToggleEnabled?: (next: boolean) => void;
 
   onDelete?: () => void;
-};
+} & JSX.HTMLAttributes<HTMLElement>;
 
 export function InspectorBase({
   iconKey,
   label,
   status = 'normal',
-  class: className,
   children,
+  impulseRates,
+  impulseRateIntentType = IntentTypes.Tertiary,
+  yMin = 15,
+  yMax = 30,
   enabled,
   onToggleEnabled,
   onDelete,
+  ...props
 }: InspectorBaseProps): JSX.Element {
   const intentClasses = {
     normal: '',
@@ -36,9 +46,18 @@ export function InspectorBase({
     proposal: 'text-neon-cyan-400',
   }[status];
 
+  const currentRate = impulseRates?.at(-1) ?? null;
+
   return (
-    <section class={classSet(['w-full mb-4', intentClasses, className])}>
-      <div class="flex items-center justify-between mb-2">
+    <section
+      class={classSet(
+        ['relative w-full h-full flex flex-col overflow-hidden', intentClasses],
+        props
+      )}
+      {...props}
+    >
+      {/* Sticky Header */}
+      <div class="sticky top-0 z-10 bg-neutral-900 px-4 py-2 flex items-center justify-between border-b border-neutral-800">
         <div class="flex items-center gap-2">
           {onToggleEnabled !== undefined && (
             <ToggleCheckbox
@@ -49,11 +68,9 @@ export function InspectorBase({
               uncheckedIntentType={IntentTypes.Error}
             />
           )}
-
           {iconKey && (
             <Icon icon={iconKey} src="/icons/iconset" class="w-5 h-5" />
           )}
-
           {label && (
             <h3 class="text-sm font-semibold uppercase tracking-wide">
               {label}
@@ -73,7 +90,22 @@ export function InspectorBase({
         )}
       </div>
 
-      <div class="space-y-2">{children}</div>
+      {/* Scrollable Content */}
+      <div class="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-neon-cyan-700 scrollbar-track-transparent px-4 py-3 space-y-3">
+        {children}
+      </div>
+      
+      {impulseRates && (
+          <LinePreviewWithValue
+            class="flex"
+            label="Impulse Rate"
+            values={impulseRates}
+            currentValue={currentRate}
+            intent={impulseRateIntentType}
+            yMin={yMin}
+            yMax={yMax}
+          />
+        )}
     </section>
   );
 }

@@ -1,5 +1,6 @@
 import { JSX } from 'preact';
 import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { classSet } from '@fathym/atomic';
 
 export type CheckboxRowProps = {
   label: string;
@@ -7,8 +8,7 @@ export type CheckboxRowProps = {
   onToggle: (next: boolean) => void;
   disabled?: boolean;
   intentType?: IntentTypes;
-  class?: string;
-};
+} & JSX.HTMLAttributes<HTMLLabelElement>;
 
 export function CheckboxRow({
   label,
@@ -16,7 +16,7 @@ export function CheckboxRow({
   onToggle,
   disabled = false,
   intentType,
-  class: className = '',
+  ...props
 }: CheckboxRowProps) {
   const classesByIntent = {
     [IntentTypes.Warning]: {
@@ -60,11 +60,15 @@ export function CheckboxRow({
 
   return (
     <label
-      class={`flex items-center justify-between px-2 py-1 text-sm ${
-        disabled
-          ? 'opacity-50 cursor-not-allowed'
-          : 'cursor-pointer hover:bg-neutral-700'
-      } ${className}`}
+      class={classSet(
+        [
+          `flex items-center justify-between px-2 py-1 text-sm`,
+          disabled
+            ? 'opacity-50 cursor-not-allowed'
+            : 'cursor-pointer hover:bg-neutral-700',
+        ],
+        props
+      )}
     >
       <span class={text}>{label}</span>
       <input

@@ -4,6 +4,8 @@ import { Modal } from '../../molecules/Modal.tsx';
 import { Input } from '../../atoms/Input.tsx';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { SearchIcon } from '../../../../build/iconset/icons/SearchIcon.tsx';
+import { SimulatorCard } from './SimulatorCard.tsx';
+import { SimulatorPackCard } from './SimulatorPackCard.tsx';
 
 type SimulatorLibraryModalProps = {
   onClose: () => void;
@@ -67,26 +69,27 @@ export function SimulatorLibraryModal({
         <div class="flex-1 pl-4 overflow-y-auto">
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div
+              <SimulatorCard
                 key={i}
-                class="bg-neutral-800 border border-neutral-700 rounded-lg p-4 flex flex-col justify-between hover:shadow-lg transition-shadow"
-              >
-                <div>
-                  <h3 class="text-white font-semibold text-sm mb-1">Sim {i}</h3>
-                  <p class="text-neutral-400 text-xs mb-2">
-                    A sample simulator description goes here.
-                  </p>
-                  <div class="text-xs text-neon-blue-400">#{category}</div>
-                </div>
-                <Action
-                  onClick={() => onInstall(`sim-${i}`)}
-                  class="mt-3 text-xs"
-                  styleType={ActionStyleTypes.Solid | ActionStyleTypes.Thin}
-                >
-                  Add to Workspace
-                </Action>
-              </div>
+                id={`sim-${i}`}
+                name={`Sim ${i}`}
+                description="A sample simulator description goes here."
+                category={category}
+                onInstall={onInstall}
+              />
             ))}
+
+            {/* Example Pack */}
+            <SimulatorPackCard
+              id="building-pack"
+              name="Smart Building Pack"
+              description="Includes RoomState, HVACSim, OccupancyFlow"
+              simulatorCount={3}
+              usedSimulators={1}
+              onInstallPack={(id) => {
+                console.log('Install pack', id);
+              }}
+            />
           </div>
         </div>
       </div>

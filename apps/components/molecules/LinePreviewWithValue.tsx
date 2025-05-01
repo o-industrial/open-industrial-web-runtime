@@ -51,7 +51,7 @@ export function LinePreviewWithValue({
         </span>
       </div>
 
-      <div class="flex-grow" style={{ height: `${height}px` }}>
+      <div class="flex-grow h-full">
         <LineSparkSVG
           lines={[{ values, intent }]}
           height={height}

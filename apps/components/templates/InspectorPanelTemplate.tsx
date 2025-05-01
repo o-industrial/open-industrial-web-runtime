@@ -1,4 +1,5 @@
 import { ComponentChildren } from 'preact';
+import { Action, ActionStyleTypes } from '../atoms/Action.tsx';
 
 export default function InspectorPanelTemplate({
   children,
@@ -8,26 +9,26 @@ export default function InspectorPanelTemplate({
   onClose?: () => void;
 }) {
   return (
-    <aside class="w-full flex flex-col bg-neutral-900 overflow-y-auto">
-      {/* Toolbar Header */}
-      <header class="w-full px-4 py-2 bg-neutral-800 border-b border-neutral-700 flex items-center justify-between">
+    <aside class="relative w-full h-full flex flex-col bg-neutral-900">
+      {/* Sticky Header */}
+      <header class="sticky top-0 w-full px-4 py-2 bg-neutral-800 border-b border-neutral-700 flex items-center justify-between">
         <h2 class="text-sm font-semibold tracking-wide text-white uppercase">
           Inspector
         </h2>
 
-        {onClose && (
-          <button
+        {/* {onClose && (
+          <Action
             onClick={onClose}
+            styleType={ActionStyleTypes.Icon}
             title="Close Inspector"
-            class="text-neutral-400 hover:text-white text-lg leading-none px-2 py-1 transition-colors duration-150"
           >
             ✕
-          </button>
-        )}
+          </Action>
+        )} */}
       </header>
 
-      {/* Main Scrollable Content */}
-      <div class="flex-1 px-4 py-3 flex flex-col gap-4">
+      {/* Scrollable Content */}
+      <div class="flex-1 overflow-y-hidden px-4 py-3 flex flex-col gap-4">
         {children}
       </div>
     </aside>

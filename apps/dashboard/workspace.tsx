@@ -8,6 +8,7 @@ import RuntimeWorkspaceDashboardTemplate from '../components/templates/RuntimeWo
 import WorkspacePanel from '../components/organisms/WorkspacePanel.tsx';
 import InspectorPanel from '../components/organisms/InspectorPanel.tsx';
 import { WorkspaceNodeData } from '../../src/managers/WorkspaceNodeData.ts';
+import AziPanel from '../components/organisms/AziPanel.tsx';
 
 export const IsIsland = true;
 
@@ -51,30 +52,20 @@ export default function WorkspacePage({ Data }: PageProps<WorkspacePageData>) {
     </div>
   );
 
-  const inspectorSlot =
-    selectedNode && (
-      <InspectorPanel
-        selectedNode={selectedNode}
-        onClose={handleInspectorClose}
-      />
-    );
-
-  const proposalSlot = (
-    <>
-      <h3 class="text-sm font-semibold text-neutral-400 mb-2 uppercase tracking-wide">
-        Azi’s Understanding
-      </h3>
-      <div class="text-neutral-500 text-xs">
-        [Schema preview and prompts will appear here]
-      </div>
-    </>
+  const inspectorSlot = (
+    <InspectorPanel
+      selectedNode={selectedNode}
+      onClose={handleInspectorClose}
+    />
   );
+
+  const aziSlot = <AziPanel />;
 
   return (
     <RuntimeWorkspaceDashboardTemplate
       stream={streamSlot}
       inspector={inspectorSlot}
-      proposal={proposalSlot}
+      azi={aziSlot}
       timeline={timelineSlot}
     >
       <WorkspacePanel onNodeSelect={setSelectedNode} />

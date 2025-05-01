@@ -13,18 +13,17 @@ export function AgreementCheckbox({
   label,
   checked,
   onCheckedChange,
-  class: className,
-  ...rest
+  ...props
 }: AgreementCheckboxProps) {
   return (
     <label
+      {...props}
       class={classSet(
         [
           'flex items-center gap-2 cursor-pointer select-none text-sm text-neutral-600 dark:text-neutral-300',
         ],
-        { class: className }
+        props
       )}
-      {...rest}
     >
       <input
         type="checkbox"

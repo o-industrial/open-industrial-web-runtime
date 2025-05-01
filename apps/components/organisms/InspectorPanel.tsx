@@ -4,6 +4,7 @@ import InspectorPanelTemplate from '../templates/InspectorPanelTemplate.tsx';
 
 import { AgentInspector } from './inspectors/AgentInspector.tsx';
 import { ConnectionInspector } from './inspectors/ConnectionInspector.tsx';
+import { SurfaceInspector } from './inspectors/SurfaceInspector.tsx';
 
 type InspectorPanelProps = {
   selectedNode: Node<WorkspaceNodeData> | null;
@@ -24,6 +25,9 @@ export default function InspectorPanel({
       case 'connection':
         inspectorContent = <ConnectionInspector node={selectedNode} />;
         break;
+      case 'surface':
+        inspectorContent = <SurfaceInspector node={selectedNode} />;
+        break;
       default:
         inspectorContent = (
           <div class="text-neutral-500 text-xs italic">
@@ -34,7 +38,7 @@ export default function InspectorPanel({
   } else {
     inspectorContent = (
       <div class="text-neutral-500 text-xs italic">
-        No node selected. Click a node to inspect.
+        No node selected. Double click a node to inspect.
       </div>
     );
   }
