@@ -8,6 +8,9 @@ export enum ActionStyleTypes {
   Rounded = 1 << 3,
   Icon = 1 << 4,
   None = 1 << 5,
+  Thin = 1 << 6,
+  UltraThin = 1 << 7,
+  Fat = 1 << 8,
 }
 
 export type ActionBaseProps = {
@@ -43,7 +46,15 @@ export function Action(props: ActionProps) {
   let intentClasses = '';
 
   if (!(styleType & ActionStyleTypes.Icon)) {
-    styleClasses += ' px-4 py-2';
+    if (styleType & ActionStyleTypes.UltraThin) {
+      styleClasses += ' px-2 py-0.5';
+    } else if (styleType & ActionStyleTypes.Thin) {
+      styleClasses += ' px-3 py-1';
+    } else if (styleType & ActionStyleTypes.Fat) {
+      styleClasses += ' px-6 py-3';
+    } else {
+      styleClasses += ' px-4 py-2';
+    }
   }
 
   if (styleType & ActionStyleTypes.Solid) {

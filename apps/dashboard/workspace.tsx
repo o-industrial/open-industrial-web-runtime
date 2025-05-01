@@ -1,10 +1,13 @@
 import { useState } from 'preact/hooks';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
+import { Node } from 'reactflow';
 
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import RuntimeWorkspaceDashboardTemplate from '../components/templates/RuntimeWorkspaceDashboardTemplate.tsx';
 import WorkspacePanel from '../components/organisms/WorkspacePanel.tsx';
+import InspectorPanel from '../components/organisms/InspectorPanel.tsx';
+import { WorkspaceNodeData } from '../../src/managers/WorkspaceNodeData.ts';
 
 export const IsIsland = true;
 
@@ -24,7 +27,12 @@ export const handler: EaCRuntimeHandlerSet<
 };
 
 export default function WorkspacePage({ Data }: PageProps<WorkspacePageData>) {
-  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const [selectedNode, setSelectedNode] =
+    useState<Node<WorkspaceNodeData> | null>(null);
+
+  const handleInspectorClose = () => {
+    setSelectedNode(null);
+  };
 
   const streamSlot = (
     <>
@@ -43,22 +51,15 @@ export default function WorkspacePage({ Data }: PageProps<WorkspacePageData>) {
     </div>
   );
 
-  const proposalSlot = selectedNodeId ? (
-    <div class="space-y-4">
-      <h3 class="text-sm font-semibold text-neutral-400 uppercase tracking-wide">
-        Node Inspector
-      </h3>
+  const inspectorSlot =
+    selectedNode && (
+      <InspectorPanel
+        selectedNode={selectedNode}
+        onClose={handleInspectorClose}
+      />
+    );
 
-      <div class="text-sm text-neutral-200">
-        Selected Node ID:{' '}
-        <span class="font-mono text-neon-blue-300">{selectedNodeId}</span>
-      </div>
-
-      <div class="text-xs text-neutral-500 italic">
-        (Node data panel coming soon…)
-      </div>
-    </div>
-  ) : (
+  const proposalSlot = (
     <>
       <h3 class="text-sm font-semibold text-neutral-400 mb-2 uppercase tracking-wide">
         Azi’s Understanding
@@ -69,15 +70,14 @@ export default function WorkspacePage({ Data }: PageProps<WorkspacePageData>) {
     </>
   );
 
-  const centerPanel = <WorkspacePanel onNodeSelect={setSelectedNodeId} />;
-  
   return (
     <RuntimeWorkspaceDashboardTemplate
       stream={streamSlot}
+      inspector={inspectorSlot}
       proposal={proposalSlot}
       timeline={timelineSlot}
     >
-      {centerPanel}
+      <WorkspacePanel onNodeSelect={setSelectedNode} />
     </RuntimeWorkspaceDashboardTemplate>
   );
 }

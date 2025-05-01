@@ -38,13 +38,6 @@ export default function ConnectionNodeRenderer({
       onDoubleClick={data.onDoubleClick}
       isSelected={data.isSelected}
       class={classes}
-      preMain={
-        <NodeHandle
-          type="target"
-          position={Position.Left}
-          intentType={IntentTypes.Tertiary}
-        />
-      }
       postMain={
         <NodeHandle
           type="source"

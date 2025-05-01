@@ -19,21 +19,25 @@ import { IS_BROWSER } from '@fathym/atomic';
 import { LoadingSpinner } from '../atoms/LoadingSpinner.tsx';
 import WorkspacePanelTemplate from '../templates/WorkspacePanelTemplate.tsx';
 import WorkspacePanelBank from './WorkspacePanelBank.tsx';
-import { NodeScopeTypes, WorkspaceManager } from '../../../src/managers/WorkspaceManager.ts';
+import {
+  NodeScopeTypes,
+  WorkspaceManager,
+} from '../../../src/managers/WorkspaceManager.ts';
 import { WorkspaceNodeData } from '../../../src/managers/WorkspaceNodeData.ts';
 import { IntentTypes } from '../../../src/types/IntentTypes.ts';
 
 export const IsIsland = true;
 
 type WorkspacePanelProps = {
-  onNodeSelect?: (nodeId: string) => void;
+  onNodeSelect?: (node: Node<WorkspaceNodeData>) => void;
 };
 
 function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState<WorkspaceNodeData>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
 
-  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null); // ✅ Add this
+  const [selectedNode, setSelectedNode] =
+    useState<Node<WorkspaceNodeData> | null>(null);
 
   const { project } = useReactFlow();
 
@@ -41,20 +45,19 @@ function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
     const result = WorkspaceManager.HandleDrop(event, nodes, project);
 
     if (!result) return;
-  
+
     const { newNode, selectedId } = result;
-  
+
     newNode.data.onDoubleClick = () => {
-      setSelectedNodeId(selectedId);
-      
-      onNodeSelect?.(selectedId);
+      setSelectedNode(newNode);
+      onNodeSelect?.(newNode);
     };
-  
+
     setNodes((nds: Node[]) => [...nds, newNode]);
 
-    setSelectedNodeId(selectedId);
+    setSelectedNode(newNode);
   };
-   
+
   const onConnect = (params: Connection) => {
     setEdges((prevEdges: Edge[]) => {
       const newEdges = addEdge(params, prevEdges);
@@ -63,9 +66,9 @@ function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
     });
   };
 
-  const handleNodeClick = (_e: unknown, node: Node) => {
-    setSelectedNodeId(node.id);
-    onNodeSelect?.(node.id);
+  const handleNodeClick = (_e: unknown, node: Node<WorkspaceNodeData>) => {
+    setSelectedNode(node);
+    onNodeSelect?.(node); // <== emit full node
   };
 
   useEffect(() => {
@@ -74,17 +77,21 @@ function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
         ...node,
         data: {
           ...node.data,
-          isSelected: node.id === selectedNodeId,
+          isSelected: node.id === selectedNode?.id,
         },
       }))
     );
-  }, [selectedNodeId]);
+  }, [selectedNode]);
 
   const scope: NodeScopeTypes = 'workspace';
 
   return (
     <WorkspacePanelTemplate
-      bank={<WorkspacePanelBank presets={WorkspaceManager.GetAvailablePresets(scope)} />}
+      bank={
+        <WorkspacePanelBank
+          presets={WorkspaceManager.GetAvailablePresets(scope)}
+        />
+      }
       canvas={
         <div
           class="absolute inset-0 w-full h-full"

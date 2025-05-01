@@ -60,13 +60,13 @@ export default function SurfaceNodeRenderer({
           intentType={IntentTypes.Secondary}
         />
       }
-      postMain={
-        <NodeHandle
-          type="source"
-          position={Position.Right}
-          intentType={IntentTypes.Secondary}
-        />
-      }
+      // postMain={
+      //   <NodeHandle
+      //     type="source"
+      //     position={Position.Right}
+      //     intentType={IntentTypes.Secondary}
+      //   />
+      // }
     >
       <div class="w-full flex flex-col gap-2 items-center justify-center py-2 px-2">
         {/* Rate Row */}

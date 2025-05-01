@@ -6,16 +6,18 @@
  * Structure:
  * - Left: Impulse Stream Viewer
  * - Center: Workspace Panel (internal bank + canvas)
- * - Right: Proposal/Inspector Panel (full-height)
+ * - Right: Inspector + Proposal Panels (stacked)
  * - Footer: Execution Loop Timeline (beneath Stream + Workspace only)
  */
 export default function RuntimeWorkspaceDashboardTemplate({
   stream,
+  inspector,
   proposal,
   timeline,
   children,
 }: {
   stream?: preact.ComponentChildren;
+  inspector?: preact.ComponentChildren;
   proposal?: preact.ComponentChildren;
   timeline?: preact.ComponentChildren;
   children?: preact.ComponentChildren;
@@ -43,9 +45,19 @@ export default function RuntimeWorkspaceDashboardTemplate({
         </footer>
       </div>
 
-      {/* Proposal / Inspector Panel (full height, right side) */}
-      <aside class="w-[320px] bg-neutral-900 border-l border-neutral-800 p-4 overflow-y-auto flex flex-col">
-        {proposal}
+      {/* Inspector + Proposal Panels */}
+      <aside class="w-[320px] bg-neutral-900 border-l border-neutral-800 flex flex-col h-full">
+        {/* Inspector: Only rendered if content exists */}
+        {inspector && (
+          <div class="border-b border-neutral-800">
+            {inspector}
+          </div>
+        )}
+
+        {/* Proposal: fills remaining vertical space */}
+        <div class="flex-grow overflow-hidden">
+          {proposal}
+        </div>
       </aside>
     </div>
   );

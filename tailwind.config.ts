@@ -1,4 +1,5 @@
 import { type Config } from 'tailwindcss';
+import scrollbar from 'tailwind-scrollbar';
 import typography from '@tailwindcss/typography';
 import unimportant from 'tailwindcss/unimportant';
 
@@ -310,7 +311,7 @@ const config: Config = {
       typography: typoConfig,
     },
   },
-  plugins: [typography, unimportant],
+  plugins: [scrollbar, typography, unimportant],
 };
 
 export default config;

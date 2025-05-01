@@ -163,6 +163,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                     // schema: 'https://api.iconify.design/mdi:mdi:table.svg',
                     schema:
                       'https://api.iconify.design/mdi:view-grid-outline.svg',
+                    search: 'https://api.iconify.design/lucide:search.svg',
                     signal:
                       'https://api.iconify.design/mdi:alert-decagram-outline.svg',
                     surface:
