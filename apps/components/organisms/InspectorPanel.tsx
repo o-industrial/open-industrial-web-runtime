@@ -1,5 +1,5 @@
 import { Node } from 'reactflow';
-import { FlowNodeData } from '../../../src/managers/FlowNodeData.ts';
+import { FlowNodeData } from '../../../src/flow/FlowNodeData.ts';
 import InspectorPanelTemplate from '../templates/InspectorPanelTemplate.tsx';
 
 import { AgentInspector } from './inspectors/AgentInspector.tsx';

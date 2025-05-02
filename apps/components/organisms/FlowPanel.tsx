@@ -1,99 +1,41 @@
 import { JSX } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
 import {
   ReactFlow,
-  useNodesState,
-  useEdgesState,
-  addEdge,
   Background,
   Controls,
-  Connection,
-  Edge,
-  Node,
   MiniMap,
+  Node,
   useReactFlow,
   ReactFlowProvider,
-  NodeProps,
 } from 'reactflow';
 import { IS_BROWSER } from '@fathym/atomic';
 
-import { LoadingSpinner } from '../atoms/LoadingSpinner.tsx';
 import FlowPanelTemplate from '../templates/FlowPanelTemplate.tsx';
 import FlowPanelBank from './FlowPanelBank.tsx';
+import { LoadingSpinner } from '../atoms/LoadingSpinner.tsx';
 import { IntentTypes } from '../../../src/types/IntentTypes.ts';
-import { NodePreset } from '../../../src/managers/NodePreset.ts';
-import { NodeScopeTypes } from '../../../src/managers/FlowManager.ts';
-import { FlowNodeData } from '../../../src/managers/FlowNodeData.ts';
+import { FlowManager } from '../../../src/flow/FlowManager.ts';
 
 export const IsIsland = true;
 
 type FlowPanelProps = {
-  presets: Record<string, NodePreset>;
-  nodeTypes: Record<
-    string,
-    (props: NodeProps<FlowNodeData>) => JSX.Element | null
-  >;
-  handleDrop: (
-    event: DragEvent,
-    nodes: Node<FlowNodeData>[],
-    project: ReturnType<typeof useReactFlow>['project']
-  ) => {
-    newNode: Node<FlowNodeData>;
-    selectedId?: string;
-  } | null;
-  onNodeSelect?: (node: Node<FlowNodeData>) => void;
+  flowMgr: FlowManager;
 };
 
-function FlowPanel({
-  presets,
-  nodeTypes,
-  handleDrop,
-  onNodeSelect,
-}: FlowPanelProps) {
-  const [nodes, setNodes, onNodesChange] = useNodesState<FlowNodeData>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
+function FlowPanel({ flowMgr }: FlowPanelProps) {
+  const { screenToFlowPosition } = useReactFlow();
 
-  const [selectedNode, setSelectedNode] = useState<Node<FlowNodeData> | null>(
-    null
-  );
-
-  const { project } = useReactFlow();
-
-  const onDrop = (event: DragEvent) => {
-    const result = handleDrop(event, nodes, project);
-    if (!result) return;
-
-    const { newNode } = result;
-
-    newNode.data.onDoubleClick = () => {
-      setSelectedNode(newNode);
-      onNodeSelect?.(newNode);
-    };
-
-    setNodes((nds: Node[]) => [...nds, newNode]);
-    setSelectedNode(newNode);
-  };
-
-  const onConnect = (params: Connection) => {
-    setEdges((prevEdges: Edge[]) => addEdge(params, prevEdges));
-  };
-
-  const handleNodeClick = (_e: unknown, node: Node<FlowNodeData>) => {
-    setSelectedNode(node);
-    onNodeSelect?.(node);
-  };
-
-  useEffect(() => {
-    setNodes((prevNodes: Node[]) =>
-      prevNodes.map((node) => ({
-        ...node,
-        data: {
-          ...node.data,
-          isSelected: node.id === selectedNode?.id,
-        },
-      }))
-    );
-  }, [selectedNode]);
+  const {
+    nodes,
+    edges,
+    presets,
+    nodeTypes,
+    onNodesChange,
+    onEdgesChange,
+    handleDrop,
+    handleConnect,
+    handleNodeClick,
+  } = flowMgr.Use();
 
   return (
     <FlowPanelTemplate
@@ -101,17 +43,17 @@ function FlowPanel({
       canvas={
         <div
           class="absolute inset-0 w-full h-full"
-          onDrop={onDrop}
+          onDrop={(e) => handleDrop(e, screenToFlowPosition)}
           onDragOver={(e) => e.preventDefault()}
         >
           <ReactFlow
             nodes={nodes}
             edges={edges}
+            nodeTypes={nodeTypes}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
+            onConnect={handleConnect}
             onNodeClick={handleNodeClick}
-            onConnect={onConnect}
-            nodeTypes={nodeTypes}
             fitView
             fitViewOptions={{ padding: 0.2 }}
             minZoom={0.3}
@@ -121,7 +63,7 @@ function FlowPanel({
             <Background />
             <Controls position="bottom-left" />
             <MiniMap
-              nodeColor={(node) => {
+              nodeColor={(node: Node) => {
                 if (node.data?.status === 'error') return '#F43F5E';
                 if (node.data?.status === 'warning') return '#EAB308';
                 return '#06B6D4';
@@ -141,7 +83,10 @@ function FlowPanel({
 }
 
 export default function WrappedFlowPanel(props: FlowPanelProps) {
-  if (!IS_BROWSER) return <LoadingSpinner intentType={IntentTypes.Primary} />;
+  if (!IS_BROWSER) {
+    return <LoadingSpinner intentType={IntentTypes.Primary} />;
+  }
+
   return (
     <ReactFlowProvider>
       <FlowPanel {...props} />
