@@ -37,8 +37,8 @@ export default function RuntimeWorkspaceDashboardTemplate({
   const aziColStart = 1;
   const inspectorColSpan = inspectorExpanded ? 3 : 1;
   const inspectorColStart = 17 - inspectorColSpan;
-  const workspaceColStart = aziColStart + aziColSpan;
-  const workspaceColSpan = inspectorColStart - workspaceColStart;
+  const flowColStart = aziColStart + aziColSpan;
+  const flowColSpan = inspectorColStart - flowColStart;
 
   // Bottom row layout (rowStart = 9)
   const rowStart = bottomBothCollapsed ? 9 : 7;
@@ -103,25 +103,26 @@ export default function RuntimeWorkspaceDashboardTemplate({
         </Action>
       </PanelShell>
 
-      {/* Workspace Panel */}
+      {/* Flow Panel */}
       <PanelShell
         rowSpan={topRowSpan}
-        colStart={workspaceColStart}
-        colSpan={workspaceColSpan}
+        colStart={flowColStart}
+        colSpan={flowColSpan}
         class="-:border-x -:bg-neutral-950 -:flex -:flex-col"
       >
         {props.breadcrumb && (
           <div
             class="-:col-span-full -:flex -:items-center"
             style={{
-              gridColumnStart: workspaceColStart,
-              gridColumnEnd: workspaceColStart + workspaceColSpan,
+              gridColumnStart: flowColStart,
+              gridColumnEnd: flowColStart + flowColSpan,
               gridRowStart: 1,
             }}
           >
             {props.breadcrumb}
           </div>
         )}
+        
         {children}
       </PanelShell>
 
@@ -167,7 +168,7 @@ export default function RuntimeWorkspaceDashboardTemplate({
           class={classSet([
             '-:transition-all -:duration-500 -:overflow-hidden -:h-full',
             streamExpanded
-              ? '-:opacity-100 -:w-full -:p-4'
+              ? '-:opacity-100 -:w-full'
               : '-:opacity-30 -:w-0',
           ])}
         >
@@ -196,7 +197,7 @@ export default function RuntimeWorkspaceDashboardTemplate({
           class={classSet([
             '-:transition-all -:duration-500 -:overflow-hidden -:h-full',
             timelineExpanded
-              ? '-:opacity-100 -:w-full -:px-4'
+              ? '-:opacity-100 -:w-full'
               : '-:opacity-30 -:w-0',
           ])}
         >

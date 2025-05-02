@@ -1,5 +1,5 @@
 import { Node } from 'reactflow';
-import { WorkspaceNodeData } from '../../../src/managers/WorkspaceNodeData.ts';
+import { FlowNodeData } from '../../../src/managers/FlowNodeData.ts';
 import InspectorPanelTemplate from '../templates/InspectorPanelTemplate.tsx';
 
 import { AgentInspector } from './inspectors/AgentInspector.tsx';
@@ -7,7 +7,7 @@ import { ConnectionInspector } from './inspectors/ConnectionInspector.tsx';
 import { SurfaceInspector } from './inspectors/SurfaceInspector.tsx';
 
 type InspectorPanelProps = {
-  selectedNode: Node<WorkspaceNodeData> | null;
+  selectedNode: Node<FlowNodeData> | null;
   onClose?: () => void;
 };
 

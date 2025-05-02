@@ -1,3 +1,4 @@
+import { JSX } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import {
   ReactFlow,
@@ -12,40 +13,57 @@ import {
   MiniMap,
   useReactFlow,
   ReactFlowProvider,
+  NodeProps,
 } from 'reactflow';
 import { IS_BROWSER } from '@fathym/atomic';
 
 import { LoadingSpinner } from '../atoms/LoadingSpinner.tsx';
-import WorkspacePanelTemplate from '../templates/WorkspacePanelTemplate.tsx';
-import WorkspacePanelBank from './WorkspacePanelBank.tsx';
-import {
-  NodeScopeTypes,
-  WorkspaceManager,
-} from '../../../src/managers/WorkspaceManager.ts';
-import { WorkspaceNodeData } from '../../../src/managers/WorkspaceNodeData.ts';
+import FlowPanelTemplate from '../templates/FlowPanelTemplate.tsx';
+import FlowPanelBank from './FlowPanelBank.tsx';
 import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { NodePreset } from '../../../src/managers/NodePreset.ts';
+import { NodeScopeTypes } from '../../../src/managers/FlowManager.ts';
+import { FlowNodeData } from '../../../src/managers/FlowNodeData.ts';
 
 export const IsIsland = true;
 
-type WorkspacePanelProps = {
-  onNodeSelect?: (node: Node<WorkspaceNodeData>) => void;
+type FlowPanelProps = {
+  presets: Record<string, NodePreset>;
+  nodeTypes: Record<
+    string,
+    (props: NodeProps<FlowNodeData>) => JSX.Element | null
+  >;
+  handleDrop: (
+    event: DragEvent,
+    nodes: Node<FlowNodeData>[],
+    project: ReturnType<typeof useReactFlow>['project']
+  ) => {
+    newNode: Node<FlowNodeData>;
+    selectedId?: string;
+  } | null;
+  onNodeSelect?: (node: Node<FlowNodeData>) => void;
 };
 
-function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
-  const [nodes, setNodes, onNodesChange] = useNodesState<WorkspaceNodeData>([]);
+function FlowPanel({
+  presets,
+  nodeTypes,
+  handleDrop,
+  onNodeSelect,
+}: FlowPanelProps) {
+  const [nodes, setNodes, onNodesChange] = useNodesState<FlowNodeData>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
 
-  const [selectedNode, setSelectedNode] =
-    useState<Node<WorkspaceNodeData> | null>(null);
+  const [selectedNode, setSelectedNode] = useState<Node<FlowNodeData> | null>(
+    null
+  );
 
   const { project } = useReactFlow();
 
   const onDrop = (event: DragEvent) => {
-    const result = WorkspaceManager.HandleDrop(event, nodes, project);
-
+    const result = handleDrop(event, nodes, project);
     if (!result) return;
 
-    const { newNode, selectedId } = result;
+    const { newNode } = result;
 
     newNode.data.onDoubleClick = () => {
       setSelectedNode(newNode);
@@ -53,21 +71,16 @@ function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
     };
 
     setNodes((nds: Node[]) => [...nds, newNode]);
-
     setSelectedNode(newNode);
   };
 
   const onConnect = (params: Connection) => {
-    setEdges((prevEdges: Edge[]) => {
-      const newEdges = addEdge(params, prevEdges);
-
-      return newEdges;
-    });
+    setEdges((prevEdges: Edge[]) => addEdge(params, prevEdges));
   };
 
-  const handleNodeClick = (_e: unknown, node: Node<WorkspaceNodeData>) => {
+  const handleNodeClick = (_e: unknown, node: Node<FlowNodeData>) => {
     setSelectedNode(node);
-    onNodeSelect?.(node); // <== emit full node
+    onNodeSelect?.(node);
   };
 
   useEffect(() => {
@@ -82,15 +95,9 @@ function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
     );
   }, [selectedNode]);
 
-  const scope: NodeScopeTypes = 'workspace';
-
   return (
-    <WorkspacePanelTemplate
-      bank={
-        <WorkspacePanelBank
-          presets={WorkspaceManager.GetAvailablePresets(scope)}
-        />
-      }
+    <FlowPanelTemplate
+      bank={<FlowPanelBank presets={presets} />}
       canvas={
         <div
           class="absolute inset-0 w-full h-full"
@@ -104,17 +111,15 @@ function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
             onEdgesChange={onEdgesChange}
             onNodeClick={handleNodeClick}
             onConnect={onConnect}
-            nodeTypes={WorkspaceManager.GetAvailableTypes(scope)}
+            nodeTypes={nodeTypes}
             fitView
-            fitViewOptions={{ padding: 0.2 }} // optional: tight zoom
+            fitViewOptions={{ padding: 0.2 }}
             minZoom={0.3}
             maxZoom={4}
             defaultZoom={1.25}
           >
             <Background />
-
             <Controls position="bottom-left" />
-
             <MiniMap
               nodeColor={(node) => {
                 if (node.data?.status === 'error') return '#F43F5E';
@@ -135,13 +140,11 @@ function WorkspacePanel({ onNodeSelect }: WorkspacePanelProps) {
   );
 }
 
-// 👇 Wrap the export in the provider!
-export default function WrappedWorkspacePanel(props: WorkspacePanelProps) {
+export default function WrappedFlowPanel(props: FlowPanelProps) {
   if (!IS_BROWSER) return <LoadingSpinner intentType={IntentTypes.Primary} />;
-
   return (
     <ReactFlowProvider>
-      <WorkspacePanel {...props} />
+      <FlowPanel {...props} />
     </ReactFlowProvider>
   );
 }

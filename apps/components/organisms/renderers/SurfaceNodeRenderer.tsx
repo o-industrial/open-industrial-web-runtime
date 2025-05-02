@@ -5,7 +5,7 @@ import NodeHandle from '../../atoms/NodeHandle.tsx';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
-import { WorkspaceNodeData } from '../../../../src/managers/WorkspaceNodeData.ts';
+import { FlowNodeData } from '../../../../src/managers/FlowNodeData.ts';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { LineSparkSVG } from '../../atoms/LineSparkSVG.tsx';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
@@ -17,7 +17,7 @@ export type SurfaceStats = {
   lastSignalAt?: string;
 };
 
-export type SurfaceNodeData = WorkspaceNodeData<SurfaceStats>;
+export type SurfaceNodeData = FlowNodeData<SurfaceStats>;
 
 function parseLastSignalToSeconds(value: string): number {
   const seconds = parseInt(value.replace(/[^\d]/g, ''), 10);

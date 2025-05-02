@@ -5,10 +5,13 @@ import { Node } from 'reactflow';
 
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import RuntimeWorkspaceDashboardTemplate from '../components/templates/RuntimeWorkspaceDashboardTemplate.tsx';
-import WorkspacePanel from '../components/organisms/WorkspacePanel.tsx';
+import FlowPanel from '../components/organisms/FlowPanel.tsx';
 import InspectorPanel from '../components/organisms/InspectorPanel.tsx';
-import { WorkspaceNodeData } from '../../src/managers/WorkspaceNodeData.ts';
+import { FlowNodeData } from '../../src/managers/FlowNodeData.ts';
 import AziPanel from '../components/organisms/AziPanel.tsx';
+import StreamPanel from '../components/organisms/StreamPanel.tsx';
+import TimelinePanel from '../components/organisms/TimelinePanel.tsx';
+import { FlowManager } from '../../src/managers/FlowManager.ts';
 
 export const IsIsland = true;
 
@@ -29,28 +32,15 @@ export const handler: EaCRuntimeHandlerSet<
 
 export default function WorkspacePage({ Data }: PageProps<WorkspacePageData>) {
   const [selectedNode, setSelectedNode] =
-    useState<Node<WorkspaceNodeData> | null>(null);
+    useState<Node<FlowNodeData> | null>(null);
 
   const handleInspectorClose = () => {
     setSelectedNode(null);
   };
 
-  const streamSlot = (
-    <>
-      <h3 class="text-sm font-semibold text-neutral-400 mb-2 uppercase tracking-wide">
-        Live Stream
-      </h3>
-      <div class="text-neutral-500 text-xs">
-        [Streamed impulses will appear here]
-      </div>
-    </>
-  );
+  const streamSlot = <StreamPanel />;
 
-  const timelineSlot = (
-    <div class="text-neutral-500 text-xs text-center">
-      [Execution Loop Timeline coming soon]
-    </div>
-  );
+  const timelineSlot = <TimelinePanel />;
 
   const inspectorSlot = (
     <InspectorPanel
@@ -73,7 +63,13 @@ export default function WorkspacePage({ Data }: PageProps<WorkspacePageData>) {
       stream={streamSlot}
       timeline={timelineSlot}
     >
-      <WorkspacePanel onNodeSelect={setSelectedNode} />
+      <FlowPanel
+        scope="workspace"
+        presets={FlowManager.GetAvailablePresets('workspace')}
+        nodeTypes={FlowManager.GetAvailableTypes('workspace')}
+        handleDrop={FlowManager.HandleDrop}
+        onNodeSelect={setSelectedNode}
+      />
     </RuntimeWorkspaceDashboardTemplate>
   );
 }

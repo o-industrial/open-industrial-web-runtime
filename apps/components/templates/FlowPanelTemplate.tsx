@@ -1,11 +1,11 @@
 /**
- * WorkspacePanelTemplate
+ * FlowPanelTemplate
  *
  * Full-canvas layout with overlayed bank.
  * Ensures React Flow canvas receives input,
  * and overlay (bank) does not block interactivity.
  */
-export default function WorkspacePanelTemplate({
+export default function FlowPanelTemplate({
   bank,
   canvas,
 }: {

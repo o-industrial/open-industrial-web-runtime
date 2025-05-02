@@ -3,14 +3,14 @@ import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
 import NodeHandle from '../../atoms/NodeHandle.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
-import { WorkspaceNodeData } from '../../../../src/managers/WorkspaceNodeData.ts';
+import { FlowNodeData } from '../../../../src/managers/FlowNodeData.ts';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 
 type DeviceStats = {
   impulseRates?: number[];
 };
 
-export type DeviceNodeData = WorkspaceNodeData<DeviceStats>;
+export type DeviceNodeData = FlowNodeData<DeviceStats>;
 
 export default function DeviceNodeRenderer({
   data,

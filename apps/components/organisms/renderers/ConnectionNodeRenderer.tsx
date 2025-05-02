@@ -6,7 +6,7 @@ import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { TriggerMatchIcon } from '../../../../build/iconset/icons/TriggerMatchIcon.tsx';
 import { DeleteIcon } from '../../../../build/iconset/icons/DeleteIcon.tsx';
 import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
-import { WorkspaceNodeData } from '../../../../src/managers/WorkspaceNodeData.ts';
+import { FlowNodeData } from '../../../../src/managers/FlowNodeData.ts';
 import { LineSparkSVG } from '../../atoms/LineSparkSVG.tsx';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
@@ -15,7 +15,7 @@ type ConnectionStats = {
   impulseRates?: number[];
 };
 
-export type ConnectionNodeData = WorkspaceNodeData<ConnectionStats>;
+export type ConnectionNodeData = FlowNodeData<ConnectionStats>;
 
 export default function ConnectionNodeRenderer({
   data,

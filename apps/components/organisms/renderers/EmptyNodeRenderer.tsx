@@ -2,7 +2,7 @@ import { NodeProps, Position } from 'reactflow';
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
 import NodeHandle from '../../atoms/NodeHandle.tsx';
 import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
-import { WorkspaceNodeData } from '../../../../src/managers/WorkspaceNodeData.ts';
+import { FlowNodeData } from '../../../../src/managers/FlowNodeData.ts';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 
@@ -10,7 +10,7 @@ type EmptyStats = {
   impulseRates?: number[];
 };
 
-export type EmptyNodeData = WorkspaceNodeData<EmptyStats>;
+export type EmptyNodeData = FlowNodeData<EmptyStats>;
 
 export default function EmptyNodeRenderer({
   data,

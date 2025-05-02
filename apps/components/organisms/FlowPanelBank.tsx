@@ -1,11 +1,11 @@
 import NodePresetItem from '../molecules/NodePresetItem.tsx';
 
 /**
- * WorkspacePanelBank
+ * FlowPanelBank
  *
  * Displays a bank of draggable node presets (connection, surface, etc.).
  */
-export type WorkspacePanelBankProps = {
+export type FlowPanelBankProps = {
   presets: Record<string, {
     Label: string;
     IconKey: string;
@@ -13,7 +13,7 @@ export type WorkspacePanelBankProps = {
   }>;
 };
 
-export default function WorkspacePanelBank({ presets }: WorkspacePanelBankProps) {
+export default function FlowPanelBank({ presets }: FlowPanelBankProps) {
   return (
     <div class="flex flex-col items-center gap-2">
       {Object.entries(presets).map(([key, preset]) => (

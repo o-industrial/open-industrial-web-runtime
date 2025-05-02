@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 import { memo } from 'preact/compat';
 import { Node, NodeProps, XYPosition } from 'reactflow';
 import { NodePreset } from './NodePreset.ts';
-import { WorkspaceNodeData } from './WorkspaceNodeData.ts';
+import { FlowNodeData } from './FlowNodeData.ts';
 
 import AgentNodeRenderer from '../../apps/components/organisms/renderers/AgentNodeRenderer.tsx';
 import ConnectionNodeRenderer from '../../apps/components/organisms/renderers/ConnectionNodeRenderer.tsx';
@@ -13,7 +13,7 @@ import SurfaceNodeRenderer from '../../apps/components/organisms/renderers/Surfa
 
 export type NodeScopeTypes = 'workspace' | 'surface';
 
-export class WorkspaceManager {
+export class FlowManager {
   private static nodeScopes: Record<string, NodeScopeTypes[]> = {
     agent: ['surface'],
     connection: ['workspace'],
@@ -48,9 +48,9 @@ export class WorkspaceManager {
   public static GetAvailablePresets(
     scope: NodeScopeTypes
   ): Record<string, NodePreset> {
-    return Object.entries(WorkspaceManager.presets).reduce(
+    return Object.entries(FlowManager.presets).reduce(
       (acc, [type, preset]) => {
-        if (WorkspaceManager.nodeScopes[type]?.includes(scope)) {
+        if (FlowManager.nodeScopes[type]?.includes(scope)) {
           acc[type] = preset;
         }
         return acc;
@@ -63,9 +63,9 @@ export class WorkspaceManager {
     scope: NodeScopeTypes
   ): Record<
     string,
-    (props: NodeProps<WorkspaceNodeData>) => JSX.Element | null
+    (props: NodeProps<FlowNodeData>) => JSX.Element | null
   > {
-    return WorkspaceManager.nodeTypes;
+    return FlowManager.nodeTypes;
     // return Object.entries(WorkspaceManager.nodeTypes)
     //   .filter(([type]) => WorkspaceManager.nodeScopes[type]?.includes(scope))
     //   .reduce((acc, [type, component]) => {
@@ -75,24 +75,24 @@ export class WorkspaceManager {
   }
 
   public static GetNodeType(
-    type: keyof typeof WorkspaceManager.nodeTypes
-  ): (props: NodeProps<WorkspaceNodeData>) => JSX.Element | null {
+    type: keyof typeof FlowManager.nodeTypes
+  ): (props: NodeProps<FlowNodeData>) => JSX.Element | null {
     return (
-      WorkspaceManager.nodeTypes[type] ?? WorkspaceManager.nodeTypes['empty']
+      FlowManager.nodeTypes[type] ?? FlowManager.nodeTypes['empty']
     );
   }
 
   public static GetPreset(
-    type: keyof typeof WorkspaceManager.presets
+    type: keyof typeof FlowManager.presets
   ): NodePreset | undefined {
-    return WorkspaceManager.presets[type];
+    return FlowManager.presets[type];
   }
 
   public static HandleDrop(
     event: DragEvent,
-    nodes: Node<WorkspaceNodeData>[],
+    nodes: Node<FlowNodeData>[],
     project: (p: XYPosition) => XYPosition
-  ): { newNode: Node<WorkspaceNodeData>; selectedId: string } | null {
+  ): { newNode: Node<FlowNodeData>; selectedId: string } | null {
     event.preventDefault();
     const transfer = event.dataTransfer;
     if (!transfer) return null;
@@ -107,7 +107,7 @@ export class WorkspaceManager {
       y: event.clientY - bounds.top,
     });
 
-    const preset = WorkspaceManager.GetPreset(type);
+    const preset = FlowManager.GetPreset(type);
     if (!preset) return null;
 
     const id = `${type}-${Date.now()}`;
@@ -130,12 +130,12 @@ export class WorkspaceManager {
     const scope = surfaceParent ? 'surface' : 'workspace';
 
     // Abort if the node type isn't allowed in the current scope
-    if (!WorkspaceManager.IsTypeAllowedInScope(type, scope)) {
+    if (!FlowManager.IsTypeAllowedInScope(type, scope)) {
       console.warn(`Node type "${type}" not allowed in scope "${scope}".`);
       return null;
     }
 
-    const newNode = WorkspaceManager.CreateNode(
+    const newNode = FlowManager.CreateNode(
       id,
       preset.Type,
       position,
@@ -146,16 +146,16 @@ export class WorkspaceManager {
   }
 
   public static IsTypeAllowedInScope(type: string, scope: NodeScopeTypes): boolean {
-    return WorkspaceManager.nodeScopes[type]?.includes(scope);
+    return FlowManager.nodeScopes[type]?.includes(scope);
   }
   
   public static CreateNode(
     id: string,
-    type: keyof typeof WorkspaceManager.presets,
+    type: keyof typeof FlowManager.presets,
     position: XYPosition,
-    surfaceParent?: Node<WorkspaceNodeData>
-  ): Node<WorkspaceNodeData> {
-    const preset = WorkspaceManager.GetPreset(type);
+    surfaceParent?: Node<FlowNodeData>
+  ): Node<FlowNodeData> {
+    const preset = FlowManager.GetPreset(type);
     if (!preset) throw new Error(`Unknown preset type: ${type}`);
 
     const relativePosition = surfaceParent
@@ -165,7 +165,7 @@ export class WorkspaceManager {
         }
       : position;
 
-    const baseData: WorkspaceNodeData = {
+    const baseData: FlowNodeData = {
       type: preset.Type,
       label: preset.Label,
       iconKey: preset.IconKey,
@@ -174,7 +174,7 @@ export class WorkspaceManager {
       childNodeIds: [],
     };
 
-    const enhancedData = WorkspaceManager.enhanceNodeData(type, baseData);
+    const enhancedData = FlowManager.enhanceNodeData(type, baseData);
 
     return {
       id,
@@ -190,29 +190,29 @@ export class WorkspaceManager {
 
   private static enhanceNodeData(
     type: string,
-    data: WorkspaceNodeData
-  ): WorkspaceNodeData {
+    data: FlowNodeData
+  ): FlowNodeData {
     switch (type) {
       case 'agent':
-        return WorkspaceManager.buildAgentNodeData(data);
+        return FlowManager.buildAgentNodeData(data);
       case 'connection':
-        return WorkspaceManager.buildConnectionNodeData(data);
+        return FlowManager.buildConnectionNodeData(data);
       case 'device':
-        return WorkspaceManager.buildDeviceNodeData(data);
+        return FlowManager.buildDeviceNodeData(data);
       case 'empty':
-        return WorkspaceManager.buildEmptyNodeData(data);
+        return FlowManager.buildEmptyNodeData(data);
       case 'schema':
-        return WorkspaceManager.buildSchemaNodeData(data);
+        return FlowManager.buildSchemaNodeData(data);
       case 'surface':
-        return WorkspaceManager.buildSurfaceNodeData(data);
+        return FlowManager.buildSurfaceNodeData(data);
       default:
         return data;
     }
   }
 
   private static buildAgentNodeData(
-    base: WorkspaceNodeData
-  ): WorkspaceNodeData {
+    base: FlowNodeData
+  ): FlowNodeData {
     const buffer: number[] = Array.from({ length: 20 }, () =>
       Number((10 + Math.random() * 5).toFixed(2))
     );
@@ -241,8 +241,8 @@ export class WorkspaceManager {
   }
 
   private static buildConnectionNodeData(
-    base: WorkspaceNodeData
-  ): WorkspaceNodeData {
+    base: FlowNodeData
+  ): FlowNodeData {
     const buffer: number[] = Array.from({ length: 20 }, () =>
       Number((20 + Math.random() * 10).toFixed(2))
     );
@@ -260,8 +260,8 @@ export class WorkspaceManager {
   }
 
   private static buildDeviceNodeData(
-    base: WorkspaceNodeData
-  ): WorkspaceNodeData {
+    base: FlowNodeData
+  ): FlowNodeData {
     const buffer: number[] = Array.from({ length: 20 }, () =>
       Number((5 + Math.random() * 5).toFixed(2))
     );
@@ -279,8 +279,8 @@ export class WorkspaceManager {
   }
 
   private static buildEmptyNodeData(
-    base: WorkspaceNodeData
-  ): WorkspaceNodeData {
+    base: FlowNodeData
+  ): FlowNodeData {
     const buffer: number[] = Array.from({ length: 20 }, () =>
       Number((5 + Math.random() * 3).toFixed(2))
     );
@@ -298,8 +298,8 @@ export class WorkspaceManager {
   }
 
   private static buildSchemaNodeData(
-    base: WorkspaceNodeData
-  ): WorkspaceNodeData {
+    base: FlowNodeData
+  ): FlowNodeData {
     const buffer: number[] = Array.from({ length: 20 }, () =>
       Number((10 + Math.random() * 10).toFixed(2))
     );
@@ -317,8 +317,8 @@ export class WorkspaceManager {
   }
 
   private static buildSurfaceNodeData(
-    base: WorkspaceNodeData
-  ): WorkspaceNodeData {
+    base: FlowNodeData
+  ): FlowNodeData {
     const buffer: number[] = Array.from({ length: 20 }, () =>
       Number((10 + Math.random() * 5).toFixed(2))
     );
