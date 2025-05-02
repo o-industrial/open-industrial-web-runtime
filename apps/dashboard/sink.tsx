@@ -16,6 +16,7 @@ import { Action, ActionStyleTypes } from '../components/atoms/Action.tsx';
 import { IntentTypes } from '../../src/types/IntentTypes.ts';
 import { LineSparkSVG } from '../components/atoms/LineSparkSVG.tsx';
 
+// deno-lint-ignore ban-types
 type IndexPageData = {};
 
 export const handler: EaCRuntimeHandlerSet<
@@ -27,75 +28,75 @@ export const handler: EaCRuntimeHandlerSet<
   },
 };
 
-export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
+export default function DashboardIndex({}: PageProps<IndexPageData>) {
   return (
     <>
-      <div class="py-16 px-4 bg-neutral-500/75">
-        <div class="mx-auto block w-[350px] text-center">
-          <h1 class="text-4xl">Dashboard</h1>
+      <div class='py-16 px-4 bg-neutral-500/75'>
+        <div class='mx-auto block w-[350px] text-center'>
+          <h1 class='text-4xl'>Dashboard</h1>
 
-          <div class="flex flex-row py-8">{/* <Counter /> */}</div>
+          <div class='flex flex-row py-8'>{/* <Counter /> */}</div>
         </div>
       </div>
 
-      <div class="p-4">
-        <div class="space-y-8">
-          <h1 class="text-2xl font-bold mb-6">Node Type Icons</h1>
+      <div class='p-4'>
+        <div class='space-y-8'>
+          <h1 class='text-2xl font-bold mb-6'>Node Type Icons</h1>
 
-          <div class="flex flex-wrap gap-8">
-            <div class="flex flex-col items-center space-y-2">
-              <DeviceIcon class="w-6 h-6 text-neon-pink-400" />
-              <span class="text-sm font-semibold">Device</span>
+          <div class='flex flex-wrap gap-8'>
+            <div class='flex flex-col items-center space-y-2'>
+              <DeviceIcon class='w-6 h-6 text-neon-pink-400' />
+              <span class='text-sm font-semibold'>Device</span>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <ImpulseIcon class="w-6 h-6 text-neon-pink-400" />
-              <span class="text-sm font-semibold">Impulse</span>
+            <div class='flex flex-col items-center space-y-2'>
+              <ImpulseIcon class='w-6 h-6 text-neon-pink-400' />
+              <span class='text-sm font-semibold'>Impulse</span>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <SchemaIcon class="w-6 h-6 text-neon-pink-400" />
-              <span class="text-sm font-semibold">Schema</span>
+            <div class='flex flex-col items-center space-y-2'>
+              <SchemaIcon class='w-6 h-6 text-neon-pink-400' />
+              <span class='text-sm font-semibold'>Schema</span>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <CompositeSchemaIcon class="w-6 h-6 text-neon-pink-400" />
-              <span class="text-sm font-semibold">Composite Schema</span>
+            <div class='flex flex-col items-center space-y-2'>
+              <CompositeSchemaIcon class='w-6 h-6 text-neon-pink-400' />
+              <span class='text-sm font-semibold'>Composite Schema</span>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <ReferenceSchemaIcon class="w-6 h-6 text-neon-pink-400" />
-              <span class="text-sm font-semibold">Reference Schema</span>
+            <div class='flex flex-col items-center space-y-2'>
+              <ReferenceSchemaIcon class='w-6 h-6 text-neon-pink-400' />
+              <span class='text-sm font-semibold'>Reference Schema</span>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <SignalIcon class="w-6 h-6 text-neon-pink-400" />
-              <span class="text-sm font-semibold">Signal</span>
+            <div class='flex flex-col items-center space-y-2'>
+              <SignalIcon class='w-6 h-6 text-neon-pink-400' />
+              <span class='text-sm font-semibold'>Signal</span>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <SurfaceIcon class="w-6 h-6 text-neon-pink-400" />
-              <span class="text-sm font-semibold">Surface</span>
+            <div class='flex flex-col items-center space-y-2'>
+              <SurfaceIcon class='w-6 h-6 text-neon-pink-400' />
+              <span class='text-sm font-semibold'>Surface</span>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <TriggerMatchIcon class="w-6 h-6 text-neon-pink-400" />
-              <span class="text-sm font-semibold">Trigger Match</span>
+            <div class='flex flex-col items-center space-y-2'>
+              <TriggerMatchIcon class='w-6 h-6 text-neon-pink-400' />
+              <span class='text-sm font-semibold'>Trigger Match</span>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <EmptyIcon class="w-6 h-6 text-neon-pink-400" />
-              <span class="text-sm font-semibold">Empty</span>
+            <div class='flex flex-col items-center space-y-2'>
+              <EmptyIcon class='w-6 h-6 text-neon-pink-400' />
+              <span class='text-sm font-semibold'>Empty</span>
             </div>
           </div>
         </div>
 
-        <div class="space-y-8">
-          <h1 class="text-2xl font-bold mb-6">Action Button Variants</h1>
+        <div class='space-y-8'>
+          <h1 class='text-2xl font-bold mb-6'>Action Button Variants</h1>
 
-          <div class="flex flex-wrap gap-8">
-            <div class="flex flex-col items-center space-y-2">
-              <h2 class="text-sm font-semibold">Primary Solid</h2>
+          <div class='flex flex-wrap gap-8'>
+            <div class='flex flex-col items-center space-y-2'>
+              <h2 class='text-sm font-semibold'>Primary Solid</h2>
               <Action
                 styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
                 intentType={IntentTypes.Primary}
@@ -104,51 +105,51 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               </Action>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <h2 class="text-sm font-semibold">Secondary Outline</h2>
+            <div class='flex flex-col items-center space-y-2'>
+              <h2 class='text-sm font-semibold'>Secondary Outline</h2>
               <Action
                 styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
                 intentType={IntentTypes.Secondary}
-                href="#"
+                href='#'
               >
                 Read Terms
               </Action>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <h2 class="text-sm font-semibold">Tertiary Outline</h2>
+            <div class='flex flex-col items-center space-y-2'>
+              <h2 class='text-sm font-semibold'>Tertiary Outline</h2>
               <Action
                 styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
                 intentType={IntentTypes.Tertiary}
-                href="#"
+                href='#'
               >
                 Read Terms
               </Action>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <h2 class="text-sm font-semibold">Icon Primary</h2>
+            <div class='flex flex-col items-center space-y-2'>
+              <h2 class='text-sm font-semibold'>Icon Primary</h2>
               <Action
                 styleType={ActionStyleTypes.Icon | ActionStyleTypes.Rounded}
                 intentType={IntentTypes.Primary}
               >
-                <SignalIcon class="w-5 h-5" />
+                <SignalIcon class='w-5 h-5' />
               </Action>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <h2 class="text-sm font-semibold">Info Link</h2>
+            <div class='flex flex-col items-center space-y-2'>
+              <h2 class='text-sm font-semibold'>Info Link</h2>
               <Action
                 styleType={ActionStyleTypes.Link}
                 intentType={IntentTypes.Info}
-                href="#"
+                href='#'
               >
                 Learn More
               </Action>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <h2 class="text-sm font-semibold">Solid Warning</h2>
+            <div class='flex flex-col items-center space-y-2'>
+              <h2 class='text-sm font-semibold'>Solid Warning</h2>
               <Action
                 styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
                 intentType={IntentTypes.Warning}
@@ -157,8 +158,8 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               </Action>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <h2 class="text-sm font-semibold">Outline Warning</h2>
+            <div class='flex flex-col items-center space-y-2'>
+              <h2 class='text-sm font-semibold'>Outline Warning</h2>
               <Action
                 styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
                 intentType={IntentTypes.Warning}
@@ -167,8 +168,8 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               </Action>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <h2 class="text-sm font-semibold">Solid Info</h2>
+            <div class='flex flex-col items-center space-y-2'>
+              <h2 class='text-sm font-semibold'>Solid Info</h2>
               <Action
                 styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
                 intentType={IntentTypes.Info}
@@ -177,8 +178,8 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               </Action>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <h2 class="text-sm font-semibold">Outline Info</h2>
+            <div class='flex flex-col items-center space-y-2'>
+              <h2 class='text-sm font-semibold'>Outline Info</h2>
               <Action
                 styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
                 intentType={IntentTypes.Info}
@@ -187,8 +188,8 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               </Action>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <h2 class="text-sm font-semibold">Solid Error</h2>
+            <div class='flex flex-col items-center space-y-2'>
+              <h2 class='text-sm font-semibold'>Solid Error</h2>
               <Action
                 styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
                 intentType={IntentTypes.Error}
@@ -197,8 +198,8 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               </Action>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <h2 class="text-sm font-semibold">Outline Error</h2>
+            <div class='flex flex-col items-center space-y-2'>
+              <h2 class='text-sm font-semibold'>Outline Error</h2>
               <Action
                 styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
                 intentType={IntentTypes.Error}
@@ -207,8 +208,8 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               </Action>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <h2 class="text-sm font-semibold">Disabled Primary</h2>
+            <div class='flex flex-col items-center space-y-2'>
+              <h2 class='text-sm font-semibold'>Disabled Primary</h2>
               <Action
                 styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
                 intentType={IntentTypes.Primary}
@@ -218,12 +219,12 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
               </Action>
             </div>
 
-            <div class="flex flex-col items-center space-y-2">
-              <h2 class="text-sm font-semibold">Disabled Link</h2>
+            <div class='flex flex-col items-center space-y-2'>
+              <h2 class='text-sm font-semibold'>Disabled Link</h2>
               <Action
                 styleType={ActionStyleTypes.Link}
                 intentType={IntentTypes.Info}
-                href="#"
+                href='#'
                 disabled
               >
                 Disabled Link
@@ -232,13 +233,13 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
           </div>
         </div>
 
-        <div class="space-y-8 mt-16">
-          <h1 class="text-2xl font-bold mb-6">LineSparkSVG Demo Grid</h1>
+        <div class='space-y-8 mt-16'>
+          <h1 class='text-2xl font-bold mb-6'>LineSparkSVG Demo Grid</h1>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8'>
             {/* SMOOTH PRIMARY */}
-            <div class="bg-neutral-800 p-4 rounded-md shadow-md">
-              <h2 class="text-sm font-medium mb-2 text-white">
+            <div class='bg-neutral-800 p-4 rounded-md shadow-md'>
+              <h2 class='text-sm font-medium mb-2 text-white'>
                 Smooth – Primary
               </h2>
               <LineSparkSVG
@@ -253,8 +254,8 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
             </div>
 
             {/* LINEAR INFO */}
-            <div class="bg-neutral-800 p-4 rounded-md shadow-md">
-              <h2 class="text-sm font-medium mb-2 text-white">Linear – Info</h2>
+            <div class='bg-neutral-800 p-4 rounded-md shadow-md'>
+              <h2 class='text-sm font-medium mb-2 text-white'>Linear – Info</h2>
               <LineSparkSVG
                 lines={[
                   {
@@ -267,8 +268,8 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
             </div>
 
             {/* STEP – ERROR */}
-            <div class="bg-neutral-800 p-4 rounded-md shadow-md">
-              <h2 class="text-sm font-medium mb-2 text-white">Step – Error</h2>
+            <div class='bg-neutral-800 p-4 rounded-md shadow-md'>
+              <h2 class='text-sm font-medium mb-2 text-white'>Step – Error</h2>
               <LineSparkSVG
                 lines={[
                   {
@@ -281,8 +282,8 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
             </div>
 
             {/* DUAL LINES – INFO + WARNING */}
-            <div class="bg-neutral-800 p-4 rounded-md shadow-md">
-              <h2 class="text-sm font-medium mb-2 text-white">
+            <div class='bg-neutral-800 p-4 rounded-md shadow-md'>
+              <h2 class='text-sm font-medium mb-2 text-white'>
                 Multi – Info + Warning
               </h2>
               <LineSparkSVG
@@ -302,8 +303,8 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
             </div>
 
             {/* NO ANIMATION */}
-            <div class="bg-neutral-800 p-4 rounded-md shadow-md">
-              <h2 class="text-sm font-medium mb-2 text-white">
+            <div class='bg-neutral-800 p-4 rounded-md shadow-md'>
+              <h2 class='text-sm font-medium mb-2 text-white'>
                 Linear – Static
               </h2>
               <LineSparkSVG
@@ -319,8 +320,8 @@ export default function DashboardIndex({ Data }: PageProps<IndexPageData>) {
             </div>
 
             {/* TERTIARY SMOOTH THICKER */}
-            <div class="bg-neutral-800 p-4 rounded-md shadow-md">
-              <h2 class="text-sm font-medium mb-2 text-white">
+            <div class='bg-neutral-800 p-4 rounded-md shadow-md'>
+              <h2 class='text-sm font-medium mb-2 text-white'>
                 Smooth – Thick
               </h2>
               <LineSparkSVG

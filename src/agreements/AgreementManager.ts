@@ -25,7 +25,7 @@ export class AgreementManager {
 
   constructor(
     protected ioc: IoCContainer,
-    protected oiKvLookup: string = 'oi'
+    protected oiKvLookup: string = 'oi',
   ) {}
 
   /**
@@ -54,7 +54,7 @@ export class AgreementManager {
           console.warn(`AgreementManager: Missing or unreadable file: ${def.file}`);
           return null;
         }
-      })
+      }),
     );
 
     return agreements.filter((a): a is AgreementData => Boolean(a));
@@ -83,7 +83,7 @@ export class AgreementManager {
   /**
    * Saves the user's newly accepted agreements, merging safely with existing accepted agreements.
    * Uses optimistic concurrency and retries once on conflict.
-   * 
+   *
    * @param username The user's username.
    * @param agreedKeys Array of agreement keys the user is accepting.
    * @throws Error if username is missing or concurrency issues persist.
@@ -108,7 +108,7 @@ export class AgreementManager {
             const def = allDefinitions.find((d) => d.key === k);
             return def ? [k, def.version] : null;
           })
-          .filter((e): e is [string, string] => e !== null)
+          .filter((e): e is [string, string] => e !== null),
       );
 
       const merged = merge(currentAccepted, incomingAccepted);
@@ -126,14 +126,14 @@ export class AgreementManager {
 
   /**
    * Checks whether any of the current system agreements are out-of-date compared to the user's accepted agreements.
-   * 
+   *
    * @param agreements Array of system AgreementData objects.
    * @param userAccepted Record of agreement keys and versions the user has accepted.
    * @returns True if any agreement is missing or outdated, otherwise false.
    */
   AgreementsOutOfDate(
     agreements: AgreementData[],
-    userAccepted: Record<string, string>
+    userAccepted: Record<string, string>,
   ): boolean {
     return agreements.some((agreement) => {
       const acceptedVersion = userAccepted[agreement.key];

@@ -55,11 +55,11 @@ export function ToggleCheckbox({
       class={`relative inline-flex items-center justify-center w-5 h-5 border rounded-sm bg-slate-800 border-slate-500 ${opacityClass} ${className}`}
     >
       <input
-        type="checkbox"
+        type='checkbox'
         checked={checked}
         onChange={(e) => onToggle(e.currentTarget.checked)}
         disabled={disabled}
-        class="sr-only peer"
+        class='sr-only peer'
       />
       <span
         class={`text-xs font-bold transition-all duration-200 ${textClass}`}

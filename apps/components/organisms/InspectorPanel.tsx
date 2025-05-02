@@ -30,14 +30,14 @@ export default function InspectorPanel({
         break;
       default:
         inspectorContent = (
-          <div class="text-neutral-500 text-xs italic">
+          <div class='text-neutral-500 text-xs italic'>
             No inspector available for <strong>{selectedNode.type}</strong>.
           </div>
         );
     }
   } else {
     inspectorContent = (
-      <div class="text-neutral-500 text-xs italic">
+      <div class='text-neutral-500 text-xs italic'>
         No node selected. Double click a node to inspect.
       </div>
     );

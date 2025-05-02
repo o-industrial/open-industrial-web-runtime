@@ -1,9 +1,5 @@
-import { z } from "zod";
-import { EaCDetails, EaCDetailsSchema } from "@fathym/eac";
-import {
-  EaCSchemaDetails,
-  EaCSchemaDetailsSchema,
-} from "./EaCSchemaDetails.ts";
+import { EaCDetails, EaCDetailsSchema } from '@fathym/eac';
+import { EaCSchemaDetails, EaCSchemaDetailsSchema } from './EaCSchemaDetails.ts';
 
 /**
  * Everything as Code (EaC) schema container.

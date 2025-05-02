@@ -16,7 +16,9 @@ export default function UseCases() {
         </div>
         <div class='p-6 bg-[#112E60] rounded-lg shadow-md text-center'>
           <h3 class='text-xl font-semibold text-neon-blue'>Predictive Maintenance</h3>
-          <p class='mt-2 text-neutral-300'>AI-driven insights for proactive equipment maintenance.</p>
+          <p class='mt-2 text-neutral-300'>
+            AI-driven insights for proactive equipment maintenance.
+          </p>
         </div>
         <div class='p-6 bg-[#112E60] rounded-lg shadow-md text-center'>
           <h3 class='text-xl font-semibold text-neon-green'>Supply Chain Optimization</h3>

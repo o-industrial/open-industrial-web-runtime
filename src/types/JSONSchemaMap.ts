@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 import { FieldMappingRule, FieldMappingRuleSchema } from './FieldMappingRule.ts';
 
 export type JSONSchemaMap = Record<string, FieldMappingRule>;

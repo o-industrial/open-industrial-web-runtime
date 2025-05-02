@@ -20,18 +20,17 @@ export type EaCAzureIoTHubDataConnectionDetails = {
 /**
  * Schema for validating EaCAzureIoTHubDataConnectionDetails.
  */
-export const EaCAzureIoTHubDataConnectionDetailsSchema =
-  EaCDataConnectionDetailsSchema.extend({
-    Type: z.literal('AzureIoTHub'),
-    ConnectionString: z.string().describe('Azure IoT Hub connection string.'),
-    DeviceID: z.string().describe('Target device identifier in IoT Hub.'),
-  }).describe('Schema for Azure IoT Hub-based Data Connection Details');
+export const EaCAzureIoTHubDataConnectionDetailsSchema = EaCDataConnectionDetailsSchema.extend({
+  Type: z.literal('AzureIoTHub'),
+  ConnectionString: z.string().describe('Azure IoT Hub connection string.'),
+  DeviceID: z.string().describe('Target device identifier in IoT Hub.'),
+}).describe('Schema for Azure IoT Hub-based Data Connection Details');
 
 /**
  * Type guard to validate whether a given object is an EaCAzureIoTHubDataConnectionDetails.
  */
 export function isEaCAzureIoTHubDataConnectionDetails(
-  conn: unknown
+  conn: unknown,
 ): conn is EaCAzureIoTHubDataConnectionDetails {
   return EaCAzureIoTHubDataConnectionDetailsSchema.safeParse(conn).success;
 }
@@ -40,7 +39,7 @@ export function isEaCAzureIoTHubDataConnectionDetails(
  * Parses and validates the provided data as EaCAzureIoTHubDataConnectionDetails.
  */
 export function parseEaCAzureIoTHubDataConnectionDetails(
-  conn: unknown
+  conn: unknown,
 ): EaCAzureIoTHubDataConnectionDetails {
   return EaCAzureIoTHubDataConnectionDetailsSchema.parse(conn);
 }

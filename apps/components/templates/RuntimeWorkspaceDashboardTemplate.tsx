@@ -42,21 +42,9 @@ export default function RuntimeWorkspaceDashboardTemplate({
 
   // Bottom row layout (rowStart = 9)
   const rowStart = bottomBothCollapsed ? 9 : 7;
-  const streamColSpan = bottomBothCollapsed
-    ? 7
-    : streamExpanded
-    ? timelineExpanded
-      ? 7
-      : 15
-    : 1;
+  const streamColSpan = bottomBothCollapsed ? 7 : streamExpanded ? timelineExpanded ? 7 : 15 : 1;
   const streamRowSpan = bottomBothCollapsed ? 1 : 3;
-  const timelineColSpan = bottomBothCollapsed
-    ? 9
-    : timelineExpanded
-    ? streamExpanded
-      ? 9
-      : 15
-    : 1;
+  const timelineColSpan = bottomBothCollapsed ? 9 : timelineExpanded ? streamExpanded ? 9 : 15 : 1;
   const timelineColStart = bottomBothCollapsed
     ? streamColSpan + 1
     : streamExpanded
@@ -78,7 +66,7 @@ export default function RuntimeWorkspaceDashboardTemplate({
         rowSpan={topRowSpan}
         colStart={aziColStart}
         colSpan={aziColSpan}
-        class="-:border-r -:bg-neutral-900 relative"
+        class='-:border-r -:bg-neutral-900 relative'
       >
         <div
           class={classSet([
@@ -93,13 +81,9 @@ export default function RuntimeWorkspaceDashboardTemplate({
           styleType={ActionStyleTypes.Icon}
           intentType={IntentTypes.Primary}
           onClick={() => setAziExpanded(!aziExpanded)}
-          class="-:absolute -:top-1 -:right-1 -:z-50"
+          class='-:absolute -:top-1 -:right-1 -:z-50'
         >
-          {aziExpanded ? (
-            <CloseIcon class="w-5 h-5" />
-          ) : (
-            <ExpandIcon class="w-5 h-5" />
-          )}
+          {aziExpanded ? <CloseIcon class='w-5 h-5' /> : <ExpandIcon class='w-5 h-5' />}
         </Action>
       </PanelShell>
 
@@ -108,11 +92,11 @@ export default function RuntimeWorkspaceDashboardTemplate({
         rowSpan={topRowSpan}
         colStart={flowColStart}
         colSpan={flowColSpan}
-        class="-:border-x -:bg-neutral-950 -:flex -:flex-col"
+        class='-:border-x -:bg-neutral-950 -:flex -:flex-col'
       >
         {props.breadcrumb && (
           <div
-            class="-:col-span-full -:flex -:items-center"
+            class='-:col-span-full -:flex -:items-center'
             style={{
               gridColumnStart: flowColStart,
               gridColumnEnd: flowColStart + flowColSpan,
@@ -122,7 +106,7 @@ export default function RuntimeWorkspaceDashboardTemplate({
             {props.breadcrumb}
           </div>
         )}
-        
+
         {children}
       </PanelShell>
 
@@ -131,7 +115,7 @@ export default function RuntimeWorkspaceDashboardTemplate({
         rowSpan={topRowSpan}
         colStart={inspectorColStart}
         colSpan={inspectorColSpan}
-        class="-:border-l -:bg-neutral-900 relative"
+        class='-:border-l -:bg-neutral-900 relative'
       >
         <div
           class={classSet([
@@ -146,13 +130,9 @@ export default function RuntimeWorkspaceDashboardTemplate({
           styleType={ActionStyleTypes.Icon}
           intentType={IntentTypes.Primary}
           onClick={() => setInspectorExpanded(!inspectorExpanded)}
-          class="-:absolute -:top-1 -:right-1 -:z-50"
+          class='-:absolute -:top-1 -:right-1 -:z-50'
         >
-          {inspectorExpanded ? (
-            <CloseIcon class="w-5 h-5" />
-          ) : (
-            <ExpandIcon class="w-5 h-5" />
-          )}
+          {inspectorExpanded ? <CloseIcon class='w-5 h-5' /> : <ExpandIcon class='w-5 h-5' />}
         </Action>
       </PanelShell>
 
@@ -162,14 +142,12 @@ export default function RuntimeWorkspaceDashboardTemplate({
         rowSpan={streamRowSpan}
         colStart={1}
         colSpan={streamColSpan}
-        class="-:border-t -:bg-neutral-900 -:flex -:flex-col -:h-full relative"
+        class='-:border-t -:bg-neutral-900 -:flex -:flex-col -:h-full relative'
       >
         <div
           class={classSet([
             '-:transition-all -:duration-500 -:overflow-hidden -:h-full',
-            streamExpanded
-              ? '-:opacity-100 -:w-full'
-              : '-:opacity-30 -:w-0',
+            streamExpanded ? '-:opacity-100 -:w-full' : '-:opacity-30 -:w-0',
           ])}
         >
           {stream}
@@ -179,9 +157,9 @@ export default function RuntimeWorkspaceDashboardTemplate({
           styleType={ActionStyleTypes.Icon}
           intentType={IntentTypes.Primary}
           onClick={() => setStreamExpanded(!streamExpanded)}
-          class="-:absolute -:top-1 -:right-1 -:z-50"
+          class='-:absolute -:top-1 -:right-1 -:z-50'
         >
-          {streamExpanded ? <CloseIcon class="w-5 h-5" /> : '▲'}
+          {streamExpanded ? <CloseIcon class='w-5 h-5' /> : '▲'}
         </Action>
       </PanelShell>
 
@@ -191,14 +169,12 @@ export default function RuntimeWorkspaceDashboardTemplate({
         rowSpan={timelineRowSpan}
         colStart={timelineColStart}
         colSpan={timelineColSpan}
-        class="-:border-t -:border-l -:bg-neutral-800 -:flex -:flex-col -:h-full relative"
+        class='-:border-t -:border-l -:bg-neutral-800 -:flex -:flex-col -:h-full relative'
       >
         <div
           class={classSet([
             '-:transition-all -:duration-500 -:overflow-hidden -:h-full',
-            timelineExpanded
-              ? '-:opacity-100 -:w-full'
-              : '-:opacity-30 -:w-0',
+            timelineExpanded ? '-:opacity-100 -:w-full' : '-:opacity-30 -:w-0',
           ])}
         >
           {timeline}
@@ -208,9 +184,9 @@ export default function RuntimeWorkspaceDashboardTemplate({
           styleType={ActionStyleTypes.Icon}
           intentType={IntentTypes.Primary}
           onClick={() => setTimelineExpanded(!timelineExpanded)}
-          class="-:absolute -:top-1 -:right-1 -:z-50"
+          class='-:absolute -:top-1 -:right-1 -:z-50'
         >
-          {timelineExpanded ? <CloseIcon class="w-5 h-5" /> : '▲'}
+          {timelineExpanded ? <CloseIcon class='w-5 h-5' /> : '▲'}
         </Action>
       </PanelShell>
     </div>

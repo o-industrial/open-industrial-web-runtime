@@ -1,8 +1,5 @@
-import { EaCDetails, EaCDetailsSchema } from "@fathym/eac";
-import {
-  EaCAgentDetails,
-  EaCAgentDetailsSchema,
-} from "./EaCAgentDetails.ts";
+import { EaCDetails, EaCDetailsSchema } from '@fathym/eac';
+import { EaCAgentDetails, EaCAgentDetailsSchema } from './EaCAgentDetails.ts';
 
 /**
  * Represents an Agent in Everything as Code (EaC).

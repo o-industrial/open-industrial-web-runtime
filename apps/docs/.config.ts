@@ -98,30 +98,84 @@ function loadDocsConfig(): Promise<DocsConfig> {
                 Title: 'Track A – Hybrid OT Integration',
                 Path: '/journeys/pharma-factory/hybrid',
                 Children: [
-                  { Title: 'Introduce the Integration Zone', Path: '/journeys/pharma-factory/hybrid/introduce-zone' },
-                  { Title: 'Observe, Join, Confirm', Path: '/journeys/pharma-factory/hybrid/observe-join' },
-                  { Title: 'Fork + Run in Shadow', Path: '/journeys/pharma-factory/hybrid/shadow-mode' },
-                  { Title: 'Add Shared Reference Memory', Path: '/journeys/pharma-factory/hybrid/shared-memory' },
-                  { Title: 'Enable Real-Time Reflex Sync', Path: '/journeys/pharma-factory/hybrid/reflex-sync' },
-                  { Title: 'Create Role-Based Views and Queries', Path: '/journeys/pharma-factory/hybrid/team-views' },
-                  { Title: 'Validate and Replay Over Legacy', Path: '/journeys/pharma-factory/hybrid/replay-legacy' },
-                  { Title: 'Approve and Promote the Memory Pack', Path: '/journeys/pharma-factory/hybrid/promote-pack' },
-                  { Title: 'Ship It with Azi', Path: '/journeys/pharma-factory/hybrid/deploy-runtime' },
+                  {
+                    Title: 'Introduce the Integration Zone',
+                    Path: '/journeys/pharma-factory/hybrid/introduce-zone',
+                  },
+                  {
+                    Title: 'Observe, Join, Confirm',
+                    Path: '/journeys/pharma-factory/hybrid/observe-join',
+                  },
+                  {
+                    Title: 'Fork + Run in Shadow',
+                    Path: '/journeys/pharma-factory/hybrid/shadow-mode',
+                  },
+                  {
+                    Title: 'Add Shared Reference Memory',
+                    Path: '/journeys/pharma-factory/hybrid/shared-memory',
+                  },
+                  {
+                    Title: 'Enable Real-Time Reflex Sync',
+                    Path: '/journeys/pharma-factory/hybrid/reflex-sync',
+                  },
+                  {
+                    Title: 'Create Role-Based Views and Queries',
+                    Path: '/journeys/pharma-factory/hybrid/team-views',
+                  },
+                  {
+                    Title: 'Validate and Replay Over Legacy',
+                    Path: '/journeys/pharma-factory/hybrid/replay-legacy',
+                  },
+                  {
+                    Title: 'Approve and Promote the Memory Pack',
+                    Path: '/journeys/pharma-factory/hybrid/promote-pack',
+                  },
+                  {
+                    Title: 'Ship It with Azi',
+                    Path: '/journeys/pharma-factory/hybrid/deploy-runtime',
+                  },
                 ],
               },
               {
                 Title: 'Track B – Full System Replacement',
                 Path: '/journeys/pharma-factory/full',
                 Children: [
-                  { Title: 'Start from Memory, Not Code', Path: '/journeys/pharma-factory/full/start-from-memory' },
-                  { Title: 'Assemble the Execution Lattice', Path: '/journeys/pharma-factory/full/assemble-lattice' },
-                  { Title: 'Author Reflex Agents', Path: '/journeys/pharma-factory/full/reflex-agents' },
-                  { Title: 'Connect Devices via Protocol Streams', Path: '/journeys/pharma-factory/full/device-streams' },
-                  { Title: 'Deploy to Real Surfaces', Path: '/journeys/pharma-factory/full/deploy-surfaces' },
-                  { Title: 'Empower the Team', Path: '/journeys/pharma-factory/full/team-dashboards' },
-                  { Title: 'Audit via Replay + Impulse Diffing', Path: '/journeys/pharma-factory/full/audit-replay' },
-                  { Title: 'Secure the Runtime with Contracts', Path: '/journeys/pharma-factory/full/runtime-contracts' },
-                  { Title: 'Federate and Operate as a Team', Path: '/journeys/pharma-factory/full/federate-runtime' },
+                  {
+                    Title: 'Start from Memory, Not Code',
+                    Path: '/journeys/pharma-factory/full/start-from-memory',
+                  },
+                  {
+                    Title: 'Assemble the Execution Lattice',
+                    Path: '/journeys/pharma-factory/full/assemble-lattice',
+                  },
+                  {
+                    Title: 'Author Reflex Agents',
+                    Path: '/journeys/pharma-factory/full/reflex-agents',
+                  },
+                  {
+                    Title: 'Connect Devices via Protocol Streams',
+                    Path: '/journeys/pharma-factory/full/device-streams',
+                  },
+                  {
+                    Title: 'Deploy to Real Surfaces',
+                    Path: '/journeys/pharma-factory/full/deploy-surfaces',
+                  },
+                  {
+                    Title: 'Empower the Team',
+                    Path: '/journeys/pharma-factory/full/team-dashboards',
+                  },
+                  {
+                    Title: 'Audit via Replay + Impulse Diffing',
+                    Path: '/journeys/pharma-factory/full/audit-replay',
+                  },
+                  {
+                    Title: 'Secure the Runtime with Contracts',
+                    Path: '/journeys/pharma-factory/full/runtime-contracts',
+                  },
+                  {
+                    Title: 'Federate and Operate as a Team',
+                    Path: '/journeys/pharma-factory/full/federate-runtime',
+                  },
                 ],
               },
             ],

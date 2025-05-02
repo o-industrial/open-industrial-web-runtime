@@ -1,9 +1,6 @@
-import { z } from "zod";
-import { EaCDetails, EaCDetailsSchema } from "@fathym/eac";
-import {
-  EaCSurfaceDetails,
-  EaCSurfaceDetailsSchema,
-} from "./EaCSurfaceDetails.ts";
+import { z } from 'zod';
+import { EaCDetails, EaCDetailsSchema } from '@fathym/eac';
+import { EaCSurfaceDetails, EaCSurfaceDetailsSchema } from './EaCSurfaceDetails.ts';
 import { Position } from '../types/Position.ts';
 
 /**
@@ -31,7 +28,7 @@ export type SurfaceAgentSettings = {
  */
 export type SurfaceSchemaSettings = {
   Enabled?: boolean;
-  DisplayMode?: "raw" | "graph" | "table";
+  DisplayMode?: 'raw' | 'graph' | 'table';
   Position?: Position;
   [key: string]: unknown;
 };
@@ -67,37 +64,37 @@ export const SurfacePositionSchema = z.object({
 
 export const EaCSurfaceAsCodeSchema = EaCDetailsSchema.extend({
   Details: EaCSurfaceDetailsSchema.optional(),
-  ParentSurfaceLookup: z.string().optional().describe("Optional reference to a parent surface."),
+  ParentSurfaceLookup: z.string().optional().describe('Optional reference to a parent surface.'),
   DataConnections: z
     .record(
       z.object({
         Enabled: z.boolean().optional(),
         TumblingWindowSeconds: z.number().optional(),
         Position: SurfacePositionSchema.optional(),
-      }).catchall(z.unknown())
+      }).catchall(z.unknown()),
     )
     .optional()
-    .describe("Mapping of data connection keys to runtime settings."),
+    .describe('Mapping of data connection keys to runtime settings.'),
   Agents: z
     .record(
       z.object({
         Enabled: z.boolean().optional(),
         ShowHistory: z.boolean().optional(),
         Position: SurfacePositionSchema.optional(),
-      }).catchall(z.unknown())
+      }).catchall(z.unknown()),
     )
     .optional()
-    .describe("Mapping of agent keys to surface display settings."),
+    .describe('Mapping of agent keys to surface display settings.'),
   Schemas: z
     .record(
       z.object({
         Enabled: z.boolean().optional(),
-        DisplayMode: z.enum(["raw", "graph", "table"]).optional(),
+        DisplayMode: z.enum(['raw', 'graph', 'table']).optional(),
         Position: SurfacePositionSchema.optional(),
-      }).catchall(z.unknown())
+      }).catchall(z.unknown()),
     )
     .optional()
-    .describe("Mapping of schema keys to visual mode settings."),
+    .describe('Mapping of schema keys to visual mode settings.'),
   Surfaces: z
     .record(
       z.object({
@@ -105,10 +102,10 @@ export const EaCSurfaceAsCodeSchema = EaCDetailsSchema.extend({
         Collapsible: z.boolean().optional(),
         DefaultCollapsed: z.boolean().optional(),
         Position: SurfacePositionSchema.optional(),
-      }).catchall(z.unknown())
+      }).catchall(z.unknown()),
     )
     .optional()
-    .describe("Mapping of child surface keys to container behavior settings."),
+    .describe('Mapping of child surface keys to container behavior settings.'),
 });
 
 export function isEaCSurfaceAsCode(

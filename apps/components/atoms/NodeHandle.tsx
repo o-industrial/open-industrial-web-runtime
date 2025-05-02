@@ -1,4 +1,4 @@
-import { Handle, Position, HandleProps } from 'reactflow';
+import { Handle, HandleProps, Position } from 'reactflow';
 import { IntentTypes } from '../../../src/types/IntentTypes.ts';
 import { classSet } from '@fathym/atomic';
 

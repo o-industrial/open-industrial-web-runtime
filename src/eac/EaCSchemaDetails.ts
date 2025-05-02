@@ -48,7 +48,7 @@ export const EaCSchemaDetailsSchema: z.ZodObject<
  */
 export function isEaCSchemaDetails<TType extends string | undefined = string>(
   type: TType,
-  schema: unknown
+  schema: unknown,
 ): schema is EaCSchemaDetails<TType> {
   if (!EaCSchemaDetailsSchema.safeParse(schema).success) return false;
   return !type || (schema as EaCSchemaDetails<TType>).Type === type;
@@ -58,7 +58,7 @@ export function isEaCSchemaDetails<TType extends string | undefined = string>(
  * Parses and validates an object as EaCSchemaDetails.
  */
 export function parseEaCSchemaDetails<
-  TType extends string | undefined = string
+  TType extends string | undefined = string,
 >(schema: unknown): EaCSchemaDetails<TType> {
   return EaCSchemaDetailsSchema.parse(schema) as EaCSchemaDetails<TType>;
 }

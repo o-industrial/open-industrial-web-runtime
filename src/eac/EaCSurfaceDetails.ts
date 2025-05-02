@@ -1,7 +1,4 @@
-import {
-  EaCVertexDetails,
-  EaCVertexDetailsSchema,
-} from "@fathym/eac";
+import { EaCVertexDetails, EaCVertexDetailsSchema } from '@fathym/eac';
 
 /**
  * Basic details structure for a Surface in Everything as Code (EaC).
@@ -14,7 +11,7 @@ export type EaCSurfaceDetails = EaCVertexDetails;
  * Schema for EaCSurfaceDetails.
  */
 export const EaCSurfaceDetailsSchema = EaCVertexDetailsSchema.describe(
-  "Schema for surface-level metadata and attributes."
+  'Schema for surface-level metadata and attributes.',
 );
 
 /**

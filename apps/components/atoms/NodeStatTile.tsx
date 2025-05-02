@@ -25,12 +25,10 @@ export function NodeStatTile({
   }[intent];
 
   return (
-    <div class="flex flex-col items-center text-center flex-1 space-y-1">
-      <span class="text-sm font-medium text-gray-300">{label}</span>
+    <div class='flex flex-col items-center text-center flex-1 space-y-1'>
+      <span class='text-sm font-medium text-gray-300'>{label}</span>
       <span
-        class={`text-2xl font-bold tracking-tight ${intentClass} ${
-          animate ? 'animate-pulse' : ''
-        }`}
+        class={`text-2xl font-bold tracking-tight ${intentClass} ${animate ? 'animate-pulse' : ''}`}
       >
         {value}
       </span>

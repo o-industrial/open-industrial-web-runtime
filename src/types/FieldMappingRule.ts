@@ -62,7 +62,7 @@ export const FieldMappingRuleSchema = z
     Source: z
       .union([z.string(), z.record(z.string())])
       .describe(
-        'Either a single string path or a named record of string paths.'
+        'Either a single string path or a named record of string paths.',
       ),
 
     /**

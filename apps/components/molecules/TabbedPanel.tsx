@@ -25,7 +25,7 @@ export function TabbedPanel({
   ...props
 }: TabbedPanelProps) {
   const [selected, setSelected] = useState<string>(
-    initialTab ?? tabs[0]?.key ?? ''
+    initialTab ?? tabs[0]?.key ?? '',
   );
 
   const activeTab = tabs.find((t) => t.key === selected);
@@ -39,7 +39,7 @@ export function TabbedPanel({
           scrollableContent ? 'overflow-hidden' : '',
           stickyTabs ? 'h-full' : '',
         ],
-        props
+        props,
       )}
     >
       <div
@@ -48,15 +48,13 @@ export function TabbedPanel({
           stickyTabs ? 'sticky top-0 z-10 bg-neutral-900' : '',
         ])}
       >
-        <div class="inline-flex space-x-2 border-b border-neutral-700 mb-3 whitespace-nowrap min-w-full">
+        <div class='inline-flex space-x-2 border-b border-neutral-700 mb-3 whitespace-nowrap min-w-full'>
           {tabs.map((tab) => (
             <Action
               key={tab.key}
               onClick={() => setSelected(tab.key)}
               styleType={ActionStyleTypes.Link | ActionStyleTypes.Thin}
-              intentType={
-                selected === tab.key ? IntentTypes.Info : IntentTypes.None
-              }
+              intentType={selected === tab.key ? IntentTypes.Info : IntentTypes.None}
               class={`rounded-t-md border-b-2 ${
                 selected === tab.key
                   ? 'border-neon-cyan-400'

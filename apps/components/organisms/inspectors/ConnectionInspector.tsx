@@ -1,7 +1,6 @@
 import { Node } from 'reactflow';
 import { useState } from 'preact/hooks';
 import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
-import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { Input } from '../../atoms/forms/Input.tsx';
@@ -9,7 +8,6 @@ import { SummaryRowWithAction } from '../../molecules/SummaryRowWithAction.tsx';
 import { InspectorBase } from './InspectorBase.tsx';
 import { MultiSelectCheckboxGroup } from '../../molecules/MultiSelectCheckboxGroup.tsx';
 import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
-import { Modal } from '../../molecules/Modal.tsx';
 import { SimulatorLibraryModal } from '../simulators/SimulatorLibraryModal.tsx';
 import { CheckboxRow } from '../../atoms/forms/CheckboxRow.tsx';
 
@@ -19,8 +17,7 @@ const CONNECTION_DETAILS: Record<
 > = {
   iothub: {
     name: 'Azure IoT Hub',
-    description:
-      'Cloud-to-device messaging and telemetry for Azure-connected devices.',
+    description: 'Cloud-to-device messaging and telemetry for Azure-connected devices.',
     details: {
       Endpoint: 'mqtts://iothub.azure.net',
       Port: '8883',
@@ -101,11 +98,11 @@ export function ConnectionManagementForm({
   const simulator: { label: string } | undefined = undefined;
 
   return (
-    <div class="space-y-3 pt-2">
-      <Input label="Connection Label" value={label} onInput={setLabel} />
+    <div class='space-y-3 pt-2'>
+      <Input label='Connection Label' value={label} onInput={setLabel} />
 
       <MultiSelectCheckboxGroup
-        label="Connection Types"
+        label='Connection Types'
         options={CONNECTION_TYPES}
         selected={connectionTypes}
         onChange={setConnectionTypes}
@@ -126,16 +123,16 @@ export function ConnectionManagementForm({
           />
 
           <CheckboxRow
-            label="Enable Sim"
+            label='Enable Sim'
             checked={false}
             disabled={false}
-            onToggle={(next) => {}}
+            onToggle={(_next) => {}}
           />
         </>
       )}
 
       <Action
-        class="text-sm"
+        class='text-sm'
         styleType={ActionStyleTypes.Solid | ActionStyleTypes.Thin}
         intentType={IntentTypes.Primary}
         onClick={onSave}
@@ -153,26 +150,26 @@ export function ConnectionInfoPanel({ types }: { types: string[] }) {
 
   if (!enabledInfo.length) {
     return (
-      <p class="text-sm text-neutral-400 italic">
+      <p class='text-sm text-neutral-400 italic'>
         No connection types enabled.
       </p>
     );
   }
 
   return (
-    <div class="space-y-6">
+    <div class='space-y-6'>
       {enabledInfo.map((info) => (
         <div
           key={info.name}
-          class="bg-neutral-800 border border-neutral-700 rounded p-4"
+          class='bg-neutral-800 border border-neutral-700 rounded p-4'
         >
-          <h4 class="text-sm font-semibold text-white mb-1">{info.name}</h4>
-          <p class="text-xs text-neutral-400 mb-2">{info.description}</p>
-          <ul class="text-xs text-neutral-300 space-y-1">
+          <h4 class='text-sm font-semibold text-white mb-1'>{info.name}</h4>
+          <p class='text-xs text-neutral-400 mb-2'>{info.description}</p>
+          <ul class='text-xs text-neutral-300 space-y-1'>
             {Object.entries(info.details).map(([key, val]) => (
-              <li key={key} class="flex justify-between">
-                <span class="text-neutral-400">{key}</span>
-                <span class="font-mono">{val}</span>
+              <li key={key} class='flex justify-between'>
+                <span class='text-neutral-400'>{key}</span>
+                <span class='font-mono'>{val}</span>
               </li>
             ))}
           </ul>
@@ -185,12 +182,12 @@ export function ConnectionInfoPanel({ types }: { types: string[] }) {
 export function ConnectionInspector({ node }: { node: Node }) {
   const stats = useLiveStats(node.data.stats, node.data.getStats);
   const impulseRates = stats.impulseRates ?? [];
-  const currentRate = impulseRates.at(-1) ?? null;
+  const _currentRate = impulseRates.at(-1) ?? null;
 
   const [label, setLabel] = useState(node.data.label ?? '');
   const [enabled, setEnabled] = useState(node.data.enabled ?? true);
   const [connectionTypes, setConnectionTypes] = useState<string[]>(
-    node.data.connectionTypes ?? ['iothub']
+    node.data.connectionTypes ?? ['iothub'],
   );
 
   const handleSave = () => {
@@ -202,7 +199,7 @@ export function ConnectionInspector({ node }: { node: Node }) {
 
   return (
     <InspectorBase
-      iconKey="connection"
+      iconKey='connection'
       label={label}
       enabled={enabled}
       impulseRates={impulseRates}
@@ -210,10 +207,10 @@ export function ConnectionInspector({ node }: { node: Node }) {
       onDelete={() => console.log('Delete node')}
     >
       <TabbedPanel
-        initialTab="settings"
+        initialTab='settings'
         // scrollableContent
         // stickyTabs
-        class="mt-2"
+        class='mt-2'
         tabs={[
           {
             key: 'settings',
@@ -237,7 +234,7 @@ export function ConnectionInspector({ node }: { node: Node }) {
             key: 'analytics',
             label: 'Analytics',
             content: (
-              <p class="text-sm text-neutral-300">
+              <p class='text-sm text-neutral-300'>
                 📈 Connection analytics will appear here.
               </p>
             ),
@@ -246,7 +243,7 @@ export function ConnectionInspector({ node }: { node: Node }) {
             key: 'stream',
             label: 'Impulse Stream',
             content: (
-              <p class="text-sm text-neutral-300">
+              <p class='text-sm text-neutral-300'>
                 📡 Live impulse logs and stream filtering.
               </p>
             ),

@@ -15,7 +15,7 @@ export type FlowPanelBankProps = {
 
 export default function FlowPanelBank({ presets }: FlowPanelBankProps) {
   return (
-    <div class="flex flex-col items-center gap-2">
+    <div class='flex flex-col items-center gap-2'>
       {Object.entries(presets).map(([key, preset]) => (
         <NodePresetItem
           key={key}

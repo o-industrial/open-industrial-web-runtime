@@ -1,8 +1,7 @@
 import { JSX } from 'preact';
-import { useRef, useState, useEffect } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
-import { SearchIcon } from '../../../../build/iconset/icons/SearchIcon.tsx';
 import { Input } from '../../atoms/forms/Input.tsx';
 import { SendIcon } from '../../../../build/iconset/icons/SendIcon.tsx';
 
@@ -22,7 +21,7 @@ export function AziChatInput({
   disabled = false,
   inputIntentType = IntentTypes.None,
   actionIntentType = IntentTypes.Primary,
-  sendIcon = <SendIcon class="w-5 h-5" />,
+  sendIcon = <SendIcon class='w-5 h-5' />,
   maxHeight = 200,
 }: AziChatInputProps) {
   const [input, setInput] = useState('');
@@ -58,7 +57,7 @@ export function AziChatInput({
   }, [input]);
 
   return (
-    <form onSubmit={handleSubmit} class="flex gap-2 w-full">
+    <form onSubmit={handleSubmit} class='flex gap-2 w-full'>
       <Input
         ref={textareaRef}
         multiline
@@ -68,15 +67,15 @@ export function AziChatInput({
         placeholder={placeholder}
         disabled={disabled}
         intentType={inputIntentType}
-        class="flex-grow resize-none overflow-hidden"
+        class='flex-grow resize-none overflow-hidden'
       />
 
       <Action
-        type="submit"
+        type='submit'
         styleType={ActionStyleTypes.Solid | ActionStyleTypes.Thin}
         intentType={actionIntentType}
         disabled={disabled}
-        class="text-xs"
+        class='text-xs'
       >
         {sendIcon}
       </Action>

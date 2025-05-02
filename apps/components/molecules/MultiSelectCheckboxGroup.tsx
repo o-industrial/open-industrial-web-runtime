@@ -1,4 +1,3 @@
-import { JSX } from 'preact';
 import { CheckboxRow } from '../atoms/forms/CheckboxRow.tsx';
 
 export type MultiSelectCheckboxGroupProps = {
@@ -24,20 +23,18 @@ export function MultiSelectCheckboxGroup({
     if (!enabled) return;
 
     onChange(
-      next
-        ? [...selected, value]
-        : selected.filter((v) => v !== value),
+      next ? [...selected, value] : selected.filter((v) => v !== value),
     );
   };
 
   return (
     <div class={`w-full ${className}`}>
       {label && (
-        <label class="block text-xs font-semibold text-neutral-300 mb-1">
+        <label class='block text-xs font-semibold text-neutral-300 mb-1'>
           {label}
         </label>
       )}
-      <div class="rounded border border-neutral-700 bg-neutral-800 divide-y divide-neutral-700">
+      <div class='rounded border border-neutral-700 bg-neutral-800 divide-y divide-neutral-700'>
         {options.map((opt) => (
           <CheckboxRow
             key={opt.value}

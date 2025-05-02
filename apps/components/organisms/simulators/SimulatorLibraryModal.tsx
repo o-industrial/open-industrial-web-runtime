@@ -1,4 +1,3 @@
-import { JSX } from 'preact';
 import { useState } from 'preact/hooks';
 import { Modal } from '../../molecules/Modal.tsx';
 import { Input } from '../../atoms/forms/Input.tsx';
@@ -28,29 +27,29 @@ export function SimulatorLibraryModal({
   const [category, setCategory] = useState('all');
 
   return (
-    <Modal title="Simulator Marketplace" onClose={onClose}>
-      <div class="flex h-full">
+    <Modal title='Simulator Marketplace' onClose={onClose}>
+      <div class='flex h-full'>
         {/* Left Panel */}
-        <div class="w-64 flex-shrink-0 pr-4 border-r border-neutral-700">
-          <div class="flex items-center gap-2 mb-4">
+        <div class='w-64 flex-shrink-0 pr-4 border-r border-neutral-700'>
+          <div class='flex items-center gap-2 mb-4'>
             <Input
-              placeholder="Search simulators..."
+              placeholder='Search simulators...'
               value={search}
               onInput={setSearch}
-              class="w-full"
+              class='w-full'
             />
             <Action
-              title="Search"
+              title='Search'
               onClick={() => console.log('Search:', search)}
               styleType={ActionStyleTypes.Icon}
             >
-              <SearchIcon class="w-4 h-4" />
+              <SearchIcon class='w-4 h-4' />
             </Action>
           </div>
 
-          <div class="space-y-1 text-sm">
+          <div class='space-y-1 text-sm'>
             {CATEGORIES.map((cat) => (
-              <button
+              <Action
                 key={cat.key}
                 onClick={() => setCategory(cat.key)}
                 class={`w-full text-left px-3 py-1 rounded transition ${
@@ -60,20 +59,20 @@ export function SimulatorLibraryModal({
                 }`}
               >
                 {cat.label}
-              </button>
+              </Action>
             ))}
           </div>
         </div>
 
         {/* Right Panel */}
-        <div class="flex-1 pl-4 overflow-y-auto">
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div class='flex-1 pl-4 overflow-y-auto'>
+          <div class='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <SimulatorCard
                 key={i}
                 id={`sim-${i}`}
                 name={`Sim ${i}`}
-                description="A sample simulator description goes here."
+                description='A sample simulator description goes here.'
                 category={category}
                 onInstall={onInstall}
               />
@@ -81,9 +80,9 @@ export function SimulatorLibraryModal({
 
             {/* Example Pack */}
             <SimulatorPackCard
-              id="building-pack"
-              name="Smart Building Pack"
-              description="Includes RoomState, HVACSim, OccupancyFlow"
+              id='building-pack'
+              name='Smart Building Pack'
+              description='Includes RoomState, HVACSim, OccupancyFlow'
               simulatorCount={3}
               usedSimulators={1}
               onInstallPack={(id) => {

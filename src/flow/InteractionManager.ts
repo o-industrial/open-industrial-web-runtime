@@ -1,4 +1,4 @@
-import { XYPosition, Node, Edge } from 'reactflow';
+import { Edge, Node, XYPosition } from 'reactflow';
 import { GraphStateManager } from './GraphStateManager.ts';
 import { SelectionManager } from './SelectionManager.ts';
 import { PresetManager } from './PresetManager.ts';
@@ -8,13 +8,13 @@ export class InteractionManager {
   constructor(
     private graph: GraphStateManager,
     private selection: SelectionManager,
-    private presets: PresetManager
+    private presets: PresetManager,
   ) {}
 
   HandleDrop(
     event: DragEvent,
     nodes: Node<FlowNodeData>[],
-    screenToFlowPosition: (p: XYPosition) => XYPosition
+    screenToFlowPosition: (p: XYPosition) => XYPosition,
   ): { newNode: Node<FlowNodeData>; selectedId: string } | null {
     event.preventDefault();
 
@@ -48,9 +48,9 @@ export class InteractionManager {
     const id = `${type}-${Date.now()}`;
     const relativePosition = surfaceParent
       ? {
-          x: position.x - (surfaceParent.position.x ?? 0),
-          y: position.y - (surfaceParent.position.y ?? 0),
-        }
+        x: position.x - (surfaceParent.position.x ?? 0),
+        y: position.y - (surfaceParent.position.y ?? 0),
+      }
       : position;
 
     const preset = this.presets.GetPreset(type)!;

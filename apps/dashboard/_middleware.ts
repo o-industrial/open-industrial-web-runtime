@@ -27,7 +27,7 @@ export default [
           `/dashboard/agreements?returnUrl=${returnUrl}`,
           false,
           false,
-          req
+          req,
         );
       }
     }

@@ -21,7 +21,7 @@ export const agreementsBlockerMiddleware: EaCRuntimeHandler<
         `/dashboard/agreements?returnUrl=${returnUrl}`,
         false,
         false,
-        req
+        req,
       );
     }
   }

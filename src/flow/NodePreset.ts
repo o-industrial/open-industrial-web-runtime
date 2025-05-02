@@ -1,4 +1,3 @@
-
 export type NodePreset = {
   Type: string;
   Label: string;

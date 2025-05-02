@@ -7,8 +7,6 @@ import { TriggerMatchIcon } from '../../../../build/iconset/icons/TriggerMatchIc
 import { DeleteIcon } from '../../../../build/iconset/icons/DeleteIcon.tsx';
 import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { FlowNodeData } from '../../../../src/flow/FlowNodeData.ts';
-import { LineSparkSVG } from '../../atoms/LineSparkSVG.tsx';
-import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 
 type ConnectionStats = {
@@ -33,52 +31,52 @@ export default function ConnectionNodeRenderer({
 
   return (
     <WorkspaceNodeRendererBase
-      iconKey="connection"
+      iconKey='connection'
       label={data.label}
       onDoubleClick={data.onDoubleClick}
       isSelected={data.isSelected}
       class={classes}
       postMain={
         <NodeHandle
-          type="source"
+          type='source'
           position={Position.Right}
           intentType={IntentTypes.Tertiary}
         />
       }
     >
-      <div class="w-full flex flex-col items-center justify-center py-2 px-2">
+      <div class='w-full flex flex-col items-center justify-center py-2 px-2'>
         {/* Rate Line + Stat */}
-        {impulses.length > 1 ? (
-          <LinePreviewWithValue
-            label="Rate"
-            values={impulses}
-            currentValue={latest}
-            intent={IntentTypes.Warning}
-            yMin={15}
-            yMax={30}
-          />
-        ) : (
-          <div class="text-sm text-gray-400 italic mb-2">No live rate data</div>
-        )}
+        {impulses.length > 1
+          ? (
+            <LinePreviewWithValue
+              label='Rate'
+              values={impulses}
+              currentValue={latest}
+              intent={IntentTypes.Warning}
+              yMin={15}
+              yMax={30}
+            />
+          )
+          : <div class='text-sm text-gray-400 italic mb-2'>No live rate data</div>}
 
         {/* Footer Actions */}
-        <div class="flex justify-end gap-2 w-full mt-1 px-2">
+        <div class='flex justify-end gap-2 w-full mt-1 px-2'>
           <Action
-            title="Filter Stream"
+            title='Filter Stream'
             styleType={ActionStyleTypes.Icon}
             intentType={IntentTypes.Tertiary}
             onClick={() => console.log('Filter stream for:', data.label)}
           >
-            <TriggerMatchIcon class="w-4 h-4" />
+            <TriggerMatchIcon class='w-4 h-4' />
           </Action>
 
           <Action
-            title="Delete Connection"
+            title='Delete Connection'
             styleType={ActionStyleTypes.Icon}
             intentType={IntentTypes.Error}
             onClick={() => console.log('Delete node:', data.label)}
           >
-            <DeleteIcon class="w-4 h-4" />
+            <DeleteIcon class='w-4 h-4' />
           </Action>
         </div>
       </div>

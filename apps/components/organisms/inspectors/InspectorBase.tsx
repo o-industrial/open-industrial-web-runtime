@@ -52,27 +52,25 @@ export function InspectorBase({
     <section
       class={classSet(
         ['relative w-full h-full flex flex-col overflow-hidden', intentClasses],
-        props
+        props,
       )}
       {...props}
     >
       {/* Sticky Header */}
-      <div class="sticky top-0 z-10 bg-neutral-900 px-4 py-2 flex items-center justify-between border-b border-neutral-800">
-        <div class="flex items-center gap-2">
+      <div class='sticky top-0 z-10 bg-neutral-900 px-4 py-2 flex items-center justify-between border-b border-neutral-800'>
+        <div class='flex items-center gap-2'>
           {onToggleEnabled !== undefined && (
             <ToggleCheckbox
               checked={enabled ?? true}
               onToggle={onToggleEnabled}
-              title="Enable or disable node"
+              title='Enable or disable node'
               checkedIntentType={IntentTypes.Info}
               uncheckedIntentType={IntentTypes.Error}
             />
           )}
-          {iconKey && (
-            <Icon icon={iconKey} src="/icons/iconset" class="w-5 h-5" />
-          )}
+          {iconKey && <Icon icon={iconKey} src='/icons/iconset' class='w-5 h-5' />}
           {label && (
-            <h3 class="text-sm font-semibold uppercase tracking-wide">
+            <h3 class='text-sm font-semibold uppercase tracking-wide'>
               {label}
             </h3>
           )}
@@ -80,32 +78,32 @@ export function InspectorBase({
 
         {onDelete && (
           <Action
-            title="Delete Node"
+            title='Delete Node'
             intentType={IntentTypes.Error}
             styleType={ActionStyleTypes.Icon}
             onClick={onDelete}
           >
-            <DeleteIcon class="w-4 h-4" />
+            <DeleteIcon class='w-4 h-4' />
           </Action>
         )}
       </div>
 
       {/* Scrollable Content */}
-      <div class="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-neon-cyan-700 scrollbar-track-transparent px-4 py-3 space-y-3">
+      <div class='flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-neon-cyan-700 scrollbar-track-transparent px-4 py-3 space-y-3'>
         {children}
       </div>
-      
+
       {impulseRates && (
-          <LinePreviewWithValue
-            class="flex"
-            label="Impulse Rate"
-            values={impulseRates}
-            currentValue={currentRate}
-            intent={impulseRateIntentType}
-            yMin={yMin}
-            yMax={yMax}
-          />
-        )}
+        <LinePreviewWithValue
+          class='flex'
+          label='Impulse Rate'
+          values={impulseRates}
+          currentValue={currentRate}
+          intent={impulseRateIntentType}
+          yMin={yMin}
+          yMax={yMax}
+        />
+      )}
     </section>
   );
 }

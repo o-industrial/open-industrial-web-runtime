@@ -27,25 +27,25 @@ export function AgreementCard({
         [
           'border border-neutral-200 dark:border-neutral-700 rounded-lg p-6 bg-white dark:bg-neutral-950 shadow-md flex flex-col gap-4',
         ],
-        { class: className }
+        { class: className },
       )}
       {...rest}
     >
       <div>
-        <h3 class="text-lg font-bold text-neutral-800 dark:text-white">{title}</h3>
-        <p class="mt-2 text-neutral-600 dark:text-neutral-400 text-sm">{abstract}</p>
+        <h3 class='text-lg font-bold text-neutral-800 dark:text-white'>{title}</h3>
+        <p class='mt-2 text-neutral-600 dark:text-neutral-400 text-sm'>{abstract}</p>
         <a
           href={documentLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="mt-2 inline-block text-neon-cyan-400 hover:underline text-sm"
+          target='_blank'
+          rel='noopener noreferrer'
+          class='mt-2 inline-block text-neon-cyan-400 hover:underline text-sm'
         >
           View Full Document
         </a>
       </div>
 
       <AgreementCheckbox
-        label="I have read and agree to these terms"
+        label='I have read and agree to these terms'
         checked={checked}
         onCheckedChange={onCheckedChange}
       />

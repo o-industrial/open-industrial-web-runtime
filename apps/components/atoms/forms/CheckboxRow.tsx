@@ -53,26 +53,23 @@ export function CheckboxRow({
     },
   };
 
-  const { text, accent } =
-    intentType !== undefined
-      ? classesByIntent[intentType] ?? classesByIntent.default
-      : classesByIntent.default;
+  const { text, accent } = intentType !== undefined
+    ? classesByIntent[intentType] ?? classesByIntent.default
+    : classesByIntent.default;
 
   return (
     <label
       class={classSet(
         [
           `flex items-center justify-between px-2 py-1 text-sm`,
-          disabled
-            ? 'opacity-50 cursor-not-allowed'
-            : 'cursor-pointer hover:bg-neutral-700',
+          disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-neutral-700',
         ],
-        props
+        props,
       )}
     >
       <span class={text}>{label}</span>
       <input
-        type="checkbox"
+        type='checkbox'
         checked={checked}
         disabled={disabled}
         onChange={(e) => onToggle(e.currentTarget.checked)}

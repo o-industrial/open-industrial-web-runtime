@@ -22,12 +22,12 @@ export function SummaryRowWithAction({
     <div
       class={`flex items-center justify-between text-sm border border-neutral-700 rounded px-2 py-1 ${className}`}
     >
-      <span class="truncate text-sm text-neutral-300">{label}</span>
+      <span class='truncate text-sm text-neutral-300'>{label}</span>
       <Action
         onClick={onActionClick}
         intentType={intentType}
         styleType={styleType}
-        class="ml-2 text-sm"
+        class='ml-2 text-sm'
       >
         {actionLabel}
       </Action>

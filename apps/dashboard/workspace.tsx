@@ -27,18 +27,17 @@ export const handler: EaCRuntimeHandlerSet<
   },
 };
 
-export default function WorkspacePage({ Data }: PageProps<WorkspacePageData>) {
+export default function WorkspacePage({}: PageProps<WorkspacePageData>) {
   const flowMgr = useMemo(() => new FlowManager('workspace'), []);
 
-  const selectedNode =
-    flowMgr.Selection.GetSelectedNodes(flowMgr.Graph.GetNodes())[0] ?? null;
+  const selectedNode = flowMgr.Selection.GetSelectedNodes(flowMgr.Graph.GetNodes())[0] ?? null;
 
   return (
     <RuntimeWorkspaceDashboardTemplate
       azi={<AziPanel />}
       breadcrumb={
-        <div class="-:w-full -:text-xs -:text-neutral-400 -:bg-neutral-900 -:tracking-wide -:font-light -:px-4 -:pt-1.5 -:pb-1">
-          hello-azi (Workspace) / <span class="-:text-white">Management</span>
+        <div class='-:w-full -:text-xs -:text-neutral-400 -:bg-neutral-900 -:tracking-wide -:font-light -:px-4 -:pt-1.5 -:pb-1'>
+          hello-azi (Workspace) / <span class='-:text-white'>Management</span>
         </div>
       }
       inspector={

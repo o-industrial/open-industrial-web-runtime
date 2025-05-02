@@ -1,12 +1,11 @@
-import { JSX } from 'preact';
 import {
-  ReactFlow,
   Background,
   Controls,
   MiniMap,
   Node,
-  useReactFlow,
+  ReactFlow,
   ReactFlowProvider,
+  useReactFlow,
 } from 'reactflow';
 import { IS_BROWSER } from '@fathym/atomic';
 
@@ -42,7 +41,7 @@ function FlowPanel({ flowMgr }: FlowPanelProps) {
       bank={<FlowPanelBank presets={presets} />}
       canvas={
         <div
-          class="absolute inset-0 w-full h-full"
+          class='absolute inset-0 w-full h-full'
           onDrop={(e) => handleDrop(e, screenToFlowPosition)}
           onDragOver={(e) => e.preventDefault()}
         >
@@ -61,19 +60,19 @@ function FlowPanel({ flowMgr }: FlowPanelProps) {
             defaultZoom={1.25}
           >
             <Background />
-            <Controls position="bottom-left" />
+            <Controls position='bottom-left' />
             <MiniMap
               nodeColor={(node: Node) => {
                 if (node.data?.status === 'error') return '#F43F5E';
                 if (node.data?.status === 'warning') return '#EAB308';
                 return '#06B6D4';
               }}
-              maskColor="rgba(0,0,0,0.2)"
+              maskColor='rgba(0,0,0,0.2)'
               style={{
                 borderRadius: '0.5rem',
                 boxShadow: '0 0 8px rgba(0,0,0,0.3)',
               }}
-              className="-:!bg-neutral-800 -:!border -:!border-neutral-700"
+              className='-:!bg-neutral-800 -:!border -:!border-neutral-700'
             />
           </ReactFlow>
         </div>

@@ -5,7 +5,7 @@
  */
 export async function saveWithRetry<T>(
   doSave: () => Promise<T>,
-  retries = 1
+  retries = 1,
 ): Promise<T> {
   try {
     return await doSave();
@@ -16,7 +16,7 @@ export async function saveWithRetry<T>(
       err.message.includes('Concurrent update detected')
     ) {
       console.warn(
-        'AgreementManager: Concurrency conflict detected. Retrying once.'
+        'AgreementManager: Concurrency conflict detected. Retrying once.',
       );
       return await saveWithRetry(doSave, retries - 1);
     }

@@ -11,11 +11,15 @@ export default function MultiEnvironmentFlow() {
       <div class='mt-10 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto'>
         <div class='p-6 bg-[#112E60] rounded-lg shadow-md text-center'>
           <h3 class='text-xl font-semibold text-neon-green'>Test Environment</h3>
-          <p class='mt-2 text-neutral-300'>Safely experiment with AI models and automation logic.</p>
+          <p class='mt-2 text-neutral-300'>
+            Safely experiment with AI models and automation logic.
+          </p>
         </div>
         <div class='p-6 bg-[#112E60] rounded-lg shadow-md text-center'>
           <h3 class='text-xl font-semibold text-neon-blue'>Integration Environment</h3>
-          <p class='mt-2 text-neutral-300'>Ensure seamless compatibility with industrial systems.</p>
+          <p class='mt-2 text-neutral-300'>
+            Ensure seamless compatibility with industrial systems.
+          </p>
         </div>
         <div class='p-6 bg-[#112E60] rounded-lg shadow-md text-center'>
           <h3 class='text-xl font-semibold text-neon-green'>Production Environment</h3>

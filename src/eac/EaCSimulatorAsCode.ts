@@ -1,8 +1,5 @@
-import { EaCDetails, EaCDetailsSchema } from "@fathym/eac";
-import {
-  EaCSimulatorDetails,
-  EaCSimulatorDetailsSchema,
-} from "./EaCSimulatorDetails.ts";
+import { EaCDetails, EaCDetailsSchema } from '@fathym/eac';
+import { EaCSimulatorDetails, EaCSimulatorDetailsSchema } from './EaCSimulatorDetails.ts';
 
 /**
  * Represents a deployed simulator instance within an Everything as Code (EaC) workspace.

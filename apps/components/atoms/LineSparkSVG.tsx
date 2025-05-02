@@ -41,7 +41,7 @@ function normalizeAndBuildPath(
   mode: 'smooth' | 'linear' | 'step',
   yMin?: number,
   yMax?: number,
-  yPadding = 0.1
+  yPadding = 0.1,
 ): string {
   if (values.length < 2) return '';
 
@@ -53,8 +53,7 @@ function normalizeAndBuildPath(
   const paddedMax = maxVal + range * yPadding;
   const paddedRange = paddedMax - paddedMin;
 
-  const scaleY = (v: number) =>
-    height - ((v - paddedMin) / paddedRange) * height;
+  const scaleY = (v: number) => height - ((v - paddedMin) / paddedRange) * height;
 
   if (mode === 'smooth') {
     return buildSmoothPath(values, width, height, smoothing, scaleY);
@@ -80,7 +79,7 @@ export function LineSparkSVG({
       {...props}
       class={classSet([`w-full`], props)}
       viewBox={`0 0 ${width} ${height}`}
-      preserveAspectRatio="none"
+      preserveAspectRatio='none'
     >
       {lines.map((line, idx) => {
         const {
@@ -98,7 +97,7 @@ export function LineSparkSVG({
           mode,
           yMin,
           yMax,
-          yPadding
+          yPadding,
         );
 
         const strokeClass = intentToClass[intent];
@@ -106,13 +105,11 @@ export function LineSparkSVG({
         return (
           <path
             key={idx}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
+            fill='none'
+            stroke='currentColor'
+            strokeWidth='2'
             d={d}
-            class={`${strokeClass} ${
-              animate ? 'animate-[pulse_1.5s_ease-in-out_infinite]' : ''
-            }`}
+            class={`${strokeClass} ${animate ? 'animate-[pulse_1.5s_ease-in-out_infinite]' : ''}`}
           />
         );
       })}

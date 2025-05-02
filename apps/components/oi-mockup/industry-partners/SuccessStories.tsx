@@ -6,7 +6,8 @@ export default function SuccessStories() {
           Real-World AI Execution Powered by Industry Partnerships
         </h2>
         <p class='text-lg text-neutral-300'>
-          See how industry leaders are leveraging Open Industrial partnerships to optimize execution.
+          See how industry leaders are leveraging Open Industrial partnerships to optimize
+          execution.
         </p>
       </div>
       <div class='mt-10 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto'>

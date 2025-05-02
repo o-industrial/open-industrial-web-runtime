@@ -2,10 +2,7 @@ import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import { AgreementManager } from '../../src/agreements/AgreementManager.ts';
-import {
-  AgreementData,
-  AgreementList,
-} from '../components/organisms/AgreementList.tsx';
+import { AgreementData, AgreementList } from '../components/organisms/AgreementList.tsx';
 
 export const IsIsland = true;
 
@@ -80,17 +77,17 @@ export default function AgreementsPage({
 
   return (
     <>
-      <div class="py-16 px-4 bg-neutral-500/75">
-        <div class="mx-auto block w-[350px] text-center">
-          <h1 class="text-4xl font-bold mb-4">Review and Accept</h1>
+      <div class='py-16 px-4 bg-neutral-500/75'>
+        <div class='mx-auto block w-[350px] text-center'>
+          <h1 class='text-4xl font-bold mb-4'>Review and Accept</h1>
 
-          <p class="text-sm text-neutral-200">
+          <p class='text-sm text-neutral-200'>
             Please review and accept our agreements before continuing.
           </p>
         </div>
       </div>
 
-      <div class="p-8">
+      <div class='p-8'>
         <AgreementList
           agreements={Data.agreements}
           onAllAccepted={handleAllAccepted}

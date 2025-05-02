@@ -3,7 +3,7 @@ export function buildSmoothPath(
   width: number,
   height: number,
   smoothing = 0.2,
-  scaleY?: (v: number) => number
+  scaleY?: (v: number) => number,
 ): string {
   if (values.length < 2) return '';
 
@@ -23,7 +23,9 @@ export function buildSmoothPath(
     const curr = getPoint(i);
     const cpX = prev.x + stepX * smoothing;
 
-    d += ` C ${cpX.toFixed(2)} ${prev.y.toFixed(2)}, ${cpX.toFixed(2)} ${curr.y.toFixed(2)}, ${curr.x.toFixed(2)} ${curr.y.toFixed(2)}`;
+    d += ` C ${cpX.toFixed(2)} ${prev.y.toFixed(2)}, ${cpX.toFixed(2)} ${curr.y.toFixed(2)}, ${
+      curr.x.toFixed(2)
+    } ${curr.y.toFixed(2)}`;
   }
 
   return d;

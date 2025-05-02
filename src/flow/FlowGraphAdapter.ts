@@ -29,7 +29,7 @@ export function translateToReactFlow(graph: FlowGraph): {
 
 export function translateFromReactFlow(
   nodes: Node<FlowNodeData>[],
-  edges: Edge[]
+  edges: Edge[],
 ): FlowGraph {
   return {
     Nodes: nodes.map((n) => ({

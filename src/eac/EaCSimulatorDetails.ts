@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { EaCVertexDetails, EaCVertexDetailsSchema } from "@fathym/eac";
+import { z } from 'zod';
+import { EaCVertexDetails, EaCVertexDetailsSchema } from '@fathym/eac';
 
 /**
  * Represents the base details structure for a simulator in Everything as Code (EaC).
@@ -19,8 +19,8 @@ export type EaCSimulatorDetails<
 export const EaCSimulatorDetailsSchema: z.ZodObject<{
   Type: z.ZodString;
 }> = EaCVertexDetailsSchema.extend({
-  Type: z.string().describe("The type identifier for this simulator."),
-}).describe("Schema for base simulator details in EaC.");
+  Type: z.string().describe('The type identifier for this simulator.'),
+}).describe('Schema for base simulator details in EaC.');
 
 /**
  * Type guard for EaCSimulatorDetails.

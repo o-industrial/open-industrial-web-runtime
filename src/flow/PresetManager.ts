@@ -40,7 +40,7 @@ export class PresetManager {
     return Object.fromEntries(
       Object.entries(PresetManager.presets).filter(([type]) =>
         PresetManager.scopeMap[type]?.includes(scope)
-      )
+      ),
     );
   }
 

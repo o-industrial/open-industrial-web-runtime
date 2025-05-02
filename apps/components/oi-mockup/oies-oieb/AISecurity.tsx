@@ -11,7 +11,9 @@ export default function AISecurity() {
       <div class='mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto'>
         <div class='p-6 bg-[#112E60] rounded-lg shadow-md text-center'>
           <h3 class='text-xl font-semibold text-neon-green'>Zero Trust Security</h3>
-          <p class='mt-2 text-neutral-300'>AI-driven anomaly detection and compliance enforcement.</p>
+          <p class='mt-2 text-neutral-300'>
+            AI-driven anomaly detection and compliance enforcement.
+          </p>
         </div>
         <div class='p-6 bg-[#112E60] rounded-lg shadow-md text-center'>
           <h3 class='text-xl font-semibold text-neon-blue'>Regulatory Compliance</h3>

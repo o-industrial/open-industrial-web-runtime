@@ -1,6 +1,9 @@
 import { EaCDetails, EaCDetailsSchema } from '@fathym/eac';
 import z from 'zod';
-import { EaCDataConnectionDetails, EaCDataConnectionDetailsSchema } from "./EaCDataConnectionDetails.ts";
+import {
+  EaCDataConnectionDetails,
+  EaCDataConnectionDetailsSchema,
+} from './EaCDataConnectionDetails.ts';
 
 /**
  * Represents an Everything as Code (EaC) Data Connection.
@@ -18,7 +21,7 @@ export type EaCDataConnectionAsCode = EaCDetails<EaCDataConnectionDetails> & {
  */
 export const EaCDataConnectionAsCodeSchema = EaCDetailsSchema.extend({
   Details: EaCDataConnectionDetailsSchema.optional(),
-  SimulatorLookup: z.string().optional().describe("Optional lookup key for associated simulator."),
+  SimulatorLookup: z.string().optional().describe('Optional lookup key for associated simulator.'),
 });
 
 /**

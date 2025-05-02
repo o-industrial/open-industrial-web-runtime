@@ -31,33 +31,34 @@ export function AziChatMessage({
     [IntentTypes.None]: 'bg-neutral-800 border-neutral-700',
   };
 
-  const bubbleClass =
-    bubbleColorMap[intentType] ?? bubbleColorMap[IntentTypes.Info];
+  const bubbleClass = bubbleColorMap[intentType] ?? bubbleColorMap[IntentTypes.Info];
   const rootAlign = isRight ? 'justify-end' : 'justify-start';
   const containerAlign = isRight ? 'items-end' : 'items-start';
   const rowDirection = isRight ? 'flex-row-reverse' : 'flex-row';
 
   return (
     <div {...rest} class={classSet(['flex', rootAlign], rest)}>
-      {inline ? (
-        <div
-          class={`flex ${rowDirection} items-center gap-2 max-w-[80%]`}
-        >
-          <Badge intentType={intentType}>{badge}</Badge>
-          <div class={`border rounded px-3 py-2 text-sm ${bubbleClass}`}>
-            {content}
+      {inline
+        ? (
+          <div
+            class={`flex ${rowDirection} items-center gap-2 max-w-[80%]`}
+          >
+            <Badge intentType={intentType}>{badge}</Badge>
+            <div class={`border rounded px-3 py-2 text-sm ${bubbleClass}`}>
+              {content}
+            </div>
           </div>
-        </div>
-      ) : (
-        <div class={`flex flex-col ${containerAlign} max-w-[80%]`}>
-          <Badge intentType={intentType} class="mb-1">
-            {badge}
-          </Badge>
-          <div class={`border rounded px-3 py-2 text-sm ${bubbleClass}`}>
-            {content}
+        )
+        : (
+          <div class={`flex flex-col ${containerAlign} max-w-[80%]`}>
+            <Badge intentType={intentType} class='mb-1'>
+              {badge}
+            </Badge>
+            <div class={`border rounded px-3 py-2 text-sm ${bubbleClass}`}>
+              {content}
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 }

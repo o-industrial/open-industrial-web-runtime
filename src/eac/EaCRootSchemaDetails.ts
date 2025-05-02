@@ -1,8 +1,5 @@
 import { z } from 'zod';
-import {
-  EaCSchemaDetails,
-  EaCSchemaDetailsSchema,
-} from './EaCSchemaDetails.ts';
+import { EaCSchemaDetails, EaCSchemaDetailsSchema } from './EaCSchemaDetails.ts';
 import { JSONSchemaMap, JSONSchemaMapSchema } from '../types/JSONSchemaMap.ts';
 
 /**
@@ -21,14 +18,14 @@ export type EaCRootSchemaDetails = EaCSchemaDetails<'Root'> & {
 /**
  * Schema for EaCRootSchemaDetails.
  */
-export const EaCRootSchemaDetailsSchema: z.ZodType<EaCRootSchemaDetails> =
-  EaCSchemaDetailsSchema.extend({
+export const EaCRootSchemaDetailsSchema: z.ZodType<EaCRootSchemaDetails> = EaCSchemaDetailsSchema
+  .extend({
     Type: z.literal('Root'),
     DataConnectionLookup: z
       .string()
       .optional()
       .describe(
-        "Key for resolving the DataConnection that supplies this schema's data."
+        "Key for resolving the DataConnection that supplies this schema's data.",
       ),
     DataConnectionSettings: z
       .object({
@@ -40,13 +37,13 @@ export const EaCRootSchemaDetailsSchema: z.ZodType<EaCRootSchemaDetails> =
   }).describe('Schema for Root-type schema used for raw data ingestion.');
 
 export function isEaCRootSchemaDetails(
-  details: unknown
+  details: unknown,
 ): details is EaCRootSchemaDetails {
   return EaCRootSchemaDetailsSchema.safeParse(details).success;
 }
 
 export function parseEaCRootSchemaDetails(
-  details: unknown
+  details: unknown,
 ): EaCRootSchemaDetails {
   return EaCRootSchemaDetailsSchema.parse(details);
 }

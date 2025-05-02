@@ -1,7 +1,7 @@
 import { FlowGraph } from './FlowGraph.ts';
-import { Node, Edge, NodeChange, EdgeChange, applyNodeChanges, applyEdgeChanges } from 'reactflow';
+import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange } from 'reactflow';
 import { FlowNodeData } from './FlowNodeData.ts';
-import { translateToReactFlow, translateFromReactFlow } from './FlowGraphAdapter.ts';
+import { translateFromReactFlow, translateToReactFlow } from './FlowGraphAdapter.ts';
 
 export class GraphStateManager {
   private graph: FlowGraph = { Nodes: [], Edges: [] };

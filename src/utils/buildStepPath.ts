@@ -2,7 +2,7 @@ export function buildStepPath(
   values: number[],
   width: number,
   height: number,
-  scaleY?: (v: number) => number
+  scaleY?: (v: number) => number,
 ): string {
   if (values.length < 2) return '';
 

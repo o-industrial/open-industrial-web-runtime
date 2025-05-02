@@ -1,10 +1,7 @@
 import { useState } from 'preact/hooks';
 import AziPanelTemplate from '../templates/AziPanelTemplate.tsx';
-import { Input } from '../atoms/forms/Input.tsx';
-import { Action, ActionStyleTypes } from '../atoms/Action.tsx';
 import { IntentTypes } from '../../../src/types/IntentTypes.ts';
 import { AziChatMessage } from '../molecules/azi/AziChatMessage.tsx';
-import { SearchIcon } from '../../../build/iconset/icons/SearchIcon.tsx';
 import { AziChatInput } from '../molecules/azi/AziChatInput.tsx';
 
 type Role = 'user' | 'azi' | 'tool';
@@ -40,8 +37,7 @@ export default function AziPanel({
     },
     {
       role: 'tool',
-      content:
-        'Loaded RoomState v2 schema from memory. Linked to surface: lab-sim-1.',
+      content: 'Loaded RoomState v2 schema from memory. Linked to surface: lab-sim-1.',
     },
     {
       role: 'user',
@@ -57,14 +53,12 @@ export default function AziPanel({
     },
     {
       role: 'azi',
-      content:
-        'RoomState agent reported above-threshold humidity. Action signal dispatched.',
+      content: 'RoomState agent reported above-threshold humidity. Action signal dispatched.',
     },
     { role: 'user', content: 'What action was triggered?' },
     {
       role: 'azi',
-      content:
-        'FanControlAgent v2 responded by increasing airflow in the lab zone.',
+      content: 'FanControlAgent v2 responded by increasing airflow in the lab zone.',
     },
     { role: 'tool', content: 'Signal trace: fan.speed = 72%' },
     { role: 'user', content: 'Nice. Show me drift from baseline?' },
@@ -98,9 +92,7 @@ export default function AziPanel({
         <AziChatMessage
           key={idx}
           align={msg.role === 'user' ? 'right' : 'left'}
-          badge={
-            msg.role === 'azi' ? 'Azi' : msg.role === 'tool' ? 'Tool' : 'You'
-          }
+          badge={msg.role === 'azi' ? 'Azi' : msg.role === 'tool' ? 'Tool' : 'You'}
           content={msg.content}
           intentType={intentTypes[msg.role] ?? IntentTypes.None}
           inline

@@ -17,10 +17,10 @@ export function SurfaceSettingsTab({
   onSave: () => void;
 }) {
   return (
-    <div class="space-y-3 pt-2">
-      <Input label="Surface Name" value={label} onInput={setLabel} />
+    <div class='space-y-3 pt-2'>
+      <Input label='Surface Name' value={label} onInput={setLabel} />
       <Action
-        class="text-sm"
+        class='text-sm'
         styleType={ActionStyleTypes.Solid | ActionStyleTypes.Thin}
         intentType={IntentTypes.Primary}
         onClick={onSave}
@@ -33,7 +33,7 @@ export function SurfaceSettingsTab({
 
 export function SurfaceAnalyticsTab() {
   return (
-    <p class="text-sm text-neutral-300">
+    <p class='text-sm text-neutral-300'>
       📈 Surface-level analytics will appear here.
     </p>
   );
@@ -41,7 +41,7 @@ export function SurfaceAnalyticsTab() {
 
 export function SurfaceStreamTab() {
   return (
-    <p class="text-sm text-neutral-300">
+    <p class='text-sm text-neutral-300'>
       📡 Impulses received and routed on this surface.
     </p>
   );
@@ -62,7 +62,7 @@ export function SurfaceInspector({ node }: { node: Node }) {
 
   return (
     <InspectorBase
-      iconKey="surface"
+      iconKey='surface'
       label={label}
       enabled={enabled}
       impulseRates={impulseRates}
@@ -72,8 +72,8 @@ export function SurfaceInspector({ node }: { node: Node }) {
       onDelete={() => console.log('Delete surface')}
     >
       <TabbedPanel
-        initialTab="settings"
-        class="mt-2"
+        initialTab='settings'
+        class='mt-2'
         tabs={[
           {
             key: 'settings',

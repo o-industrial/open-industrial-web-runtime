@@ -44,7 +44,7 @@ export function AgreementList({
 
   return (
     <div class={classSet(['space-y-8'], { class: className })} {...rest}>
-      <div class="grid gap-6 grid-cols-1 md:grid-cols-2">
+      <div class='grid gap-6 grid-cols-1 md:grid-cols-2'>
         {agreements.map((agreement, idx) => (
           <AgreementCard
             key={idx}
@@ -57,7 +57,7 @@ export function AgreementList({
         ))}
       </div>
 
-      <div class="flex justify-center">
+      <div class='flex justify-center'>
         <Action
           styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
           intentType={IntentTypes.Primary}

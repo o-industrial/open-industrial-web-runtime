@@ -9,14 +9,14 @@ export function AgentInspector({ node }: { node: Node }) {
   const stats = useLiveStats(node.data.stats, node.data.getStats);
 
   return (
-    <InspectorBase iconKey="agent" label="Agent Node">
+    <InspectorBase iconKey='agent' label='Agent Node'>
       <LinePreviewWithValue
-        label="Impulse Rate"
+        label='Impulse Rate'
         values={stats.impulseRates ?? []}
         intent={IntentTypes.Tertiary}
       />
-      <NodeStatTile label="Matches" value={stats.matchesHandled} />
-      <NodeStatTile label="Avg Latency" value={`${stats.avgLatencyMs}ms`} />
+      <NodeStatTile label='Matches' value={stats.matchesHandled} />
+      <NodeStatTile label='Avg Latency' value={`${stats.avgLatencyMs}ms`} />
     </InspectorBase>
   );
 }

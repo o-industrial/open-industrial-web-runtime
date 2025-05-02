@@ -1,8 +1,4 @@
-import { z } from "zod";
-import {
-  EaCVertexDetails,
-  EaCVertexDetailsSchema,
-} from "@fathym/eac";
+import { EaCVertexDetails, EaCVertexDetailsSchema } from '@fathym/eac';
 
 /**
  * Represents details for an Agent in Everything as Code (EaC).
@@ -15,7 +11,7 @@ export type EaCAgentDetails = EaCVertexDetails;
  * Schema for EaCAgentDetails.
  */
 export const EaCAgentDetailsSchema = EaCVertexDetailsSchema.describe(
-  "Schema for base agent definition in EaC."
+  'Schema for base agent definition in EaC.',
 );
 
 /**

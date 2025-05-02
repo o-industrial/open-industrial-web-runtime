@@ -1,9 +1,12 @@
 import z from 'zod';
-import { EaCAgentAsCode, EaCAgentAsCodeSchema } from "./EaCAgentAsCode.ts";
-import { EaCDataConnectionAsCode, EaCDataConnectionAsCodeSchema } from "./EaCDataConnectionAsCode.ts";
-import { EaCSchemaAsCode, EaCSchemaAsCodeSchema } from "./EaCSchemaAsCode.ts";
-import { EaCSurfaceAsCode, EaCSurfaceAsCodeSchema } from "./EaCSurfaceAsCode.ts";
-import { EaCSimulatorAsCode, EaCSimulatorAsCodeSchema } from "./EaCSimulatorAsCode.ts";
+import { EaCAgentAsCode, EaCAgentAsCodeSchema } from './EaCAgentAsCode.ts';
+import {
+  EaCDataConnectionAsCode,
+  EaCDataConnectionAsCodeSchema,
+} from './EaCDataConnectionAsCode.ts';
+import { EaCSchemaAsCode, EaCSchemaAsCodeSchema } from './EaCSchemaAsCode.ts';
+import { EaCSurfaceAsCode, EaCSurfaceAsCodeSchema } from './EaCSurfaceAsCode.ts';
+import { EaCSimulatorAsCode, EaCSimulatorAsCodeSchema } from './EaCSimulatorAsCode.ts';
 
 // Optional config types
 export type ImpulseOptions = {
@@ -14,10 +17,10 @@ export type ImpulseOptions = {
 };
 
 export type SignalOptions = {
-  Store?: "Memory" | "DFS" | "External";
+  Store?: 'Memory' | 'DFS' | 'External';
   RetentionSeconds?: number;
   PersistOnTrigger?: boolean;
-  DefaultSignalShape?: "event" | "proposal" | "patch";
+  DefaultSignalShape?: 'event' | 'proposal' | 'patch';
 };
 
 export type EverythingAsCodeOIWorkspace = {
@@ -56,11 +59,11 @@ export const EverythingAsCodeOIWorkspaceSchema = z.object({
         .optional(),
       Signals: z
         .object({
-          Store: z.enum(["Memory", "DFS", "External"]).optional(),
+          Store: z.enum(['Memory', 'DFS', 'External']).optional(),
           RetentionSeconds: z.number().optional(),
           PersistOnTrigger: z.boolean().optional(),
           DefaultSignalShape: z
-            .enum(["event", "proposal", "patch"])
+            .enum(['event', 'proposal', 'patch'])
             .optional(),
         })
         .optional(),

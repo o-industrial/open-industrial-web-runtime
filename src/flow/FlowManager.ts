@@ -1,13 +1,6 @@
-import {
-  Node,
-  Edge,
-  XYPosition,
-  Connection,
-  NodeChange,
-  EdgeChange,
-} from 'reactflow';
+import { Connection, Edge, EdgeChange, Node, NodeChange, XYPosition } from 'reactflow';
 import { FlowNodeData } from './FlowNodeData.ts';
-import { useMemo, useState, useCallback } from 'preact/hooks';
+import { useCallback, useState } from 'preact/hooks';
 import { GraphStateManager } from './GraphStateManager.ts';
 import { InteractionManager } from './InteractionManager.ts';
 import { PresetManager } from './PresetManager.ts';
@@ -28,7 +21,7 @@ export class FlowManager {
     this.Runtime = new InteractionManager(
       this.Graph,
       this.Selection,
-      this.Presets
+      this.Presets,
     );
   }
 
@@ -57,7 +50,7 @@ export class FlowManager {
         const result = this.Runtime.HandleDrop(event, current, toFlow);
         if (result) refresh();
       },
-      []
+      [],
     );
 
     const handleConnect = useCallback((params: Connection) => {

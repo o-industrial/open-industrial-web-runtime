@@ -1,4 +1,4 @@
-import { Position, NodeProps } from 'reactflow';
+import { NodeProps, Position } from 'reactflow';
 import { useMemo } from 'preact/hooks';
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
 import NodeHandle from '../../atoms/NodeHandle.tsx';
@@ -7,7 +7,6 @@ import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { FlowNodeData } from '../../../../src/flow/FlowNodeData.ts';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
-import { LineSparkSVG } from '../../atoms/LineSparkSVG.tsx';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 
 export type SurfaceStats = {
@@ -36,7 +35,7 @@ export default function SurfaceNodeRenderer({
   const lastSignalAt = stats.lastSignalAt ?? '—';
   const lastSignalAge = useMemo(
     () => parseLastSignalToSeconds(lastSignalAt),
-    [lastSignalAt]
+    [lastSignalAt],
   );
 
   const currentRate = impulseRates.at(-1);
@@ -48,14 +47,14 @@ export default function SurfaceNodeRenderer({
 
   return (
     <WorkspaceNodeRendererBase
-      iconKey="surface"
+      iconKey='surface'
       label={data.label}
       onDoubleClick={data.onDoubleClick}
       isSelected={data.isSelected}
       class={classes}
       preMain={
         <NodeHandle
-          type="target"
+          type='target'
           position={Position.Left}
           intentType={IntentTypes.Secondary}
         />
@@ -68,62 +67,61 @@ export default function SurfaceNodeRenderer({
       //   />
       // }
     >
-      <div class="w-full flex flex-col gap-2 items-center justify-center py-2 px-2">
+      <div class='w-full flex flex-col gap-2 items-center justify-center py-2 px-2'>
         {/* Rate Row */}
-        {impulseRates.length > 1 ? (
-          <LinePreviewWithValue
-            label="Rate"
-            values={impulseRates}
-            currentValue={currentRate}
-            intent={IntentTypes.Tertiary}
-            yMin={5}
-            yMax={20}
-          />
-        ) : (
-          <div class="text-sm text-gray-400 italic mb-2">No live rate data</div>
-        )}
+        {impulseRates.length > 1
+          ? (
+            <LinePreviewWithValue
+              label='Rate'
+              values={impulseRates}
+              currentValue={currentRate}
+              intent={IntentTypes.Tertiary}
+              yMin={5}
+              yMax={20}
+            />
+          )
+          : <div class='text-sm text-gray-400 italic mb-2'>No live rate data</div>}
 
         {/* Stat Trio */}
-        <div class="w-full flex justify-between mt-2 mb-2 gap-2">
+        <div class='w-full flex justify-between mt-2 mb-2 gap-2'>
           <NodeStatTile
-            label="Inputs"
+            label='Inputs'
             value={inputCount}
             intent={IntentTypes.Tertiary}
           />
           <NodeStatTile
-            label="Agents"
+            label='Agents'
             value={agentCount}
             intent={IntentTypes.Secondary}
           />
           <NodeStatTile
-            label="Last Signal"
+            label='Last Signal'
             value={lastSignalAt}
-            intent={
-              lastSignalAge > 60 ? IntentTypes.Error : IntentTypes.Primary
-            }
+            intent={lastSignalAge > 60 ? IntentTypes.Error : IntentTypes.Primary}
             animate={lastSignalAge > 60}
           />
         </div>
 
         {/* Footer Actions */}
-        <div class="flex justify-end gap-2 w-full mt-1 px-2">
+        <div class='flex justify-end gap-2 w-full mt-1 px-2'>
           <Action
-            title="Manage Surface"
+            title='Manage Surface'
             styleType={ActionStyleTypes.Icon}
             intentType={IntentTypes.Info}
             onClick={() => console.log('Open surface panel:', data.label)}
           >
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+            <svg class='w-4 h-4' viewBox='0 0 24 24' fill='none'>
               <path
-                d="M9 18V5l12-2v13"
-                stroke="currentColor"
-                stroke-width="2"
+                d='M9 18V5l12-2v13'
+                stroke='currentColor'
+                stroke-width='2'
               />
-              <path d="M3 6v13l12 2V8" stroke="currentColor" stroke-width="2" />
+              <path d='M3 6v13l12 2V8' stroke='currentColor' stroke-width='2' />
             </svg>
           </Action>
 
-          {/* <Action
+          {
+            /* <Action
             title="Test Signal"
             styleType={ActionStyleTypes.Icon}
             intentType={IntentTypes.Tertiary}
@@ -136,7 +134,8 @@ export default function SurfaceNodeRenderer({
                 stroke-width="2"
               />
             </svg>
-          </Action> */}
+          </Action> */
+          }
         </div>
       </div>
     </WorkspaceNodeRendererBase>

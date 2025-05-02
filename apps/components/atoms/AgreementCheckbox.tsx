@@ -22,14 +22,14 @@ export function AgreementCheckbox({
         [
           'flex items-center gap-2 cursor-pointer select-none text-sm text-neutral-600 dark:text-neutral-300',
         ],
-        props
+        props,
       )}
     >
       <input
-        type="checkbox"
+        type='checkbox'
         checked={checked}
         onChange={(e) => onCheckedChange(e.currentTarget.checked)}
-        class="h-4 w-4 rounded border-neutral-400 text-neon-violet-500 focus:ring-neon-violet-400"
+        class='h-4 w-4 rounded border-neutral-400 text-neon-violet-500 focus:ring-neon-violet-400'
       />
       {label}
     </label>
