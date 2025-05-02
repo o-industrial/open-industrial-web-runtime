@@ -34,6 +34,8 @@ export class FlowManager {
       setEdges([...this.Graph.GetEdges()]);
     };
 
+    this.Runtime.SetRefreshHandler(refresh);
+
     const onNodesChange = useCallback((changes: NodeChange[]) => {
       this.Graph.ApplyNodeChanges(changes);
       refresh();
@@ -78,6 +80,7 @@ export class FlowManager {
       handleDrop,
       handleConnect,
       handleNodeClick,
+      refresh,
     };
   }
 }

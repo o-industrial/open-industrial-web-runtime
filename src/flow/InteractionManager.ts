@@ -3,18 +3,21 @@ import { GraphStateManager } from './GraphStateManager.ts';
 import { SelectionManager } from './SelectionManager.ts';
 import { PresetManager } from './PresetManager.ts';
 import { FlowNodeData } from './FlowNodeData.ts';
+import { StatManager } from './StatManager.ts';
 
 export class InteractionManager {
+  private refreshCallback: (() => void) | null = null;
+
   constructor(
     private graph: GraphStateManager,
     private selection: SelectionManager,
-    private presets: PresetManager,
+    private presets: PresetManager
   ) {}
 
-  HandleDrop(
+  public HandleDrop(
     event: DragEvent,
     nodes: Node<FlowNodeData>[],
-    screenToFlowPosition: (p: XYPosition) => XYPosition,
+    screenToFlowPosition: (p: XYPosition) => XYPosition
   ): { newNode: Node<FlowNodeData>; selectedId: string } | null {
     event.preventDefault();
 
@@ -48,23 +51,32 @@ export class InteractionManager {
     const id = `${type}-${Date.now()}`;
     const relativePosition = surfaceParent
       ? {
-        x: position.x - (surfaceParent.position.x ?? 0),
-        y: position.y - (surfaceParent.position.y ?? 0),
-      }
+          x: position.x - (surfaceParent.position.x ?? 0),
+          y: position.y - (surfaceParent.position.y ?? 0),
+        }
       : position;
 
     const preset = this.presets.GetPreset(type)!;
+
+    const stats = new StatManager();
+
+    const enriched = stats.Enrich(type, {
+      type: preset.Type,
+      label: preset.Label,
+      iconKey: preset.IconKey,
+      isSelected: false,
+      childNodeIds: [],
+      onDoubleClick: () => {
+        this.selection.SelectNode(id);
+        this.refreshCallback?.();
+      },
+    });
+
     const newNode: Node<FlowNodeData> = {
       id,
       type: preset.Type,
       position: relativePosition,
-      data: {
-        type: preset.Type,
-        label: preset.Label,
-        iconKey: preset.IconKey,
-        isSelected: false,
-        childNodeIds: [],
-      },
+      data: enriched,
       ...(surfaceParent && {
         parentId: surfaceParent.id,
         extent: 'parent',
@@ -77,7 +89,7 @@ export class InteractionManager {
     return { newNode, selectedId: id };
   }
 
-  ConnectNodes(source: string, target: string): void {
+  public ConnectNodes(source: string, target: string): void {
     const edgeId = `e-${source}-${target}`;
     if (!this.graph.HasEdge(edgeId)) {
       const edge: Edge = {
@@ -87,5 +99,9 @@ export class InteractionManager {
       };
       this.graph.AddEdge(edge);
     }
+  }
+
+  public SetRefreshHandler(refresh: () => void) {
+    this.refreshCallback = refresh;
   }
 }
