@@ -36,6 +36,7 @@
     "@fathym/eac-dfs": "jsr:@fathym/eac-dfs@0",
     "@fathym/eac-identity": "jsr:@fathym/eac-identity@0.0.14",
     "@fathym/ioc": "jsr:@fathym/ioc@0",
+    "json-schema": "npm:json-schema@0.4.0",
     "@o-industrial/common/api": "../open-industrial-reference-architecture/src/api/.exports.ts",
     "@o-industrial/common/sop": "../open-industrial-reference-architecture/src/sop/.exports.ts",
     "pdfjs-dist": "npm:pdfjs-dist@5.2.133",
@@ -53,7 +54,8 @@
     "tailwindcss/plugin": "npm:/tailwindcss@3.4.1/plugin.js",
     "tailwind-scrollbar": "npm:tailwind-scrollbar@4.0.2",
     "@tailwindcss/typography": "npm:@tailwindcss/typography@0.5.16",
-    "tailwindcss/unimportant": "npm:tailwindcss-unimportant@2.1.1"
+    "tailwindcss/unimportant": "npm:tailwindcss-unimportant@2.1.1",
+    "zod": "npm:zod@3.23.8"
   },
   "exclude": [
     "**/_eac-runtime/*",
