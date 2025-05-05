@@ -1,5 +1,5 @@
 import { Node } from 'reactflow';
-import { FlowNodeData } from './FlowNodeData.ts';
+import { FlowNodeData } from '../types/react/FlowNodeData.ts';
 
 type SelectionChangedCallback = () => void;
 

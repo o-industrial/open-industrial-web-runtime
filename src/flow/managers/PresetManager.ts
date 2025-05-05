@@ -1,11 +1,14 @@
-import { NodeScopeTypes } from './FlowManager.ts';
-import { NodePreset } from './NodePreset.ts';
-import AgentNodeRenderer from '../../apps/components/organisms/renderers/AgentNodeRenderer.tsx';
-import ConnectionNodeRenderer from '../../apps/components/organisms/renderers/ConnectionNodeRenderer.tsx';
-import DeviceNodeRenderer from '../../apps/components/organisms/renderers/DeviceNodeRenderer.tsx';
-import EmptyNodeRenderer from '../../apps/components/organisms/renderers/EmptyNodeRenderer.tsx';
-import SchemaNodeRenderer from '../../apps/components/organisms/renderers/SchemaNodeRenderer.tsx';
-import SurfaceNodeRenderer from '../../apps/components/organisms/renderers/SurfaceNodeRenderer.tsx';
+import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
+import { NodePreset } from '../types/react/NodePreset.ts';
+
+import AgentNodeRenderer from '../../../apps/components/organisms/renderers/AgentNodeRenderer.tsx';
+import ConnectionNodeRenderer from '../../../apps/components/organisms/renderers/ConnectionNodeRenderer.tsx';
+import DeviceNodeRenderer from '../../../apps/components/organisms/renderers/DeviceNodeRenderer.tsx';
+import EmptyNodeRenderer from '../../../apps/components/organisms/renderers/EmptyNodeRenderer.tsx';
+import SchemaNodeRenderer from '../../../apps/components/organisms/renderers/SchemaNodeRenderer.tsx';
+import SurfaceNodeRenderer from '../../../apps/components/organisms/renderers/SurfaceNodeRenderer.tsx';
+// import SimulatorNodeRenderer from '../../../apps/components/organisms/renderers/SimulatorNodeRenderer.tsx';
+
 import { memo } from 'preact/compat';
 
 export class PresetManager {
@@ -16,6 +19,7 @@ export class PresetManager {
     surface: { Type: 'surface', Label: 'Surface', IconKey: 'surface' },
     device: { Type: 'device', Label: 'Device', IconKey: 'device' },
     agent: { Type: 'agent', Label: 'Agent', IconKey: 'agent' },
+    simulator: { Type: 'simulator', Label: 'Simulator', IconKey: 'simulator' },
   };
 
   private static nodeTypes = {
@@ -25,14 +29,16 @@ export class PresetManager {
     empty: memo(EmptyNodeRenderer),
     schema: memo(SchemaNodeRenderer),
     surface: memo(SurfaceNodeRenderer),
+    simulator: memo(EmptyNodeRenderer),
   };
 
   private static scopeMap: Record<string, NodeScopeTypes[]> = {
     agent: ['surface'],
     connection: ['workspace'],
-    device: ['surface'],
+    device: [], // surface later?
     schema: ['surface'],
-    surface: ['workspace'],
+    surface: ['surface', 'workspace'],
+    simulator: ['workspace'],
     empty: [],
   };
 

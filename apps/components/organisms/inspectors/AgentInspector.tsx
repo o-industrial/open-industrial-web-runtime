@@ -1,22 +1,34 @@
-import { Node } from 'reactflow';
 import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 import { InspectorBase } from './InspectorBase.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { InspectorCommonProps } from '../InspectorPanel.tsx';
+import { AgentNodeData } from '../renderers/AgentNodeRenderer.tsx';
 
-export function AgentInspector({ node }: { node: Node }) {
-  const stats = useLiveStats(node.data.stats, node.data.getStats);
+type AgentInspectorProps = InspectorCommonProps<AgentNodeData>;
+
+export function AgentInspector({
+  settings,
+  onSettingsChanged,
+}: AgentInspectorProps) {
+  const stats = useLiveStats(settings.stats, settings.getStats);
 
   return (
-    <InspectorBase iconKey='agent' label='Agent Node'>
+    <InspectorBase
+      iconKey="agent"
+      label={settings.label ?? 'Agent Node'}
+      enabled={settings.enabled}
+      onToggleEnabled={(val) => onSettingsChanged({ enabled: val })}
+      onDelete={() => console.log('TODO: Delete agent node')}
+    >
       <LinePreviewWithValue
-        label='Impulse Rate'
+        label="Impulse Rate"
         values={stats.impulseRates ?? []}
         intent={IntentTypes.Tertiary}
       />
-      <NodeStatTile label='Matches' value={stats.matchesHandled} />
-      <NodeStatTile label='Avg Latency' value={`${stats.avgLatencyMs}ms`} />
+      <NodeStatTile label="Matches" value={stats.matchesHandled || 0} />
+      <NodeStatTile label="Avg Latency" value={`${stats.avgLatencyMs}ms`} />
     </InspectorBase>
   );
 }

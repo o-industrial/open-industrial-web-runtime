@@ -3,7 +3,7 @@ import scrollbar from 'tailwind-scrollbar';
 import typography from '@tailwindcss/typography';
 import unimportant from 'tailwindcss/unimportant';
 
-const neonColors = {
+export const neonColors = {
   'neon-violet': {
     50: '#FAE8FF',
     100: '#F5D0FE',

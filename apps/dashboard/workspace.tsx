@@ -1,4 +1,5 @@
 import { useMemo, useEffect, useState } from 'preact/hooks';
+import { EverythingAsCode } from '@fathym/eac';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
 
@@ -9,14 +10,15 @@ import InspectorPanel from '../components/organisms/InspectorPanel.tsx';
 import AziPanel from '../components/organisms/AziPanel.tsx';
 import StreamPanel from '../components/organisms/StreamPanel.tsx';
 import TimelinePanel from '../components/organisms/TimelinePanel.tsx';
-import { FlowManager } from '../../src/flow/FlowManager.ts';
-import { FlowNodeData } from '../../src/flow/FlowNodeData.ts';
-import { Node } from 'reactflow';
+import { FlowManager } from '../../src/flow/managers/FlowManager.ts';
+import { SimulatorLibraryModal } from '../components/organisms/SimulatorLibraryModal.tsx';
+import { OpenIndustrialEaC } from '../../src/types/OpenIndustrialEaC.ts';
+import { SimulatedOIEaC } from '../../src/utils/SimulatedOIEaC.ts';
 
 export const IsIsland = true;
 
 type WorkspacePageData = {
-  workspaceName?: string;
+  EaC: OpenIndustrialEaC;
 };
 
 export const handler: EaCRuntimeHandlerSet<
@@ -25,46 +27,57 @@ export const handler: EaCRuntimeHandlerSet<
 > = {
   GET: (_req, ctx) => {
     return ctx.Render({
-      workspaceName: 'hello-azi',
+      EaC: SimulatedOIEaC,
     });
   },
 };
 
-export default function WorkspacePage({}: PageProps<WorkspacePageData>) {
+export default function WorkspacePage({
+  Data: { EaC },
+}: PageProps<WorkspacePageData>) {
   const flowMgr = useMemo(() => new FlowManager('workspace'), []);
 
-  const [selectedNode, setSelectedNode] = useState<Node<FlowNodeData> | null>(
-    flowMgr.Selection.GetSelectedNodes(flowMgr.Graph.GetNodes())[0] ?? null
-  );
+  const [showMarketplace, setShowMarketplace] = useState(false);
 
   useEffect(() => {
-    const update = () => {
-      const node = flowMgr.Selection.GetSelectedNodes(flowMgr.Graph.GetNodes())[0] ?? null;
-      setSelectedNode(node);
-    };
+    if (EaC) {
+      flowMgr.EaC.LoadFrom(EaC);
+    }
+  }, [EaC]);
 
-    flowMgr.Selection.OnSelectionChanged(update);
-    return () => flowMgr.Selection.OffSelectionChanged(update);
-  }, [flowMgr]);
+  const modals = (
+    <>
+      {showMarketplace && (
+        <SimulatorLibraryModal
+          SimMgr={flowMgr.Simulators}
+          onClose={() => setShowMarketplace(false)}
+          onInstall={(sims) => {
+            console.log('✅ Installed simulators:', sims);
+            setShowMarketplace(false);
+          }}
+        />
+      )}
+    </>
+  );
 
   return (
     <RuntimeWorkspaceDashboardTemplate
-      azi={<AziPanel />}
+      azi={<AziPanel flowMgr={flowMgr} />}
       breadcrumb={
         <div class="-:w-full -:text-xs -:text-neutral-400 -:bg-neutral-900 -:tracking-wide -:font-light -:px-4 -:pt-1.5 -:pb-1">
-          hello-azi (Workspace) / <span class="-:text-white">Management</span>
+          {EaC.Details?.Name} (Workspace) /{' '}
+          <span class="-:text-white">Management</span>
         </div>
       }
-      inspector={
-        <InspectorPanel
-          selectedNode={selectedNode}
-          onClose={() => flowMgr.Selection.ClearSelection()}
-        />
-      }
+      inspector={<InspectorPanel flowMgr={flowMgr} />}
       stream={<StreamPanel />}
       timeline={<TimelinePanel />}
+      modals={modals}
     >
-      <FlowPanel flowMgr={flowMgr} />
+      <FlowPanel
+        flowMgr={flowMgr}
+        onShowSimulatorLibrary={() => setShowMarketplace(true)}
+      />
     </RuntimeWorkspaceDashboardTemplate>
   );
 }

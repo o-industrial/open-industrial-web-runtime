@@ -6,14 +6,8 @@ import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { TriggerMatchIcon } from '../../../../build/iconset/icons/TriggerMatchIcon.tsx';
 import { DeleteIcon } from '../../../../build/iconset/icons/DeleteIcon.tsx';
 import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
-import { FlowNodeData } from '../../../../src/flow/FlowNodeData.ts';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
-
-type ConnectionStats = {
-  impulseRates?: number[];
-};
-
-export type ConnectionNodeData = FlowNodeData<ConnectionStats>;
+import { ConnectionNodeData } from '../../../../src/flow/types/ConnectionNodeData.tsx';
 
 export default function ConnectionNodeRenderer({
   data,
@@ -46,18 +40,18 @@ export default function ConnectionNodeRenderer({
     >
       <div class='w-full flex flex-col items-center justify-center py-2 px-2'>
         {/* Rate Line + Stat */}
-        {impulses.length > 1
-          ? (
-            <LinePreviewWithValue
-              label='Rate'
-              values={impulses}
-              currentValue={latest}
-              intent={IntentTypes.Warning}
-              yMin={15}
-              yMax={30}
-            />
-          )
-          : <div class='text-sm text-gray-400 italic mb-2'>No live rate data</div>}
+        {impulses.length > 1 ? (
+          <LinePreviewWithValue
+            label='Rate'
+            values={impulses}
+            currentValue={latest}
+            intent={IntentTypes.Warning}
+            yMin={15}
+            yMax={30}
+          />
+        ) : (
+          <div class='text-sm text-gray-400 italic mb-2'>No live rate data</div>
+        )}
 
         {/* Footer Actions */}
         <div class='flex justify-end gap-2 w-full mt-1 px-2'>

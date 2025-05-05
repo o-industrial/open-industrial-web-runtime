@@ -1,17 +1,11 @@
-import { Node } from 'reactflow';
-import { useState } from 'preact/hooks';
 import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
-import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
-import { Input } from '../../atoms/forms/Input.tsx';
-import { SummaryRowWithAction } from '../../molecules/SummaryRowWithAction.tsx';
 import { InspectorBase } from './InspectorBase.tsx';
-import { MultiSelectCheckboxGroup } from '../../molecules/MultiSelectCheckboxGroup.tsx';
 import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
-import { SimulatorLibraryModal } from '../simulators/SimulatorLibraryModal.tsx';
-import { CheckboxRow } from '../../atoms/forms/CheckboxRow.tsx';
+import { ConnectionManagementForm } from '../../molecules/ConnectionManagementForm.tsx';
+import { ConnectionNodeData } from '../../../../src/flow/types/ConnectionNodeData.tsx';
+import { InspectorCommonProps } from '../InspectorPanel.tsx';
 
-const CONNECTION_DETAILS: Record<
+export const CONNECTION_DETAILS: Record<
   string,
   { name: string; description: string; details: Record<string, string> }
 > = {
@@ -71,105 +65,28 @@ const CONNECTION_DETAILS: Record<
   },
 };
 
-export function ConnectionManagementForm({
-  label,
-  setLabel,
-  connectionTypes,
-  setConnectionTypes,
-  onSave,
-}: {
-  label: string;
-  setLabel: (val: string) => void;
-  connectionTypes: string[];
-  setConnectionTypes: (types: string[]) => void;
-  onSave: () => void;
-}) {
-  const [showMarketplace, setShowMarketplace] = useState(false);
+export function ConnectionInfoPanel({ types }: { types: string[]; }) {
+  const enabled = types.map((key) => CONNECTION_DETAILS[key]).filter(Boolean);
 
-  const CONNECTION_TYPES = [
-    { label: 'IoT Hub', value: 'iothub', enabled: true },
-    { label: 'REST', value: 'rest', enabled: true },
-    { label: 'MQTT', value: 'mqtt', enabled: false },
-    { label: 'OPC UA', value: 'opcua', enabled: false },
-    { label: 'MODBus', value: 'modbus', enabled: false },
-    { label: 'EtherLink', value: 'etherlink', enabled: false },
-  ];
-
-  const simulator: { label: string } | undefined = undefined;
-
-  return (
-    <div class='space-y-3 pt-2'>
-      <Input label='Connection Label' value={label} onInput={setLabel} />
-
-      <MultiSelectCheckboxGroup
-        label='Connection Types'
-        options={CONNECTION_TYPES}
-        selected={connectionTypes}
-        onChange={setConnectionTypes}
-      />
-
-      <SummaryRowWithAction
-        label={simulator?.label ?? 'Select a simulator...'}
-        actionLabel={simulator ? 'Change' : 'Browse'}
-        onActionClick={() => setShowMarketplace(true)}
-        intentType={IntentTypes.Info}
-      />
-
-      {showMarketplace && (
-        <>
-          <SimulatorLibraryModal
-            onClose={() => setShowMarketplace(false)}
-            onInstall={(_simId) => setShowMarketplace(false)}
-          />
-
-          <CheckboxRow
-            label='Enable Sim'
-            checked={false}
-            disabled={false}
-            onToggle={(_next) => {}}
-          />
-        </>
-      )}
-
-      <Action
-        class='text-sm'
-        styleType={ActionStyleTypes.Solid | ActionStyleTypes.Thin}
-        intentType={IntentTypes.Primary}
-        onClick={onSave}
-      >
-        Save Changes
-      </Action>
-    </div>
-  );
-}
-
-export function ConnectionInfoPanel({ types }: { types: string[] }) {
-  const enabledInfo = types
-    .map((key) => CONNECTION_DETAILS[key])
-    .filter(Boolean);
-
-  if (!enabledInfo.length) {
+  if (!enabled.length) {
     return (
-      <p class='text-sm text-neutral-400 italic'>
+      <p class="text-sm text-neutral-400 italic">
         No connection types enabled.
       </p>
     );
   }
 
   return (
-    <div class='space-y-6'>
-      {enabledInfo.map((info) => (
-        <div
-          key={info.name}
-          class='bg-neutral-800 border border-neutral-700 rounded p-4'
-        >
-          <h4 class='text-sm font-semibold text-white mb-1'>{info.name}</h4>
-          <p class='text-xs text-neutral-400 mb-2'>{info.description}</p>
-          <ul class='text-xs text-neutral-300 space-y-1'>
+    <div class="space-y-6">
+      {enabled.map((info) => (
+        <div key={info.name} class="bg-neutral-800 border border-neutral-700 rounded p-4">
+          <h4 class="text-sm font-semibold text-white mb-1">{info.name}</h4>
+          <p class="text-xs text-neutral-400 mb-2">{info.description}</p>
+          <ul class="text-xs text-neutral-300 space-y-1">
             {Object.entries(info.details).map(([key, val]) => (
-              <li key={key} class='flex justify-between'>
-                <span class='text-neutral-400'>{key}</span>
-                <span class='font-mono'>{val}</span>
+              <li key={key} class="flex justify-between">
+                <span class="text-neutral-400">{key}</span>
+                <span class="font-mono">{val}</span>
               </li>
             ))}
           </ul>
@@ -179,62 +96,50 @@ export function ConnectionInfoPanel({ types }: { types: string[] }) {
   );
 }
 
-export function ConnectionInspector({ node }: { node: Node }) {
-  const stats = useLiveStats(node.data.stats, node.data.getStats);
+type ConnectionInspectorProps = InspectorCommonProps<ConnectionNodeData>;
+
+export function ConnectionInspector({
+  settings,
+  onSettingsChanged,
+}: ConnectionInspectorProps) {
+  const stats = useLiveStats(settings.stats, settings.getStats);
   const impulseRates = stats.impulseRates ?? [];
-  const _currentRate = impulseRates.at(-1) ?? null;
-
-  const [label, setLabel] = useState(node.data.label ?? '');
-  const [enabled, setEnabled] = useState(node.data.enabled ?? true);
-  const [connectionTypes, setConnectionTypes] = useState<string[]>(
-    node.data.connectionTypes ?? ['iothub'],
-  );
-
-  const handleSave = () => {
-    node.data.label = label;
-    node.data.enabled = enabled;
-    node.data.connectionTypes = connectionTypes;
-    console.log('Updated node:', node);
-  };
 
   return (
     <InspectorBase
-      iconKey='connection'
-      label={label}
-      enabled={enabled}
+      iconKey="connection"
+      label={settings.label}
+      enabled={settings.enabled}
       impulseRates={impulseRates}
-      onToggleEnabled={setEnabled}
-      onDelete={() => console.log('Delete node')}
+      onToggleEnabled={(enabled) => onSettingsChanged({ enabled })}
+      onDelete={() => console.log('🗑️ Delete connection node')}
     >
       <TabbedPanel
-        initialTab='settings'
-        // scrollableContent
-        // stickyTabs
-        class='mt-2'
+        initialTab="settings"
+        class="mt-2"
         tabs={[
           {
             key: 'settings',
             label: 'Settings',
             content: (
               <ConnectionManagementForm
-                label={label}
-                setLabel={setLabel}
-                connectionTypes={connectionTypes}
-                setConnectionTypes={setConnectionTypes}
-                onSave={handleSave}
+                initial={settings}
+                onSave={onSettingsChanged}
               />
             ),
           },
           {
             key: 'connection',
             label: 'Connection Info',
-            content: <ConnectionInfoPanel types={connectionTypes} />,
+            content: (
+              <ConnectionInfoPanel types={settings.connectionTypes ?? []} />
+            ),
           },
           {
             key: 'analytics',
             label: 'Analytics',
             content: (
-              <p class='text-sm text-neutral-300'>
+              <p class="text-sm text-neutral-300">
                 📈 Connection analytics will appear here.
               </p>
             ),
@@ -243,7 +148,7 @@ export function ConnectionInspector({ node }: { node: Node }) {
             key: 'stream',
             label: 'Impulse Stream',
             content: (
-              <p class='text-sm text-neutral-300'>
+              <p class="text-sm text-neutral-300">
                 📡 Live impulse logs and stream filtering.
               </p>
             ),

@@ -1,5 +1,14 @@
+import { z } from 'zod';
+
 import { EaCDetails, EaCDetailsSchema } from '@fathym/eac';
-import { EaCSimulatorDetails, EaCSimulatorDetailsSchema } from './EaCSimulatorDetails.ts';
+import {
+  EaCSimulatorDetails,
+  EaCSimulatorDetailsSchema,
+} from './EaCSimulatorDetails.ts';
+import {
+  EaCFlowNodeMetadata,
+  EaCFlowNodeMetadataSchema,
+} from './EaCFlowNodeMetadata.ts';
 
 /**
  * Represents a deployed simulator instance within an Everything as Code (EaC) workspace.
@@ -8,29 +17,32 @@ import { EaCSimulatorDetails, EaCSimulatorDetailsSchema } from './EaCSimulatorDe
  * configure and persist simulator runtime context, which may be referenced by
  * DataConnections via `SimulatorLookup`.
  */
-export type EaCSimulatorAsCode = EaCDetails<EaCSimulatorDetails>;
+export type EaCSimulatorAsCode = EaCDetails<EaCSimulatorDetails> & {
+  /** Canvas metadata for simulator layout and activation state. */
+  Metadata?: EaCFlowNodeMetadata;
+};
 
 /**
- * Schema for EaCSimulatorAsCode.
+ * Zod schema for EaCSimulatorAsCode.
  */
-export const EaCSimulatorAsCodeSchema = EaCDetailsSchema.extend({
-  Details: EaCSimulatorDetailsSchema.optional(),
-});
+export const EaCSimulatorAsCodeSchema: z.ZodType<EaCSimulatorAsCode> =
+  EaCDetailsSchema.extend({
+    Details: EaCSimulatorDetailsSchema.optional(),
+    Metadata: EaCFlowNodeMetadataSchema.optional(),
+  }).describe(
+    'Schema for a simulator node with canvas metadata and runtime config.'
+  );
 
 /**
  * Type guard for EaCSimulatorAsCode.
  */
-export function isEaCSimulatorAsCode(
-  sim: unknown,
-): sim is EaCSimulatorAsCode {
+export function isEaCSimulatorAsCode(sim: unknown): sim is EaCSimulatorAsCode {
   return EaCSimulatorAsCodeSchema.safeParse(sim).success;
 }
 
 /**
- * Validates and parses an object as EaCSimulatorAsCode.
+ * Parses and validates an object as EaCSimulatorAsCode.
  */
-export function parseEaCSimulatorAsCode(
-  sim: unknown,
-): EaCSimulatorAsCode {
+export function parseEaCSimulatorAsCode(sim: unknown): EaCSimulatorAsCode {
   return EaCSimulatorAsCodeSchema.parse(sim);
 }

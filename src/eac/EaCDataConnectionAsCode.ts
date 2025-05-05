@@ -1,9 +1,14 @@
+import { z } from 'zod';
+
 import { EaCDetails, EaCDetailsSchema } from '@fathym/eac';
-import z from 'zod';
 import {
   EaCDataConnectionDetails,
   EaCDataConnectionDetailsSchema,
 } from './EaCDataConnectionDetails.ts';
+import {
+  EaCFlowNodeMetadata,
+  EaCFlowNodeMetadataSchema,
+} from './EaCFlowNodeMetadata.ts';
 
 /**
  * Represents an Everything as Code (EaC) Data Connection.
@@ -14,15 +19,23 @@ import {
 export type EaCDataConnectionAsCode = EaCDetails<EaCDataConnectionDetails> & {
   /** Optional lookup key for associating this connection with a simulator instance. */
   SimulatorLookup?: string;
+
+  /** Flow metadata used for canvas placement and enablement tracking. */
+  Metadata?: EaCFlowNodeMetadata;
 };
 
 /**
- * Schema for EaCDataConnectionAsCode.
+ * Schema for EaCDataConnectionAsCode — includes structural, runtime, and canvas metadata.
  */
-export const EaCDataConnectionAsCodeSchema = EaCDetailsSchema.extend({
-  Details: EaCDataConnectionDetailsSchema.optional(),
-  SimulatorLookup: z.string().optional().describe('Optional lookup key for associated simulator.'),
-});
+export const EaCDataConnectionAsCodeSchema: z.ZodType<EaCDataConnectionAsCode> =
+  EaCDetailsSchema.extend({
+    Details: EaCDataConnectionDetailsSchema.optional(),
+    SimulatorLookup: z
+      .string()
+      .optional()
+      .describe('Optional lookup key for associated simulator.'),
+    Metadata: EaCFlowNodeMetadataSchema.optional(),
+  }).describe('Schema for a reusable data connection definition with simulator and layout metadata.');
 
 /**
  * Type guard for EaCDataConnectionAsCode.

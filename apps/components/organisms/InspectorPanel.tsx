@@ -1,51 +1,82 @@
-import { Node } from 'reactflow';
-import { FlowNodeData } from '../../../src/flow/FlowNodeData.ts';
+import { FlowManager } from '../../../src/flow/managers/FlowManager.ts';
 import InspectorPanelTemplate from '../templates/InspectorPanelTemplate.tsx';
 
 import { AgentInspector } from './inspectors/AgentInspector.tsx';
 import { ConnectionInspector } from './inspectors/ConnectionInspector.tsx';
 import { SurfaceInspector } from './inspectors/SurfaceInspector.tsx';
+import { useEffect, useState } from 'preact/hooks';
+import { FlowNodeData } from '../../../src/flow/types/react/FlowNodeData.ts';
+
+type NodeSettings = Partial<FlowNodeData>;
 
 type InspectorPanelProps = {
-  selectedNode: Node<FlowNodeData> | null;
-  onClose?: () => void;
+  flowMgr: FlowManager;
 };
 
-export default function InspectorPanel({
-  selectedNode,
-  onClose,
-}: InspectorPanelProps) {
-  let inspectorContent = null;
+export type InspectorCommonProps<T extends FlowNodeData = FlowNodeData> = {
+  settings: Partial<T>;
+  onSettingsChanged: (next: Partial<T>) => void;
+  onSave?: () => void;
+};
 
-  if (selectedNode) {
-    switch (selectedNode.type) {
+export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
+  const { selected } = flowMgr.UseSelection();
+
+  const [settings, setSettings] = useState<NodeSettings>({});
+
+  useEffect(() => {
+    if (selected) setSettings({ ...selected.data });
+  }, [selected]);
+
+  const handleSettingsChanged = (next: NodeSettings) => {
+    setSettings((prev) => ({ ...prev, ...next }));
+  };
+
+  const handleSave = () => {
+    if (selected) {
+      selected.data = { ...selected.data, ...settings };
+      console.log('Updated node:', selected);
+    }
+  };
+
+  const handleClose = () => {
+    flowMgr.Selection.ClearSelection();
+  };
+
+  const renderInspector = () => {
+    if (!selected) {
+      return (
+        <div class="text-neutral-500 text-xs italic">
+          No node selected. Double click a node to inspect.
+        </div>
+      );
+    }
+
+    const commonProps: InspectorCommonProps = {
+      settings,
+      onSettingsChanged: handleSettingsChanged,
+      onSave: handleSave,
+    };
+
+    switch (selected.type) {
       case 'agent':
-        inspectorContent = <AgentInspector node={selectedNode} />;
-        break;
+        return <AgentInspector {...commonProps} />;
       case 'connection':
-        inspectorContent = <ConnectionInspector node={selectedNode} />;
-        break;
+        return <ConnectionInspector {...commonProps} />;
       case 'surface':
-        inspectorContent = <SurfaceInspector node={selectedNode} />;
-        break;
+        return <SurfaceInspector {...commonProps} />;
       default:
-        inspectorContent = (
-          <div class='text-neutral-500 text-xs italic'>
-            No inspector available for <strong>{selectedNode.type}</strong>.
+        return (
+          <div class="text-neutral-500 text-xs italic">
+            No inspector available for <strong>{selected.type}</strong>.
           </div>
         );
     }
-  } else {
-    inspectorContent = (
-      <div class='text-neutral-500 text-xs italic'>
-        No node selected. Double click a node to inspect.
-      </div>
-    );
-  }
+  };
 
   return (
-    <InspectorPanelTemplate onClose={onClose}>
-      {inspectorContent}
+    <InspectorPanelTemplate onClose={handleClose}>
+      {renderInspector()}
     </InspectorPanelTemplate>
   );
 }

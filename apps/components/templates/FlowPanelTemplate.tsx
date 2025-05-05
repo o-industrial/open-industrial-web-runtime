@@ -1,16 +1,11 @@
-/**
- * FlowPanelTemplate
- *
- * Full-canvas layout with overlayed bank.
- * Ensures React Flow canvas receives input,
- * and overlay (bank) does not block interactivity.
- */
 export default function FlowPanelTemplate({
   bank,
   canvas,
+  systemControls,
 }: {
   bank?: preact.ComponentChildren;
   canvas?: preact.ComponentChildren;
+  systemControls?: preact.ComponentChildren;
 }) {
   return (
     <div class='relative w-full h-full flex-grow bg-neutral-950 overflow-hidden'>
@@ -26,6 +21,13 @@ export default function FlowPanelTemplate({
           {bank}
         </div>
       </div>
+
+      {/* Bottom-left System Controls */}
+      {systemControls && (
+        <div class='absolute bottom-4 left-4 z-10 pointer-events-none'>
+          <div class='pointer-events-auto'>{systemControls}</div>
+        </div>
+      )}
     </div>
   );
 }

@@ -5,7 +5,7 @@ import NodeHandle from '../../atoms/NodeHandle.tsx';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
-import { FlowNodeData } from '../../../../src/flow/FlowNodeData.ts';
+import { FlowNodeData } from '../../../../src/flow/types/react/FlowNodeData.ts';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 

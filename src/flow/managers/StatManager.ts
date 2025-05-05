@@ -1,4 +1,4 @@
-import { FlowNodeData } from './FlowNodeData.ts';
+import { FlowNodeData } from '../types/react/FlowNodeData.ts';
 
 export class StatManager {
   public Enrich(type: string, base: FlowNodeData): FlowNodeData {
@@ -8,6 +8,7 @@ export class StatManager {
       case 'device': return this.BuildDevice(base);
       case 'schema': return this.BuildSchema(base);
       case 'surface': return this.BuildSurface(base);
+      case 'simulator': return this.BuildSimulator(base);
       case 'empty':
       default: return this.BuildEmpty(base);
     }
@@ -53,6 +54,28 @@ export class StatManager {
         buffer.push(next);
         if (buffer.length > 20) buffer.shift();
         return { impulseRates: [...buffer] };
+      },
+    };
+  }
+
+  private BuildSimulator(base: FlowNodeData): FlowNodeData {
+    const buffer = this.BuildBuffer(15, 8);
+    return {
+      ...base,
+      stats: {
+        impulseRates: [...buffer],
+        devicesSimulated: Math.floor(Math.random() * 10) + 1,
+        messageRatePerDevice: Number((Math.random() * 2 + 1).toFixed(2)),
+      },
+      getStats: async () => {
+        const next = Number((15 + Math.random() * 8).toFixed(2));
+        buffer.push(next);
+        if (buffer.length > 20) buffer.shift();
+        return {
+          impulseRates: [...buffer],
+          devicesSimulated: Math.floor(Math.random() * 10) + 1,
+          messageRatePerDevice: Number((Math.random() * 2 + 1).toFixed(2)),
+        };
       },
     };
   }

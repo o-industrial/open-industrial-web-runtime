@@ -2,7 +2,10 @@ import { EaCAtomicIconsProcessor } from '@fathym/atomic-icons';
 import { FathymAtomicIconsPlugin } from '@fathym/atomic-icons/plugin';
 import { DefaultMyCoreProcessorHandlerResolver } from './DefaultMyCoreProcessorHandlerResolver.ts';
 import { IoCContainer } from '@fathym/ioc';
-import { EaCRuntimeConfig, EaCRuntimePluginConfig } from '@fathym/eac/runtime/config';
+import {
+  EaCRuntimeConfig,
+  EaCRuntimePluginConfig,
+} from '@fathym/eac/runtime/config';
 import { EaCRuntimePlugin } from '@fathym/eac/runtime/plugins';
 import { EverythingAsCode } from '@fathym/eac';
 import { EverythingAsCodeApplications } from '@fathym/eac-applications';
@@ -121,9 +124,15 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               CacheControl: {
                 'text\\/html': `private, max-age=${60 * 5}`,
                 'image\\/': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/javascript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/typescript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'application\\/javascript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'application\\/typescript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'text\\/css': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
               },
             } as EaCDFSProcessor,
           },
@@ -140,22 +149,39 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                   IconMap: {
                     agent: 'https://api.iconify.design/mdi:robot-outline.svg',
                     close: 'https://api.iconify.design/lucide:x.svg',
-                    compositeSchema: 'https://api.iconify.design/lucide:layers.svg',
-                    connection: 'https://api.iconify.design/mdi:link-variant.svg',
+                    compositeSchema:
+                      'https://api.iconify.design/lucide:layers.svg',
+                    connection:
+                      'https://api.iconify.design/mdi:link-variant.svg',
                     delete: 'https://api.iconify.design/lucide:trash-2.svg',
                     device: 'https://api.iconify.design/mdi:chip.svg',
                     empty: 'https://api.iconify.design/lucide:square.svg',
-                    expand: 'https://api.iconify.design/lucide:arrow-left-from-line.svg',
+                    expand:
+                      'https://api.iconify.design/lucide:arrow-left-from-line.svg',
+                    fitView: 'https://api.iconify.design/lucide:maximize.svg',
                     impulse: 'https://api.iconify.design/mdi:pulse.svg',
                     loading: 'https://api.iconify.design/lucide:loader-2.svg',
-                    referenceSchema: 'https://api.iconify.design/lucide:book-open.svg',
+                    map: 'https://api.iconify.design/lucide:map.svg',
+                    mapPinned:
+                      'https://api.iconify.design/lucide:map-pinned.svg',
+                    referenceSchema:
+                      'https://api.iconify.design/lucide:book-open.svg',
+                    resetZoom:
+                      'https://api.iconify.design/lucide:refresh-cw.svg',
                     // schema: 'https://api.iconify.design/mdi:mdi:table.svg',
-                    schema: 'https://api.iconify.design/mdi:view-grid-outline.svg',
+                    schema:
+                      'https://api.iconify.design/mdi:view-grid-outline.svg',
                     search: 'https://api.iconify.design/lucide:search.svg',
                     send: 'https://api.iconify.design/lucide:send.svg',
-                    signal: 'https://api.iconify.design/mdi:alert-decagram-outline.svg',
-                    surface: 'https://api.iconify.design/mdi:layers-outline.svg',
+                    signal:
+                      'https://api.iconify.design/mdi:alert-decagram-outline.svg',
+                    simulator:
+                      'https://api.iconify.design/mdi:flask-outline.svg',
+                    surface:
+                      'https://api.iconify.design/mdi:layers-outline.svg',
                     triggerMatch: 'https://api.iconify.design/lucide:zap.svg',
+                    zoomIn: 'https://api.iconify.design/lucide:plus.svg',
+                    zoomOut: 'https://api.iconify.design/lucide:minus.svg',
                   },
                 },
                 Generate: true,
@@ -216,9 +242,15 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               CacheControl: {
                 'text\\/html': `private, max-age=${60 * 5}`,
                 'image\\/': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/javascript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/typescript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'application\\/javascript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'application\\/typescript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'text\\/css': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
               },
             } as EaCDFSProcessor,
           },
@@ -272,7 +304,9 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               ConfigPath: './tailwind.config.ts',
               StylesTemplatePath: './apps/tailwind/styles.css',
               CacheControl: {
-                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'text\\/css': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
               },
             } as EaCTailwindProcessor,
           },
@@ -291,7 +325,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Type: 'DenoKV',
               Name: 'Thinky',
               Description: 'The Deno KV database to use for thinky',
-              DenoKVPath: Deno.env.get('OPEN_INDUSTRIAL_DENO_KV_PATH') || undefined,
+              DenoKVPath:
+                Deno.env.get('OPEN_INDUSTRIAL_DENO_KV_PATH') || undefined,
             } as EaCDenoKVDetails,
           },
         },
@@ -371,14 +406,16 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'BaseHREF',
               Name: 'Base HREF',
-              Description: 'Adjusts the base HREF of a response based on configureation.',
+              Description:
+                'Adjusts the base HREF of a response based on configureation.',
             } as EaCBaseHREFModifierDetails,
           },
           keepAlive: {
             Details: {
               Type: 'KeepAlive',
               Name: 'Deno KV Cache',
-              Description: 'Lightweight cache to use that stores data in a DenoKV database.',
+              Description:
+                'Lightweight cache to use that stores data in a DenoKV database.',
               KeepAlivePath: '/_eac/alive',
             } as EaCKeepAliveModifierDetails,
           },
@@ -386,7 +423,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'OAuth',
               Name: 'OAuth',
-              Description: 'Used to restrict user access to various applications.',
+              Description:
+                'Used to restrict user access to various applications.',
               ProviderLookup: 'adb2c',
               SignInPath: '/oauth/signin',
             } as EaCOAuthModifierDetails,
@@ -397,7 +435,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             DatabaseLookup: 'oauth',
             Details: {
               Name: 'Azure ADB2C OAuth Provider',
-              Description: 'The provider used to connect with our azure adb2c instance',
+              Description:
+                'The provider used to connect with our azure adb2c instance',
               ClientID: Deno.env.get('AZURE_ADB2C_CLIENT_ID')!,
               ClientSecret: Deno.env.get('AZURE_ADB2C_CLIENT_SECRET')!,
               Scopes: ['openid', Deno.env.get('AZURE_ADB2C_CLIENT_ID')!],

@@ -1,5 +1,5 @@
 export type FlowGraphEdge = {
-  Id: string;
+  ID: string;
   Source: string;
   Target: string;
   Label?: string;
