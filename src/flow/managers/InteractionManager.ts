@@ -1,31 +1,17 @@
-import {
-  Node,
-  XYPosition,
-  NodeChange,
-  EdgeChange,
-  applyNodeChanges,
-  applyEdgeChanges,
-  Edge,
-} from 'reactflow';
+import { Node, XYPosition, NodeChange, EdgeChange, Edge } from 'reactflow';
 
 import { SelectionManager } from './SelectionManager.ts';
 import { PresetManager } from './PresetManager.ts';
 import { FlowNodeData } from '../types/react/FlowNodeData.ts';
-import { StatManager } from './StatManager.ts';
 import { EaCManager } from './EaCManager.ts';
-import { GraphStateManager } from './GraphStateManager.ts';
 
 export class InteractionManager {
   private refreshCallback: (() => void) | null = null;
-  private debounceNodeTimeout?: number;
-  private debounceEdgeTimeout?: number;
 
   constructor(
     private selection: SelectionManager,
     private presets: PresetManager,
-    private stats: StatManager,
-    private eacMgr: EaCManager,
-    private graphMgr: GraphStateManager
+    private eacMgr: EaCManager
   ) {}
 
   /**
@@ -36,7 +22,7 @@ export class InteractionManager {
     event: DragEvent,
     nodes: Node<FlowNodeData>[],
     screenToFlowPosition: (p: XYPosition) => XYPosition
-  ): { newNode: Node<FlowNodeData>; selectedId: string } | null {
+  ): { selectedId: string } | null {
     event.preventDefault();
 
     const type = event.dataTransfer?.getData('application/node-type');
@@ -90,35 +76,9 @@ export class InteractionManager {
       surfaceParent?.id
     );
 
-    const preset = this.presets.GetPreset(type)!;
-    const enriched: FlowNodeData = this.stats.Enrich(type, {
-      type,
-      label: preset.Label,
-      iconKey: preset.IconKey,
-      enabled: true,
-      details: newGraphNode.Details ?? {},
-      onDoubleClick: () => {
-        this.selection.SelectNode(newGraphNode.ID);
-        this.refreshCallback?.();
-      },
-    });
-
-    const reactNode: Node<FlowNodeData> = {
-      id: newGraphNode.ID,
-      type,
-      position: relativePosition,
-      data: enriched,
-      ...(surfaceParent && {
-        parentId: surfaceParent.id,
-        extent: 'parent',
-      }),
-    };
-
-    console.log(`[Drop] Node created with ID: ${newGraphNode.ID}`);
-
     this.selection.SelectNode(newGraphNode.ID);
 
-    return { newNode: reactNode, selectedId: newGraphNode.ID };
+    return { selectedId: newGraphNode.ID };
   }
 
   /**
@@ -146,22 +106,15 @@ export class InteractionManager {
     changes: NodeChange[],
     currentNodes: Node<FlowNodeData>[]
   ): void {
-    console.log(`[NodeChange] Received ${changes.length} changes`, changes);
-
-    const updated = this.graphMgr.ApplyNodesChange(changes, currentNodes);
-
-    this.eacMgr.UpdateNodePositionsFromReactFlow(updated);
+    this.eacMgr.ApplyReactFlowNodeChanges(changes, currentNodes);
   }
 
   /**
    * Applies edge changes from ReactFlow → updates GraphStateManager immediately
    * → debounces propagation to EaC (rebuild relationships).
    */
+
   public OnEdgesChange(changes: EdgeChange[], currentEdges: Edge[]): void {
-    console.log(`[EdgeChange] Received ${changes.length} changes`, changes);
-
-    const updated = this.graphMgr.ApplyEdgesChange(changes, currentEdges);
-
-    this.eacMgr.UpdateEdgesFromReactFlow(changes, updated);
+    this.eacMgr.ApplyReactFlowEdgeChanges(changes, currentEdges);
   }
 }

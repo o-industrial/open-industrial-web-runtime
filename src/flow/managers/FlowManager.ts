@@ -34,19 +34,17 @@ export class FlowManager {
 
   constructor(eac: OpenIndustrialEaC, scope: NodeScopeTypes = 'workspace') {
     this.Scope = scope;
-    this.Graph = new GraphStateManager();
     this.Azi = new AziManager();
     this.Selection = new SelectionManager();
     this.Presets = new PresetManager();
     this.Stats = new StatManager();
     this.Simulators = new SimulatorLibraryManager();
+    this.Graph = new GraphStateManager(this.Selection, this.Stats);
     this.EaC = this.createEaCManager(eac);
     this.Runtime = new InteractionManager(
       this.Selection,
       this.Presets,
-      this.Stats,
-      this.EaC,
-      this.Graph
+      this.EaC
     );
 
     console.log('🚀 FlowManager initialized:', {
@@ -92,12 +90,7 @@ export class FlowManager {
   public UseInteraction() {
     const handleDrop = useCallback(
       (event: DragEvent, toFlow: (point: XYPosition) => XYPosition) => {
-        const result = this.Runtime.HandleDrop(
-          event,
-          this.Graph.GetNodes(),
-          toFlow
-        );
-        if (result) this.Selection.SelectNode(result.selectedId);
+        this.Runtime.HandleDrop(event, this.Graph.GetNodes(), toFlow);
       },
       []
     );

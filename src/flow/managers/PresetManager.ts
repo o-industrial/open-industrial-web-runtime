@@ -21,7 +21,11 @@ import { Position } from '../../types/Position.ts';
 export class PresetManager {
   private static presets: Record<string, NodePreset> = {
     empty: { Type: 'empty', Label: 'Empty Node', IconKey: 'empty' },
-    connection: { Type: 'connection', Label: 'Connection', IconKey: 'connection' },
+    connection: {
+      Type: 'connection',
+      Label: 'Connection',
+      IconKey: 'connection',
+    },
     schema: { Type: 'schema', Label: 'Schema', IconKey: 'schema' },
     surface: { Type: 'surface', Label: 'Surface', IconKey: 'surface' },
     device: { Type: 'device', Label: 'Device', IconKey: 'device' },
@@ -45,9 +49,35 @@ export class PresetManager {
     device: [], // surface later?
     schema: ['surface'],
     surface: ['surface', 'workspace'],
-    simulator: ['workspace'],
+    simulator: [],
     empty: [],
   };
+
+  GetConfigForType(_nodeId: string, type: string): Record<string, unknown> {
+    switch (type) {
+      case 'connection': {
+        // You could later look up the specific connection type by ID if needed
+        const ingestOptions = [
+          { label: 'Default', value: 'Default', enabled: true },
+          { label: 'REST', value: 'HTTP', enabled: true },
+          { label: 'MQTT', value: 'MQTT', enabled: false },
+          { label: 'Web Socket', value: 'WebSocket', enabled: false },
+        ];
+
+        return { ingestOptions };
+      }
+
+      // Example: stub for future types
+      case 'surface': {
+        return {
+          supportedAgents: ['ReflexAgent', 'ControlAgent'],
+        };
+      }
+
+      default:
+        return {};
+    }
+  }
 
   CreatePartialEaCFromPreset(
     type: string,
@@ -59,24 +89,30 @@ export class PresetManager {
       Position: position,
       Enabled: true,
     };
-  
+
     const details = { Name: id };
-  
+
     switch (type) {
       case 'connection':
         return {
           DataConnections: {
-            [id]: { Metadata: metadata, Details: details } as EaCDataConnectionAsCode,
+            [id]: {
+              Metadata: metadata,
+              Details: details,
+            } as EaCDataConnectionAsCode,
           },
         };
-  
+
       case 'simulator':
         return {
           Simulators: {
-            [id]: { Metadata: metadata, Details: details } as EaCSimulatorAsCode,
+            [id]: {
+              Metadata: metadata,
+              Details: details,
+            } as EaCSimulatorAsCode,
           },
         };
-  
+
       case 'surface':
         return {
           Surfaces: {
@@ -87,7 +123,7 @@ export class PresetManager {
             } as EaCSurfaceAsCode,
           },
         };
-  
+
       default:
         throw new Error(`Unsupported preset type: ${type}`);
     }
@@ -97,7 +133,7 @@ export class PresetManager {
     return Object.fromEntries(
       Object.entries(PresetManager.presets).filter(([type]) =>
         PresetManager.scopeMap[type]?.includes(scope)
-      ),
+      )
     );
   }
 

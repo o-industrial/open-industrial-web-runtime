@@ -11,11 +11,11 @@ import {
   SimulatorLibraryManager,
   SimulatorPackDefinition,
 } from '../../../src/flow/managers/SimulatorLibraryManager.ts';
+import { FlowManager } from '../../../src/flow/managers/FlowManager.ts'; // 🧠 Your actual path may vary
 
 type SimulatorLibraryModalProps = {
-  SimMgr: SimulatorLibraryManager;
+  flowMgr: FlowManager;
   onClose: () => void;
-  onInstall: (sims: SimulatorDefinition[]) => void;
 };
 
 const CATEGORIES = [
@@ -27,18 +27,24 @@ const CATEGORIES = [
 ];
 
 export function SimulatorLibraryModal({
-  SimMgr,
+  flowMgr,
   onClose,
-  onInstall,
 }: SimulatorLibraryModalProps) {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('all');
 
-  const simulators = SimMgr.GetByCategory(category).filter((sim) =>
+  const simulators = flowMgr.Simulators.GetByCategory(category).filter((sim) =>
     sim.Label.toLowerCase().includes(search.toLowerCase())
   );
 
-  const packs: SimulatorPackDefinition[] = SimMgr.GetPacksByCategory(category);
+  const packs: SimulatorPackDefinition[] =
+    flowMgr.Simulators.GetPacksByCategory(category);
+
+  const handleInstall = (sims: SimulatorDefinition[]) => {
+    flowMgr.EaC.InstallSimulators(sims);
+
+    onClose();
+  };
 
   return (
     <Modal title="Simulator Marketplace" onClose={onClose}>
@@ -90,7 +96,7 @@ export function SimulatorLibraryModal({
                 name={sim.Label}
                 description={sim.Description}
                 category={sim.Category}
-                onInstall={() => onInstall([sim])}
+                onInstall={() => handleInstall([sim])}
               />
             ))}
 
@@ -100,11 +106,13 @@ export function SimulatorLibraryModal({
                 id={pack.ID}
                 name={pack.Label}
                 description={pack.Description}
-                simulatorCount={pack.SimulatorIDs.length}
-                usedSimulators={0} // optional future prop
+                simulatorCount={pack.Simulators.length}
+                usedSimulators={0}
                 onInstallPack={(id) => {
-                  const sims = SimMgr.ResolvePack(id);
-                  if (sims.length) onInstall(sims);
+                  const sims = flowMgr.Simulators.ResolvePack(id);
+                  if (sims.length) {
+                    handleInstall(sims);
+                  }
                 }}
               />
             ))}

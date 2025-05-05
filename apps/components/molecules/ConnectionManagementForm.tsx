@@ -1,64 +1,45 @@
-import { useState } from 'preact/hooks';
 import { JSX } from 'preact';
-import { ConnectionNodeData } from '../../../src/flow/types/ConnectionNodeData.tsx';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
-import { Action, ActionStyleTypes } from '../atoms/Action.tsx';
 import { Input } from '../atoms/forms/Input.tsx';
 import { MultiSelectCheckboxGroup } from './MultiSelectCheckboxGroup.tsx';
+import {
+  EaCDataConnectionDetails,
+  MultiProtocolIngestOption,
+} from '../../../src/eac/EaCDataConnectionDetails.ts';
+import { IngestOption } from '../../../src/types/IngestOption.ts';
 
 type Props = {
-  initial: Partial<ConnectionNodeData>;
-  onSave: (next: Partial<ConnectionNodeData>) => void;
+  details: Partial<EaCDataConnectionDetails>;
+  onChange: (next: Partial<EaCDataConnectionDetails>) => void;
+  ingestOptions: IngestOption[];
 };
 
-export function ConnectionManagementForm({ initial, onSave }: Props) {
-  const [label, setLabel] = useState(initial.label ?? '');
-  const [connectionTypes, setConnectionTypes] = useState<string[]>(
-    initial.connectionTypes ?? ['iothub']
-  );
+export function ConnectionManagementForm({
+  details,
+  onChange,
+  ingestOptions,
+}: Props) {
+  const handleLabelInput = (e: JSX.TargetedEvent<HTMLInputElement, Event>) => {
+    onChange({ Name: e.currentTarget.value });
+  };
 
-  const CONNECTION_TYPES = [
-    { label: 'IoT Hub', value: 'iothub', enabled: true },
-    { label: 'REST', value: 'rest', enabled: true },
-    { label: 'MQTT', value: 'mqtt', enabled: false },
-    { label: 'OPC UA', value: 'opcua', enabled: false },
-    { label: 'MODBus', value: 'modbus', enabled: false },
-    { label: 'EtherLink', value: 'etherlink', enabled: false },
-  ];
-
-  const handleSave = () => {
-    onSave({
-      ...initial,
-      label,
-      connectionTypes,
-    });
+  const handleProtocolsChange = (next: string[]) => {
+    onChange({ MultiProtocolIngest: next as MultiProtocolIngestOption[] });
   };
 
   return (
     <div class="space-y-3 pt-2">
       <Input
         label="Connection Label"
-        value={label}
-        onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
-          setLabel(e.currentTarget.value)
-        }
+        value={details.Name ?? ''}
+        onInput={handleLabelInput}
       />
 
       <MultiSelectCheckboxGroup
-        label="Connection Types"
-        options={CONNECTION_TYPES}
-        selected={connectionTypes}
-        onChange={setConnectionTypes}
+        label="Ingest Protocols"
+        options={ingestOptions}
+        selected={details.MultiProtocolIngest ?? []}
+        onChange={handleProtocolsChange}
       />
-
-      <Action
-        class="text-sm"
-        styleType={ActionStyleTypes.Solid | ActionStyleTypes.Thin}
-        intentType={IntentTypes.Primary}
-        onClick={handleSave}
-      >
-        Save Changes
-      </Action>
     </div>
   );
 }

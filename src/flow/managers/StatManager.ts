@@ -24,22 +24,16 @@ export class StatManager {
     const buffer = this.BuildBuffer(10, 5);
     return {
       ...base,
-      stats: {
-        impulseRates: [...buffer],
-        matchesHandled: Math.floor(Math.random() * 200),
-        avgLatencyMs: Number((Math.random() * 40 + 10).toFixed(1)),
-        lastRunAgo: `${Math.floor(Math.random() * 90)}s ago`,
-      },
-      getStats: async () => {
+      getStats: () => {
         const next = Number((10 + Math.random() * 5).toFixed(2));
         buffer.push(next);
         if (buffer.length > 20) buffer.shift();
-        return {
+        return Promise.resolve({
           impulseRates: [...buffer],
           matchesHandled: Math.floor(Math.random() * 200),
           avgLatencyMs: Number((Math.random() * 40 + 10).toFixed(1)),
           lastRunAgo: `${Math.floor(Math.random() * 90)}s ago`,
-        };
+        });
       },
     };
   }
@@ -48,12 +42,19 @@ export class StatManager {
     const buffer = this.BuildBuffer(20, 10);
     return {
       ...base,
-      stats: { impulseRates: [...buffer] },
-      getStats: async () => {
+      getStats: () => {
         const next = Number((20 + Math.random() * 10).toFixed(2));
         buffer.push(next);
         if (buffer.length > 20) buffer.shift();
-        return { impulseRates: [...buffer] };
+        return Promise.resolve({
+          impulseRates: [...buffer],
+          connectionInfo: {
+            BaseURL: 'https://api.mock.local',
+            Method: 'POST',
+            AuthType: 'SAS Token',
+            Status: 'Healthy',
+          },
+        });
       },
     };
   }
@@ -62,20 +63,15 @@ export class StatManager {
     const buffer = this.BuildBuffer(15, 8);
     return {
       ...base,
-      stats: {
-        impulseRates: [...buffer],
-        devicesSimulated: Math.floor(Math.random() * 10) + 1,
-        messageRatePerDevice: Number((Math.random() * 2 + 1).toFixed(2)),
-      },
-      getStats: async () => {
+      getStats: () => {
         const next = Number((15 + Math.random() * 8).toFixed(2));
         buffer.push(next);
         if (buffer.length > 20) buffer.shift();
-        return {
+        return Promise.resolve({
           impulseRates: [...buffer],
           devicesSimulated: Math.floor(Math.random() * 10) + 1,
           messageRatePerDevice: Number((Math.random() * 2 + 1).toFixed(2)),
-        };
+        });
       },
     };
   }
@@ -84,12 +80,11 @@ export class StatManager {
     const buffer = this.BuildBuffer(5, 5);
     return {
       ...base,
-      stats: { impulseRates: [...buffer] },
-      getStats: async () => {
+      getStats: () => {
         const next = Number((5 + Math.random() * 5).toFixed(2));
         buffer.push(next);
         if (buffer.length > 20) buffer.shift();
-        return { impulseRates: [...buffer] };
+        return Promise.resolve({ impulseRates: [...buffer] });
       },
     };
   }
@@ -98,12 +93,11 @@ export class StatManager {
     const buffer = this.BuildBuffer(10, 10);
     return {
       ...base,
-      stats: { impulseRates: [...buffer] },
-      getStats: async () => {
+      getStats: () => {
         const next = Number((10 + Math.random() * 10).toFixed(2));
         buffer.push(next);
         if (buffer.length > 20) buffer.shift();
-        return { impulseRates: [...buffer] };
+        return Promise.resolve({ impulseRates: [...buffer] });
       },
     };
   }
@@ -112,22 +106,16 @@ export class StatManager {
     const buffer = this.BuildBuffer(10, 5);
     return {
       ...base,
-      stats: {
-        impulseRates: [...buffer],
-        inputCount: Math.floor(Math.random() * 4) + 1,
-        agentCount: Math.floor(Math.random() * 3) + 1,
-        lastSignalAt: `${Math.floor(Math.random() * 60)}s ago`,
-      },
-      getStats: async () => {
+      getStats: () => {
         const next = Number((10 + Math.random() * 5).toFixed(2));
         buffer.push(next);
         if (buffer.length > 20) buffer.shift();
-        return {
+        return Promise.resolve({
           impulseRates: [...buffer],
           inputCount: Math.floor(Math.random() * 4) + 1,
           agentCount: Math.floor(Math.random() * 3) + 1,
           lastSignalAt: `${Math.floor(Math.random() * 60)}s ago`,
-        };
+        });
       },
     };
   }
@@ -136,12 +124,11 @@ export class StatManager {
     const buffer = this.BuildBuffer(5, 3);
     return {
       ...base,
-      stats: { impulseRates: [...buffer] },
-      getStats: async () => {
+      getStats: () => {
         const next = Number((5 + Math.random() * 3).toFixed(2));
         buffer.push(next);
         if (buffer.length > 20) buffer.shift();
-        return { impulseRates: [...buffer] };
+        return Promise.resolve({ impulseRates: [...buffer] });
       },
     };
   }

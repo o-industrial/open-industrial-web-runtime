@@ -1,6 +1,9 @@
 import { EaCVertexDetails } from '@fathym/eac';
 
-export type FlowNodeData<TEaC extends EaCVertexDetails = EaCVertexDetails> = {
+export type FlowNodeData<
+  TEaC extends EaCVertexDetails = EaCVertexDetails,
+  TStats extends Record<string, unknown> = Record<string, unknown>
+> = {
   /** Internal type*/
   type: string;
 
@@ -14,8 +17,7 @@ export type FlowNodeData<TEaC extends EaCVertexDetails = EaCVertexDetails> = {
   details: TEaC;
 
   /** Runtime node stats (live sim, metrics, etc.) */
-  stats?: Record<string, unknown>;
-  getStats?: () => Promise<Record<string, unknown>>;
+  getStats?: () => Promise<TStats>;
 
   /** UI interaction */
   isSelected?: boolean;

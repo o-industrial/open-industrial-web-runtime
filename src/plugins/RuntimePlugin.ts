@@ -168,7 +168,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                       'https://api.iconify.design/lucide:book-open.svg',
                     resetZoom:
                       'https://api.iconify.design/lucide:refresh-cw.svg',
-                    // schema: 'https://api.iconify.design/mdi:mdi:table.svg',
                     schema:
                       'https://api.iconify.design/mdi:view-grid-outline.svg',
                     search: 'https://api.iconify.design/lucide:search.svg',
@@ -182,6 +181,14 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                     triggerMatch: 'https://api.iconify.design/lucide:zap.svg',
                     zoomIn: 'https://api.iconify.design/lucide:plus.svg',
                     zoomOut: 'https://api.iconify.design/lucide:minus.svg',
+
+                    // 🆕 Management action icons:
+                    save: 'https://api.iconify.design/lucide:save.svg',
+                    undo: 'https://api.iconify.design/lucide:undo.svg',
+                    redo: 'https://api.iconify.design/lucide:redo.svg',
+                    fork: 'https://api.iconify.design/lucide:git-fork.svg',
+                    revert: 'https://api.iconify.design/lucide:rotate-ccw.svg',
+                    commit: 'https://api.iconify.design/lucide:git-commit.svg',
                   },
                 },
                 Generate: true,

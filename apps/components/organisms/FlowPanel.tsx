@@ -19,7 +19,9 @@ import { LoadingSpinner } from '../atoms/LoadingSpinner.tsx';
 import { IntentTypes } from '../../../src/types/IntentTypes.ts';
 import { FlowManager } from '../../../src/flow/managers/FlowManager.ts';
 import { FlowControls } from '../molecules/flows/FlowControls.tsx';
+import { ManagementControls } from '../molecules/flows/ManagementControls.tsx';
 import { SystemControls } from '../molecules/flows/SystemControls.tsx';
+import { neonColors } from '../../../tailwind.config.ts';
 
 export const IsIsland = true;
 
@@ -42,29 +44,29 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
   } = flowMgr.UseInteraction();
   const { presets, nodeTypes } = flowMgr.UseUIContext();
 
-  console.log('🎨 FlowPanel render triggered');
-  console.log('🧩 Current graph state:', {
-    nodeCount: nodes.length,
-    edgeCount: edges.length,
-    nodeKeys: nodes.map((n) => n.id),
-    edgeKeys: edges.map((e) => e.id),
-  });
-
   return (
     <FlowPanelTemplate
       bank={<FlowPanelBank presets={presets} />}
       systemControls={
         <SystemControls onOpenSimulatorLibrary={onShowSimulatorLibrary} />
       }
+      managementControls={
+        <ManagementControls
+          hasChanges={flowMgr.HasUnsavedChanges?.() ?? false}
+          onUndo={() => flowMgr.History.Undo()}
+          onRedo={() => flowMgr.History.Redo()}
+          onCommit={() => flowMgr.CommitRuntime()}
+          onRevert={() => flowMgr.RevertToLastCommit()}
+          onFork={() => flowMgr.ForkRuntime()}
+        />
+      }
       canvas={
         <div
           class="absolute inset-0 w-full h-full"
           onDrop={(e) => {
-            console.log('📥 Drop event received');
             handleDrop(e, screenToFlowPosition);
           }}
           onDragOver={(e) => {
-            console.log('🛸 DragOver event');
             e.preventDefault();
           }}
         >
@@ -73,19 +75,15 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
             edges={edges}
             nodeTypes={nodeTypes}
             onNodesChange={(changes: NodeChange[], nodes: Node[]) => {
-              console.log('🔧 Node changes:', changes);
               handleNodesChange(changes, nodes);
             }}
             onEdgesChange={(changes: EdgeChange[], edges: Edge[]) => {
-              console.log('🔗 Edge changes:', changes);
-              handleEdgesChange(changes, edges);
+              // handleEdgesChange(changes, edges); // Uncomment when logic is in place
             }}
             onConnect={(conn: Connection) => {
-              console.log('🔌 Connect triggered:', conn);
               handleConnect(conn);
             }}
             onNodeClick={(e: unknown, node: Node) => {
-              console.log('🖱️ Node click:', node.id);
               handleNodeClick(e, node);
             }}
             fitView
@@ -104,19 +102,15 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
                       const status = node.data?.status;
                       const color =
                         status === 'error'
-                          ? '#F43F5E'
+                          ? neonColors['neon-red']['500']
                           : status === 'warning'
-                          ? '#EAB308'
-                          : '#06B6D4';
+                          ? neonColors['neon-yellow']['500']
+                          : neonColors['neon-cyan']['500'];
 
-                      console.log(`🗺️ MiniMap color for ${node.id}: ${color}`);
                       return color;
                     }}
                     maskColor="rgba(0,0,0,0.2)"
-                    style={{
-                      borderRadius: '0.5rem',
-                      boxShadow: '0 0 8px rgba(0,0,0,0.3)',
-                    }}
+                    style={{ borderRadius: '0.5rem' }}
                     className="-:!bg-neutral-800 -:!border -:!border-neutral-700"
                   />
                 </div>
@@ -124,11 +118,9 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
 
               <div class="pointer-events-auto">
                 <FlowControls
+                  mapIntent={showMap ? IntentTypes.Info : IntentTypes.Tertiary}
                   showMap={showMap}
-                  onToggleMap={(val) => {
-                    console.log('🧭 Toggling MiniMap:', val);
-                    setShowMap(val);
-                  }}
+                  onToggleMap={setShowMap}
                 />
               </div>
             </div>

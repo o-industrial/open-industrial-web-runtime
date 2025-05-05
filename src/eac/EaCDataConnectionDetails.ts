@@ -4,7 +4,7 @@ import { EaCVertexDetails, EaCVertexDetailsSchema } from '@fathym/eac';
 /**
  * Enum of supported multiprotocol ingest options.
  */
-export const MultiProtocolIngestOptions = ['HTTP', 'MQTT', 'WebSocket'] as const;
+export const MultiProtocolIngestOptions = ['Default', 'HTTP', 'MQTT', 'WebSocket'] as const;
 export type MultiProtocolIngestOption = typeof MultiProtocolIngestOptions[number];
 
 /**
@@ -29,7 +29,7 @@ export type EaCDataConnectionDetails<
  */
 export const EaCDataConnectionDetailsSchema: z.ZodObject<{
   Type: z.ZodString;
-  MultiProtocolIngest: z.ZodOptional<z.ZodArray<z.ZodEnum<['HTTP', 'MQTT', 'WebSocket']>>>;
+  MultiProtocolIngest: z.ZodOptional<z.ZodArray<z.ZodEnum<['Default', 'HTTP', 'MQTT', 'WebSocket']>>>;
 }> = EaCVertexDetailsSchema.extend({
   Type: z.string().describe('The type identifier for this data connection.'),
   MultiProtocolIngest: z

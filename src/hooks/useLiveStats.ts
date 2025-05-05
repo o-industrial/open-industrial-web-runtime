@@ -1,19 +1,26 @@
 import { useEffect, useState } from 'preact/hooks';
 
-export function useLiveStats<TStats extends Record<string, unknown> = Record<string, unknown>>(
-  initialStats: TStats = {} as TStats,
+export function useLiveStats<TStats extends Record<string, unknown>>(
   getStats?: () => Promise<TStats>,
-  intervalMs = 1000,
-): TStats {
-  const [stats, setStats] = useState<TStats>(initialStats);
+  intervalMs = 1000
+): TStats | undefined {
+  const [stats, setStats] = useState<TStats>();
 
   useEffect(() => {
     if (!getStats) return;
 
-    const interval = setInterval(async () => {
-      const next = await getStats();
-      setStats((prev) => ({ ...prev, ...next }));
-    }, intervalMs);
+    const fetchStats = async () => {
+      try {
+        const next = await getStats();
+        setStats(next);
+      } catch (err) {
+        console.warn('[useLiveStats] Failed to fetch stats:', err);
+      }
+    };
+
+    fetchStats(); // prime immediately
+
+    const interval = setInterval(fetchStats, intervalMs);
 
     return () => clearInterval(interval);
   }, [getStats]);

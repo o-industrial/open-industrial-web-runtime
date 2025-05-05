@@ -10,7 +10,7 @@ export type SimulatorPackDefinition = {
   Label: string;
   Description: string;
   Category: string;
-  SimulatorIDs: string[];
+  Simulators: SimulatorDefinition[];
 };
 
 export class SimulatorLibraryManager {
@@ -52,7 +52,9 @@ export class SimulatorLibraryManager {
         Label: 'Smart Building Pack',
         Description: 'Includes RoomState, HVACSim, OccupancyFlow',
         Category: 'Environmental',
-        SimulatorIDs: ['sim-roomstate', 'sim-hvac', 'sim-opflow'],
+        Simulators: this.Simulators.filter((s) =>
+          ['sim-roomstate', 'sim-hvac', 'sim-opflow'].includes(s.ID)
+        ),
       },
     ];
   }
@@ -78,8 +80,8 @@ export class SimulatorLibraryManager {
   public ResolvePack(packId: string): SimulatorDefinition[] {
     const pack = this.Packs.find((p) => p.ID === packId);
     if (!pack) return [];
-    return pack.SimulatorIDs.map((id) =>
-      this.Simulators.find((s) => s.ID === id)
+    return pack.Simulators.map((sim) =>
+      this.Simulators.find((s) => s.ID === sim.ID)
     ).filter(Boolean) as SimulatorDefinition[];
   }
 

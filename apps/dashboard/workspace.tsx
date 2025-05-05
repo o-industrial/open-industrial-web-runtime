@@ -56,13 +56,8 @@ export default function WorkspacePage({
     <>
       {showMarketplace && (
         <SimulatorLibraryModal
-          SimMgr={flowMgr.Simulators}
+          flowMgr={flowMgr}
           onClose={() => setShowMarketplace(false)}
-          onInstall={(sims) => {
-            console.log('✅ Installed simulators:', sims);
-            setShowMarketplace(false);
-            console.log('📦 Simulator modal closed');
-          }}
         />
       )}
     </>

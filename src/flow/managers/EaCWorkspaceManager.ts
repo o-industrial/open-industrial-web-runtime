@@ -43,6 +43,13 @@ export class EaCWorkspaceManager extends EaCManager {
         Type: 'connection',
         Label: conn.Details?.Name ?? key,
         Metadata: conn.Metadata,
+        // {
+        //   Enabled: conn.Metadata?.Enabled,
+        //   Position: {
+        //     X: conn.Metadata?.Position?.X || 0,
+        //     Y: conn.Metadata?.Position?.Y || 0,
+        //   }
+        // },
         Details: conn.Details,
       });
     }
@@ -168,31 +175,12 @@ export class EaCWorkspaceManager extends EaCManager {
   }
 
   /**
-   * Handles edge list changes by removing deleted edges and adding new connections.
-   */
-  protected updateConnections(changes: EdgeChange[], updated: Edge[]): void {
-    for (const change of changes) {
-      if (change.type === 'remove') {
-        console.log(`❌ [EaCWorkspace] Removing edge ${change.id} from EaC`);
-        this.removeConnectionEdge(change.id);
-      }
-    }
-
-    for (const edge of updated) {
-      if (!this.hasConnection(edge.source, edge.target)) {
-        console.log(`➕ [EaCWorkspace] Adding new edge ${edge.id} to EaC`);
-        this.CreateConnectionEdge(edge.source, edge.target);
-      }
-    }
-  }
-
-  /**
    * Returns true if the source → target connection already exists in the current graph.
    */
   private hasConnection(source: string, target: string): boolean {
-    return this.graph.GetGraph().Edges.some(
-      (e) => e.Source === source && e.Target === target
-    );
+    return this.graph
+      .GetGraph()
+      .Edges.some((e) => e.Source === source && e.Target === target);
   }
 
   /**
@@ -251,5 +239,24 @@ export class EaCWorkspaceManager extends EaCManager {
     if (partial) {
       this.MergePartial(partial);
     }
+  }
+
+  /**
+   * Handles edge list changes by removing deleted edges and adding new connections.
+   */
+  protected updateConnections(
+    changes: EdgeChange[],
+    updated: Edge[]
+  ): OpenIndustrialEaC | null {
+    // TODO: Diff current vs. new edge structure, then build:
+    const partial: OpenIndustrialEaC = {
+      DataConnections: {
+        // Populate from new edge structure
+      },
+    };
+
+    const changed = true; // Your diff logic here
+
+    return changed ? partial : null;
   }
 }
