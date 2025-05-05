@@ -10,6 +10,13 @@ import SurfaceNodeRenderer from '../../../apps/components/organisms/renderers/Su
 // import SimulatorNodeRenderer from '../../../apps/components/organisms/renderers/SimulatorNodeRenderer.tsx';
 
 import { memo } from 'preact/compat';
+import { EaCSurfaceAsCode } from '../../eac/EaCSurfaceAsCode.ts';
+import { EaCSimulatorAsCode } from '../../eac/EaCSimulatorAsCode.ts';
+import { EaCDataConnectionAsCode } from '../../eac/EaCDataConnectionAsCode.ts';
+import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
+import { EaCFlowNodeMetadata } from '../../eac/EaCFlowNodeMetadata.ts';
+import { XYPosition } from 'reactflow';
+import { Position } from '../../types/Position.ts';
 
 export class PresetManager {
   private static presets: Record<string, NodePreset> = {
@@ -41,6 +48,50 @@ export class PresetManager {
     simulator: ['workspace'],
     empty: [],
   };
+
+  CreatePartialEaCFromPreset(
+    type: string,
+    id: string,
+    position: Position,
+    parentId?: string
+  ): Partial<OpenIndustrialEaC> {
+    const metadata: EaCFlowNodeMetadata = {
+      Position: position,
+      Enabled: true,
+    };
+  
+    const details = { Name: id };
+  
+    switch (type) {
+      case 'connection':
+        return {
+          DataConnections: {
+            [id]: { Metadata: metadata, Details: details } as EaCDataConnectionAsCode,
+          },
+        };
+  
+      case 'simulator':
+        return {
+          Simulators: {
+            [id]: { Metadata: metadata, Details: details } as EaCSimulatorAsCode,
+          },
+        };
+  
+      case 'surface':
+        return {
+          Surfaces: {
+            [id]: {
+              Metadata: metadata,
+              Details: details,
+              ...(parentId && { ParentSurfaceLookup: parentId }),
+            } as EaCSurfaceAsCode,
+          },
+        };
+  
+      default:
+        throw new Error(`Unsupported preset type: ${type}`);
+    }
+  }
 
   GetPresetsForScope(scope: NodeScopeTypes): Record<string, NodePreset> {
     return Object.fromEntries(

@@ -1,20 +1,19 @@
-import { Edge, Node, XYPosition } from 'reactflow';
-import { GraphStateManager } from './GraphStateManager.ts';
+import { Node, XYPosition } from 'reactflow';
+
 import { SelectionManager } from './SelectionManager.ts';
 import { PresetManager } from './PresetManager.ts';
 import { FlowNodeData } from '../types/react/FlowNodeData.ts';
 import { StatManager } from './StatManager.ts';
-import { FlowGraphNode } from '../types/graph/FlowGraphNode.ts';
-import { FlowGraphEdge } from '../types/graph/FlowGraphEdge.ts';
+import { EaCManager } from './EaCManager.ts';
 
 export class InteractionManager {
   private refreshCallback: (() => void) | null = null;
 
   constructor(
-    private graph: GraphStateManager,
     private selection: SelectionManager,
     private presets: PresetManager,
-    private stats: StatManager
+    private stats: StatManager,
+    private eacMgr: EaCManager
   ) {}
 
   public HandleDrop(
@@ -51,7 +50,6 @@ export class InteractionManager {
       return null;
     }
 
-    const id = `${type}-${Date.now()}`;
     const relativePosition = surfaceParent
       ? {
           x: position.x - surfaceParent.position.x,
@@ -59,25 +57,14 @@ export class InteractionManager {
         }
       : position;
 
+    const newGraphNode = this.eacMgr.CreateNodeFromPreset(
+      type,
+      { X: relativePosition.x, Y: relativePosition.y },
+      surfaceParent?.id
+    );
+
     const preset = this.presets.GetPreset(type)!;
 
-    // === Canonical FlowGraph Node
-    const newGraphNode: FlowGraphNode = {
-      ID: id,
-      Type: type as FlowGraphNode['Type'],
-      Label: preset.Label,
-      Metadata: {
-        Position: { X: relativePosition.x, Y: relativePosition.y },
-        Enabled: true,
-      },
-      Details: {
-        Name: preset.Label,
-      },
-    };
-
-    this.graph.AddNode(newGraphNode);
-
-    // === View Node for immediate hydration
     const enriched: FlowNodeData = this.stats.Enrich(type, {
       type,
       label: preset.Label,
@@ -85,13 +72,13 @@ export class InteractionManager {
       enabled: true,
       details: newGraphNode.Details ?? {},
       onDoubleClick: () => {
-        this.selection.SelectNode(id);
+        this.selection.SelectNode(newGraphNode.ID);
         this.refreshCallback?.();
       },
     });
 
     const reactNode: Node<FlowNodeData> = {
-      id,
+      id: newGraphNode.ID,
       type,
       position: relativePosition,
       data: enriched,
@@ -101,22 +88,13 @@ export class InteractionManager {
       }),
     };
 
-    this.selection.SelectNode(id);
+    this.selection.SelectNode(newGraphNode.ID);
 
-    return { newNode: reactNode, selectedId: id };
+    return { newNode: reactNode, selectedId: newGraphNode.ID };
   }
 
   public ConnectNodes(source: string, target: string): void {
-    const edgeId = `${source}->${target}`;
-    if (!this.graph.HasEdge(edgeId)) {
-      const edge: FlowGraphEdge = {
-        ID: edgeId,
-        Source: source,
-        Target: target,
-        Label: '', // Optional: fill in label later
-      };
-      this.graph.AddEdge(edge);
-    }
+    this.eacMgr.CreateConnectionEdge(source, target);
   }
 
   public SetRefreshHandler(refresh: () => void) {

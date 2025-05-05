@@ -21,8 +21,6 @@ export const IsIsland = true;
 
 type FlowPanelProps = {
   flowMgr: FlowManager;
-
-  // 👇 Surface-level UI triggers can be handled in page-level template
   onShowSimulatorLibrary?: () => void;
 };
 
@@ -30,10 +28,9 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
   const [showMap, setShowMap] = useState(true);
   const { screenToFlowPosition } = useReactFlow();
 
-  const { nodes, edges, onNodesChange, onEdgesChange, refresh } =
-    flowMgr.UseGraph();
+  const { nodes, edges } = flowMgr.UseGraphView();
   const { handleDrop, handleConnect, handleNodeClick } =
-    flowMgr.UseInteraction(refresh);
+    flowMgr.UseInteraction();
   const { presets, nodeTypes } = flowMgr.UseUIContext();
 
   return (
@@ -52,8 +49,8 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
             nodes={nodes}
             edges={edges}
             nodeTypes={nodeTypes}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
+            onNodesChange={flowMgr.Graph.ApplyNodeChanges.bind(flowMgr.Graph)}
+            onEdgesChange={flowMgr.Graph.ApplyEdgeChanges.bind(flowMgr.Graph)}
             onConnect={handleConnect}
             onNodeClick={handleNodeClick}
             fitView
@@ -64,7 +61,7 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
           >
             <Background />
 
-            {/* 🧭 Overlays inside flow context */}
+            {/* 🧭 Flow UI overlays */}
             <div class="absolute bottom-4 right-4 z-20 pointer-events-none flex flex-col items-end gap-2">
               {showMap && (
                 <div class="pointer-events-auto rounded-md border border-neutral-700 bg-neutral-900/90 backdrop-blur-md shadow-lg">

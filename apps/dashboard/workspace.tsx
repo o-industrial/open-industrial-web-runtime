@@ -41,7 +41,7 @@ export default function WorkspacePage({
 
   useEffect(() => {
     if (EaC) {
-      flowMgr.EaC.LoadFrom(EaC);
+      flowMgr.EaC.MergePartial(EaC);
     }
   }, [EaC]);
 

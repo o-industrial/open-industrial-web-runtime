@@ -1,57 +1,63 @@
 import { EaCManager } from './EaCManager.ts';
-import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
+import { FlowGraph } from '../types/graph/FlowGraph.ts';
 import { FlowGraphNode } from '../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../types/graph/FlowGraphEdge.ts';
 
+import { GraphStateManager } from './GraphStateManager.ts';
+import { PresetManager } from './PresetManager.ts';
+
+import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
 import { EverythingAsCodeOIWorkspace } from '../../eac/EverythingAsCodeOIWorkspace.ts';
 import { EaCDataConnectionAsCode } from '../../eac/EaCDataConnectionAsCode.ts';
-import { EaCSimulatorAsCode } from '../../eac/EaCSimulatorAsCode.ts';
-import {
-  EaCSurfaceAsCode,
-  SurfaceDataConnectionSettings,
-} from '../../eac/EaCSurfaceAsCode.ts';
-import { EaCSimulatorDetails } from '../../eac/EaCSimulatorDetails.ts';
-import { EaCDataConnectionDetails } from '../../eac/EaCDataConnectionDetails.ts';
-import { EaCSurfaceDetails } from '../../eac/EaCSurfaceDetails.ts';
-import { EaCFlowNodeMetadata } from '../../eac/EaCFlowNodeMetadata.ts';
-import { GraphStateManager } from './GraphStateManager.ts';
+import { EaCSurfaceAsCode } from '../../eac/EaCSurfaceAsCode.ts';
 
+/**
+ * Manages a full Workspace-scope Everything-as-Code model and its
+ * corresponding flow graph. This includes data connections, simulators,
+ * surfaces, and their interlinked relationships.
+ */
 export class EaCWorkspaceManager extends EaCManager {
-  constructor(scope: NodeScopeTypes, graph: GraphStateManager) {
-    super(scope, graph);
+  constructor(
+    eac: EverythingAsCodeOIWorkspace,
+    graph: GraphStateManager,
+    presets: PresetManager
+  ) {
+    super(eac, 'workspace', graph, presets);
   }
 
-  public LoadFrom(eac: EverythingAsCodeOIWorkspace): void {
+  /**
+   * Derives the canonical flow graph (nodes + edges) from current EaC state.
+   * This is used after every mutation to rehydrate the topology.
+   */
+  protected buildGraph(eac: OpenIndustrialEaC): FlowGraph {
     const nodes: FlowGraphNode[] = [];
     const edges: FlowGraphEdge[] = [];
 
-    // === Load Data Connections ===
-    for (const [key, conn] of Object.entries(eac.DataConnections ?? {})) {
-      const { Details, Metadata } = conn;
+    const wks = eac as EverythingAsCodeOIWorkspace;
 
+    // === Data Connections ===
+    for (const [key, conn] of Object.entries(wks.DataConnections ?? {})) {
       nodes.push({
         ID: key,
         Type: 'connection',
-        Label: Details?.Name ?? key,
-        Metadata,
-        Details,
+        Label: conn.Details?.Name ?? key,
+        Metadata: conn.Metadata,
+        Details: conn.Details,
       });
     }
 
-    // === Load Simulators ===
-    for (const [key, sim] of Object.entries(eac.Simulators ?? {})) {
-      const { Details, Metadata } = sim;
-
+    // === Simulators ===
+    for (const [key, sim] of Object.entries(wks.Simulators ?? {})) {
       nodes.push({
         ID: key,
         Type: 'simulator',
-        Label: Details?.Name ?? key,
-        Metadata,
-        Details,
+        Label: sim.Details?.Name ?? key,
+        Metadata: sim.Metadata,
+        Details: sim.Details,
       });
 
-      // Simulator → DataConnection
-      for (const [connKey, conn] of Object.entries(eac.DataConnections ?? {})) {
+      // simulates → data connection
+      for (const [connKey, conn] of Object.entries(wks.DataConnections ?? {})) {
         if (conn.SimulatorLookup === key) {
           edges.push({
             ID: `${key}->${connKey}`,
@@ -63,19 +69,17 @@ export class EaCWorkspaceManager extends EaCManager {
       }
     }
 
-    // === Load Surfaces ===
-    for (const [key, surf] of Object.entries(eac.Surfaces ?? {})) {
-      const { Details, Metadata } = surf;
-
+    // === Surfaces ===
+    for (const [key, surf] of Object.entries(wks.Surfaces ?? {})) {
       nodes.push({
         ID: key,
         Type: 'surface',
-        Label: Details?.Name ?? key,
-        Metadata,
-        Details,
+        Label: surf.Details?.Name ?? key,
+        Metadata: surf.Metadata,
+        Details: surf.Details,
       });
 
-      // DataConnection → Surface
+      // connection → surface
       for (const connKey of Object.keys(surf.DataConnections ?? {})) {
         edges.push({
           ID: `${connKey}->${key}`,
@@ -85,7 +89,7 @@ export class EaCWorkspaceManager extends EaCManager {
         });
       }
 
-      // ParentSurface → Surface
+      // parent → surface
       if (surf.ParentSurfaceLookup) {
         edges.push({
           ID: `${surf.ParentSurfaceLookup}->${key}`,
@@ -96,81 +100,77 @@ export class EaCWorkspaceManager extends EaCManager {
       }
     }
 
-    this.graph.LoadFromGraph({ Nodes: nodes, Edges: edges });
+    return { Nodes: nodes, Edges: edges };
   }
 
-  public ExportTo(): Partial<EverythingAsCodeOIWorkspace> {
-    const graph = this.graph.ExportGraph();
+  /**
+   * Creates an EaC partial structure based on a proposed connection between two nodes.
+   * Returns the EaC delta and triggers downstream graph rebuild if the relationship is valid.
+   *
+   * Supports:
+   * - simulator → connection (`simulates`)
+   * - connection → surface (`feeds`)
+   * - surface → surface (`parent`)
+   */
+  public CreateConnectionEdge(
+    source: string,
+    target: string
+  ): Partial<OpenIndustrialEaC> | null {
+    const wks = this.GetEaC() as EverythingAsCodeOIWorkspace;
 
-    const dataConnections: Record<string, EaCDataConnectionAsCode> = {};
-    const simulators: Record<string, EaCSimulatorAsCode> = {};
-    const surfaces: Record<string, EaCSurfaceAsCode> = {};
+    const src = this.graph.GetGraph().Nodes.find((n) => n.ID === source);
+    const tgt = this.graph.GetGraph().Nodes.find((n) => n.ID === target);
+    if (!src || !tgt) return null;
 
-    const surfaceDataConnections: Record<string, Set<string>> = {};
-    const surfaceParents: Record<string, string> = {};
-    const connectionSimulators: Record<string, string> = {};
+    let partial: Partial<EverythingAsCodeOIWorkspace> | null = null;
 
-    // Reconstruct relationships from edges
-    for (const edge of graph.Edges) {
-      if (edge.Label === 'feeds') {
-        if (!surfaceDataConnections[edge.Target]) {
-          surfaceDataConnections[edge.Target] = new Set();
-        }
-        surfaceDataConnections[edge.Target].add(edge.Source);
-      } else if (edge.Label === 'parent') {
-        surfaceParents[edge.Target] = edge.Source;
-      } else if (edge.Label === 'simulates') {
-        connectionSimulators[edge.Target] = edge.Source;
-      }
+    if (src.Type === 'simulator' && tgt.Type === 'connection') {
+      // simulator → connection
+      const existing = wks.DataConnections?.[tgt.ID]?.SimulatorLookup;
+      if (existing === src.ID) return null;
+
+      partial = {
+        DataConnections: {
+          [tgt.ID]: {
+            ...wks.DataConnections?.[tgt.ID],
+            SimulatorLookup: src.ID,
+          } as EaCDataConnectionAsCode,
+        },
+      };
+    } else if (src.Type === 'connection' && tgt.Type === 'surface') {
+      // connection → surface
+      const connSet = {
+        ...(wks.Surfaces?.[tgt.ID]?.DataConnections ?? {}),
+        [src.ID]: {},
+      };
+
+      partial = {
+        Surfaces: {
+          [tgt.ID]: {
+            ...wks.Surfaces?.[tgt.ID],
+            DataConnections: connSet,
+          } as EaCSurfaceAsCode,
+        },
+      };
+    } else if (src.Type === 'surface' && tgt.Type === 'surface') {
+      // parent → surface
+      const existing = wks.Surfaces?.[tgt.ID]?.ParentSurfaceLookup;
+      if (existing === src.ID) return null;
+
+      partial = {
+        Surfaces: {
+          [tgt.ID]: {
+            ...wks.Surfaces?.[tgt.ID],
+            ParentSurfaceLookup: src.ID,
+          } as EaCSurfaceAsCode,
+        },
+      };
     }
 
-    for (const node of graph.Nodes) {
-      const { ID, Type, Metadata, Details } = node;
-
-      switch (Type) {
-        case 'connection': {
-          dataConnections[ID] = {
-            Metadata: Metadata as EaCFlowNodeMetadata,
-            Details: Details as EaCDataConnectionDetails,
-            SimulatorLookup: connectionSimulators[ID],
-          };
-          break;
-        }
-
-        case 'simulator': {
-          simulators[ID] = {
-            Metadata: Metadata as EaCFlowNodeMetadata,
-            Details: Details as EaCSimulatorDetails,
-          };
-          break;
-        }
-
-        case 'surface': {
-          const dataConnKeys = Array.from(surfaceDataConnections[ID] ?? []);
-          const dataConnMap = dataConnKeys.reduce(
-            (acc, connKey) => ({
-              ...acc,
-              [connKey]: {} as SurfaceDataConnectionSettings,
-            }),
-            {} as Record<string, SurfaceDataConnectionSettings>
-          );
-
-          surfaces[ID] = {
-            Metadata: Metadata as EaCFlowNodeMetadata,
-            Details: Details as EaCSurfaceDetails,
-            ParentSurfaceLookup: surfaceParents[ID],
-            DataConnections: dataConnKeys.length > 0 ? dataConnMap : undefined,
-          };
-
-          break;
-        }
-      }
+    if (partial) {
+      this.MergePartial(partial);
     }
 
-    return {
-      DataConnections: dataConnections,
-      Simulators: simulators,
-      Surfaces: surfaces,
-    };
+    return partial;
   }
 }
