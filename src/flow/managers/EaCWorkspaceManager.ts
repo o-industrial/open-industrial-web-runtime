@@ -11,10 +11,12 @@ import { EverythingAsCodeOIWorkspace } from '../../eac/EverythingAsCodeOIWorkspa
 import { EaCDataConnectionAsCode } from '../../eac/EaCDataConnectionAsCode.ts';
 import { EaCSurfaceAsCode } from '../../eac/EaCSurfaceAsCode.ts';
 
+import { Edge, EdgeChange } from 'reactflow';
+
 /**
- * Manages a full Workspace-scope Everything-as-Code model and its
- * corresponding flow graph. This includes data connections, simulators,
- * surfaces, and their interlinked relationships.
+ * Workspace-level Everything-as-Code manager.
+ * Handles conversion between structured EaC and flow graph representation,
+ * as well as tracking simulator, connection, and surface relationships.
  */
 export class EaCWorkspaceManager extends EaCManager {
   constructor(
@@ -26,8 +28,7 @@ export class EaCWorkspaceManager extends EaCManager {
   }
 
   /**
-   * Derives the canonical flow graph (nodes + edges) from current EaC state.
-   * This is used after every mutation to rehydrate the topology.
+   * Translates current EaC structure into FlowGraph (nodes + edges).
    */
   protected buildGraph(eac: OpenIndustrialEaC): FlowGraph {
     const nodes: FlowGraphNode[] = [];
@@ -56,7 +57,7 @@ export class EaCWorkspaceManager extends EaCManager {
         Details: sim.Details,
       });
 
-      // simulates → data connection
+      // Link: simulator → data connection
       for (const [connKey, conn] of Object.entries(wks.DataConnections ?? {})) {
         if (conn.SimulatorLookup === key) {
           edges.push({
@@ -79,7 +80,7 @@ export class EaCWorkspaceManager extends EaCManager {
         Details: surf.Details,
       });
 
-      // connection → surface
+      // Link: connection → surface
       for (const connKey of Object.keys(surf.DataConnections ?? {})) {
         edges.push({
           ID: `${connKey}->${key}`,
@@ -89,7 +90,7 @@ export class EaCWorkspaceManager extends EaCManager {
         });
       }
 
-      // parent → surface
+      // Link: parent surface → surface
       if (surf.ParentSurfaceLookup) {
         edges.push({
           ID: `${surf.ParentSurfaceLookup}->${key}`,
@@ -104,13 +105,8 @@ export class EaCWorkspaceManager extends EaCManager {
   }
 
   /**
-   * Creates an EaC partial structure based on a proposed connection between two nodes.
-   * Returns the EaC delta and triggers downstream graph rebuild if the relationship is valid.
-   *
-   * Supports:
-   * - simulator → connection (`simulates`)
-   * - connection → surface (`feeds`)
-   * - surface → surface (`parent`)
+   * Applies a new relationship between two nodes in the graph.
+   * Returns a partial EaC update if the connection is valid.
    */
   public CreateConnectionEdge(
     source: string,
@@ -125,7 +121,6 @@ export class EaCWorkspaceManager extends EaCManager {
     let partial: Partial<EverythingAsCodeOIWorkspace> | null = null;
 
     if (src.Type === 'simulator' && tgt.Type === 'connection') {
-      // simulator → connection
       const existing = wks.DataConnections?.[tgt.ID]?.SimulatorLookup;
       if (existing === src.ID) return null;
 
@@ -138,7 +133,6 @@ export class EaCWorkspaceManager extends EaCManager {
         },
       };
     } else if (src.Type === 'connection' && tgt.Type === 'surface') {
-      // connection → surface
       const connSet = {
         ...(wks.Surfaces?.[tgt.ID]?.DataConnections ?? {}),
         [src.ID]: {},
@@ -153,7 +147,6 @@ export class EaCWorkspaceManager extends EaCManager {
         },
       };
     } else if (src.Type === 'surface' && tgt.Type === 'surface') {
-      // parent → surface
       const existing = wks.Surfaces?.[tgt.ID]?.ParentSurfaceLookup;
       if (existing === src.ID) return null;
 
@@ -172,5 +165,91 @@ export class EaCWorkspaceManager extends EaCManager {
     }
 
     return partial;
+  }
+
+  /**
+   * Handles edge list changes by removing deleted edges and adding new connections.
+   */
+  protected updateConnections(changes: EdgeChange[], updated: Edge[]): void {
+    for (const change of changes) {
+      if (change.type === 'remove') {
+        console.log(`❌ [EaCWorkspace] Removing edge ${change.id} from EaC`);
+        this.removeConnectionEdge(change.id);
+      }
+    }
+
+    for (const edge of updated) {
+      if (!this.hasConnection(edge.source, edge.target)) {
+        console.log(`➕ [EaCWorkspace] Adding new edge ${edge.id} to EaC`);
+        this.CreateConnectionEdge(edge.source, edge.target);
+      }
+    }
+  }
+
+  /**
+   * Returns true if the source → target connection already exists in the current graph.
+   */
+  private hasConnection(source: string, target: string): boolean {
+    return this.graph.GetGraph().Edges.some(
+      (e) => e.Source === source && e.Target === target
+    );
+  }
+
+  /**
+   * Removes a connection relationship by ID. Decodes relationship type from edge ID prefix.
+   */
+  private removeConnectionEdge(edgeId: string): void {
+    const [source, target] = edgeId.split('->');
+    const wks = this.GetEaC() as EverythingAsCodeOIWorkspace;
+
+    const src = this.graph.GetGraph().Nodes.find((n) => n.ID === source);
+    const tgt = this.graph.GetGraph().Nodes.find((n) => n.ID === target);
+    if (!src || !tgt) return;
+
+    let partial: Partial<EverythingAsCodeOIWorkspace> | null = null;
+
+    if (src.Type === 'simulator' && tgt.Type === 'connection') {
+      if (wks.DataConnections?.[tgt.ID]?.SimulatorLookup === src.ID) {
+        partial = {
+          DataConnections: {
+            [tgt.ID]: {
+              ...wks.DataConnections?.[tgt.ID],
+              SimulatorLookup: undefined,
+            },
+          },
+        };
+      }
+    } else if (src.Type === 'connection' && tgt.Type === 'surface') {
+      const surface = wks.Surfaces?.[tgt.ID];
+      if (surface?.DataConnections?.[src.ID]) {
+        const updatedConnections = { ...surface.DataConnections };
+        delete updatedConnections[src.ID];
+
+        partial = {
+          Surfaces: {
+            [tgt.ID]: {
+              ...surface,
+              DataConnections: updatedConnections,
+            },
+          },
+        };
+      }
+    } else if (src.Type === 'surface' && tgt.Type === 'surface') {
+      const surface = wks.Surfaces?.[tgt.ID];
+      if (surface?.ParentSurfaceLookup === src.ID) {
+        partial = {
+          Surfaces: {
+            [tgt.ID]: {
+              ...surface,
+              ParentSurfaceLookup: undefined,
+            },
+          },
+        };
+      }
+    }
+
+    if (partial) {
+      this.MergePartial(partial);
+    }
   }
 }

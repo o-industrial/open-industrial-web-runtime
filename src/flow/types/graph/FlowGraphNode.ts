@@ -12,7 +12,7 @@ export type FlowGraphNode<TEaC extends EaCVertexDetails = EaCVertexDetails> = {
   ID: string;
 
   /** Canonical flow node type — determines rendering and behavior. */
-  Type: 'connection' | 'simulator' | 'surface';
+  Type: string;
 
   /** Optional label used for node UI (fallbacks to Name or ID). */
   Label?: string;

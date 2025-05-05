@@ -35,12 +35,19 @@ export const handler: EaCRuntimeHandlerSet<
 export default function WorkspacePage({
   Data: { EaC },
 }: PageProps<WorkspacePageData>) {
-  const flowMgr = useMemo(() => new FlowManager('workspace'), []);
+  console.log('🌀 WorkspacePage mounted');
+
+  const flowMgr = useMemo(() => {
+    const mgr = new FlowManager({}, 'workspace');
+    console.log('🧩 New FlowManager created');
+    return mgr;
+  }, []);
 
   const [showMarketplace, setShowMarketplace] = useState(false);
 
   useEffect(() => {
     if (EaC) {
+      console.log('📥 Merging partial EaC:', EaC);
       flowMgr.EaC.MergePartial(EaC);
     }
   }, [EaC]);
@@ -54,6 +61,7 @@ export default function WorkspacePage({
           onInstall={(sims) => {
             console.log('✅ Installed simulators:', sims);
             setShowMarketplace(false);
+            console.log('📦 Simulator modal closed');
           }}
         />
       )}

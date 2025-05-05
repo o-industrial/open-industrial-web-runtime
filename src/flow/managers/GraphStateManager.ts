@@ -11,31 +11,36 @@ import { FlowNodeData } from '../types/react/FlowNodeData.ts';
 import { FlowGraph } from '../types/graph/FlowGraph.ts';
 import { FlowGraphNode } from '../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../types/graph/FlowGraphEdge.ts';
-import { translateFromReactFlow } from '../../utils/translateFromReactFlow.ts';
 
 export class GraphStateManager {
   protected graph: FlowGraph = { Nodes: [], Edges: [] };
   protected nodeCache: Record<string, Node<FlowNodeData>> = {};
   protected edgeCache: Record<string, Edge> = {};
   protected listeners: (() => void)[] = [];
-  protected emitTimeout?: number;
 
-  // === Canonical Access ===
+  /**
+   * Public API: Returns canonical FlowGraph structure.
+   */
   public GetGraph(): FlowGraph {
     return this.graph;
   }
 
+  /**
+   * Alias for GetGraph.
+   */
   public ExportGraph(): FlowGraph {
     return this.graph;
   }
 
-  // === Load Full or Partial Graph ===
+  /**
+   * Load and merge a new FlowGraph, triggering events only on change.
+   */
   public LoadFromGraph(graph: FlowGraph): void {
+    console.log('📥 Loading new graph structure:', graph);
     let changed = false;
 
     for (const node of graph.Nodes) {
       const idx = this.graph.Nodes.findIndex((n) => n.ID === node.ID);
-
       if (idx === -1) {
         this.graph.Nodes.push(node);
         changed = true;
@@ -47,7 +52,6 @@ export class GraphStateManager {
 
     for (const edge of graph.Edges) {
       const idx = this.graph.Edges.findIndex((e) => e.ID === edge.ID);
-
       if (idx === -1) {
         this.graph.Edges.push(edge);
         changed = true;
@@ -58,77 +62,67 @@ export class GraphStateManager {
     }
 
     if (changed) {
+      console.log('🔁 Graph changed — updating');
       this.clearCaches();
       this.emitGraphChanged();
+    } else {
+      console.log('✅ No changes detected — graph unchanged');
     }
   }
 
-  // === React Flow View ===
+  /**
+   * Apply React Flow-style node changes and immediately update FlowGraph.
+   */
+  public ApplyNodesChange(changes: NodeChange[], currentNodes: Node<FlowNodeData>[]): Node[] {
+    const updated = applyNodeChanges(changes, currentNodes);
+    this.nodeCache = {};
+    this.graph.Nodes = updated.map((node) => this.toFlowGraphNode(node));
+    // this.emitGraphChanged();
+    return updated;
+  }
+
+  /**
+   * Apply React Flow-style edge changes and immediately update FlowGraph.
+   */
+  public ApplyEdgesChange(changes: EdgeChange[], currentEdges: Edge[]): Edge[] {
+    const updated = applyEdgeChanges(changes, currentEdges);
+    this.edgeCache = {};
+    this.graph.Edges = updated.map((edge) => this.toFlowGraphEdge(edge));
+    // this.emitGraphChanged();
+
+    return updated;
+  }
+
+  /**
+   * Returns React Flow nodes.
+   */
   public GetNodes(): Node<FlowNodeData>[] {
     return this.toReactFlowNodes();
   }
 
+  /**
+   * Returns React Flow edges.
+   */
   public GetEdges(): Edge[] {
     return this.toReactFlowEdges();
   }
 
-  public UpdateFromReactFlow(nodes: Node<FlowNodeData>[], edges: Edge[]): void {
-    this.graph = translateFromReactFlow(nodes, edges);
-    this.clearCaches();
-    this.emitGraphChanged();
+  /**
+   * Register a listener for graph structure changes.
+   */
+  public OnGraphChanged(cb: () => void): void {
+    this.listeners.push(cb);
   }
 
-  // === React Flow Mutation Hooks ===
-  public ApplyNodeChanges(changes: NodeChange[]): void {
-    const updated = applyNodeChanges(changes, this.GetNodes());
-    this.UpdateFromReactFlow(updated, this.GetEdges());
-  }
-
-  public ApplyEdgeChanges(changes: EdgeChange[]): void {
-    const updated = applyEdgeChanges(changes, this.GetEdges());
-    this.UpdateFromReactFlow(this.GetNodes(), updated);
-  }
-
-  // === Manual Mutation ===
-  public AddNode(node: FlowGraphNode): void {
-    if (!this.HasNode(node.ID)) {
-      this.graph.Nodes.push(node);
-      this.clearCaches();
-      this.emitGraphChanged();
-    }
-  }
-
-  public AddEdge(edge: FlowGraphEdge): void {
-    if (!this.HasEdge(edge.ID)) {
-      this.graph.Edges.push(edge);
-      this.clearCaches();
-      this.emitGraphChanged();
-    }
-  }
-
-  public HasNode(id: string): boolean {
-    return this.graph.Nodes.some((n) => n.ID === id);
-  }
-
-  public HasEdge(id: string): boolean {
-    return this.graph.Edges.some((e) => e.ID === id);
-  }
-
-  // === Events ===
-  public OnGraphChanged(callback: () => void): void {
-    this.listeners.push(callback);
-  }
-
-  public OffGraphChanged(callback: () => void): void {
-    this.listeners = this.listeners.filter((cb) => cb !== callback);
+  /**
+   * Unregister a previously added graph change listener.
+   */
+  public OffGraphChanged(cb: () => void): void {
+    this.listeners = this.listeners.filter((fn) => fn !== cb);
   }
 
   protected emitGraphChanged(): void {
-    if (this.emitTimeout) clearTimeout(this.emitTimeout);
-
-    this.emitTimeout = setTimeout(() => {
-      this.listeners.forEach((cb) => cb());
-    }, 75);
+    this.listeners.forEach((cb) => cb());
   }
 
   protected clearCaches(): void {
@@ -136,7 +130,6 @@ export class GraphStateManager {
     this.edgeCache = {};
   }
 
-  // === React Flow Translation ===
   protected toReactFlowNodes(): Node<FlowNodeData>[] {
     return this.graph.Nodes.map((n) => {
       const id = n.ID;
@@ -177,5 +170,27 @@ export class GraphStateManager {
       this.edgeCache[id] = existing ? Object.assign(existing, updated) : updated;
       return this.edgeCache[id];
     });
+  }
+
+  protected toFlowGraphNode(n: Node<FlowNodeData>): FlowGraphNode {
+    return {
+      ID: n.id,
+      Type: n.type ?? 'empty',
+      Label: n.data?.label ?? n.id,
+      Details: n.data?.details,
+      Metadata: {
+        Position: { X: n.position.x, Y: n.position.y },
+        Enabled: n.data?.enabled,
+      },
+    };
+  }
+
+  protected toFlowGraphEdge(e: Edge): FlowGraphEdge {
+    return {
+      ID: e.id,
+      Source: e.source,
+      Target: e.target,
+      Label: e.label,
+    };
   }
 }

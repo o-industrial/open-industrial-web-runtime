@@ -2,9 +2,13 @@ import {
   Background,
   MiniMap,
   Node,
+  Edge,
+  EdgeChange,
+  NodeChange,
   ReactFlow,
   ReactFlowProvider,
   useReactFlow,
+  Connection,
 } from 'reactflow';
 import { useState } from 'preact/hooks';
 import { IS_BROWSER } from '@fathym/atomic';
@@ -29,9 +33,22 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
   const { screenToFlowPosition } = useReactFlow();
 
   const { nodes, edges } = flowMgr.UseGraphView();
-  const { handleDrop, handleConnect, handleNodeClick } =
-    flowMgr.UseInteraction();
+  const {
+    handleDrop,
+    handleConnect,
+    handleNodeClick,
+    handleNodesChange,
+    handleEdgesChange,
+  } = flowMgr.UseInteraction();
   const { presets, nodeTypes } = flowMgr.UseUIContext();
+
+  console.log('🎨 FlowPanel render triggered');
+  console.log('🧩 Current graph state:', {
+    nodeCount: nodes.length,
+    edgeCount: edges.length,
+    nodeKeys: nodes.map((n) => n.id),
+    edgeKeys: edges.map((e) => e.id),
+  });
 
   return (
     <FlowPanelTemplate
@@ -42,17 +59,35 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
       canvas={
         <div
           class="absolute inset-0 w-full h-full"
-          onDrop={(e) => handleDrop(e, screenToFlowPosition)}
-          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => {
+            console.log('📥 Drop event received');
+            handleDrop(e, screenToFlowPosition);
+          }}
+          onDragOver={(e) => {
+            console.log('🛸 DragOver event');
+            e.preventDefault();
+          }}
         >
           <ReactFlow
             nodes={nodes}
             edges={edges}
             nodeTypes={nodeTypes}
-            onNodesChange={flowMgr.Graph.ApplyNodeChanges.bind(flowMgr.Graph)}
-            onEdgesChange={flowMgr.Graph.ApplyEdgeChanges.bind(flowMgr.Graph)}
-            onConnect={handleConnect}
-            onNodeClick={handleNodeClick}
+            onNodesChange={(changes: NodeChange[], nodes: Node[]) => {
+              console.log('🔧 Node changes:', changes);
+              handleNodesChange(changes, nodes);
+            }}
+            onEdgesChange={(changes: EdgeChange[], edges: Edge[]) => {
+              console.log('🔗 Edge changes:', changes);
+              handleEdgesChange(changes, edges);
+            }}
+            onConnect={(conn: Connection) => {
+              console.log('🔌 Connect triggered:', conn);
+              handleConnect(conn);
+            }}
+            onNodeClick={(e: unknown, node: Node) => {
+              console.log('🖱️ Node click:', node.id);
+              handleNodeClick(e, node);
+            }}
             fitView
             fitViewOptions={{ padding: 0.2 }}
             minZoom={0.3}
@@ -61,15 +96,21 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
           >
             <Background />
 
-            {/* 🧭 Flow UI overlays */}
             <div class="absolute bottom-4 right-4 z-20 pointer-events-none flex flex-col items-end gap-2">
               {showMap && (
                 <div class="pointer-events-auto rounded-md border border-neutral-700 bg-neutral-900/90 backdrop-blur-md shadow-lg">
                   <MiniMap
                     nodeColor={(node: Node) => {
-                      if (node.data?.status === 'error') return '#F43F5E';
-                      if (node.data?.status === 'warning') return '#EAB308';
-                      return '#06B6D4';
+                      const status = node.data?.status;
+                      const color =
+                        status === 'error'
+                          ? '#F43F5E'
+                          : status === 'warning'
+                          ? '#EAB308'
+                          : '#06B6D4';
+
+                      console.log(`🗺️ MiniMap color for ${node.id}: ${color}`);
+                      return color;
                     }}
                     maskColor="rgba(0,0,0,0.2)"
                     style={{
@@ -82,7 +123,13 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
               )}
 
               <div class="pointer-events-auto">
-                <FlowControls showMap={showMap} onToggleMap={setShowMap} />
+                <FlowControls
+                  showMap={showMap}
+                  onToggleMap={(val) => {
+                    console.log('🧭 Toggling MiniMap:', val);
+                    setShowMap(val);
+                  }}
+                />
               </div>
             </div>
           </ReactFlow>
@@ -94,8 +141,11 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
 
 export default function WrappedFlowPanel(props: FlowPanelProps) {
   if (!IS_BROWSER) {
+    console.log('🚫 FlowPanel rendering skipped (not browser)');
     return <LoadingSpinner intentType={IntentTypes.Primary} />;
   }
+
+  console.log('🌐 Rendering WrappedFlowPanel in browser');
 
   return (
     <ReactFlowProvider>

@@ -1,4 +1,11 @@
-import { Connection, Node, XYPosition } from 'reactflow';
+import {
+  Connection,
+  Edge,
+  EdgeChange,
+  Node,
+  NodeChange,
+  XYPosition,
+} from 'reactflow';
 import { useCallback, useEffect, useState } from 'preact/hooks';
 
 import { FlowNodeData } from '../types/react/FlowNodeData.ts';
@@ -33,13 +40,20 @@ export class FlowManager {
     this.Presets = new PresetManager();
     this.Stats = new StatManager();
     this.Simulators = new SimulatorLibraryManager();
-    this.EaC = this.CreateEaCManager(eac);
+    this.EaC = this.createEaCManager(eac);
     this.Runtime = new InteractionManager(
       this.Selection,
       this.Presets,
       this.Stats,
-      this.EaC
+      this.EaC,
+      this.Graph
     );
+
+    console.log('🚀 FlowManager initialized:', {
+      scope: this.Scope,
+      nodes: this.Graph.GetNodes().length,
+      edges: this.Graph.GetEdges().length,
+    });
   }
 
   public UseAzi() {
@@ -51,7 +65,9 @@ export class FlowManager {
       return () => this.Azi.OffMessagesChanged(update);
     }, []);
 
-    const send = (text: string) => this.Azi.Send(text);
+    const send = (text: string) => {
+      this.Azi.Send(text);
+    };
 
     return { messages, send };
   }
@@ -81,9 +97,7 @@ export class FlowManager {
           this.Graph.GetNodes(),
           toFlow
         );
-        if (result) {
-          this.Selection.SelectNode(result.selectedId);
-        }
+        if (result) this.Selection.SelectNode(result.selectedId);
       },
       []
     );
@@ -101,7 +115,27 @@ export class FlowManager {
       []
     );
 
-    return { handleDrop, handleConnect, handleNodeClick };
+    const handleNodesChange = useCallback(
+      (changes: NodeChange[], nodes: Node[]) => {
+        this.Runtime.OnNodesChange(changes, nodes ?? this.Graph.GetNodes());
+      },
+      []
+    );
+
+    const handleEdgesChange = useCallback(
+      (changes: EdgeChange[], edges: Edge[]) => {
+        this.Runtime.OnEdgesChange(changes, edges ?? this.Graph.GetEdges());
+      },
+      []
+    );
+
+    return {
+      handleDrop,
+      handleConnect,
+      handleNodeClick,
+      handleNodesChange,
+      handleEdgesChange,
+    };
   }
 
   public UseSelection() {
@@ -138,12 +172,7 @@ export class FlowManager {
 
     const saveSettings = () => {
       if (!selected) return;
-
-      // You’ll later wire this up to emit changes back to EaC
-      // For now, local mutation is a fallback
       selected.data = { ...selected.data, ...settings };
-
-      console.log('🔄 Saved (placeholder) settings for:', selected);
     };
 
     return {
@@ -154,13 +183,12 @@ export class FlowManager {
   }
 
   public UseUIContext() {
-    return {
-      presets: this.Presets.GetPresetsForScope(this.Scope),
-      nodeTypes: this.Presets.GetRendererMap(),
-    };
+    const presets = this.Presets.GetPresetsForScope(this.Scope);
+    const nodeTypes = this.Presets.GetRendererMap();
+    return { presets, nodeTypes };
   }
 
-  protected CreateEaCManager(eac: OpenIndustrialEaC): EaCManager {
+  protected createEaCManager(eac: OpenIndustrialEaC): EaCManager {
     switch (this.Scope) {
       case 'workspace':
         return new EaCWorkspaceManager(eac, this.Graph, this.Presets);
