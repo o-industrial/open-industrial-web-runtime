@@ -7,6 +7,7 @@ import { EaCDataConnectionDetails } from '../../../../src/eac/EaCDataConnectionD
 import { DataConnectionStats } from '../../../../src/flow/types/DataConnectionStats.ts';
 import { ConnectionInfoPanel } from '../../atoms/ConnectionInfoPanel.tsx';
 import { DataConnectionConfig } from '../../../../src/flow/types/DataConnectionConfig.ts';
+import { useMemo } from 'preact/hooks';
 
 type ConnectionInspectorProps = InspectorCommonProps<
   EaCDataConnectionDetails,
@@ -20,6 +21,7 @@ export function ConnectionInspector({
   enabled,
   getStats,
   onDetailsChanged,
+  onToggleEnabled,
 }: ConnectionInspectorProps) {
   const stats = useLiveStats(getStats);
   const ingestOptions = config?.ingestOptions ?? [];
@@ -30,7 +32,7 @@ export function ConnectionInspector({
       label={details.Name}
       enabled={enabled}
       impulseRates={stats?.impulseRates ?? []}
-      onToggleEnabled={(val) => onDetailsChanged({ Enabled: val })}
+      onToggleEnabled={onToggleEnabled}
       onDelete={() => console.log('🗑️ TODO: Delete connection node')}
     >
       <TabbedPanel

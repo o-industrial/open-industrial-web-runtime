@@ -6,6 +6,7 @@ import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { InspectorCommonProps } from '../InspectorPanel.tsx';
 import { AgentStats } from '../../../../src/flow/types/AgentStats.tsx';
 import { EaCAgentDetails } from '../../../../src/eac/EaCAgentDetails.ts';
+import { useMemo } from 'preact/hooks';
 
 type AgentInspectorProps = InspectorCommonProps<EaCAgentDetails, AgentStats>;
 
@@ -14,6 +15,7 @@ export function AgentInspector({
   enabled,
   getStats,
   onDetailsChanged,
+  onToggleEnabled,
 }: AgentInspectorProps) {
   const stats = useLiveStats(getStats);
 
@@ -22,7 +24,7 @@ export function AgentInspector({
       iconKey="agent"
       label={details.Name ?? 'Agent Node'}
       enabled={enabled}
-      onToggleEnabled={(enabled) => onDetailsChanged({ Enabled: enabled })}
+      onToggleEnabled={onToggleEnabled}
       onDelete={() => console.log('🗑️ TODO: Delete agent node')}
     >
       <LinePreviewWithValue

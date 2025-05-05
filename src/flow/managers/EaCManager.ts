@@ -138,39 +138,19 @@ export abstract class EaCManager {
     return result?.AsCode?.Details ?? null;
   }
 
-  public UpdateDetailsForNode(id: string, next: EaCVertexDetails): void {
+  public GetMetadataForNode(id: string): EaCFlowNodeMetadata | null {
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
+  
     if (!node) {
       console.warn(`[Inspector] No matching node in graph for ID: ${id}`);
-      return;
+      return null;
     }
-
-    const type = node.Type;
-    const current = this.findEaCAsCode(id, type);
-    if (!current) return;
-
-    const prevDetails = current.AsCode.Details ?? {};
-    const merged = { ...prevDetails, ...next };
-
-    const changed = JSON.stringify(prevDetails) !== JSON.stringify(merged);
-    if (!changed) {
-      console.log(`[Inspector] No detail changes for node: ${id}`);
-      return;
-    }
-
-    const partial: OpenIndustrialEaC = {
-      [this.getEaCKeyForType(type)]: {
-        [id]: {
-          Details: merged,
-        },
-      },
-    };
-
-    console.log(`✏️ [Inspector] Merging updated Details for ${id} →`, merged);
-
-    this.MergePartial(partial);
+  
+    const result = this.findEaCAsCode(node.ID, node.Type);
+  
+    return result?.AsCode?.Metadata ?? null;
   }
-
+  
   public InstallSimulators(simDefs: SimulatorDefinition[]): void {
     const partial: OpenIndustrialEaC = {
       Simulators: {},
@@ -205,6 +185,76 @@ export abstract class EaCManager {
     } else {
       console.log('✅ No graph rebuild needed — structure unchanged');
     }
+  }
+
+  public UpdateDetailsForNode(id: string, next: EaCVertexDetails): void {
+    const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
+    if (!node) {
+      console.warn(`[Inspector] No matching node in graph for ID: ${id}`);
+      return;
+    }
+
+    const type = node.Type;
+    const current = this.findEaCAsCode(id, type);
+    if (!current) return;
+
+    const prevDetails = current.AsCode.Details ?? {};
+    const merged = { ...prevDetails, ...next };
+
+    const changed = JSON.stringify(prevDetails) !== JSON.stringify(merged);
+    if (!changed) {
+      console.log(`[Inspector] No detail changes for node: ${id}`);
+      return;
+    }
+
+    const partial: OpenIndustrialEaC = {
+      [this.getEaCKeyForType(type)]: {
+        [id]: {
+          Details: merged,
+        },
+      },
+    };
+
+    console.log(`✏️ [Inspector] Merging updated Details for ${id} →`, merged);
+
+    this.MergePartial(partial);
+  }
+
+  public UpdateMetadataForNode(id: string, metadata: Partial<EaCFlowNodeMetadata>): void {
+    const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
+    if (!node) {
+      console.warn(`[EaC] No graph node found for ID: ${id}`);
+      return;
+    }
+  
+    const type = node.Type;
+    const current = this.findEaCAsCode(id, type);
+    if (!current) {
+      console.warn(`[EaC] No matching EaC entry for ${type}:${id}`);
+      return;
+    }
+  
+    const prevMeta = current.AsCode.Metadata ?? {};
+    const mergedMeta = { ...prevMeta, ...metadata };
+  
+    const changed = JSON.stringify(prevMeta) !== JSON.stringify(mergedMeta);
+    if (!changed) {
+      console.log(`[EaC] No metadata change for ${id}`);
+      return;
+    }
+  
+    const partial: OpenIndustrialEaC = {
+      [this.getEaCKeyForType(type)]: {
+        [id]: {
+          Metadata: mergedMeta,
+          Details: {},
+        },
+      },
+    };
+  
+    console.log(`✏️ [EaC] Merging updated Metadata for ${id} →`, mergedMeta);
+  
+    this.MergePartial(partial);
   }
 
   protected findEaCAsCode(

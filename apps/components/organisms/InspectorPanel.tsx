@@ -24,6 +24,7 @@ export type InspectorCommonProps<
   enabled: boolean;
   getStats?: () => Promise<TStats>;
   onDetailsChanged: (next: Partial<TDetails>) => void;
+  onToggleEnabled: (enabled: boolean) => void;
 };
 
 export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
@@ -69,6 +70,16 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
     flowMgr.Selection.ClearSelection();
   }, []);
 
+  const handleToggleEnabled = useCallback(
+    (val: boolean) => {
+      if (selectedId) {
+        flowMgr.EaC.UpdateMetadataForNode(selectedId, { Enabled: val });
+        console.log(`🟡 Toggled enabled state for node ${selectedId} → ${val}`);
+      }
+    },
+    [selectedId]
+  );
+
   // 🔁 Update details when selected node changes
   useEffect(() => {
     if (selectedId) {
@@ -77,21 +88,25 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
     }
   }, [selectedId]);
 
-  // 🔁 Rebuild commonProps when selected or details change
   useEffect(() => {
     if (!selected) {
       setCommonProps(undefined);
       return;
     }
-
+console.log('here her here here here')
     const presetConfig =
       flowMgr.Presets?.GetConfigForType?.(selected.id, selected.type!) ?? {};
 
+    // ✅ This is the correct, source-of-truth enabled flag
+    const latestMetadata = flowMgr.EaC.GetMetadataForNode?.(selected.id);
+    const enabled = latestMetadata?.Enabled ?? false;
+
     setCommonProps({
       details,
-      enabled: selected.data.enabled ?? false,
+      enabled,
       getStats: selected.data.getStats,
       onDetailsChanged: handleDetailsChanged,
+      onToggleEnabled: handleToggleEnabled,
       config: presetConfig,
     });
   }, [selected, details, handleDetailsChanged, handleSave]);

@@ -33,6 +33,7 @@ export function SurfaceInspector({
   enabled,
   getStats,
   onDetailsChanged,
+  onToggleEnabled,
 }: SurfaceInspectorProps) {
   const stats = useLiveStats(getStats);
 
@@ -44,7 +45,7 @@ export function SurfaceInspector({
       impulseRates={stats?.impulseRates ?? []}
       yMin={5}
       yMax={20}
-      onToggleEnabled={(val) => onDetailsChanged({ Enabled: val })}
+      onToggleEnabled={onToggleEnabled}
       onDelete={() => console.log('🗑️ TODO: Delete surface node')}
     >
       <TabbedPanel
