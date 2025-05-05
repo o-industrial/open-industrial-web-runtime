@@ -18,33 +18,28 @@ export class GraphStateManager {
   protected edgeCache: Record<string, Edge> = {};
   protected listeners: (() => void)[] = [];
 
-  /**
-   * Public API: Returns canonical FlowGraph structure.
-   */
   public GetGraph(): FlowGraph {
     return this.graph;
   }
 
-  /**
-   * Alias for GetGraph.
-   */
   public ExportGraph(): FlowGraph {
     return this.graph;
   }
 
-  /**
-   * Load and merge a new FlowGraph, triggering events only on change.
-   */
   public LoadFromGraph(graph: FlowGraph): void {
-    console.log('📥 Loading new graph structure:', graph);
+    console.log('📥 [GraphState] Loading new graph structure:', graph);
     let changed = false;
 
     for (const node of graph.Nodes) {
       const idx = this.graph.Nodes.findIndex((n) => n.ID === node.ID);
       if (idx === -1) {
+        console.log(`➕ [GraphState] New node added: ${node.ID}`);
         this.graph.Nodes.push(node);
         changed = true;
-      } else if (JSON.stringify(this.graph.Nodes[idx]) !== JSON.stringify(node)) {
+      } else if (
+        JSON.stringify(this.graph.Nodes[idx]) !== JSON.stringify(node)
+      ) {
+        console.log(`✏️ [GraphState] Node updated: ${node.ID}`);
         this.graph.Nodes[idx] = node;
         changed = true;
       }
@@ -53,79 +48,159 @@ export class GraphStateManager {
     for (const edge of graph.Edges) {
       const idx = this.graph.Edges.findIndex((e) => e.ID === edge.ID);
       if (idx === -1) {
+        console.log(`➕ [GraphState] New edge added: ${edge.ID}`);
         this.graph.Edges.push(edge);
         changed = true;
-      } else if (JSON.stringify(this.graph.Edges[idx]) !== JSON.stringify(edge)) {
+      } else if (
+        JSON.stringify(this.graph.Edges[idx]) !== JSON.stringify(edge)
+      ) {
+        console.log(`✏️ [GraphState] Edge updated: ${edge.ID}`);
         this.graph.Edges[idx] = edge;
         changed = true;
       }
     }
 
     if (changed) {
-      console.log('🔁 Graph changed — updating');
+      console.log(
+        '🔁 [GraphState] Graph changed — updating caches and notifying listeners'
+      );
       this.clearCaches();
       this.emitGraphChanged();
     } else {
-      console.log('✅ No changes detected — graph unchanged');
+      console.log('✅ [GraphState] No changes detected — graph unchanged');
     }
   }
 
-  /**
-   * Apply React Flow-style node changes and immediately update FlowGraph.
-   */
-  public ApplyNodesChange(changes: NodeChange[], currentNodes: Node<FlowNodeData>[]): Node[] {
+  public ApplyNodesChange(
+    changes: NodeChange[],
+    currentNodes: Node<FlowNodeData>[]
+  ): Node[] {
+    console.log(
+      `🧩 [GraphState] Applying ${changes.length} node changes`,
+      changes
+    );
+
     const updated = applyNodeChanges(changes, currentNodes);
-    this.nodeCache = {};
-    this.graph.Nodes = updated.map((node) => this.toFlowGraphNode(node));
-    // this.emitGraphChanged();
+    let shouldEmit = false;
+
+    for (const node of updated) {
+      const flowNode = this.toFlowGraphNode(node);
+      const cached = this.nodeCache[node.id];
+
+      if (cached) {
+        const posChanged =
+          cached.position.x !== node.position.x ||
+          cached.position.y !== node.position.y;
+        const labelChanged = cached.data.label !== node.data.label;
+        const enabledChanged = cached.data.enabled !== node.data.enabled;
+
+        if (posChanged || labelChanged || enabledChanged) {
+          console.log(`🔄 [GraphState] Updating node ${node.id}`);
+          cached.position = { ...node.position };
+          cached.data = { ...cached.data, ...node.data };
+          cached.type = node.type;
+          shouldEmit = true;
+        }
+      } else {
+        console.log(`➕ [GraphState] New node ${node.id}`);
+        this.nodeCache[node.id] = { ...node };
+        shouldEmit = true;
+      }
+
+      const idx = this.graph.Nodes.findIndex((n) => n.ID === node.id);
+      if (idx !== -1) {
+        this.graph.Nodes[idx] = flowNode;
+      } else {
+        this.graph.Nodes.push(flowNode);
+      }
+    }
+
+    if (shouldEmit) {
+      console.log('✅ [GraphState] Emitting graph change due to node updates');
+      this.emitGraphChanged();
+    }
+
     return updated;
   }
 
-  /**
-   * Apply React Flow-style edge changes and immediately update FlowGraph.
-   */
   public ApplyEdgesChange(changes: EdgeChange[], currentEdges: Edge[]): Edge[] {
+    console.log(
+      `🔗 [GraphState] Applying ${changes.length} edge changes`,
+      changes
+    );
+
     const updated = applyEdgeChanges(changes, currentEdges);
-    this.edgeCache = {};
-    this.graph.Edges = updated.map((edge) => this.toFlowGraphEdge(edge));
-    // this.emitGraphChanged();
+    let shouldEmit = false;
+
+    for (const edge of updated) {
+      const flowEdge = this.toFlowGraphEdge(edge);
+      const cached = this.edgeCache[edge.id];
+
+      const hasChanged =
+        !cached ||
+        cached.source !== edge.source ||
+        cached.target !== edge.target ||
+        cached.label !== edge.label;
+
+      if (hasChanged) {
+        if (cached) {
+          console.log(`🔄 [GraphState] Updating edge ${edge.id}`);
+          Object.assign(cached, edge);
+        } else {
+          console.log(`➕ [GraphState] New edge ${edge.id}`);
+          this.edgeCache[edge.id] = { ...edge };
+        }
+
+        const idx = this.graph.Edges.findIndex((e) => e.ID === edge.id);
+        if (idx !== -1) {
+          this.graph.Edges[idx] = flowEdge;
+        } else {
+          this.graph.Edges.push(flowEdge);
+        }
+
+        shouldEmit = true;
+      }
+    }
+
+    if (shouldEmit) {
+      console.log('✅ [GraphState] Emitting graph change due to edge updates');
+      this.emitGraphChanged();
+    }
 
     return updated;
   }
 
-  /**
-   * Returns React Flow nodes.
-   */
   public GetNodes(): Node<FlowNodeData>[] {
     return this.toReactFlowNodes();
   }
 
-  /**
-   * Returns React Flow edges.
-   */
   public GetEdges(): Edge[] {
     return this.toReactFlowEdges();
   }
 
-  /**
-   * Register a listener for graph structure changes.
-   */
   public OnGraphChanged(cb: () => void): void {
     this.listeners.push(cb);
+    console.log(
+      `[GraphState] Listener added — total: ${this.listeners.length}`
+    );
   }
 
-  /**
-   * Unregister a previously added graph change listener.
-   */
   public OffGraphChanged(cb: () => void): void {
     this.listeners = this.listeners.filter((fn) => fn !== cb);
+    console.log(
+      `[GraphState] Listener removed — total: ${this.listeners.length}`
+    );
   }
 
   protected emitGraphChanged(): void {
+    console.log(
+      `[GraphState] Emitting change to ${this.listeners.length} listener(s)`
+    );
     this.listeners.forEach((cb) => cb());
   }
 
   protected clearCaches(): void {
+    console.log('[GraphState] Clearing node and edge caches');
     this.nodeCache = {};
     this.edgeCache = {};
   }
@@ -150,7 +225,9 @@ export class GraphStateManager {
         },
       };
 
-      this.nodeCache[id] = existing ? Object.assign(existing, updated) : updated;
+      this.nodeCache[id] = existing
+        ? Object.assign(existing, updated)
+        : updated;
       return this.nodeCache[id];
     });
   }
@@ -167,7 +244,9 @@ export class GraphStateManager {
         label: e.Label,
       };
 
-      this.edgeCache[id] = existing ? Object.assign(existing, updated) : updated;
+      this.edgeCache[id] = existing
+        ? Object.assign(existing, updated)
+        : updated;
       return this.edgeCache[id];
     });
   }

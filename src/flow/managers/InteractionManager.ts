@@ -40,7 +40,10 @@ export class InteractionManager {
     event.preventDefault();
 
     const type = event.dataTransfer?.getData('application/node-type');
-    if (!type || !this.presets.GetPreset(type)) return null;
+    if (!type || !this.presets.GetPreset(type)) {
+      console.warn(`[Drop] Aborted — unknown or missing node type: ${type}`);
+      return null;
+    }
 
     const position = screenToFlowPosition({
       x: event.clientX,
@@ -61,7 +64,10 @@ export class InteractionManager {
     });
 
     const scope = surfaceParent ? 'surface' : 'workspace';
-    if (!this.presets.IsTypeAllowedInScope(type, scope)) return null;
+    if (!this.presets.IsTypeAllowedInScope(type, scope)) {
+      console.warn(`[Drop] Disallowed node type: ${type} in scope: ${scope}`);
+      return null;
+    }
 
     const relativePosition = surfaceParent
       ? {
@@ -69,6 +75,14 @@ export class InteractionManager {
           y: position.y - surfaceParent.position.y,
         }
       : position;
+
+    console.log(`[Drop] Creating node of type: ${type} at`, {
+      screen: { x: event.clientX, y: event.clientY },
+      flow: position,
+      relative: relativePosition,
+      scope,
+      parent: surfaceParent?.id,
+    });
 
     const newGraphNode = this.eacMgr.CreateNodeFromPreset(
       type,
@@ -100,6 +114,8 @@ export class InteractionManager {
       }),
     };
 
+    console.log(`[Drop] Node created with ID: ${newGraphNode.ID}`);
+
     this.selection.SelectNode(newGraphNode.ID);
 
     return { newNode: reactNode, selectedId: newGraphNode.ID };
@@ -110,6 +126,7 @@ export class InteractionManager {
    * Creates a new edge in the runtime graph via EaCManager.
    */
   public ConnectNodes(source: string, target: string): void {
+    console.log(`[Connect] Source: ${source} → Target: ${target}`);
     this.eacMgr.CreateConnectionEdge(source, target);
   }
 
@@ -118,6 +135,7 @@ export class InteractionManager {
    */
   public SetRefreshHandler(refresh: () => void) {
     this.refreshCallback = refresh;
+    console.log(`[Init] Refresh handler registered`);
   }
 
   /**
@@ -128,13 +146,11 @@ export class InteractionManager {
     changes: NodeChange[],
     currentNodes: Node<FlowNodeData>[]
   ): void {
+    console.log(`[NodeChange] Received ${changes.length} changes`, changes);
+
     const updated = this.graphMgr.ApplyNodesChange(changes, currentNodes);
 
-    if (this.debounceNodeTimeout) clearTimeout(this.debounceNodeTimeout);
-
-    this.debounceNodeTimeout = setTimeout(() => {
-      this.eacMgr.UpdateNodePositionsFromReactFlow(updated);
-    }, 100);
+    this.eacMgr.UpdateNodePositionsFromReactFlow(updated);
   }
 
   /**
@@ -142,12 +158,10 @@ export class InteractionManager {
    * → debounces propagation to EaC (rebuild relationships).
    */
   public OnEdgesChange(changes: EdgeChange[], currentEdges: Edge[]): void {
+    console.log(`[EdgeChange] Received ${changes.length} changes`, changes);
+
     const updated = this.graphMgr.ApplyEdgesChange(changes, currentEdges);
 
-    if (this.debounceEdgeTimeout) clearTimeout(this.debounceEdgeTimeout);
-
-    this.debounceEdgeTimeout = setTimeout(() => {
-      this.eacMgr.UpdateEdgesFromReactFlow(changes, updated);
-    }, 100);
+    this.eacMgr.UpdateEdgesFromReactFlow(changes, updated);
   }
 }
