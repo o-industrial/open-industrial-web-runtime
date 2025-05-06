@@ -1,14 +1,14 @@
 import {
   Background,
-  MiniMap,
-  Node,
+  Connection,
   Edge,
   EdgeChange,
+  MiniMap,
+  Node,
   NodeChange,
   ReactFlow,
   ReactFlowProvider,
   useReactFlow,
-  Connection,
 } from 'reactflow';
 import { useState } from 'preact/hooks';
 import { IS_BROWSER } from '@fathym/atomic';
@@ -17,41 +17,50 @@ import FlowPanelTemplate from '../templates/FlowPanelTemplate.tsx';
 import FlowPanelBank from '../molecules/flows/FlowPanelBank.tsx';
 import { LoadingSpinner } from '../atoms/LoadingSpinner.tsx';
 import { IntentTypes } from '../../../src/types/IntentTypes.ts';
-import { FlowManager } from '../../../src/flow/managers/FlowManager.ts';
+import { WorkspaceManager } from '../../../src/flow/managers/WorkspaceManager.ts';
 import { FlowControls } from '../molecules/flows/FlowControls.tsx';
 import { ManagementControls } from '../molecules/flows/ManagementControls.tsx';
 import { SystemControls } from '../molecules/flows/SystemControls.tsx';
 import { neonColors } from '../../../tailwind.config.ts';
+import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 
 export const IsIsland = true;
 
 type FlowPanelProps = {
-  flowMgr: FlowManager;
+  workspaceMgr: WorkspaceManager;
+  oiApiRoot: string;
+  oiApiToken: string;
   onShowSimulatorLibrary?: () => void;
 };
 
-function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
+function FlowPanel({
+  workspaceMgr,
+  oiApiRoot,
+  oiApiToken,
+  onShowSimulatorLibrary,
+}: FlowPanelProps) {
   const [showMap, setShowMap] = useState(true);
   const { screenToFlowPosition } = useReactFlow();
 
-  const { nodes, edges } = flowMgr.UseGraphView();
+  const { nodes, edges } = workspaceMgr.UseGraphView();
   const {
     handleDrop,
     handleConnect,
     handleNodeClick,
     handleNodesChange,
-    handleEdgesChange,
-  } = flowMgr.UseInteraction();
-  const { presets, nodeTypes } = flowMgr.UseUIContext();
+    handleEdgesChange: _handleEdgesChange,
+  } = workspaceMgr.UseInteraction();
+  const { presets, nodeTypes } = workspaceMgr.UseUIContext();
 
-  const history = flowMgr.UseHistory();
+  const root = `${location.origin}${oiApiRoot}`;
+  const oiSvc = new OpenIndustrialAPIClient(new URL(root), oiApiToken);
+
+  const history = workspaceMgr.UseHistory(oiSvc);
 
   return (
     <FlowPanelTemplate
       bank={<FlowPanelBank presets={presets} />}
-      systemControls={
-        <SystemControls onOpenSimulatorLibrary={onShowSimulatorLibrary} />
-      }
+      systemControls={<SystemControls onOpenSimulatorLibrary={onShowSimulatorLibrary} />}
       managementControls={
         <ManagementControls
           hasChanges={history.hasChanges}
@@ -64,7 +73,7 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
       }
       canvas={
         <div
-          class="absolute inset-0 w-full h-full"
+          class='absolute inset-0 w-full h-full'
           onDrop={(e) => {
             handleDrop(e, screenToFlowPosition);
           }}
@@ -79,7 +88,7 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
             onNodesChange={(changes: NodeChange[], nodes: Node[]) => {
               handleNodesChange(changes, nodes);
             }}
-            onEdgesChange={(changes: EdgeChange[], edges: Edge[]) => {
+            onEdgesChange={(_changes: EdgeChange[], _edges: Edge[]) => {
               // handleEdgesChange(changes, edges); // Uncomment when logic is in place
             }}
             onConnect={(conn: Connection) => {
@@ -96,29 +105,28 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
           >
             <Background />
 
-            <div class="absolute bottom-4 right-4 z-20 pointer-events-none flex flex-col items-end gap-2">
+            <div class='absolute bottom-4 right-4 z-20 pointer-events-none flex flex-col items-end gap-2'>
               {showMap && (
-                <div class="pointer-events-auto rounded-md border border-neutral-700 bg-neutral-900/90 backdrop-blur-md shadow-lg">
+                <div class='pointer-events-auto rounded-md border border-neutral-700 bg-neutral-900/90 backdrop-blur-md shadow-lg'>
                   <MiniMap
                     nodeColor={(node: Node) => {
                       const status = node.data?.status;
-                      const color =
-                        status === 'error'
-                          ? neonColors['neon-red']['500']
-                          : status === 'warning'
-                          ? neonColors['neon-yellow']['500']
-                          : neonColors['neon-cyan']['500'];
+                      const color = status === 'error'
+                        ? neonColors['neon-red']['500']
+                        : status === 'warning'
+                        ? neonColors['neon-yellow']['500']
+                        : neonColors['neon-cyan']['500'];
 
                       return color;
                     }}
-                    maskColor="rgba(0,0,0,0.2)"
+                    maskColor='rgba(0,0,0,0.2)'
                     style={{ borderRadius: '0.5rem' }}
-                    className="-:!bg-neutral-800 -:!border -:!border-neutral-700"
+                    className='-:!bg-neutral-800 -:!border -:!border-neutral-700'
                   />
                 </div>
               )}
 
-              <div class="pointer-events-auto">
+              <div class='pointer-events-auto'>
                 <FlowControls
                   mapIntent={showMap ? IntentTypes.Info : IntentTypes.Tertiary}
                   showMap={showMap}

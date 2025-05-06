@@ -22,38 +22,38 @@ export default function EmptyNodeRenderer({ data }: NodeProps<EmptyNodeData>) {
 
   return (
     <WorkspaceNodeRendererBase
-      iconKey="empty"
+      iconKey='empty'
       label={data.label}
       onDoubleClick={data.onDoubleClick}
       isSelected={data.isSelected}
-      class="data-[state=expanded]:w-[300px] data-[state=expanded]:h-auto data-[state=expanded]:rounded-md"
+      class='data-[state=expanded]:w-[300px] data-[state=expanded]:h-auto data-[state=expanded]:rounded-md'
       preMain={
         <NodeHandle
-          type="target"
+          type='target'
           position={Position.Left}
           intentType={IntentTypes.None}
         />
       }
       postMain={
         <NodeHandle
-          type="source"
+          type='source'
           position={Position.Right}
           intentType={IntentTypes.None}
         />
       }
     >
-      {impulses.length > 1 ? (
-        <LinePreviewWithValue
-          label="Impulse"
-          values={impulses}
-          currentValue={latest}
-          intent={IntentTypes.None}
-          yMin={0}
-          yMax={15}
-        />
-      ) : (
-        <div class="text-sm text-gray-500 italic p-2">Idle</div>
-      )}
+      {impulses.length > 1
+        ? (
+          <LinePreviewWithValue
+            label='Impulse'
+            values={impulses}
+            currentValue={latest}
+            intent={IntentTypes.None}
+            yMin={0}
+            yMax={15}
+          />
+        )
+        : <div class='text-sm text-gray-500 italic p-2'>Idle</div>}
     </WorkspaceNodeRendererBase>
   );
 }

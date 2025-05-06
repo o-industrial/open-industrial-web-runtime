@@ -1,9 +1,19 @@
-import { CurrentEaCState } from '@fathym/eac-applications/steward/api';
+import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
+import { OpenIndustrialEaC } from '../types/OpenIndustrialEaC.ts';
+import { EaCUserRecord } from '@fathym/eac';
 
 export type OpenIndustrialWebState = {
-  EnterpriseLookup: string;
+  OIClient: OpenIndustrialAPIClient;
+
+  OIKV: Deno.Kv;
 
   OIJWT: string;
 
   Username: string;
-} & CurrentEaCState;
+
+  UserWorkspaces: EaCUserRecord[];
+
+  Workspace: OpenIndustrialEaC;
+
+  WorkspaceLookup: string;
+};

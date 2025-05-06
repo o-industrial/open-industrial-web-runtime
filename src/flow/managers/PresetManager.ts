@@ -1,5 +1,17 @@
+// deno-lint-ignore-file no-explicit-any
+import { memo } from 'preact/compat';
+import {
+  EaCAzureIoTHubDataConnectionDetails,
+  EaCDataConnectionAsCode,
+  EaCFlowNodeMetadata,
+  EaCSimulatorAsCode,
+  EaCSurfaceAsCode,
+} from '@o-industrial/common/eac';
+
 import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
 import { NodePreset } from '../types/react/NodePreset.ts';
+import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
+import { Position } from '../../types/Position.ts';
 
 import AgentNodeRenderer from '../../../apps/components/organisms/renderers/AgentNodeRenderer.tsx';
 import ConnectionNodeRenderer from '../../../apps/components/organisms/renderers/ConnectionNodeRenderer.tsx';
@@ -7,15 +19,6 @@ import DeviceNodeRenderer from '../../../apps/components/organisms/renderers/Dev
 import EmptyNodeRenderer from '../../../apps/components/organisms/renderers/EmptyNodeRenderer.tsx';
 import SchemaNodeRenderer from '../../../apps/components/organisms/renderers/SchemaNodeRenderer.tsx';
 import SurfaceNodeRenderer from '../../../apps/components/organisms/renderers/SurfaceNodeRenderer.tsx';
-// import SimulatorNodeRenderer from '../../../apps/components/organisms/renderers/SimulatorNodeRenderer.tsx';
-
-import { memo } from 'preact/compat';
-import { EaCSurfaceAsCode } from '../../eac/EaCSurfaceAsCode.ts';
-import { EaCSimulatorAsCode } from '../../eac/EaCSimulatorAsCode.ts';
-import { EaCDataConnectionAsCode } from '../../eac/EaCDataConnectionAsCode.ts';
-import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
-import { EaCFlowNodeMetadata } from '../../eac/EaCFlowNodeMetadata.ts';
-import { Position } from '../../types/Position.ts';
 import SimulatorNodeRenderer from '../../../apps/components/organisms/renderers/SimulatorNodeRenderer.tsx';
 import { AgentInspector } from '../../../apps/components/organisms/inspectors/AgentInspector.tsx';
 import { ConnectionInspector } from '../../../apps/components/organisms/inspectors/ConnectionInspector.tsx';
@@ -68,7 +71,7 @@ export class PresetManager {
     type: string,
     id: string,
     position: Position,
-    parentId?: string
+    parentId?: string,
   ): Partial<OpenIndustrialEaC> {
     const metadata: EaCFlowNodeMetadata = {
       Position: position,
@@ -83,7 +86,10 @@ export class PresetManager {
           DataConnections: {
             [id]: {
               Metadata: metadata,
-              Details: details,
+              Details: {
+                ...details,
+                Type: 'AzureIoTHub',
+              } as EaCAzureIoTHubDataConnectionDetails,
             } as EaCDataConnectionAsCode,
           },
         };
@@ -148,7 +154,7 @@ export class PresetManager {
     return Object.fromEntries(
       Object.entries(PresetManager.presets).filter(([type]) =>
         PresetManager.scopeMap[type]?.includes(scope)
-      )
+      ),
     );
   }
 

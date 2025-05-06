@@ -1,10 +1,6 @@
-import { jsonMapSetClone } from '@fathym/common';
+import { jsonMapSetClone, NullableArrayOrObject } from '@fathym/common';
+import { EaCHistorySnapshot } from '@o-industrial/common/types';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
-
-export type EaCHistorySnapshot = {
-  eac: OpenIndustrialEaC;
-  deletes: OpenIndustrialEaC;
-};
 
 export class HistoryManager {
   private history: EaCHistorySnapshot[] = [];
@@ -33,13 +29,19 @@ export class HistoryManager {
     this.dirty = true;
   }
 
-  public FlushIfDirty(eac: OpenIndustrialEaC, deletes: OpenIndustrialEaC): void {
+  public FlushIfDirty(
+    eac: OpenIndustrialEaC,
+    deletes: NullableArrayOrObject<OpenIndustrialEaC>,
+  ): void {
     if (!this.dirty) return;
     this.Push(eac, deletes);
     this.dirty = false;
   }
 
-  public Push(eac: OpenIndustrialEaC, deletes: OpenIndustrialEaC = {}): void {
+  public Push(
+    eac: OpenIndustrialEaC,
+    deletes: NullableArrayOrObject<OpenIndustrialEaC> = {},
+  ): void {
     const snapshot: EaCHistorySnapshot = {
       eac: jsonMapSetClone(eac),
       deletes: jsonMapSetClone(deletes),

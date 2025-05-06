@@ -2,7 +2,7 @@ import { useEffect, useState } from 'preact/hooks';
 
 export function useLiveStats<TStats extends Record<string, unknown>>(
   getStats?: () => Promise<TStats>,
-  intervalMs = 1000
+  intervalMs = 1000,
 ): TStats | undefined {
   const [stats, setStats] = useState<TStats>();
 

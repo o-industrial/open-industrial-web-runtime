@@ -1,12 +1,7 @@
-import {
-  Connection,
-  Edge,
-  EdgeChange,
-  Node,
-  NodeChange,
-  XYPosition,
-} from 'reactflow';
 import { useCallback, useEffect, useState } from 'preact/hooks';
+import { Connection, Edge, EdgeChange, Node, NodeChange, XYPosition } from 'reactflow';
+import { EaCStatusProcessingTypes } from '@fathym/eac/steward/status';
+import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 
 import { FlowNodeData } from '../types/react/FlowNodeData.ts';
 import { GraphStateManager } from './GraphStateManager.ts';
@@ -22,7 +17,7 @@ import { EaCWorkspaceManager } from './EaCWorkspaceManager.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
 import { HistoryManager } from './HistoryManager.ts';
 
-export class FlowManager {
+export class WorkspaceManager {
   public Scope: NodeScopeTypes;
   public Azi: AziManager;
   public Graph: GraphStateManager;
@@ -47,7 +42,7 @@ export class FlowManager {
     this.Runtime = new InteractionManager(
       this.Selection,
       this.Presets,
-      this.EaC
+      this.EaC,
     );
 
     console.log('🚀 FlowManager initialized:', {
@@ -97,7 +92,7 @@ export class FlowManager {
       (event: DragEvent, toFlow: (point: XYPosition) => XYPosition) => {
         this.Runtime.HandleDrop(event, this.Graph.GetNodes(), toFlow);
       },
-      []
+      [],
     );
 
     const handleConnect = useCallback((params: Connection) => {
@@ -110,21 +105,21 @@ export class FlowManager {
       (_e: unknown, node: Node<FlowNodeData>) => {
         this.Selection.SelectNode(node.id);
       },
-      []
+      [],
     );
 
     const handleNodesChange = useCallback(
       (changes: NodeChange[], nodes: Node[]) => {
         this.Runtime.OnNodesChange(changes, nodes ?? this.Graph.GetNodes());
       },
-      []
+      [],
     );
 
     const handleEdgesChange = useCallback(
       (changes: EdgeChange[], edges: Edge[]) => {
         this.Runtime.OnEdgesChange(changes, edges ?? this.Graph.GetEdges());
       },
-      []
+      [],
     );
 
     return {
@@ -136,11 +131,11 @@ export class FlowManager {
     };
   }
 
-  public UseHistory() {
+  public UseHistory(oiSvc: OpenIndustrialAPIClient) {
     const [canUndo, setCanUndo] = useState(this.History.CanUndo());
     const [canRedo, setCanRedo] = useState(this.History.CanRedo());
     const [hasChanges, setHasChanges] = useState(
-      this.History.HasUnsavedChanges()
+      this.History.HasUnsavedChanges(),
     );
     const [version, setVersion] = useState(this.History.GetVersion());
 
@@ -188,21 +183,20 @@ export class FlowManager {
       version,
       undo: () => this.Undo(),
       redo: () => this.Redo(),
-      commit: () => this.CommitRuntime(),
+      commit: () => this.Commit(oiSvc),
       revert: () => this.RevertToLastCommit(),
-      fork: () => this.ForkRuntime(),
+      fork: () => this.Fork(),
     };
   }
 
   public UseSelection() {
     const [selected, setSelected] = useState<Node<FlowNodeData> | null>(
-      this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null
+      this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null,
     );
 
     useEffect(() => {
       const update = () => {
-        const node =
-          this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null;
+        const node = this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null;
         setSelected(node);
       };
       this.Selection.OnSelectionChanged(update);
@@ -246,12 +240,19 @@ export class FlowManager {
 
   // === History Actions ===
 
-  public CommitRuntime(): void {
-    this.History.Commit();
-    console.log('✅ Runtime committed');
+  public async Commit(oiSvc: OpenIndustrialAPIClient): Promise<void> {
+    const history = this.History.GetCurrent();
+
+    const status = await oiSvc.Workspaces.Commit(history);
+
+    console.log(`✅ Runtime committed: CommitID ${status.ID}`);
+
+    if (status.Processing === EaCStatusProcessingTypes.COMPLETE) {
+      this.History.Commit();
+    }
   }
 
-  public ForkRuntime(): void {
+  public Fork(): void {
     const forked = this.History.ForkRuntime();
     console.log('🌱 Forked runtime snapshot:', forked);
   }
@@ -293,7 +294,7 @@ export class FlowManager {
           eac,
           this.Graph,
           this.Presets,
-          this.History
+          this.History,
         );
       case 'surface':
         throw new Error('Surface scope not yet implemented');

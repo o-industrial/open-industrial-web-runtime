@@ -2,7 +2,7 @@ import { EaCVertexDetails } from '@fathym/eac';
 
 export type FlowNodeData<
   TEaC extends EaCVertexDetails = EaCVertexDetails,
-  TStats extends Record<string, unknown> = Record<string, unknown>
+  TStats extends Record<string, unknown> = Record<string, unknown>,
 > = {
   /** Internal type*/
   type: string;

@@ -7,9 +7,11 @@ import { GraphStateManager } from './GraphStateManager.ts';
 import { PresetManager } from './PresetManager.ts';
 
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
-import { EverythingAsCodeOIWorkspace } from '../../eac/EverythingAsCodeOIWorkspace.ts';
-import { EaCDataConnectionAsCode } from '../../eac/EaCDataConnectionAsCode.ts';
-import { EaCSurfaceAsCode } from '../../eac/EaCSurfaceAsCode.ts';
+import {
+  EaCDataConnectionAsCode,
+  EaCSurfaceAsCode,
+  EverythingAsCodeOIWorkspace,
+} from '@o-industrial/common/eac';
 
 import { Edge, EdgeChange } from 'reactflow';
 import { HistoryManager } from './HistoryManager.ts';
@@ -24,7 +26,7 @@ export class EaCWorkspaceManager extends EaCManager {
     eac: EverythingAsCodeOIWorkspace,
     graph: GraphStateManager,
     presets: PresetManager,
-    history: HistoryManager
+    history: HistoryManager,
   ) {
     super(eac, 'workspace', graph, presets, history);
   }
@@ -119,7 +121,7 @@ export class EaCWorkspaceManager extends EaCManager {
    */
   public CreateConnectionEdge(
     source: string,
-    target: string
+    target: string,
   ): Partial<OpenIndustrialEaC> | null {
     const wks = this.GetEaC() as EverythingAsCodeOIWorkspace;
 
@@ -247,10 +249,10 @@ export class EaCWorkspaceManager extends EaCManager {
    * Handles edge list changes by removing deleted edges and adding new connections.
    */
   protected updateConnections(
-    changes: EdgeChange[],
-    updated: Edge[]
+    _changes: EdgeChange[],
+    _updated: Edge[],
   ): OpenIndustrialEaC | null {
-    // TODO: Diff current vs. new edge structure, then build:
+    // TODO(mcgear): Diff current vs. new edge structure, then build:
     const partial: OpenIndustrialEaC = {
       DataConnections: {
         // Populate from new edge structure

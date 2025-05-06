@@ -1,52 +1,76 @@
 import { EaCRuntimeHandler } from '@fathym/eac/runtime/pipelines';
-// import { buildCurrentEaCMiddleware } from '@fathym/eac-applications/steward/api';
-import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import { loadJwtConfig, redirectRequest } from '@fathym/common';
+
+import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import { AgreementManager } from '../../src/agreements/AgreementManager.ts';
 import { agreementsBlockerMiddleware } from '../../src/agreements/agreementsBlockerMiddleware.ts';
-import {
-  EaCStatusProcessingTypes,
-  waitForStatusWithFreshJwt,
-} from '@fathym/eac/steward/status';
 import { OpenIndustrialEaC } from '../../src/types/OpenIndustrialEaC.ts';
 import { loadEaCActuators } from '../../configs/eac-actuators.config.ts';
-import { loadEaCStewardSvc } from '@fathym/eac/steward/clients';
-import { EverythingAsCode } from '@fathym/eac';
+import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
+import { OpenIndustrialJWTPayload } from '@o-industrial/common/types';
 
 export default [
   agreementsBlockerMiddleware,
-  buildCurrentEaCMiddleware('oi'),
-  async (req, ctx) => {
-    ctx.State.OIJWT = await loadJwtConfig().Create({
-      EnterpriseLookup: ctx.State.EnterpriseLookup,
-      Username: ctx.State.Username,
-    });
+  buildOpenIndustrialRuntimeMiddleware('oi'),
+  buildAgreementsRedirectMiddleware(),
+] as EaCRuntimeHandler<OpenIndustrialWebState>[];
 
-    const manager = new AgreementManager(ctx.Runtime.IoC);
+/**
+ * Sets up OI API client, loads or creates workspace,
+ * and commits runtime state into `OpenIndustrialWebState`.
+ */
+export function buildOpenIndustrialRuntimeMiddleware(
+  kvLookup: string = 'eac',
+): EaCRuntimeHandler<OpenIndustrialWebState> {
+  return async (_req, ctx) => {
+    const username = ctx.State.Username!;
+    const kv = await ctx.Runtime.IoC.Resolve(Deno.Kv, kvLookup);
+    ctx.State.OIKV = kv;
 
-    const agreements = await manager.LoadAgreements();
-    const userAccepted = await manager.LoadUserAccepted(ctx.State.Username!);
+    const oiApiRoot = Deno.env.get('OPEN_INDUSTRIAL_API_ROOT')!;
+    const apiBaseUrl = new URL(oiApiRoot);
 
-    if (manager.AgreementsOutOfDate(agreements, userAccepted)) {
-      const url = new URL(req.url);
+    let lookup: string | undefined;
 
-      if (!url.pathname.startsWith('/dashboard/agreements')) {
-        const returnUrl = encodeURIComponent(url.pathname + url.search);
+    const current = await kv.get<string>([
+      'User',
+      username,
+      'Current',
+      'EnterpriseLookup',
+    ]);
 
-        return redirectRequest(
-          `/dashboard/agreements?returnUrl=${returnUrl}`,
-          false,
-          false,
-          req
-        );
+    lookup = current.value ?? undefined;
+
+    const token = await loadJwtConfig().Create({
+      Username: username,
+      WorkspaceLookup: lookup,
+    } as OpenIndustrialJWTPayload);
+
+    if (!token) {
+      throw new Error('Failed to generate OpenIndustrial JWT.');
+    }
+
+    ctx.State.OIJWT = token;
+
+    const oiClient = new OpenIndustrialAPIClient(apiBaseUrl, token);
+    ctx.State.OIClient = oiClient;
+
+    const userWorkspaces = await oiClient.Workspaces.ListForUser();
+
+    ctx.State.UserWorkspaces = userWorkspaces;
+
+    // 🔁 If no current workspace saved, ask the API
+    if (!lookup) {
+      lookup = ctx.State.UserWorkspaces[0]?.EnterpriseLookup;
+
+      if (lookup) {
+        await kv.set(['User', username, 'Current', 'EnterpriseLookup'], lookup);
       }
     }
 
-    return ctx.Next();
-  },
-  async (req, ctx) => {
-    if (!ctx.State.EaC) {
-      const saveEaC: OpenIndustrialEaC = {
+    // 🚫 Still no workspace? Create one
+    if (!lookup) {
+      const newWorkspace: OpenIndustrialEaC = {
         Details: {
           Name: 'hello-azi',
           Description: 'Getting started with Open Industrial and Azi.',
@@ -54,100 +78,46 @@ export default [
         Actuators: loadEaCActuators(),
       };
 
-      const saveResp =
-        await ctx.State.ParentSteward!.EaC.Create<OpenIndustrialEaC>(
-          saveEaC,
-          ctx.State.Username,
-          60
+      const createResp = await oiClient.Workspaces.Create(newWorkspace);
+
+      lookup = createResp.EnterpriseLookup;
+
+      await kv.set(['User', username, 'Current', 'EnterpriseLookup'], lookup);
+    }
+
+    // ✅ Load full workspace state via API
+    ctx.State.Workspace = await oiClient.Workspaces.Get();
+
+    ctx.State.WorkspaceLookup = lookup!;
+
+    return ctx.Next();
+  };
+}
+
+export function buildAgreementsRedirectMiddleware(): EaCRuntimeHandler<OpenIndustrialWebState> {
+  return async (req, ctx) => {
+    const token = await loadJwtConfig().Create({
+      WorkspaceLookup: ctx.State.WorkspaceLookup,
+      Username: ctx.State.Username,
+    });
+
+    ctx.State.OIJWT = token;
+
+    const manager = new AgreementManager(ctx.Runtime.IoC);
+    const agreements = await manager.LoadAgreements();
+    const accepted = await manager.LoadUserAccepted(ctx.State.Username!);
+
+    if (manager.AgreementsOutOfDate(agreements, accepted)) {
+      const url = new URL(req.url);
+      if (!url.pathname.startsWith('/dashboard/agreements')) {
+        const returnUrl = encodeURIComponent(url.pathname + url.search);
+        return redirectRequest(
+          `/dashboard/agreements?returnUrl=${returnUrl}`,
+          false,
+          false,
+          req,
         );
-
-      const status = await waitForStatusWithFreshJwt(
-        ctx.State.ParentSteward!,
-        saveResp.EnterpriseLookup,
-        saveResp.CommitID,
-        ctx.State.Username
-      );
-
-      if (status.Processing == EaCStatusProcessingTypes.COMPLETE) {
-        await ctx.State.EaCKV!.set(
-          ['User', ctx.State.Username, 'Current', 'EnterpriseLookup'],
-          saveResp.EnterpriseLookup
-        );
-
-        return Response.redirect(ctx.Runtime.URLMatch.Path);
-      } else {
-        // TODO(mcgear): What to do here?
-        throw new Error('There was an issue create the workspace.');
       }
-    }
-  },
-] as EaCRuntimeHandler<OpenIndustrialWebState>[];
-
-export function buildCurrentEaCMiddleware(
-  eacDBLookup: string = 'eac'
-): EaCRuntimeHandler<OpenIndustrialWebState> {
-  return async (_req, ctx) => {
-    let eac: EverythingAsCode | undefined = undefined;
-
-    ctx.State.ParentSteward = await loadEaCStewardSvc();
-
-    const username = ctx.State.Username!;
-
-    ctx.State.UserEaCs = await ctx.State.ParentSteward.EaC.ListForUser();
-
-    ctx.State.EaCKV = await ctx.Runtime.IoC.Resolve(Deno.Kv, eacDBLookup);
-
-    const currentEntLookup = await ctx.State.EaCKV.get<string>([
-      'User',
-      username,
-      'Current',
-      'EnterpriseLookup',
-    ]);
-
-    if (currentEntLookup.value) {
-      const jwt = await ctx.State.ParentSteward.EaC.JWT(
-        currentEntLookup.value,
-        username
-      );
-
-      ctx.State.EaCJWT = jwt.Token;
-
-      ctx.State.Steward = await loadEaCStewardSvc(ctx.State.EaCJWT);
-
-      eac = await ctx.State.Steward.EaC.Get();
-    }
-
-    if (!eac) {
-      if (ctx.State.UserEaCs[0]) {
-        await ctx.State.EaCKV.set(
-          ['User', username, 'Current', 'EnterpriseLookup'],
-          ctx.State.UserEaCs[0].EnterpriseLookup
-        );
-
-        const jwt = await ctx.State.ParentSteward.EaC.JWT(
-          ctx.State.UserEaCs[0].EnterpriseLookup,
-          username
-        );
-
-        ctx.State.EaCJWT = jwt.Token;
-
-        ctx.State.Steward = await loadEaCStewardSvc(ctx.State.EaCJWT);
-
-        eac = await ctx.State.Steward.EaC.Get();
-      }
-    }
-
-    ctx.State.EaC = eac;
-
-    if (ctx.State.EaC && (!ctx.State.EaCJWT || !ctx.State.Steward)) {
-      const jwt = await ctx.State.ParentSteward.EaC.JWT(
-        ctx.State.EaC.EnterpriseLookup!,
-        username
-      );
-
-      ctx.State.EaCJWT = jwt.Token;
-
-      ctx.State.Steward = await loadEaCStewardSvc(ctx.State.EaCJWT);
     }
 
     return ctx.Next();

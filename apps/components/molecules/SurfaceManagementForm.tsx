@@ -1,7 +1,7 @@
 // components/molecules/SurfaceManagementForm.tsx
 import { JSX } from 'preact';
 import { Input } from '../atoms/forms/Input.tsx';
-import { EaCSurfaceDetails } from '../../../src/eac/EaCSurfaceDetails.ts';
+import { EaCSurfaceDetails } from '@o-industrial/common/eac';
 
 type Props = {
   details: Partial<EaCSurfaceDetails>;
@@ -14,9 +14,9 @@ export function SurfaceManagementForm({ details, onChange }: Props) {
   };
 
   return (
-    <div class="space-y-3 pt-2">
+    <div class='space-y-3 pt-2'>
       <Input
-        label="Surface Name"
+        label='Surface Name'
         value={details.Name ?? ''}
         onInput={handleLabelInput}
       />

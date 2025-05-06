@@ -1,4 +1,3 @@
-
 export type AgentStats = {
   impulseRates?: number[];
   matchesHandled?: number;

@@ -1,11 +1,9 @@
-import { jsonMapSetClone, merge } from '@fathym/common';
-import {
-  Node,
-  Edge,
-  EdgeChange,
-  NodeChange,
-  applyNodeChanges,
-} from 'reactflow';
+// deno-lint-ignore-file no-explicit-any
+import { jsonMapSetClone, merge, NullableArrayOrObject } from '@fathym/common';
+import { EaCVertexDetails } from '@fathym/eac';
+import { EaCAzureDockerSimulatorDetails, EaCFlowNodeMetadata } from '@o-industrial/common/eac';
+import { EaCHistorySnapshot } from '@o-industrial/common/types';
+import { applyNodeChanges, Edge, EdgeChange, Node, NodeChange } from 'reactflow';
 import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
 import { GraphStateManager } from './GraphStateManager.ts';
@@ -14,11 +12,8 @@ import { FlowGraphNode } from '../types/graph/FlowGraphNode.ts';
 import { Position } from '../../types/Position.ts';
 import { PresetManager } from './PresetManager.ts';
 import { FlowNodeData } from '../types/react/FlowNodeData.ts';
-import { EaCFlowNodeMetadata } from '../../eac/EaCFlowNodeMetadata.ts';
 import { SimulatorDefinition } from './SimulatorLibraryManager.ts';
-import { EaCAzureDockerSimulatorDetails } from '../../eac/EaCAzureDockerSimulatorDetails.ts';
-import { EaCVertexDetails } from '@fathym/eac';
-import { EaCHistorySnapshot, HistoryManager } from './HistoryManager.ts';
+import { HistoryManager } from './HistoryManager.ts';
 
 /**
  * Canonical manager for synchronizing Everything-as-Code (EaC) state
@@ -26,14 +21,14 @@ import { EaCHistorySnapshot, HistoryManager } from './HistoryManager.ts';
  * class to ensure source-of-truth consistency and downstream reactivity.
  */
 export abstract class EaCManager {
-  protected deleteEaC: OpenIndustrialEaC = {};
+  protected deleteEaC: NullableArrayOrObject<OpenIndustrialEaC> = {};
 
   constructor(
     protected eac: OpenIndustrialEaC,
     protected scope: NodeScopeTypes,
     protected graph: GraphStateManager,
     protected presets: PresetManager,
-    protected history: HistoryManager
+    protected history: HistoryManager,
   ) {
     const initialGraph = this.buildGraph(jsonMapSetClone(this.eac));
     this.graph.LoadFromGraph(initialGraph);
@@ -43,7 +38,7 @@ export abstract class EaCManager {
 
   public ApplyReactFlowNodeChanges(
     changes: NodeChange[],
-    currentNodes: Node<FlowNodeData>[]
+    currentNodes: Node<FlowNodeData>[],
   ): void {
     console.log(`[EaC] 🧩 Applying ${changes.length} node changes`);
 
@@ -87,7 +82,7 @@ export abstract class EaCManager {
 
   public ApplyReactFlowEdgeChanges(
     changes: EdgeChange[],
-    currentEdges: Edge[]
+    currentEdges: Edge[],
   ): void {
     console.log(`[EaC] 🔗 Applying ${changes.length} edge changes`);
 
@@ -103,20 +98,20 @@ export abstract class EaCManager {
 
   public abstract CreateConnectionEdge(
     source: string,
-    target: string
+    target: string,
   ): Partial<OpenIndustrialEaC> | null;
 
   public CreateNodeFromPreset(
     type: string,
     position: Position,
-    parentId?: string
+    parentId?: string,
   ): FlowGraphNode {
     const id = `${type}-${Date.now()}`;
     const partial = this.presets.CreatePartialEaCFromPreset(
       type,
       id,
       position,
-      parentId
+      parentId,
     );
 
     this.MergePartial(partial);
@@ -313,7 +308,7 @@ export abstract class EaCManager {
 
   public UpdateMetadataForNode(
     id: string,
-    metadata: Partial<EaCFlowNodeMetadata>
+    metadata: Partial<EaCFlowNodeMetadata>,
   ): void {
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
     if (!node) {
@@ -353,13 +348,13 @@ export abstract class EaCManager {
 
   protected findEaCAsCode(
     nodeId: string,
-    type: string
+    type: string,
   ):
     | {
-        Type: string;
-        ID: string;
-        AsCode: { Metadata?: EaCFlowNodeMetadata; Details: EaCVertexDetails };
-      }
+      Type: string;
+      ID: string;
+      AsCode: { Metadata?: EaCFlowNodeMetadata; Details: EaCVertexDetails };
+    }
     | undefined {
     const id = nodeId;
 
@@ -438,6 +433,6 @@ export abstract class EaCManager {
 
   protected abstract updateConnections(
     changes: EdgeChange[],
-    updated: Edge[]
+    updated: Edge[],
   ): OpenIndustrialEaC | null;
 }

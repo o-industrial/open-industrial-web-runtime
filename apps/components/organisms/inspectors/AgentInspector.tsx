@@ -1,12 +1,9 @@
 import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
-import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 import { InspectorBase } from './InspectorBase.tsx';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { InspectorCommonProps } from '../InspectorPanel.tsx';
 import { AgentStats } from '../../../../src/flow/types/AgentStats.tsx';
-import { EaCAgentDetails } from '../../../../src/eac/EaCAgentDetails.ts';
-import { useMemo } from 'preact/hooks';
+import { EaCAgentDetails } from '@o-industrial/common/eac';
 
 type AgentInspectorProps = InspectorCommonProps<EaCAgentDetails, AgentStats>;
 
@@ -15,22 +12,22 @@ export function AgentInspector({
   enabled,
   getStats,
   onDelete,
-  onDetailsChanged,
+  onDetailsChanged: _onDetailsChanged,
   onToggleEnabled,
 }: AgentInspectorProps) {
   const stats = useLiveStats(getStats);
 
   return (
     <InspectorBase
-      iconKey="agent"
+      iconKey='agent'
       label={details.Name ?? 'Agent Node'}
       enabled={enabled}
       impulseRates={stats?.impulseRates ?? []}
       onToggleEnabled={onToggleEnabled}
       onDelete={onDelete}
     >
-      <NodeStatTile label="Matches" value={stats?.matchesHandled || 0} />
-      <NodeStatTile label="Avg Latency" value={`${stats?.avgLatencyMs}ms`} />
+      <NodeStatTile label='Matches' value={stats?.matchesHandled || 0} />
+      <NodeStatTile label='Avg Latency' value={`${stats?.avgLatencyMs}ms`} />
     </InspectorBase>
   );
 }

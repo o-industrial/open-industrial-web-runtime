@@ -1,4 +1,4 @@
 import { EverythingAsCode } from '@fathym/eac';
-import { EverythingAsCodeOIWorkspace } from '../eac/EverythingAsCodeOIWorkspace.ts';
+import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 
 export type OpenIndustrialEaC = EverythingAsCode & EverythingAsCodeOIWorkspace;

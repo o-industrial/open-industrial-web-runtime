@@ -1,5 +1,4 @@
-import { useMemo, useEffect, useState } from 'preact/hooks';
-import { EverythingAsCode } from '@fathym/eac';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
 
@@ -10,15 +9,18 @@ import InspectorPanel from '../components/organisms/InspectorPanel.tsx';
 import AziPanel from '../components/organisms/AziPanel.tsx';
 import StreamPanel from '../components/organisms/StreamPanel.tsx';
 import TimelinePanel from '../components/organisms/TimelinePanel.tsx';
-import { FlowManager } from '../../src/flow/managers/FlowManager.ts';
+import { WorkspaceManager } from '../../src/flow/managers/WorkspaceManager.ts';
 import { SimulatorLibraryModal } from '../components/organisms/SimulatorLibraryModal.tsx';
 import { OpenIndustrialEaC } from '../../src/types/OpenIndustrialEaC.ts';
-import { SimulatedOIEaC } from '../../src/utils/SimulatedOIEaC.ts';
 
 export const IsIsland = true;
 
 type WorkspacePageData = {
-  EaC: OpenIndustrialEaC;
+  OIAPIRoot: string;
+
+  OIAPIToken: string;
+
+  Workspace: OpenIndustrialEaC;
 };
 
 export const handler: EaCRuntimeHandlerSet<
@@ -27,18 +29,20 @@ export const handler: EaCRuntimeHandlerSet<
 > = {
   GET: (_req, ctx) => {
     return ctx.Render({
-      EaC: ctx.State.EaC!,
+      OIAPIRoot: '/api/',
+      OIAPIToken: ctx.State.OIJWT,
+      Workspace: ctx.State.Workspace!,
     });
   },
 };
 
 export default function WorkspacePage({
-  Data: { EaC },
+  Data: { Workspace: EaC, OIAPIRoot: oiApiRoot, OIAPIToken: oiApiToken },
 }: PageProps<WorkspacePageData>) {
   console.log('🌀 WorkspacePage mounted');
 
-  const flowMgr = useMemo(() => {
-    const mgr = new FlowManager({}, 'workspace');
+  const workspaceMgr = useMemo(() => {
+    const mgr = new WorkspaceManager({}, 'workspace');
     console.log('🧩 New FlowManager created');
     return mgr;
   }, []);
@@ -48,7 +52,7 @@ export default function WorkspacePage({
   useEffect(() => {
     if (EaC) {
       console.log('📥 Merging partial EaC:', EaC);
-      flowMgr.EaC.MergePartial(EaC);
+      workspaceMgr.EaC.MergePartial(EaC);
     }
   }, [EaC]);
 
@@ -56,7 +60,7 @@ export default function WorkspacePage({
     <>
       {showMarketplace && (
         <SimulatorLibraryModal
-          flowMgr={flowMgr}
+          workspaceMgr={workspaceMgr}
           onClose={() => setShowMarketplace(false)}
         />
       )}
@@ -65,20 +69,21 @@ export default function WorkspacePage({
 
   return (
     <RuntimeWorkspaceDashboardTemplate
-      azi={<AziPanel flowMgr={flowMgr} />}
+      azi={<AziPanel workspaceMgr={workspaceMgr} />}
       breadcrumb={
-        <div class="-:w-full -:text-xs -:text-neutral-400 -:bg-neutral-900 -:tracking-wide -:font-light -:px-4 -:pt-1.5 -:pb-1">
-          {EaC.Details?.Name} (Workspace) /{' '}
-          <span class="-:text-white">Management</span>
+        <div class='-:w-full -:text-xs -:text-neutral-400 -:bg-neutral-900 -:tracking-wide -:font-light -:px-4 -:pt-1.5 -:pb-1'>
+          {EaC.Details?.Name} (Workspace) / <span class='-:text-white'>Management</span>
         </div>
       }
-      inspector={<InspectorPanel flowMgr={flowMgr} />}
+      inspector={<InspectorPanel workspaceMgr={workspaceMgr} />}
       stream={<StreamPanel />}
       timeline={<TimelinePanel />}
       modals={modals}
     >
       <FlowPanel
-        flowMgr={flowMgr}
+        oiApiRoot={oiApiRoot}
+        oiApiToken={oiApiToken}
+        workspaceMgr={workspaceMgr}
         onShowSimulatorLibrary={() => setShowMarketplace(true)}
       />
     </RuntimeWorkspaceDashboardTemplate>

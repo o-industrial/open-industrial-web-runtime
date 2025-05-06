@@ -3,21 +3,26 @@ import { FlowNodeData } from '../types/react/FlowNodeData.ts';
 export class StatManager {
   public Enrich(type: string, base: FlowNodeData): FlowNodeData {
     switch (type) {
-      case 'agent': return this.BuildAgent(base);
-      case 'connection': return this.BuildConnection(base);
-      case 'device': return this.BuildDevice(base);
-      case 'schema': return this.BuildSchema(base);
-      case 'surface': return this.BuildSurface(base);
-      case 'simulator': return this.BuildSimulator(base);
+      case 'agent':
+        return this.BuildAgent(base);
+      case 'connection':
+        return this.BuildConnection(base);
+      case 'device':
+        return this.BuildDevice(base);
+      case 'schema':
+        return this.BuildSchema(base);
+      case 'surface':
+        return this.BuildSurface(base);
+      case 'simulator':
+        return this.BuildSimulator(base);
       case 'empty':
-      default: return this.BuildEmpty(base);
+      default:
+        return this.BuildEmpty(base);
     }
   }
 
   private BuildBuffer(seed: number, range: number, length = 20): number[] {
-    return Array.from({ length }, () =>
-      Number((seed + Math.random() * range).toFixed(2))
-    );
+    return Array.from({ length }, () => Number((seed + Math.random() * range).toFixed(2)));
   }
 
   private BuildAgent(base: FlowNodeData): FlowNodeData {

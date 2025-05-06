@@ -3,11 +3,10 @@ import { InspectorBase } from './InspectorBase.tsx';
 import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
 import { ConnectionManagementForm } from '../../molecules/ConnectionManagementForm.tsx';
 import { InspectorCommonProps } from '../InspectorPanel.tsx';
-import { EaCDataConnectionDetails } from '../../../../src/eac/EaCDataConnectionDetails.ts';
+import { EaCDataConnectionDetails } from '@o-industrial/common/eac';
 import { DataConnectionStats } from '../../../../src/flow/types/DataConnectionStats.ts';
 import { ConnectionInfoPanel } from '../../atoms/ConnectionInfoPanel.tsx';
 import { DataConnectionConfig } from '../../../../src/flow/types/DataConnectionConfig.ts';
-import { useMemo } from 'preact/hooks';
 
 type ConnectionInspectorProps = InspectorCommonProps<
   EaCDataConnectionDetails,
@@ -29,7 +28,7 @@ export function ConnectionInspector({
 
   return (
     <InspectorBase
-      iconKey="connection"
+      iconKey='connection'
       label={details.Name}
       enabled={enabled}
       impulseRates={stats?.impulseRates ?? []}
@@ -37,8 +36,8 @@ export function ConnectionInspector({
       onDelete={onDelete}
     >
       <TabbedPanel
-        initialTab="settings"
-        class="mt-2"
+        initialTab='settings'
+        class='mt-2'
         tabs={[
           {
             key: 'settings',
@@ -54,15 +53,13 @@ export function ConnectionInspector({
           {
             key: 'connection',
             label: 'Connection Info',
-            content: (
-              <ConnectionInfoPanel connectionInfo={stats?.connectionInfo} />
-            ),
+            content: <ConnectionInfoPanel connectionInfo={stats?.connectionInfo} />,
           },
           {
             key: 'analytics',
             label: 'Analytics',
             content: (
-              <p class="text-sm text-neutral-300">
+              <p class='text-sm text-neutral-300'>
                 📈 Connection analytics will appear here.
               </p>
             ),
@@ -71,7 +68,7 @@ export function ConnectionInspector({
             key: 'stream',
             label: 'Impulse Stream',
             content: (
-              <p class="text-sm text-neutral-300">
+              <p class='text-sm text-neutral-300'>
                 📡 Live impulse logs and stream filtering.
               </p>
             ),

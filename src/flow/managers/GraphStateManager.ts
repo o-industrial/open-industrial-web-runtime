@@ -1,4 +1,4 @@
-import { Node, Edge } from 'reactflow';
+import { Edge, Node } from 'reactflow';
 
 import { FlowNodeData } from '../types/react/FlowNodeData.ts';
 import { FlowGraph } from '../types/graph/FlowGraph.ts';
@@ -15,7 +15,7 @@ export class GraphStateManager {
 
   constructor(
     protected selection: SelectionManager,
-    protected stats: StatManager
+    protected stats: StatManager,
   ) {}
 
   public GetGraph(): FlowGraph {
@@ -29,11 +29,11 @@ export class GraphStateManager {
   public LoadFromGraph(graph: FlowGraph): void {
     console.log('📥 [GraphState] Loading new graph structure:', graph);
     let changed = false;
-  
+
     // Handle nodes
     const newNodeIDs = new Set(graph.Nodes.map((n) => n.ID));
-    const currentNodeIDs = new Set(this.graph.Nodes.map((n) => n.ID));
-  
+    const _currentNodeIDs = new Set(this.graph.Nodes.map((n) => n.ID));
+
     // Add/update nodes
     for (const node of graph.Nodes) {
       const idx = this.graph.Nodes.findIndex((n) => n.ID === node.ID);
@@ -49,7 +49,7 @@ export class GraphStateManager {
         changed = true;
       }
     }
-  
+
     // Remove deleted nodes
     const nodesBefore = this.graph.Nodes.length;
     this.graph.Nodes = this.graph.Nodes.filter((n) => newNodeIDs.has(n.ID));
@@ -57,11 +57,11 @@ export class GraphStateManager {
       console.log(`🗑️ [GraphState] Nodes removed`);
       changed = true;
     }
-  
+
     // Handle edges
     const newEdgeIDs = new Set(graph.Edges.map((e) => e.ID));
     const _currentEdgeIDs = new Set(this.graph.Edges.map((e) => e.ID));
-  
+
     // Add/update edges
     for (const edge of graph.Edges) {
       const idx = this.graph.Edges.findIndex((e) => e.ID === edge.ID);
@@ -77,7 +77,7 @@ export class GraphStateManager {
         changed = true;
       }
     }
-  
+
     // Remove deleted edges
     const edgesBefore = this.graph.Edges.length;
     this.graph.Edges = this.graph.Edges.filter((e) => newEdgeIDs.has(e.ID));
@@ -85,11 +85,11 @@ export class GraphStateManager {
       console.log(`🗑️ [GraphState] Edges removed`);
       changed = true;
     }
-  
+
     // Final emit
     if (changed) {
       console.log(
-        '🔁 [GraphState] Graph changed — updating caches and notifying listeners'
+        '🔁 [GraphState] Graph changed — updating caches and notifying listeners',
       );
       this.clearCaches();
       this.emitGraphChanged();
@@ -97,7 +97,7 @@ export class GraphStateManager {
       console.log('✅ [GraphState] No changes detected — graph unchanged');
     }
   }
-  
+
   public GetNodes(): Node<FlowNodeData>[] {
     return this.toReactFlowNodes();
   }
@@ -109,20 +109,20 @@ export class GraphStateManager {
   public OnGraphChanged(cb: () => void): void {
     this.listeners.push(cb);
     console.log(
-      `[GraphState] Listener added — total: ${this.listeners.length}`
+      `[GraphState] Listener added — total: ${this.listeners.length}`,
     );
   }
 
   public OffGraphChanged(cb: () => void): void {
     this.listeners = this.listeners.filter((fn) => fn !== cb);
     console.log(
-      `[GraphState] Listener removed — total: ${this.listeners.length}`
+      `[GraphState] Listener removed — total: ${this.listeners.length}`,
     );
   }
 
   protected emitGraphChanged(): void {
     console.log(
-      `[GraphState] Emitting change to ${this.listeners.length} listener(s)`
+      `[GraphState] Emitting change to ${this.listeners.length} listener(s)`,
     );
     this.listeners.forEach((cb) => cb());
   }
@@ -163,15 +163,12 @@ export class GraphStateManager {
         type: n.Type,
         position,
         data: enriched,
-
         // optionally preserve parentId and extent if present in Metadata
         // ...(n.Metadata?.ParentID && { parentId: n.Metadata.ParentID }),
         // ...(n.Metadata?.Extent && { extent: n.Metadata.Extent }),
       };
 
-      this.nodeCache[id] = existing
-        ? Object.assign(existing, updated)
-        : updated;
+      this.nodeCache[id] = existing ? Object.assign(existing, updated) : updated;
 
       return this.nodeCache[id];
     });
@@ -189,9 +186,7 @@ export class GraphStateManager {
         label: e.Label,
       };
 
-      this.edgeCache[id] = existing
-        ? Object.assign(existing, updated)
-        : updated;
+      this.edgeCache[id] = existing ? Object.assign(existing, updated) : updated;
       return this.edgeCache[id];
     });
   }

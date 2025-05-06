@@ -1,14 +1,12 @@
 import { OpenIndustrialEaC } from '../types/OpenIndustrialEaC.ts';
-import { EaCAzureDockerSimulatorDetails } from '../eac/EaCAzureDockerSimulatorDetails.ts';
-import { EaCAzureIoTHubDataConnectionDetails } from '../eac/EaCAzureIoTHubDataConnectionDetails.ts';
-import { EaCHTTPDataConnectionDetails } from '../eac/EaCHTTPDataConnectionDetails.ts';
+import { EaCAzureIoTHubDataConnectionDetails } from '@o-industrial/common/eac';
 
 export const SimulatedOIEaC: OpenIndustrialEaC = {
   DataConnections: {
     iotHubIngest: {
       Enabled: true,
       SimulatorLookup: 'sim_iot',
-      Details: <EaCAzureIoTHubDataConnectionDetails>{
+      Details: <EaCAzureIoTHubDataConnectionDetails> {
         Type: 'AzureIoTHub',
         Name: 'IoT Hub Ingest',
         Description: 'Primary Azure IoT Hub connection',
@@ -36,7 +34,6 @@ export const SimulatedOIEaC: OpenIndustrialEaC = {
     //   },
     // },
   },
-
   // Simulators: {
   //   sim_iot: {
   //     Enabled: true,

@@ -66,23 +66,23 @@ export class SimulatorLibraryManager {
   public GetByCategory(category: string): SimulatorDefinition[] {
     if (category.toLowerCase() === 'all') return this.GetAll();
     return this.Simulators.filter(
-      (sim) => sim.Category.toLowerCase() === category.toLowerCase()
+      (sim) => sim.Category.toLowerCase() === category.toLowerCase(),
     );
   }
 
   public GetPacksByCategory(category: string): SimulatorPackDefinition[] {
     if (category.toLowerCase() === 'all') return [...this.Packs];
     return this.Packs.filter(
-      (pack) => pack.Category.toLowerCase() === category.toLowerCase()
+      (pack) => pack.Category.toLowerCase() === category.toLowerCase(),
     );
   }
 
   public ResolvePack(packId: string): SimulatorDefinition[] {
     const pack = this.Packs.find((p) => p.ID === packId);
     if (!pack) return [];
-    return pack.Simulators.map((sim) =>
-      this.Simulators.find((s) => s.ID === sim.ID)
-    ).filter(Boolean) as SimulatorDefinition[];
+    return pack.Simulators.map((sim) => this.Simulators.find((s) => s.ID === sim.ID)).filter(
+      Boolean,
+    ) as SimulatorDefinition[];
   }
 
   public OnLibraryChanged(cb: () => void): void {

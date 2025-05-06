@@ -5,7 +5,6 @@ import { UndoIcon } from '../../../../build/iconset/icons/UndoIcon.tsx';
 import { RedoIcon } from '../../../../build/iconset/icons/RedoIcon.tsx';
 import { ForkIcon } from '../../../../build/iconset/icons/ForkIcon.tsx';
 import { RevertIcon } from '../../../../build/iconset/icons/RevertIcon.tsx';
-import { CommitIcon } from '../../../../build/iconset/icons/CommitIcon.tsx';
 import { SaveIcon } from '../../../../build/iconset/icons/SaveIcon.tsx';
 
 export type ManagementControlsProps = {
@@ -36,71 +35,69 @@ export function ManagementControls({
   revertIntent = IntentTypes.Warning,
   forkIntent = IntentTypes.Tertiary,
 }: ManagementControlsProps) {
-  const effectiveCommitIntent =
-    commitIntent ?? (hasChanges ? IntentTypes.Primary : IntentTypes.Secondary);
+  const effectiveCommitIntent = commitIntent ??
+    (hasChanges ? IntentTypes.Primary : IntentTypes.Secondary);
 
   return (
-    <div class="group relative flex flex-row-reverse items-center bg-neutral-900/80 backdrop-blur-sm border border-neutral-700 rounded-md shadow-sm overflow-hidden transition-all duration-300">
+    <div class='group relative flex flex-row-reverse items-center bg-neutral-900/80 backdrop-blur-sm border border-neutral-700 rounded-md shadow-sm overflow-hidden transition-all duration-300'>
       {/* Commit Button stays pinned right */}
       <Action
         styleType={ActionStyleTypes.Icon | ActionStyleTypes.Thin}
         intentType={effectiveCommitIntent}
         onClick={onCommit}
-        title="Commit Changes"
+        title='Commit Changes'
         disabled={!onCommit}
-        class="z-10"
+        class='z-10'
       >
-        <SaveIcon class="w-6 h-6" />
+        <SaveIcon class='w-6 h-6' />
       </Action>
 
       {/* Expandable tools on the left */}
-      <div
-        class="flex flex-row gap-2 items-center 
+      <div class='flex flex-row gap-2 items-center 
                max-w-0 group-hover:max-w-[300px] 
                opacity-0 group-hover:opacity-100 
-               transition-all duration-300 overflow-hidden"
-      >
+               transition-all duration-300 overflow-hidden'>
         <Action
           styleType={ActionStyleTypes.Icon | ActionStyleTypes.Thin}
           intentType={forkIntent}
           onClick={onFork}
-          title="Fork Runtime"
+          title='Fork Runtime'
           disabled={!onFork}
         >
-          <ForkIcon class="w-6 h-6" />
+          <ForkIcon class='w-6 h-6' />
         </Action>
 
         <Action
           styleType={ActionStyleTypes.Icon | ActionStyleTypes.Thin}
           intentType={revertIntent}
           onClick={onRevert}
-          title="Revert to Last Commit"
+          title='Revert to Last Commit'
           disabled={!onRevert}
-          class="hidden" // TODO(AI): Re-enable once we actually put some time into getting this working
+          // class="hidden" // TODO(AI): Re-enable once we actually put some time into getting this working
         >
-          <RevertIcon class="w-6 h-6" />
+          <RevertIcon class='w-6 h-6' />
         </Action>
 
         <Action
           styleType={ActionStyleTypes.Icon | ActionStyleTypes.Thin}
           intentType={undoIntent}
           onClick={onUndo}
-          title="Undo"
+          title='Undo'
           disabled={!onUndo}
-          class="hidden" // TODO(AI): Re-enable once we actually put some time into getting this working
+          // class="hidden" // TODO(AI): Re-enable once we actually put some time into getting this working
         >
-          <UndoIcon class="w-6 h-6" />
+          <UndoIcon class='w-6 h-6' />
         </Action>
 
         <Action
           styleType={ActionStyleTypes.Icon | ActionStyleTypes.Thin}
           intentType={redoIntent}
           onClick={onRedo}
-          title="Redo"
+          title='Redo'
           disabled={!onRedo}
-          class="hidden" // TODO(AI): Re-enable once we actually put some time into getting this working
+          // class="hidden" // TODO(AI): Re-enable once we actually put some time into getting this working
         >
-          <RedoIcon class="w-6 h-6" />
+          <RedoIcon class='w-6 h-6' />
         </Action>
       </div>
     </div>

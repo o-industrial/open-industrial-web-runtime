@@ -4,7 +4,7 @@ import { InspectorBase } from './InspectorBase.tsx';
 import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
 import { SurfaceManagementForm } from '../../molecules/SurfaceManagementForm.tsx';
 import { InspectorCommonProps } from '../InspectorPanel.tsx';
-import { EaCSurfaceDetails } from '../../../../src/eac/EaCSurfaceDetails.ts';
+import { EaCSurfaceDetails } from '@o-industrial/common/eac';
 import { SurfaceStats } from '../renderers/SurfaceNodeRenderer.tsx';
 
 type SurfaceInspectorProps = InspectorCommonProps<
@@ -14,7 +14,7 @@ type SurfaceInspectorProps = InspectorCommonProps<
 
 function SurfaceAnalyticsTab() {
   return (
-    <p class="text-sm text-neutral-300">
+    <p class='text-sm text-neutral-300'>
       📈 Surface-level analytics will appear here.
     </p>
   );
@@ -22,7 +22,7 @@ function SurfaceAnalyticsTab() {
 
 function SurfaceStreamTab() {
   return (
-    <p class="text-sm text-neutral-300">
+    <p class='text-sm text-neutral-300'>
       📡 Impulses received and routed on this surface.
     </p>
   );
@@ -40,7 +40,7 @@ export function SurfaceInspector({
 
   return (
     <InspectorBase
-      iconKey="surface"
+      iconKey='surface'
       label={details.Name}
       enabled={enabled}
       impulseRates={stats?.impulseRates ?? []}
@@ -48,8 +48,8 @@ export function SurfaceInspector({
       onDelete={onDelete}
     >
       <TabbedPanel
-        initialTab="settings"
-        class="mt-2"
+        initialTab='settings'
+        class='mt-2'
         tabs={[
           {
             key: 'settings',

@@ -47,7 +47,7 @@ export function InteractiveMiniMap({
           height: '160px',
           width: '200px',
         }}
-        className="-:!bg-neutral-800 -:!border-none"
+        className='-:!bg-neutral-800 -:!border-none'
       />
     </div>
   );

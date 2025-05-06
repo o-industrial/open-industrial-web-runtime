@@ -1,5 +1,5 @@
 import { EaCVertexDetails } from '@fathym/eac';
-import { EaCFlowNodeMetadata } from '../../../eac/EaCFlowNodeMetadata.ts';
+import { EaCFlowNodeMetadata } from '@o-industrial/common/eac';
 
 /**
  * Represents a single node in the flow graph canvas.

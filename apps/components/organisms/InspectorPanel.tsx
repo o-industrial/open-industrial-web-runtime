@@ -1,19 +1,14 @@
 import { merge } from '@fathym/common';
 import { EaCVertexDetails } from '@fathym/eac';
-import { useEffect, useState, useCallback } from 'preact/hooks';
+import { useCallback, useEffect, useState } from 'preact/hooks';
 
-import { FlowManager } from '../../../src/flow/managers/FlowManager.ts';
+import { WorkspaceManager } from '../../../src/flow/managers/WorkspaceManager.ts';
 import InspectorPanelTemplate from '../templates/InspectorPanelTemplate.tsx';
-
-import { AgentInspector } from './inspectors/AgentInspector.tsx';
-import { ConnectionInspector } from './inspectors/ConnectionInspector.tsx';
-import { SurfaceInspector } from './inspectors/SurfaceInspector.tsx';
-import { DataConnectionConfig } from '../../../src/flow/types/DataConnectionConfig.ts';
 
 export type InspectorCommonProps<
   TDetails extends EaCVertexDetails = EaCVertexDetails,
   TStats extends Record<string, unknown> = Record<string, unknown>,
-  TConfig extends Record<string, unknown> = Record<string, unknown>
+  TConfig extends Record<string, unknown> = Record<string, unknown>,
 > = {
   config?: TConfig;
   details: Partial<TDetails>;
@@ -25,12 +20,12 @@ export type InspectorCommonProps<
 };
 
 type InspectorPanelProps = {
-  flowMgr: FlowManager;
+  workspaceMgr: WorkspaceManager;
 };
 
-export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
-  let [updateSync, setUpdateSync] = useState([]);
-  const { selected } = flowMgr.UseSelection();
+export default function InspectorPanel({ workspaceMgr }: InspectorPanelProps) {
+  const [updateSync, setUpdateSync] = useState([]);
+  const { selected } = workspaceMgr.UseSelection();
   const selectedId = selected?.id;
 
   const [details, setDetails] = useState<EaCVertexDetails>({});
@@ -49,7 +44,7 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
           }
 
           debounceTimers[selectedId] = setTimeout(() => {
-            flowMgr.EaC.UpdateDetailsForNode(selectedId, merged);
+            workspaceMgr.EaC.UpdateDetailsForNode(selectedId, merged);
 
             console.log(`🟢 Live-synced EaC details for node ${selectedId}`);
           }, 300);
@@ -58,11 +53,11 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
         return merged;
       });
     },
-    [selectedId]
+    [selectedId],
   );
 
   const handleClose = useCallback(() => {
-    flowMgr.Selection.ClearSelection();
+    workspaceMgr.Selection.ClearSelection();
   }, []);
 
   const handleDeleteNode = useCallback(() => {
@@ -70,9 +65,9 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
 
     console.log(`🗑️ Deleting node ${selectedId}`);
 
-    flowMgr.EaC.DeleteNode(selectedId);
+    workspaceMgr.EaC.DeleteNode(selectedId);
 
-    flowMgr.Selection.ClearSelection();
+    workspaceMgr.Selection.ClearSelection();
 
     setUpdateSync([]);
   }, [selectedId]);
@@ -80,17 +75,17 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
   const handleToggleEnabled = useCallback(
     (val: boolean) => {
       if (selectedId) {
-        flowMgr.EaC.UpdateMetadataForNode(selectedId, { Enabled: val });
+        workspaceMgr.EaC.UpdateMetadataForNode(selectedId, { Enabled: val });
         setUpdateSync([]);
         console.log(`🟡 Toggled enabled state for node ${selectedId} → ${val}`);
       }
     },
-    [selectedId]
+    [selectedId],
   );
 
   useEffect(() => {
     if (selectedId) {
-      const loaded = flowMgr.EaC.GetDetailsForNode(selectedId);
+      const loaded = workspaceMgr.EaC.GetDetailsForNode(selectedId);
       setDetails({ ...(loaded ?? {}) });
     }
   }, [selectedId]);
@@ -101,10 +96,10 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
       return;
     }
 
-    const presetConfig =
-      flowMgr.Presets?.GetConfigForType?.(selected.id, selected.type!) ?? {};
+    const presetConfig = workspaceMgr.Presets?.GetConfigForType?.(selected.id, selected.type!) ??
+      {};
 
-    const latestMetadata = flowMgr.EaC.GetMetadataForNode?.(selected.id);
+    const latestMetadata = workspaceMgr.EaC.GetMetadataForNode?.(selected.id);
     const enabled = latestMetadata?.Enabled ?? false;
 
     setCommonProps({
@@ -121,17 +116,17 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
   const renderInspector = () => {
     if (!selected || !commonProps) {
       return (
-        <div class="text-neutral-500 text-xs italic">
+        <div class='text-neutral-500 text-xs italic'>
           No node selected. Double click a node to inspect.
         </div>
       );
     }
 
-    const Inspector = flowMgr.Presets.GetInspectorForType(selected.type!);
+    const Inspector = workspaceMgr.Presets.GetInspectorForType(selected.type!);
 
     if (!Inspector) {
       return (
-        <div class="text-neutral-500 text-xs italic">
+        <div class='text-neutral-500 text-xs italic'>
           No inspector available for <strong>{selected.type}</strong>.
         </div>
       );

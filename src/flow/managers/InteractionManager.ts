@@ -1,4 +1,4 @@
-import { Node, XYPosition, NodeChange, EdgeChange, Edge } from 'reactflow';
+import { Edge, EdgeChange, Node, NodeChange, XYPosition } from 'reactflow';
 
 import { SelectionManager } from './SelectionManager.ts';
 import { PresetManager } from './PresetManager.ts';
@@ -11,7 +11,7 @@ export class InteractionManager {
   constructor(
     private selection: SelectionManager,
     private presets: PresetManager,
-    private eacMgr: EaCManager
+    private eacMgr: EaCManager,
   ) {}
 
   /**
@@ -21,7 +21,7 @@ export class InteractionManager {
   public HandleDrop(
     event: DragEvent,
     nodes: Node<FlowNodeData>[],
-    screenToFlowPosition: (p: XYPosition) => XYPosition
+    screenToFlowPosition: (p: XYPosition) => XYPosition,
   ): { selectedId: string } | null {
     event.preventDefault();
 
@@ -57,9 +57,9 @@ export class InteractionManager {
 
     const relativePosition = surfaceParent
       ? {
-          x: position.x - surfaceParent.position.x,
-          y: position.y - surfaceParent.position.y,
-        }
+        x: position.x - surfaceParent.position.x,
+        y: position.y - surfaceParent.position.y,
+      }
       : position;
 
     console.log(`[Drop] Creating node of type: ${type} at`, {
@@ -73,7 +73,7 @@ export class InteractionManager {
     const newGraphNode = this.eacMgr.CreateNodeFromPreset(
       type,
       { X: relativePosition.x, Y: relativePosition.y },
-      surfaceParent?.id
+      surfaceParent?.id,
     );
 
     this.selection.SelectNode(newGraphNode.ID);
@@ -104,7 +104,7 @@ export class InteractionManager {
    */
   public OnNodesChange(
     changes: NodeChange[],
-    currentNodes: Node<FlowNodeData>[]
+    currentNodes: Node<FlowNodeData>[],
   ): void {
     this.eacMgr.ApplyReactFlowNodeChanges(changes, currentNodes);
   }

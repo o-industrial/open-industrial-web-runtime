@@ -49,10 +49,8 @@ export function InspectorBase({
   const currentRate = impulseRates?.at(-1) ?? null;
 
   // Dynamic yMin/yMax if not provided
-  const computedYMin =
-    yMin ?? (impulseRates?.length ? Math.min(...impulseRates) - 3 : 0);
-  const computedYMax =
-    yMax ?? (impulseRates?.length ? Math.max(...impulseRates) + 3 : 100);
+  const computedYMin = yMin ?? (impulseRates?.length ? Math.min(...impulseRates) - 3 : 0);
+  const computedYMax = yMax ?? (impulseRates?.length ? Math.max(...impulseRates) + 3 : 100);
 
   return (
     <section

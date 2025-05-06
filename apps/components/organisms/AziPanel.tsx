@@ -1,4 +1,4 @@
-import { FlowManager } from '../../../src/flow/managers/FlowManager.ts';
+import { WorkspaceManager } from '../../../src/flow/managers/WorkspaceManager.ts';
 import AziPanelTemplate from '../templates/AziPanelTemplate.tsx';
 import { AziChatInput } from '../molecules/azi/AziChatInput.tsx';
 import { AziChatMessage } from '../molecules/azi/AziChatMessage.tsx';
@@ -7,13 +7,13 @@ import { IntentTypes } from '../../../src/types/IntentTypes.ts';
 type Role = 'user' | 'azi' | 'tool';
 
 type AziPanelProps = {
-  flowMgr: FlowManager;
+  workspaceMgr: WorkspaceManager;
   onClose?: () => void;
   intentTypes?: Partial<Record<Role, IntentTypes>>;
 };
 
 export default function AziPanel({
-  flowMgr,
+  workspaceMgr,
   onClose,
   intentTypes = {
     user: IntentTypes.Secondary,
@@ -21,7 +21,7 @@ export default function AziPanel({
     tool: IntentTypes.Tertiary,
   },
 }: AziPanelProps) {
-  const { messages, send } = flowMgr.UseAzi();
+  const { messages, send } = workspaceMgr.UseAzi();
 
   return (
     <AziPanelTemplate

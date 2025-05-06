@@ -3,7 +3,7 @@ import { InspectorBase } from './InspectorBase.tsx';
 import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { InspectorCommonProps } from '../InspectorPanel.tsx';
-import { EaCSimulatorDetails } from '../../../../src/eac/EaCSimulatorDetails.ts';
+import { EaCSimulatorDetails } from '@o-industrial/common/eac';
 
 type SimulatorStats = {
   impulseRates?: number[];
@@ -17,26 +17,25 @@ type SimulatorInspectorProps = InspectorCommonProps<
   SimulatorStats
 >;
 
-function SimulatorAnalyticsTab({
-  stats,
-}: {
-  stats?: SimulatorStats;
-}) {
-  const { instanceCount = 0, avgStartupMs = 0, lastDeploymentAt = '—' } =
-    stats ?? {};
+function SimulatorAnalyticsTab({ stats }: { stats?: SimulatorStats }) {
+  const {
+    instanceCount = 0,
+    avgStartupMs = 0,
+    lastDeploymentAt = '—',
+  } = stats ?? {};
 
   return (
-    <div class="grid grid-cols-3 gap-2 mt-2">
-      <NodeStatTile label="Instances" value={instanceCount} />
-      <NodeStatTile label="Startup Time" value={`${avgStartupMs}ms`} />
-      <NodeStatTile label="Last Deploy" value={lastDeploymentAt} />
+    <div class='grid grid-cols-3 gap-2 mt-2'>
+      <NodeStatTile label='Instances' value={instanceCount} />
+      <NodeStatTile label='Startup Time' value={`${avgStartupMs}ms`} />
+      <NodeStatTile label='Last Deploy' value={lastDeploymentAt} />
     </div>
   );
 }
 
 function SimulatorStreamTab() {
   return (
-    <p class="text-sm text-neutral-300">
+    <p class='text-sm text-neutral-300'>
       📡 Incoming data and deployment logs will appear here.
     </p>
   );
@@ -47,14 +46,14 @@ export function SimulatorInspector({
   enabled,
   getStats,
   onDelete,
-  onDetailsChanged,
+  onDetailsChanged: _onDetailsChanged,
   onToggleEnabled,
 }: SimulatorInspectorProps) {
   const stats = useLiveStats(getStats);
 
   return (
     <InspectorBase
-      iconKey="simulator"
+      iconKey='simulator'
       label={details.Name}
       enabled={enabled}
       impulseRates={stats?.impulseRates ?? []}
@@ -62,14 +61,14 @@ export function SimulatorInspector({
       onDelete={onDelete}
     >
       <TabbedPanel
-        initialTab="settings"
-        class="mt-2"
+        initialTab='settings'
+        class='mt-2'
         tabs={[
           {
             key: 'settings',
             label: 'Settings',
             content: (
-              <div class="text-sm text-neutral-300">
+              <div class='text-sm text-neutral-300'>
                 ⚙️ Simulator configuration form coming soon.
               </div>
             ),

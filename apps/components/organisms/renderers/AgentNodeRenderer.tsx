@@ -25,30 +25,30 @@ export default function AgentNodeRenderer({ data }: NodeProps<AgentNodeData>) {
 
   return (
     <WorkspaceNodeRendererBase
-      iconKey="agent"
+      iconKey='agent'
       label={data.label}
       onDoubleClick={data.onDoubleClick}
       isSelected={data.isSelected}
-      class="data-[state=expanded]:w-[300px] data-[state=expanded]:h-auto data-[state=expanded]:rounded-md"
+      class='data-[state=expanded]:w-[300px] data-[state=expanded]:h-auto data-[state=expanded]:rounded-md'
       preMain={
         <NodeHandle
-          type="target"
+          type='target'
           position={Position.Left}
           intentType={IntentTypes.Tertiary}
         />
       }
       postMain={
         <NodeHandle
-          type="source"
+          type='source'
           position={Position.Right}
           intentType={IntentTypes.Tertiary}
         />
       }
     >
-      <div class="w-full flex flex-col gap-2 items-center justify-center py-2 px-2">
+      <div class='w-full flex flex-col gap-2 items-center justify-center py-2 px-2'>
         {impulseRates.length > 1 && (
           <LinePreviewWithValue
-            label="Rate"
+            label='Rate'
             values={impulseRates}
             currentValue={currentRate}
             intent={IntentTypes.Tertiary}
@@ -57,19 +57,19 @@ export default function AgentNodeRenderer({ data }: NodeProps<AgentNodeData>) {
           />
         )}
 
-        <div class="w-full flex justify-between gap-2 px-2">
+        <div class='w-full flex justify-between gap-2 px-2'>
           <NodeStatTile
-            label="Matches"
+            label='Matches'
             value={matchesHandled}
             intent={IntentTypes.Tertiary}
           />
           <NodeStatTile
-            label="Latency"
+            label='Latency'
             value={`${avgLatencyMs}ms`}
             intent={IntentTypes.Warning}
           />
           <NodeStatTile
-            label="Last Run"
+            label='Last Run'
             value={lastRunAgo}
             intent={lastRunAge > 30 ? IntentTypes.Error : IntentTypes.Secondary}
             animate={lastRunAge > 30}
