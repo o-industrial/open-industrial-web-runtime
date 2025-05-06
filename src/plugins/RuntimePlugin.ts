@@ -330,8 +330,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
           oi: {
             Details: {
               Type: 'DenoKV',
-              Name: 'Thinky',
-              Description: 'The Deno KV database to use for thinky',
+              Name: 'OI',
+              Description: 'The Deno KV database to use for open industrial web',
               DenoKVPath:
                 Deno.env.get('OPEN_INDUSTRIAL_DENO_KV_PATH') || undefined,
             } as EaCDenoKVDetails,

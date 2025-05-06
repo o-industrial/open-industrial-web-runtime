@@ -15,10 +15,21 @@ import { EaCSimulatorAsCode } from '../../eac/EaCSimulatorAsCode.ts';
 import { EaCDataConnectionAsCode } from '../../eac/EaCDataConnectionAsCode.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
 import { EaCFlowNodeMetadata } from '../../eac/EaCFlowNodeMetadata.ts';
-import { XYPosition } from 'reactflow';
 import { Position } from '../../types/Position.ts';
+import SimulatorNodeRenderer from '../../../apps/components/organisms/renderers/SimulatorNodeRenderer.tsx';
+import { AgentInspector } from '../../../apps/components/organisms/inspectors/AgentInspector.tsx';
+import { ConnectionInspector } from '../../../apps/components/organisms/inspectors/ConnectionInspector.tsx';
+import { SimulatorInspector } from '../../../apps/components/organisms/inspectors/SimulatorInspector.tsx';
+import { SurfaceInspector } from '../../../apps/components/organisms/inspectors/SurfaceInspector.tsx';
 
 export class PresetManager {
+  private static inspectorMap: Record<string, any> = {
+    agent: AgentInspector,
+    connection: ConnectionInspector,
+    surface: SurfaceInspector,
+    simulator: SimulatorInspector,
+  };
+
   private static presets: Record<string, NodePreset> = {
     empty: { Type: 'empty', Label: 'Empty Node', IconKey: 'empty' },
     connection: {
@@ -40,7 +51,7 @@ export class PresetManager {
     empty: memo(EmptyNodeRenderer),
     schema: memo(SchemaNodeRenderer),
     surface: memo(SurfaceNodeRenderer),
-    simulator: memo(EmptyNodeRenderer),
+    simulator: memo(SimulatorNodeRenderer),
   };
 
   private static scopeMap: Record<string, NodeScopeTypes[]> = {
@@ -52,32 +63,6 @@ export class PresetManager {
     simulator: [],
     empty: [],
   };
-
-  GetConfigForType(_nodeId: string, type: string): Record<string, unknown> {
-    switch (type) {
-      case 'connection': {
-        // You could later look up the specific connection type by ID if needed
-        const ingestOptions = [
-          { label: 'Default', value: 'Default', enabled: true },
-          { label: 'REST', value: 'HTTP', enabled: true },
-          { label: 'MQTT', value: 'MQTT', enabled: false },
-          { label: 'Web Socket', value: 'WebSocket', enabled: false },
-        ];
-
-        return { ingestOptions };
-      }
-
-      // Example: stub for future types
-      case 'surface': {
-        return {
-          supportedAgents: ['ReflexAgent', 'ControlAgent'],
-        };
-      }
-
-      default:
-        return {};
-    }
-  }
 
   CreatePartialEaCFromPreset(
     type: string,
@@ -127,6 +112,36 @@ export class PresetManager {
       default:
         throw new Error(`Unsupported preset type: ${type}`);
     }
+  }
+
+  GetConfigForType(_nodeId: string, type: string): Record<string, unknown> {
+    switch (type) {
+      case 'connection': {
+        // You could later look up the specific connection type by ID if needed
+        const ingestOptions = [
+          { label: 'Default', value: 'Default', enabled: true },
+          { label: 'REST', value: 'HTTP', enabled: true },
+          { label: 'MQTT', value: 'MQTT', enabled: false },
+          { label: 'Web Socket', value: 'WebSocket', enabled: false },
+        ];
+
+        return { ingestOptions };
+      }
+
+      // Example: stub for future types
+      case 'surface': {
+        return {
+          supportedAgents: ['ReflexAgent', 'ControlAgent'],
+        };
+      }
+
+      default:
+        return {};
+    }
+  }
+
+  GetInspectorForType(type: string): any | undefined {
+    return PresetManager.inspectorMap[type];
   }
 
   GetPresetsForScope(scope: NodeScopeTypes): Record<string, NodePreset> {

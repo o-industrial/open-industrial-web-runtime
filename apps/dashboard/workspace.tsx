@@ -27,7 +27,7 @@ export const handler: EaCRuntimeHandlerSet<
 > = {
   GET: (_req, ctx) => {
     return ctx.Render({
-      EaC: SimulatedOIEaC,
+      EaC: ctx.State.EaC!,
     });
   },
 };

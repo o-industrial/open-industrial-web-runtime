@@ -69,9 +69,9 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
     if (!selectedId) return;
 
     console.log(`🗑️ Deleting node ${selectedId}`);
-    
+
     flowMgr.EaC.DeleteNode(selectedId);
-    
+
     flowMgr.Selection.ClearSelection();
 
     setUpdateSync([]);
@@ -112,7 +112,7 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
       details,
       enabled,
       getStats: selected.data.getStats,
-      onDelete: handleDeleteNode, 
+      onDelete: handleDeleteNode,
       onDetailsChanged: handleDetailsChanged,
       onToggleEnabled: handleToggleEnabled,
     });
@@ -127,27 +127,17 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
       );
     }
 
-    switch (selected.type) {
-      case 'agent':
-        return <AgentInspector {...commonProps} config={commonProps.config} />;
-      case 'connection':
-        return (
-          <ConnectionInspector
-            {...commonProps}
-            config={commonProps.config as DataConnectionConfig}
-          />
-        );
-      case 'surface':
-        return (
-          <SurfaceInspector {...commonProps} config={commonProps.config} />
-        );
-      default:
-        return (
-          <div class="text-neutral-500 text-xs italic">
-            No inspector available for <strong>{selected.type}</strong>.
-          </div>
-        );
+    const Inspector = flowMgr.Presets.GetInspectorForType(selected.type!);
+
+    if (!Inspector) {
+      return (
+        <div class="text-neutral-500 text-xs italic">
+          No inspector available for <strong>{selected.type}</strong>.
+        </div>
+      );
     }
+
+    return <Inspector {...commonProps} />;
   };
 
   return (

@@ -43,6 +43,7 @@ export default function SurfaceNodeRenderer({
     <WorkspaceNodeRendererBase
       iconKey="surface"
       label={data.label}
+      enabled={data.enabled}
       onDoubleClick={data.onDoubleClick}
       isSelected={data.isSelected}
       class="data-[state=expanded]:w-[300px] data-[state=expanded]:h-auto data-[state=expanded]:rounded-md"

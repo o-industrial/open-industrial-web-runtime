@@ -4,11 +4,6 @@ import { EaCAzureIoTHubDataConnectionDetails } from '../eac/EaCAzureIoTHubDataCo
 import { EaCHTTPDataConnectionDetails } from '../eac/EaCHTTPDataConnectionDetails.ts';
 
 export const SimulatedOIEaC: OpenIndustrialEaC = {
-  Details: {
-    Name: 'hello-azi',
-    Description: 'Simulated workspace with HTTP and IoT Hub ingestion',
-  },
-
   DataConnections: {
     iotHubIngest: {
       Enabled: true,

@@ -139,9 +139,11 @@ export class FlowManager {
   public UseHistory() {
     const [canUndo, setCanUndo] = useState(this.History.CanUndo());
     const [canRedo, setCanRedo] = useState(this.History.CanRedo());
-    const [hasChanges, setHasChanges] = useState(this.History.HasUnsavedChanges());
+    const [hasChanges, setHasChanges] = useState(
+      this.History.HasUnsavedChanges()
+    );
     const [version, setVersion] = useState(this.History.GetVersion());
-  
+
     useEffect(() => {
       const update = () => {
         setCanUndo(this.History.CanUndo());
@@ -149,11 +151,36 @@ export class FlowManager {
         setHasChanges(this.History.HasUnsavedChanges());
         setVersion(this.History.GetVersion());
       };
-  
+
       this.History.OnChange(update);
       return () => this.History.OnChange(() => {});
     }, []);
-  
+
+    useEffect(() => {
+      const update = () => {
+        setCanUndo(this.History.CanUndo());
+        setCanRedo(this.History.CanRedo());
+        setHasChanges(this.History.HasUnsavedChanges());
+        setVersion(this.History.GetVersion());
+      };
+
+      this.History.OnChange(update);
+
+      const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+        if (this.History.HasUnsavedChanges()) {
+          e.preventDefault();
+          e.returnValue = ''; // For some browsers (Chrome)
+        }
+      };
+
+      addEventListener('beforeunload', handleBeforeUnload);
+
+      return () => {
+        this.History.OnChange(() => {});
+        removeEventListener('beforeunload', handleBeforeUnload);
+      };
+    }, []);
+
     return {
       canUndo,
       canRedo,
@@ -166,7 +193,7 @@ export class FlowManager {
       fork: () => this.ForkRuntime(),
     };
   }
-  
+
   public UseSelection() {
     const [selected, setSelected] = useState<Node<FlowNodeData> | null>(
       this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null

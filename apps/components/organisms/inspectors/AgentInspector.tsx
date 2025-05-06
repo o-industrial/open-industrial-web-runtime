@@ -25,14 +25,10 @@ export function AgentInspector({
       iconKey="agent"
       label={details.Name ?? 'Agent Node'}
       enabled={enabled}
+      impulseRates={stats?.impulseRates ?? []}
       onToggleEnabled={onToggleEnabled}
       onDelete={onDelete}
     >
-      <LinePreviewWithValue
-        label="Impulse Rate"
-        values={stats?.impulseRates ?? []}
-        intent={IntentTypes.Tertiary}
-      />
       <NodeStatTile label="Matches" value={stats?.matchesHandled || 0} />
       <NodeStatTile label="Avg Latency" value={`${stats?.avgLatencyMs}ms`} />
     </InspectorBase>

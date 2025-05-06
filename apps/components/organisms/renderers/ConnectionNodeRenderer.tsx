@@ -16,10 +16,7 @@ export default function ConnectionNodeRenderer({
 
   const stats = useLiveStats(data.getStats);
 
-  const {
-    impulseRates = [],
-    connectionInfo = {},
-  } = stats ?? {};
+  const { impulseRates = [], connectionInfo = {} } = stats ?? {};
 
   const latest = impulseRates.at(-1);
 
@@ -32,6 +29,7 @@ export default function ConnectionNodeRenderer({
     <WorkspaceNodeRendererBase
       iconKey="connection"
       label={data.label}
+      enabled={data.enabled}
       onDoubleClick={data.onDoubleClick}
       isSelected={data.isSelected}
       class={classes}

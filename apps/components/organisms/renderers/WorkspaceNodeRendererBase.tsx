@@ -25,6 +25,7 @@ export type WorkspaceNodeRendererBaseProps = {
   postMain?: ComponentChildren;
 
   children?: ComponentChildren;
+  enabled?: boolean;
 
   onDoubleClick?: () => void;
 } & JSX.HTMLAttributes<HTMLDivElement>;
@@ -47,6 +48,7 @@ export default function WorkspaceNodeRendererBase({
   postInner,
   postMain,
   children,
+  enabled,
   onDoubleClick,
   ...props
 }: WorkspaceNodeRendererBaseProps) {
@@ -105,14 +107,18 @@ export default function WorkspaceNodeRendererBase({
   return (
     <div
       class={classSet(
-        ['-:relative -:flex -:flex-row -:items-center -:align-middle'],
-        { class: outerClass },
+        [
+          '-:relative -:flex -:flex-row -:items-center -:align-middle',
+          !enabled ? 'opacity-40' : '',
+          !enabled ? 'pointer-events-none' : '',
+        ],
+        { class: outerClass }
       )}
       style={{ pointerEvents: 'auto', zIndex: 1 }}
-      onClick={handleClick}
+      onClick={enabled === false ? undefined : handleClick}
       onDblClick={handleDoubleClick}
     >
-      {preMain}
+      {enabled && preMain}
 
       <div
         data-state={state}
@@ -124,13 +130,18 @@ export default function WorkspaceNodeRendererBase({
             state === 'default' ? '-:w-14 -:h-14' : '-:w-[250px] -:h-14',
             statusClasses,
           ],
-          { class: className },
+          { class: className }
         )}
         {...props}
       >
-        {preInner}
+        {enabled && preInner}
 
-        <div class={classSet(['relative w-full', state === 'expanded' ? 'h-auto' : 'h-full'])}>
+        <div
+          class={classSet([
+            'relative w-full',
+            state === 'expanded' ? 'h-auto' : 'h-full',
+          ])}
+        >
           <div
             class={classSet([
               'pointer-events-none absolute',
@@ -144,7 +155,7 @@ export default function WorkspaceNodeRendererBase({
             {iconKey && (
               <Icon
                 icon={iconKey}
-                src='/icons/iconset'
+                src="/icons/iconset"
                 class={classSet([
                   '-:transition-all -:duration-300 -:ease-in-out',
                   state === 'default' ? 'w-6 h-6' : 'w-8 h-8',
@@ -156,7 +167,9 @@ export default function WorkspaceNodeRendererBase({
               <span
                 class={classSet([
                   '-:transition-all -:duration-750 -:ease-in-out',
-                  state === 'default' ? '-:ml-0 -:opacity-0' : '-:ml-1 -:opacity-100',
+                  state === 'default'
+                    ? '-:ml-0 -:opacity-0'
+                    : '-:ml-1 -:opacity-100',
                 ])}
               >
                 {state !== 'default' && label}
@@ -164,28 +177,28 @@ export default function WorkspaceNodeRendererBase({
             )}
           </div>
 
-          <div class='pt-8'>{state !== 'default' && children}</div>
+          <div class="pt-8">{state !== 'default' && children}</div>
         </div>
 
-        {postInner}
+        {enabled && postInner}
 
         {state === 'expanded' && (
           <Action
-            title='Collapse'
+            title="Collapse"
             onClick={(e: MouseEvent) => {
               e.stopPropagation();
               setState('default');
             }}
             styleType={ActionStyleTypes.Icon}
             intentType={IntentTypes.Error}
-            class='-:absolute -:top-0 -:right-0 -:font-bold -:pointer-events-auto'
+            class="-:absolute -:top-0 -:right-0 -:font-bold -:pointer-events-auto"
           >
-            <CloseIcon class='w-6 h-6' />
+            <CloseIcon class="w-6 h-6" />
           </Action>
         )}
       </div>
 
-      {postMain}
+      {enabled && postMain}
     </div>
   );
 }
