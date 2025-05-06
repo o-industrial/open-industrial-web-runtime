@@ -47,24 +47,47 @@ export function ManagementControls({
         intentType={effectiveCommitIntent}
         onClick={onCommit}
         title="Commit Changes"
+        disabled={!onCommit}
         class="z-10"
       >
         <SaveIcon class="w-6 h-6" />
-        {/* <CommitIcon class="w-6 h-6" /> */}
       </Action>
 
       {/* Expandable tools on the left */}
       <div
-        class="flex flex-row-reverse gap-2 items-center 
+        class="flex flex-row gap-2 items-center 
                max-w-0 group-hover:max-w-[300px] 
                opacity-0 group-hover:opacity-100 
                transition-all duration-300 overflow-hidden"
       >
         <Action
           styleType={ActionStyleTypes.Icon | ActionStyleTypes.Thin}
+          intentType={forkIntent}
+          onClick={onFork}
+          title="Fork Runtime"
+          disabled={!onFork}
+        >
+          <ForkIcon class="w-6 h-6" />
+        </Action>
+
+        <Action
+          styleType={ActionStyleTypes.Icon | ActionStyleTypes.Thin}
+          intentType={revertIntent}
+          onClick={onRevert}
+          title="Revert to Last Commit"
+          disabled={!onRevert}
+          class="hidden" // TODO(AI): Re-enable once we actually put some time into getting this working
+        >
+          <RevertIcon class="w-6 h-6" />
+        </Action>
+
+        <Action
+          styleType={ActionStyleTypes.Icon | ActionStyleTypes.Thin}
           intentType={undoIntent}
           onClick={onUndo}
           title="Undo"
+          disabled={!onUndo}
+          class="hidden" // TODO(AI): Re-enable once we actually put some time into getting this working
         >
           <UndoIcon class="w-6 h-6" />
         </Action>
@@ -74,26 +97,10 @@ export function ManagementControls({
           intentType={redoIntent}
           onClick={onRedo}
           title="Redo"
+          disabled={!onRedo}
+          class="hidden" // TODO(AI): Re-enable once we actually put some time into getting this working
         >
           <RedoIcon class="w-6 h-6" />
-        </Action>
-
-        <Action
-          styleType={ActionStyleTypes.Icon | ActionStyleTypes.Thin}
-          intentType={revertIntent}
-          onClick={onRevert}
-          title="Revert to Last Commit"
-        >
-          <RevertIcon class="w-6 h-6" />
-        </Action>
-
-        <Action
-          styleType={ActionStyleTypes.Icon | ActionStyleTypes.Thin}
-          intentType={forkIntent}
-          onClick={onFork}
-          title="Fork Runtime"
-        >
-          <ForkIcon class="w-6 h-6" />
         </Action>
       </div>
     </div>

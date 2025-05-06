@@ -44,7 +44,11 @@ export class FlowManager {
     this.History = new HistoryManager();
     this.Graph = new GraphStateManager(this.Selection, this.Stats);
     this.EaC = this.createEaCManager(eac);
-    this.Runtime = new InteractionManager(this.Selection, this.Presets, this.EaC);
+    this.Runtime = new InteractionManager(
+      this.Selection,
+      this.Presets,
+      this.EaC
+    );
 
     console.log('🚀 FlowManager initialized:', {
       scope: this.Scope,
@@ -132,6 +136,37 @@ export class FlowManager {
     };
   }
 
+  public UseHistory() {
+    const [canUndo, setCanUndo] = useState(this.History.CanUndo());
+    const [canRedo, setCanRedo] = useState(this.History.CanRedo());
+    const [hasChanges, setHasChanges] = useState(this.History.HasUnsavedChanges());
+    const [version, setVersion] = useState(this.History.GetVersion());
+  
+    useEffect(() => {
+      const update = () => {
+        setCanUndo(this.History.CanUndo());
+        setCanRedo(this.History.CanRedo());
+        setHasChanges(this.History.HasUnsavedChanges());
+        setVersion(this.History.GetVersion());
+      };
+  
+      this.History.OnChange(update);
+      return () => this.History.OnChange(() => {});
+    }, []);
+  
+    return {
+      canUndo,
+      canRedo,
+      hasChanges,
+      version,
+      undo: () => this.Undo(),
+      redo: () => this.Redo(),
+      commit: () => this.CommitRuntime(),
+      revert: () => this.RevertToLastCommit(),
+      fork: () => this.ForkRuntime(),
+    };
+  }
+  
   public UseSelection() {
     const [selected, setSelected] = useState<Node<FlowNodeData> | null>(
       this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null
@@ -189,30 +224,6 @@ export class FlowManager {
     console.log('✅ Runtime committed');
   }
 
-  public RevertToLastCommit(): void {
-    const reverted = this.History.RevertToLastCommit();
-    if (reverted) {
-      this.ReloadFromEaC(reverted);
-      console.log('🔄 Reverted to last commit');
-    }
-  }
-
-  public Undo(): void {
-    const prev = this.History.Undo();
-    if (prev) {
-      this.ReloadFromEaC(prev);
-      console.log('↩️ Undo successful');
-    }
-  }
-
-  public Redo(): void {
-    const next = this.History.Redo();
-    if (next) {
-      this.ReloadFromEaC(next);
-      console.log('↪️ Redo successful');
-    }
-  }
-
   public ForkRuntime(): void {
     const forked = this.History.ForkRuntime();
     console.log('🌱 Forked runtime snapshot:', forked);
@@ -222,9 +233,28 @@ export class FlowManager {
     return this.History.HasUnsavedChanges();
   }
 
-  public ReloadFromEaC(eac: OpenIndustrialEaC): void {
-    this.EaC = this.createEaCManager(eac);
-    this.Graph.LoadFromGraph(this.EaC['buildGraph'](eac));
+  public RevertToLastCommit(): void {
+    const snapshot = this.History.RevertToLastCommit();
+    if (snapshot) {
+      this.EaC.ResetFromSnapshot(snapshot);
+      console.log('🔄 Reverted to last commit');
+    }
+  }
+
+  public Undo(): void {
+    const snapshot = this.History.Undo();
+    if (snapshot) {
+      this.EaC.ResetFromSnapshot(snapshot);
+      console.log('↩️ Undo successful');
+    }
+  }
+
+  public Redo(): void {
+    const snapshot = this.History.Redo();
+    if (snapshot) {
+      this.EaC.ResetFromSnapshot(snapshot);
+      console.log('↪️ Redo successful');
+    }
   }
 
   // === Internals ===
@@ -232,7 +262,12 @@ export class FlowManager {
   protected createEaCManager(eac: OpenIndustrialEaC): EaCManager {
     switch (this.Scope) {
       case 'workspace':
-        return new EaCWorkspaceManager(eac, this.Graph, this.Presets);
+        return new EaCWorkspaceManager(
+          eac,
+          this.Graph,
+          this.Presets,
+          this.History
+        );
       case 'surface':
         throw new Error('Surface scope not yet implemented');
     }

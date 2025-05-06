@@ -55,19 +55,6 @@ export default function SurfaceNodeRenderer({
       }
     >
       <div class="w-full flex flex-col gap-2 items-center justify-center py-2 px-2">
-        {impulseRates.length > 1 ? (
-          <LinePreviewWithValue
-            label="Rate"
-            values={impulseRates}
-            currentValue={currentRate}
-            intent={IntentTypes.Tertiary}
-            yMin={5}
-            yMax={20}
-          />
-        ) : (
-          <div class="text-sm text-gray-400 italic mb-2">No live rate data</div>
-        )}
-
         <div class="w-full flex justify-between mt-2 mb-2 gap-2">
           <NodeStatTile
             label="Inputs"
@@ -88,6 +75,19 @@ export default function SurfaceNodeRenderer({
             animate={lastSignalAge > 60}
           />
         </div>
+
+        {impulseRates.length > 1 ? (
+          <LinePreviewWithValue
+            label="Rate"
+            values={impulseRates}
+            currentValue={currentRate}
+            intent={IntentTypes.Tertiary}
+            yMin={5}
+            yMax={20}
+          />
+        ) : (
+          <div class="text-sm text-gray-400 italic mb-2">No live rate data</div>
+        )}
 
         <div class="flex justify-end gap-2 w-full mt-1 px-2">
           <Action

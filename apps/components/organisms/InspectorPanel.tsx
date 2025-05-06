@@ -10,10 +10,6 @@ import { ConnectionInspector } from './inspectors/ConnectionInspector.tsx';
 import { SurfaceInspector } from './inspectors/SurfaceInspector.tsx';
 import { DataConnectionConfig } from '../../../src/flow/types/DataConnectionConfig.ts';
 
-type InspectorPanelProps = {
-  flowMgr: FlowManager;
-};
-
 export type InspectorCommonProps<
   TDetails extends EaCVertexDetails = EaCVertexDetails,
   TStats extends Record<string, unknown> = Record<string, unknown>,
@@ -23,11 +19,17 @@ export type InspectorCommonProps<
   details: Partial<TDetails>;
   enabled: boolean;
   getStats?: () => Promise<TStats>;
+  onDelete: () => void; // 👈 new
   onDetailsChanged: (next: Partial<TDetails>) => void;
   onToggleEnabled: (enabled: boolean) => void;
 };
 
+type InspectorPanelProps = {
+  flowMgr: FlowManager;
+};
+
 export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
+  let [updateSync, setUpdateSync] = useState([]);
   const { selected } = flowMgr.UseSelection();
   const selectedId = selected?.id;
 
@@ -59,21 +61,27 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
     [selectedId]
   );
 
-  const handleSave = useCallback(() => {
-    if (selectedId) {
-      flowMgr.EaC.UpdateDetailsForNode(selectedId, details);
-      console.log(`💾 Saved EaC details for node ${selectedId}`);
-    }
-  }, [selectedId, details]);
-
   const handleClose = useCallback(() => {
     flowMgr.Selection.ClearSelection();
   }, []);
+
+  const handleDeleteNode = useCallback(() => {
+    if (!selectedId) return;
+
+    console.log(`🗑️ Deleting node ${selectedId}`);
+    
+    flowMgr.EaC.DeleteNode(selectedId);
+    
+    flowMgr.Selection.ClearSelection();
+
+    setUpdateSync([]);
+  }, [selectedId]);
 
   const handleToggleEnabled = useCallback(
     (val: boolean) => {
       if (selectedId) {
         flowMgr.EaC.UpdateMetadataForNode(selectedId, { Enabled: val });
+        setUpdateSync([]);
         console.log(`🟡 Toggled enabled state for node ${selectedId} → ${val}`);
       }
     },
@@ -100,14 +108,15 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
     const enabled = latestMetadata?.Enabled ?? false;
 
     setCommonProps({
+      config: presetConfig,
       details,
       enabled,
       getStats: selected.data.getStats,
+      onDelete: handleDeleteNode, 
       onDetailsChanged: handleDetailsChanged,
       onToggleEnabled: handleToggleEnabled,
-      config: presetConfig,
     });
-  }, [selectedId, selected, details, handleDetailsChanged, handleSave]);// TODO: Track EaC version as trigger
+  }, [selectedId, selected, details, handleDetailsChanged, updateSync]);
 
   const renderInspector = () => {
     if (!selected || !commonProps) {

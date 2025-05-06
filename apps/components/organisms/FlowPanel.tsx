@@ -44,6 +44,8 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
   } = flowMgr.UseInteraction();
   const { presets, nodeTypes } = flowMgr.UseUIContext();
 
+  const history = flowMgr.UseHistory();
+
   return (
     <FlowPanelTemplate
       bank={<FlowPanelBank presets={presets} />}
@@ -52,12 +54,12 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
       }
       managementControls={
         <ManagementControls
-          hasChanges={flowMgr.HasUnsavedChanges()}
-          onUndo={() => flowMgr.Undo()}
-          onRedo={() => flowMgr.Redo()}
-          onCommit={() => flowMgr.CommitRuntime()}
-          onRevert={() => flowMgr.RevertToLastCommit()}
-          onFork={() => flowMgr.ForkRuntime()}
+          hasChanges={history.hasChanges}
+          onUndo={history.canUndo ? history.undo : undefined}
+          onRedo={history.canRedo ? history.redo : undefined}
+          onCommit={history.commit}
+          onRevert={history.revert}
+          onFork={history.fork}
         />
       }
       canvas={

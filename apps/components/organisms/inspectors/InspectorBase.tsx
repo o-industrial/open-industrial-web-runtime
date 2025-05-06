@@ -32,8 +32,8 @@ export function InspectorBase({
   children,
   impulseRates,
   impulseRateIntentType = IntentTypes.Tertiary,
-  yMin = 15,
-  yMax = 30,
+  yMin,
+  yMax,
   enabled,
   onToggleEnabled,
   onDelete,
@@ -47,6 +47,12 @@ export function InspectorBase({
   }[status];
 
   const currentRate = impulseRates?.at(-1) ?? null;
+
+  // Dynamic yMin/yMax if not provided
+  const computedYMin =
+    yMin ?? (impulseRates?.length ? Math.min(...impulseRates) - 3 : 0);
+  const computedYMax =
+    yMax ?? (impulseRates?.length ? Math.max(...impulseRates) + 3 : 100);
 
   return (
     <section
@@ -100,8 +106,8 @@ export function InspectorBase({
           values={impulseRates}
           currentValue={currentRate}
           intent={impulseRateIntentType}
-          yMin={yMin}
-          yMax={yMax}
+          yMin={computedYMin}
+          yMax={computedYMax}
         />
       )}
     </section>

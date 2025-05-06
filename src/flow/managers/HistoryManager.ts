@@ -1,23 +1,31 @@
 import { jsonMapSetClone } from '@fathym/common';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
 
+export type EaCHistorySnapshot = {
+  eac: OpenIndustrialEaC;
+  deletes: OpenIndustrialEaC;
+};
+
 export class HistoryManager {
-  private history: OpenIndustrialEaC[] = [];
+  private history: EaCHistorySnapshot[] = [];
   private pointer = -1;
-  private committed: OpenIndustrialEaC | null = null;
+  private committed: EaCHistorySnapshot | null = null;
   private dirty = false;
   private maxHistory = 100;
 
   private onChange?: () => void;
 
   constructor() {
-    const snapshot = jsonMapSetClone({});
-    this.history.push(snapshot);
+    const empty: EaCHistorySnapshot = {
+      eac: jsonMapSetClone({}),
+      deletes: jsonMapSetClone({}),
+    };
+    this.history.push(empty);
     this.pointer = 0;
-    this.committed = snapshot;
+    this.committed = empty;
   }
 
-  public GetCurrent(): OpenIndustrialEaC {
+  public GetCurrent(): EaCHistorySnapshot {
     return jsonMapSetClone(this.history[this.pointer]);
   }
 
@@ -25,14 +33,17 @@ export class HistoryManager {
     this.dirty = true;
   }
 
-  public FlushIfDirty(next: OpenIndustrialEaC): void {
+  public FlushIfDirty(eac: OpenIndustrialEaC, deletes: OpenIndustrialEaC): void {
     if (!this.dirty) return;
-    this.Push(next);
+    this.Push(eac, deletes);
     this.dirty = false;
   }
 
-  public Push(next: OpenIndustrialEaC): void {
-    const snapshot = jsonMapSetClone(next);
+  public Push(eac: OpenIndustrialEaC, deletes: OpenIndustrialEaC = {}): void {
+    const snapshot: EaCHistorySnapshot = {
+      eac: jsonMapSetClone(eac),
+      deletes: jsonMapSetClone(deletes),
+    };
 
     if (this.pointer < this.history.length - 1) {
       this.history = this.history.slice(0, this.pointer + 1);
@@ -49,14 +60,14 @@ export class HistoryManager {
     this.onChange?.();
   }
 
-  public Undo(): OpenIndustrialEaC | null {
+  public Undo(): EaCHistorySnapshot | null {
     if (!this.CanUndo()) return null;
     this.pointer--;
     this.onChange?.();
     return jsonMapSetClone(this.history[this.pointer]);
   }
 
-  public Redo(): OpenIndustrialEaC | null {
+  public Redo(): EaCHistorySnapshot | null {
     if (!this.CanRedo()) return null;
     this.pointer++;
     this.onChange?.();
@@ -69,17 +80,17 @@ export class HistoryManager {
     this.onChange?.();
   }
 
-  public RevertToLastCommit(): OpenIndustrialEaC | null {
+  public RevertToLastCommit(): EaCHistorySnapshot | null {
     if (!this.committed) return null;
-    this.Push(this.committed);
+    this.Push(this.committed.eac, this.committed.deletes);
     this.onChange?.();
     return jsonMapSetClone(this.committed);
   }
 
   public ForkRuntime(): OpenIndustrialEaC {
-    const current = this.GetCurrent();
+    const { eac } = this.GetCurrent();
     // Future: apply ForkedFrom tag or runtime label here
-    return jsonMapSetClone(current);
+    return jsonMapSetClone(eac);
   }
 
   public GetVersion(): number {
@@ -87,7 +98,12 @@ export class HistoryManager {
   }
 
   public HasUnsavedChanges(): boolean {
-    return JSON.stringify(this.GetCurrent()) !== JSON.stringify(this.committed);
+    if (!this.committed) return true;
+    const current = this.GetCurrent();
+    return (
+      JSON.stringify(current.eac) !== JSON.stringify(this.committed.eac) ||
+      JSON.stringify(current.deletes) !== JSON.stringify(this.committed.deletes)
+    );
   }
 
   public CanUndo(): boolean {

@@ -20,6 +20,7 @@ export function ConnectionInspector({
   details,
   enabled,
   getStats,
+  onDelete,
   onDetailsChanged,
   onToggleEnabled,
 }: ConnectionInspectorProps) {
@@ -33,7 +34,7 @@ export function ConnectionInspector({
       enabled={enabled}
       impulseRates={stats?.impulseRates ?? []}
       onToggleEnabled={onToggleEnabled}
-      onDelete={() => console.log('🗑️ TODO: Delete connection node')}
+      onDelete={onDelete}
     >
       <TabbedPanel
         initialTab="settings"

@@ -29,7 +29,12 @@ export class GraphStateManager {
   public LoadFromGraph(graph: FlowGraph): void {
     console.log('📥 [GraphState] Loading new graph structure:', graph);
     let changed = false;
-
+  
+    // Handle nodes
+    const newNodeIDs = new Set(graph.Nodes.map((n) => n.ID));
+    const currentNodeIDs = new Set(this.graph.Nodes.map((n) => n.ID));
+  
+    // Add/update nodes
     for (const node of graph.Nodes) {
       const idx = this.graph.Nodes.findIndex((n) => n.ID === node.ID);
       if (idx === -1) {
@@ -44,7 +49,20 @@ export class GraphStateManager {
         changed = true;
       }
     }
-
+  
+    // Remove deleted nodes
+    const nodesBefore = this.graph.Nodes.length;
+    this.graph.Nodes = this.graph.Nodes.filter((n) => newNodeIDs.has(n.ID));
+    if (this.graph.Nodes.length !== nodesBefore) {
+      console.log(`🗑️ [GraphState] Nodes removed`);
+      changed = true;
+    }
+  
+    // Handle edges
+    const newEdgeIDs = new Set(graph.Edges.map((e) => e.ID));
+    const _currentEdgeIDs = new Set(this.graph.Edges.map((e) => e.ID));
+  
+    // Add/update edges
     for (const edge of graph.Edges) {
       const idx = this.graph.Edges.findIndex((e) => e.ID === edge.ID);
       if (idx === -1) {
@@ -59,7 +77,16 @@ export class GraphStateManager {
         changed = true;
       }
     }
-
+  
+    // Remove deleted edges
+    const edgesBefore = this.graph.Edges.length;
+    this.graph.Edges = this.graph.Edges.filter((e) => newEdgeIDs.has(e.ID));
+    if (this.graph.Edges.length !== edgesBefore) {
+      console.log(`🗑️ [GraphState] Edges removed`);
+      changed = true;
+    }
+  
+    // Final emit
     if (changed) {
       console.log(
         '🔁 [GraphState] Graph changed — updating caches and notifying listeners'
@@ -70,7 +97,7 @@ export class GraphStateManager {
       console.log('✅ [GraphState] No changes detected — graph unchanged');
     }
   }
-
+  
   public GetNodes(): Node<FlowNodeData>[] {
     return this.toReactFlowNodes();
   }

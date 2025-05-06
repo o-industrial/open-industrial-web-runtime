@@ -14,6 +14,7 @@ export function AgentInspector({
   details,
   enabled,
   getStats,
+  onDelete,
   onDetailsChanged,
   onToggleEnabled,
 }: AgentInspectorProps) {
@@ -25,7 +26,7 @@ export function AgentInspector({
       label={details.Name ?? 'Agent Node'}
       enabled={enabled}
       onToggleEnabled={onToggleEnabled}
-      onDelete={() => console.log('🗑️ TODO: Delete agent node')}
+      onDelete={onDelete}
     >
       <LinePreviewWithValue
         label="Impulse Rate"

@@ -18,7 +18,7 @@ import { EaCFlowNodeMetadata } from '../../eac/EaCFlowNodeMetadata.ts';
 import { SimulatorDefinition } from './SimulatorLibraryManager.ts';
 import { EaCAzureDockerSimulatorDetails } from '../../eac/EaCAzureDockerSimulatorDetails.ts';
 import { EaCVertexDetails } from '@fathym/eac';
-import { HistoryManager } from './HistoryManager.ts';
+import { EaCHistorySnapshot, HistoryManager } from './HistoryManager.ts';
 
 /**
  * Canonical manager for synchronizing Everything-as-Code (EaC) state
@@ -26,6 +26,8 @@ import { HistoryManager } from './HistoryManager.ts';
  * class to ensure source-of-truth consistency and downstream reactivity.
  */
 export abstract class EaCManager {
+  protected deleteEaC: OpenIndustrialEaC = {};
+
   constructor(
     protected eac: OpenIndustrialEaC,
     protected scope: NodeScopeTypes,
@@ -35,6 +37,8 @@ export abstract class EaCManager {
   ) {
     const initialGraph = this.buildGraph(jsonMapSetClone(this.eac));
     this.graph.LoadFromGraph(initialGraph);
+
+    this.deleteEaC = jsonMapSetClone({});
   }
 
   public ApplyReactFlowNodeChanges(
@@ -123,6 +127,33 @@ export abstract class EaCManager {
     return node;
   }
 
+  public DeleteNode(id: string): void {
+    const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
+    if (!node) return;
+
+    const type = node.Type;
+    const key = this.getEaCKeyForType(type);
+
+    const partial: OpenIndustrialEaC = {
+      [key]: {
+        [id]: null,
+      },
+    } as OpenIndustrialEaC;
+
+    console.log(`🗑️ [EaC] Deleting ${type}:${id}`);
+
+    this.MergeDelete(partial);
+
+    // Remove related edges
+    const edges = this.graph
+      .GetGraph()
+      .Edges.filter((e) => e.Source === id || e.Target === id);
+    if (edges.length) {
+      const changes = edges.map((e) => ({ id: e.ID, type: 'remove' as const }));
+      this.ApplyReactFlowEdgeChanges(changes, []);
+    }
+  }
+
   public GetEaC(): OpenIndustrialEaC {
     return jsonMapSetClone(this.eac);
   }
@@ -142,17 +173,17 @@ export abstract class EaCManager {
 
   public GetMetadataForNode(id: string): EaCFlowNodeMetadata | null {
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
-  
+
     if (!node) {
       console.warn(`[Inspector] No matching node in graph for ID: ${id}`);
       return null;
     }
-  
+
     const result = this.findEaCAsCode(node.ID, node.Type);
-  
+
     return result?.AsCode?.Metadata ?? null;
   }
-  
+
   public InstallSimulators(simDefs: SimulatorDefinition[]): void {
     const partial: OpenIndustrialEaC = {
       Simulators: {},
@@ -174,15 +205,64 @@ export abstract class EaCManager {
     this.MergePartial(partial);
   }
 
+  public MergeDelete(partial: OpenIndustrialEaC): void {
+    console.log('🧨 MergeDelete called with:', partial);
+
+    const deepMergeDelete = (target: any, patch: any) => {
+      for (const key in patch) {
+        const val = patch[key];
+        if (val === null) {
+          target[key] = null;
+        } else if (typeof val === 'object') {
+          target[key] ??= {};
+          deepMergeDelete(target[key], val);
+        }
+      }
+    };
+
+    deepMergeDelete(this.deleteEaC, jsonMapSetClone(partial));
+
+    const updatedEaC = jsonMapSetClone(this.eac);
+    const deepDelete = (target: any, patch: any) => {
+      for (const key in patch) {
+        const val = patch[key];
+        if (val === null) {
+          delete target[key];
+        } else if (typeof val === 'object' && typeof target[key] === 'object') {
+          deepDelete(target[key], val);
+          if (Object.keys(target[key]).length === 0) {
+            delete target[key];
+          }
+        }
+      }
+    };
+
+    deepDelete(updatedEaC, this.deleteEaC);
+
+    const changed = JSON.stringify(this.eac) !== JSON.stringify(updatedEaC);
+
+    if (changed) {
+      this.eac = updatedEaC;
+      this.history?.Push(updatedEaC, this.deleteEaC);
+
+      console.log('♻️ [MergeDelete] Graph updated due to delete merge');
+      const rebuilt = this.buildGraph(jsonMapSetClone(updatedEaC));
+      this.graph.LoadFromGraph(rebuilt);
+    } else {
+      console.log('✅ [MergeDelete] No changes detected');
+    }
+  }
+
   public MergePartial(partial: OpenIndustrialEaC): void {
     console.log('🔧 MergePartial called with:', partial);
-  
+
     const { updated, changed } = this.merge(partial);
     console.log('📊 EaC merge result:', { changed });
-  
+
     if (changed) {
-      this.history?.Push(updated);
-  
+      this.eac = updated;
+      this.history?.Push(updated, this.deleteEaC);
+
       console.log('♻️ Rebuilding graph due to structural change');
       const rebuilt = this.buildGraph(jsonMapSetClone(updated));
       this.graph.LoadFromGraph(rebuilt);
@@ -190,7 +270,14 @@ export abstract class EaCManager {
       console.log('✅ No graph rebuild needed — structure unchanged');
     }
   }
-  
+
+  public ResetFromSnapshot(snapshot: EaCHistorySnapshot): void {
+    this.eac = jsonMapSetClone(snapshot.eac);
+    this.deleteEaC = jsonMapSetClone(snapshot.deletes);
+    const rebuilt = this.buildGraph(this.eac);
+    this.graph.LoadFromGraph(rebuilt);
+  }
+
   public UpdateDetailsForNode(id: string, next: EaCVertexDetails): void {
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
     if (!node) {
@@ -224,29 +311,32 @@ export abstract class EaCManager {
     this.MergePartial(partial);
   }
 
-  public UpdateMetadataForNode(id: string, metadata: Partial<EaCFlowNodeMetadata>): void {
+  public UpdateMetadataForNode(
+    id: string,
+    metadata: Partial<EaCFlowNodeMetadata>
+  ): void {
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
     if (!node) {
       console.warn(`[EaC] No graph node found for ID: ${id}`);
       return;
     }
-  
+
     const type = node.Type;
     const current = this.findEaCAsCode(id, type);
     if (!current) {
       console.warn(`[EaC] No matching EaC entry for ${type}:${id}`);
       return;
     }
-  
+
     const prevMeta = current.AsCode.Metadata ?? {};
-    const mergedMeta = { ...prevMeta, ...metadata };
-  
+    const mergedMeta = merge(prevMeta, metadata);
+
     const changed = JSON.stringify(prevMeta) !== JSON.stringify(mergedMeta);
     if (!changed) {
       console.log(`[EaC] No metadata change for ${id}`);
       return;
     }
-  
+
     const partial: OpenIndustrialEaC = {
       [this.getEaCKeyForType(type)]: {
         [id]: {
@@ -255,9 +345,9 @@ export abstract class EaCManager {
         },
       },
     };
-  
+
     console.log(`✏️ [EaC] Merging updated Metadata for ${id} →`, mergedMeta);
-  
+
     this.MergePartial(partial);
   }
 

@@ -32,6 +32,7 @@ export function SurfaceInspector({
   details,
   enabled,
   getStats,
+  onDelete,
   onDetailsChanged,
   onToggleEnabled,
 }: SurfaceInspectorProps) {
@@ -43,10 +44,8 @@ export function SurfaceInspector({
       label={details.Name}
       enabled={enabled}
       impulseRates={stats?.impulseRates ?? []}
-      yMin={5}
-      yMax={20}
       onToggleEnabled={onToggleEnabled}
-      onDelete={() => console.log('🗑️ TODO: Delete surface node')}
+      onDelete={onDelete}
     >
       <TabbedPanel
         initialTab="settings"
