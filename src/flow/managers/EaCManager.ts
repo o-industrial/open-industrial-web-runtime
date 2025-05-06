@@ -18,6 +18,7 @@ import { EaCFlowNodeMetadata } from '../../eac/EaCFlowNodeMetadata.ts';
 import { SimulatorDefinition } from './SimulatorLibraryManager.ts';
 import { EaCAzureDockerSimulatorDetails } from '../../eac/EaCAzureDockerSimulatorDetails.ts';
 import { EaCVertexDetails } from '@fathym/eac';
+import { HistoryManager } from './HistoryManager.ts';
 
 /**
  * Canonical manager for synchronizing Everything-as-Code (EaC) state
@@ -29,7 +30,8 @@ export abstract class EaCManager {
     protected eac: OpenIndustrialEaC,
     protected scope: NodeScopeTypes,
     protected graph: GraphStateManager,
-    protected presets: PresetManager
+    protected presets: PresetManager,
+    protected history: HistoryManager
   ) {
     const initialGraph = this.buildGraph(jsonMapSetClone(this.eac));
     this.graph.LoadFromGraph(initialGraph);
@@ -174,11 +176,13 @@ export abstract class EaCManager {
 
   public MergePartial(partial: OpenIndustrialEaC): void {
     console.log('🔧 MergePartial called with:', partial);
-
+  
     const { updated, changed } = this.merge(partial);
     console.log('📊 EaC merge result:', { changed });
-
+  
     if (changed) {
+      this.history?.Push(updated);
+  
       console.log('♻️ Rebuilding graph due to structural change');
       const rebuilt = this.buildGraph(jsonMapSetClone(updated));
       this.graph.LoadFromGraph(rebuilt);
@@ -186,7 +190,7 @@ export abstract class EaCManager {
       console.log('✅ No graph rebuild needed — structure unchanged');
     }
   }
-
+  
   public UpdateDetailsForNode(id: string, next: EaCVertexDetails): void {
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
     if (!node) {

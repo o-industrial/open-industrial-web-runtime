@@ -20,6 +20,7 @@ import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
 import { StatManager } from './StatManager.ts';
 import { EaCWorkspaceManager } from './EaCWorkspaceManager.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
+import { HistoryManager } from './HistoryManager.ts';
 
 export class FlowManager {
   public Scope: NodeScopeTypes;
@@ -31,6 +32,7 @@ export class FlowManager {
   public Simulators: SimulatorLibraryManager;
   public Stats: StatManager;
   public EaC: EaCManager;
+  public History: HistoryManager;
 
   constructor(eac: OpenIndustrialEaC, scope: NodeScopeTypes = 'workspace') {
     this.Scope = scope;
@@ -39,13 +41,10 @@ export class FlowManager {
     this.Presets = new PresetManager();
     this.Stats = new StatManager();
     this.Simulators = new SimulatorLibraryManager();
+    this.History = new HistoryManager();
     this.Graph = new GraphStateManager(this.Selection, this.Stats);
     this.EaC = this.createEaCManager(eac);
-    this.Runtime = new InteractionManager(
-      this.Selection,
-      this.Presets,
-      this.EaC
-    );
+    this.Runtime = new InteractionManager(this.Selection, this.Presets, this.EaC);
 
     console.log('🚀 FlowManager initialized:', {
       scope: this.Scope,
@@ -53,6 +52,8 @@ export class FlowManager {
       edges: this.Graph.GetEdges().length,
     });
   }
+
+  // === Hooks ===
 
   public UseAzi() {
     const [messages, setMessages] = useState(this.Azi.GetMessages());
@@ -180,6 +181,53 @@ export class FlowManager {
     const nodeTypes = this.Presets.GetRendererMap();
     return { presets, nodeTypes };
   }
+
+  // === History Actions ===
+
+  public CommitRuntime(): void {
+    this.History.Commit();
+    console.log('✅ Runtime committed');
+  }
+
+  public RevertToLastCommit(): void {
+    const reverted = this.History.RevertToLastCommit();
+    if (reverted) {
+      this.ReloadFromEaC(reverted);
+      console.log('🔄 Reverted to last commit');
+    }
+  }
+
+  public Undo(): void {
+    const prev = this.History.Undo();
+    if (prev) {
+      this.ReloadFromEaC(prev);
+      console.log('↩️ Undo successful');
+    }
+  }
+
+  public Redo(): void {
+    const next = this.History.Redo();
+    if (next) {
+      this.ReloadFromEaC(next);
+      console.log('↪️ Redo successful');
+    }
+  }
+
+  public ForkRuntime(): void {
+    const forked = this.History.ForkRuntime();
+    console.log('🌱 Forked runtime snapshot:', forked);
+  }
+
+  public HasUnsavedChanges(): boolean {
+    return this.History.HasUnsavedChanges();
+  }
+
+  public ReloadFromEaC(eac: OpenIndustrialEaC): void {
+    this.EaC = this.createEaCManager(eac);
+    this.Graph.LoadFromGraph(this.EaC['buildGraph'](eac));
+  }
+
+  // === Internals ===
 
   protected createEaCManager(eac: OpenIndustrialEaC): EaCManager {
     switch (this.Scope) {

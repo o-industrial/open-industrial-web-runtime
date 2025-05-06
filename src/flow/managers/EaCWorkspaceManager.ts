@@ -12,6 +12,7 @@ import { EaCDataConnectionAsCode } from '../../eac/EaCDataConnectionAsCode.ts';
 import { EaCSurfaceAsCode } from '../../eac/EaCSurfaceAsCode.ts';
 
 import { Edge, EdgeChange } from 'reactflow';
+import { HistoryManager } from './HistoryManager.ts';
 
 /**
  * Workspace-level Everything-as-Code manager.
@@ -22,9 +23,10 @@ export class EaCWorkspaceManager extends EaCManager {
   constructor(
     eac: EverythingAsCodeOIWorkspace,
     graph: GraphStateManager,
-    presets: PresetManager
+    presets: PresetManager,
+    history: HistoryManager
   ) {
-    super(eac, 'workspace', graph, presets);
+    super(eac, 'workspace', graph, presets, history);
   }
 
   /**

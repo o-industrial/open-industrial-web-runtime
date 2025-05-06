@@ -52,9 +52,9 @@ function FlowPanel({ flowMgr, onShowSimulatorLibrary }: FlowPanelProps) {
       }
       managementControls={
         <ManagementControls
-          hasChanges={flowMgr.HasUnsavedChanges?.() ?? false}
-          onUndo={() => flowMgr.History.Undo()}
-          onRedo={() => flowMgr.History.Redo()}
+          hasChanges={flowMgr.HasUnsavedChanges()}
+          onUndo={() => flowMgr.Undo()}
+          onRedo={() => flowMgr.Redo()}
           onCommit={() => flowMgr.CommitRuntime()}
           onRevert={() => flowMgr.RevertToLastCommit()}
           onFork={() => flowMgr.ForkRuntime()}

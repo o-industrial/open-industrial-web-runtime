@@ -80,7 +80,6 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
     [selectedId]
   );
 
-  // 🔁 Update details when selected node changes
   useEffect(() => {
     if (selectedId) {
       const loaded = flowMgr.EaC.GetDetailsForNode(selectedId);
@@ -93,11 +92,10 @@ export default function InspectorPanel({ flowMgr }: InspectorPanelProps) {
       setCommonProps(undefined);
       return;
     }
-console.log('here her here here here')
+
     const presetConfig =
       flowMgr.Presets?.GetConfigForType?.(selected.id, selected.type!) ?? {};
 
-    // ✅ This is the correct, source-of-truth enabled flag
     const latestMetadata = flowMgr.EaC.GetMetadataForNode?.(selected.id);
     const enabled = latestMetadata?.Enabled ?? false;
 
@@ -109,7 +107,7 @@ console.log('here her here here here')
       onToggleEnabled: handleToggleEnabled,
       config: presetConfig,
     });
-  }, [selected, details, handleDetailsChanged, handleSave]);
+  }, [selectedId, selected, details, handleDetailsChanged, handleSave]);// TODO: Track EaC version as trigger
 
   const renderInspector = () => {
     if (!selected || !commonProps) {

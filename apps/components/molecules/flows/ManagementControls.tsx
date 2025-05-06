@@ -53,7 +53,7 @@ export function ManagementControls({
 
       {/* Expandable tools on the left */}
       <div
-        class="flex flex-row-reverse gap-2 items-center px-2 py-1 
+        class="flex flex-row-reverse gap-2 items-center 
                max-w-0 group-hover:max-w-[300px] 
                opacity-0 group-hover:opacity-100 
                transition-all duration-300 overflow-hidden"
