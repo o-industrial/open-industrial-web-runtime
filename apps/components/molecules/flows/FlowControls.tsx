@@ -19,9 +19,9 @@ export type FlowControlsProps = {
 };
 
 export function FlowControls({
-  zoomIntent = IntentTypes.Info,
-  resetIntent = IntentTypes.Info,
-  fitIntent = IntentTypes.Info,
+  zoomIntent = IntentTypes.None,
+  resetIntent = IntentTypes.None,
+  fitIntent = IntentTypes.None,
   mapIntent = IntentTypes.Tertiary,
   showMap = true,
   onToggleMap,

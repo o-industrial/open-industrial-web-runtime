@@ -14,7 +14,7 @@ import { useState } from 'preact/hooks';
 import { IS_BROWSER } from '@fathym/atomic';
 
 import FlowPanelTemplate from '../templates/FlowPanelTemplate.tsx';
-import FlowPanelBank from './FlowPanelBank.tsx';
+import FlowPanelBank from '../molecules/flows/FlowPanelBank.tsx';
 import { LoadingSpinner } from '../atoms/LoadingSpinner.tsx';
 import { IntentTypes } from '../../../src/types/IntentTypes.ts';
 import { FlowManager } from '../../../src/flow/managers/FlowManager.ts';

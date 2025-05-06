@@ -1,4 +1,5 @@
-import NodePresetItem from '../molecules/NodePresetItem.tsx';
+import { NodePreset } from '../../../../src/flow/types/react/NodePreset.ts';
+import NodePresetItem from '../NodePresetItem.tsx';
 
 /**
  * FlowPanelBank
@@ -6,11 +7,7 @@ import NodePresetItem from '../molecules/NodePresetItem.tsx';
  * Displays a bank of draggable node presets (connection, surface, etc.).
  */
 export type FlowPanelBankProps = {
-  presets: Record<string, {
-    Label: string;
-    IconKey: string;
-    Type: string;
-  }>;
+  presets: Record<string, NodePreset>;
 };
 
 export default function FlowPanelBank({ presets }: FlowPanelBankProps) {
@@ -21,6 +18,7 @@ export default function FlowPanelBank({ presets }: FlowPanelBankProps) {
           key={key}
           label={preset.Label}
           iconKey={preset.IconKey}
+          intent={preset.Intent}
           type={preset.Type}
         />
       ))}
