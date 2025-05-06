@@ -19,7 +19,7 @@ export function SystemControls({
         onClick={onOpenSimulatorLibrary}
         title="Open Simulator Library"
       >
-        <SimulatorIcon class="w-4 h-4" />
+        <SimulatorIcon class="w-6 h-6" />
       </Action>
     </div>
   );

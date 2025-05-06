@@ -83,7 +83,7 @@ export function InspectorBase({
             styleType={ActionStyleTypes.Icon}
             onClick={onDelete}
           >
-            <DeleteIcon class='w-4 h-4' />
+            <DeleteIcon class='w-6 h-6' />
           </Action>
         )}
       </div>

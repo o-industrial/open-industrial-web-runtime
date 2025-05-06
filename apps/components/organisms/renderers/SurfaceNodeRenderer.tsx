@@ -96,7 +96,7 @@ export default function SurfaceNodeRenderer({
             intentType={IntentTypes.Info}
             onClick={() => console.log('Open surface panel:', data.label)}
           >
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
               <path
                 d="M9 18V5l12-2v13"
                 stroke="currentColor"

@@ -36,7 +36,7 @@ export function FlowControls({
         onClick={() => zoomIn()}
         title="Zoom In"
       >
-        <ZoomInIcon class="w-4 h-4" />
+        <ZoomInIcon class="w-6 h-6" />
       </Action>
 
       <Action
@@ -45,7 +45,7 @@ export function FlowControls({
         onClick={() => zoomOut()}
         title="Zoom Out"
       >
-        <ZoomOutIcon class="w-4 h-4" />
+        <ZoomOutIcon class="w-6 h-6" />
       </Action>
 
       <Action
@@ -54,7 +54,7 @@ export function FlowControls({
         onClick={() => fitView()}
         title="Fit View"
       >
-        <FitViewIcon class="w-4 h-4" />
+        <FitViewIcon class="w-6 h-6" />
       </Action>
 
       <Action
@@ -63,7 +63,7 @@ export function FlowControls({
         onClick={() => setViewport({ x: 0, y: 0, zoom: 1.2 })}
         title="Reset Zoom"
       >
-        <ResetZoomIcon class="w-4 h-4" />
+        <ResetZoomIcon class="w-6 h-6" />
       </Action>
 
       <Action
@@ -73,9 +73,9 @@ export function FlowControls({
         title={showMap ? 'Hide Mini Map' : 'Show Mini Map'}
       >
         {showMap ? (
-          <MapPinnedIcon class="w-4 h-4" />
+          <MapPinnedIcon class="w-6 h-6" />
         ) : (
-          <MapIcon class="w-4 h-4" />
+          <MapIcon class="w-6 h-6" />
         )}
       </Action>
     </div>

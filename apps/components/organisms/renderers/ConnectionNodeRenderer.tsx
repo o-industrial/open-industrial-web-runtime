@@ -88,7 +88,7 @@ export default function ConnectionNodeRenderer({
             intentType={IntentTypes.Tertiary}
             onClick={() => console.log('Filter stream for:', data.label)}
           >
-            <TriggerMatchIcon class="w-4 h-4" />
+            <TriggerMatchIcon class="w-6 h-6" />
           </Action>
 
           <Action
@@ -97,7 +97,7 @@ export default function ConnectionNodeRenderer({
             intentType={IntentTypes.Error}
             onClick={() => console.log('Delete node:', data.label)}
           >
-            <DeleteIcon class="w-4 h-4" />
+            <DeleteIcon class="w-6 h-6" />
           </Action>
         </div>
       </div>

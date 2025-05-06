@@ -6,6 +6,7 @@ import { RedoIcon } from '../../../../build/iconset/icons/RedoIcon.tsx';
 import { ForkIcon } from '../../../../build/iconset/icons/ForkIcon.tsx';
 import { RevertIcon } from '../../../../build/iconset/icons/RevertIcon.tsx';
 import { CommitIcon } from '../../../../build/iconset/icons/CommitIcon.tsx';
+import { SaveIcon } from '../../../../build/iconset/icons/SaveIcon.tsx';
 
 export type ManagementControlsProps = {
   hasChanges?: boolean;
@@ -48,7 +49,8 @@ export function ManagementControls({
         title="Commit Changes"
         class="z-10"
       >
-        <CommitIcon class="w-4 h-4" />
+        <SaveIcon class="w-6 h-6" />
+        {/* <CommitIcon class="w-6 h-6" /> */}
       </Action>
 
       {/* Expandable tools on the left */}
@@ -64,7 +66,7 @@ export function ManagementControls({
           onClick={onUndo}
           title="Undo"
         >
-          <UndoIcon class="w-4 h-4" />
+          <UndoIcon class="w-6 h-6" />
         </Action>
 
         <Action
@@ -73,7 +75,7 @@ export function ManagementControls({
           onClick={onRedo}
           title="Redo"
         >
-          <RedoIcon class="w-4 h-4" />
+          <RedoIcon class="w-6 h-6" />
         </Action>
 
         <Action
@@ -82,7 +84,7 @@ export function ManagementControls({
           onClick={onRevert}
           title="Revert to Last Commit"
         >
-          <RevertIcon class="w-4 h-4" />
+          <RevertIcon class="w-6 h-6" />
         </Action>
 
         <Action
@@ -91,7 +93,7 @@ export function ManagementControls({
           onClick={onFork}
           title="Fork Runtime"
         >
-          <ForkIcon class="w-4 h-4" />
+          <ForkIcon class="w-6 h-6" />
         </Action>
       </div>
     </div>

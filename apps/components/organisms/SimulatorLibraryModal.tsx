@@ -65,7 +65,7 @@ export function SimulatorLibraryModal({
               onClick={() => {}}
               styleType={ActionStyleTypes.Icon}
             >
-              <SearchIcon class="w-4 h-4" />
+              <SearchIcon class="w-6 h-6" />
             </Action>
           </div>
 
