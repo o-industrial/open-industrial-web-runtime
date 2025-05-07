@@ -20,7 +20,7 @@ export default [
  * and commits runtime state into `OpenIndustrialWebState`.
  */
 export function buildOpenIndustrialRuntimeMiddleware(
-  kvLookup: string = 'eac',
+  kvLookup: string = 'eac'
 ): EaCRuntimeHandler<OpenIndustrialWebState> {
   return async (_req, ctx) => {
     const username = ctx.State.Username!;
@@ -41,21 +41,17 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
     lookup = current.value ?? undefined;
 
-    const token = await loadJwtConfig().Create({
+    ctx.State.OIJWT = await loadJwtConfig().Create({
       Username: username,
       WorkspaceLookup: lookup,
     } as OpenIndustrialJWTPayload);
 
-    if (!token) {
-      throw new Error('Failed to generate OpenIndustrial JWT.');
-    }
+    ctx.State.OIClient = new OpenIndustrialAPIClient(
+      apiBaseUrl,
+      ctx.State.OIJWT
+    );
 
-    ctx.State.OIJWT = token;
-
-    const oiClient = new OpenIndustrialAPIClient(apiBaseUrl, token);
-    ctx.State.OIClient = oiClient;
-
-    const userWorkspaces = await oiClient.Workspaces.ListForUser();
+    const userWorkspaces = await ctx.State.OIClient.Workspaces.ListForUser();
 
     ctx.State.UserWorkspaces = userWorkspaces;
 
@@ -65,6 +61,16 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
       if (lookup) {
         await kv.set(['User', username, 'Current', 'EnterpriseLookup'], lookup);
+
+        ctx.State.OIJWT = await loadJwtConfig().Create({
+          Username: username,
+          WorkspaceLookup: lookup,
+        } as OpenIndustrialJWTPayload);
+
+        ctx.State.OIClient = new OpenIndustrialAPIClient(
+          apiBaseUrl,
+          ctx.State.OIJWT
+        );
       }
     }
 
@@ -78,15 +84,27 @@ export function buildOpenIndustrialRuntimeMiddleware(
         Actuators: loadEaCActuators(),
       };
 
-      const createResp = await oiClient.Workspaces.Create(newWorkspace);
+      const createResp = await ctx.State.OIClient.Workspaces.Create(
+        newWorkspace
+      );
 
       lookup = createResp.EnterpriseLookup;
 
       await kv.set(['User', username, 'Current', 'EnterpriseLookup'], lookup);
+
+      ctx.State.OIJWT = await loadJwtConfig().Create({
+        Username: username,
+        WorkspaceLookup: lookup,
+      } as OpenIndustrialJWTPayload);
+
+      ctx.State.OIClient = new OpenIndustrialAPIClient(
+        apiBaseUrl,
+        ctx.State.OIJWT
+      );
     }
 
     // ✅ Load full workspace state via API
-    ctx.State.Workspace = await oiClient.Workspaces.Get();
+    ctx.State.Workspace = await ctx.State.OIClient.Workspaces.Get();
 
     ctx.State.WorkspaceLookup = lookup!;
 
@@ -115,7 +133,7 @@ export function buildAgreementsRedirectMiddleware(): EaCRuntimeHandler<OpenIndus
           `/dashboard/agreements?returnUrl=${returnUrl}`,
           false,
           false,
-          req,
+          req
         );
       }
     }
