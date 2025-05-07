@@ -1,16 +1,16 @@
 import { JSX } from 'preact';
 import { useState } from 'preact/hooks';
-import { Modal } from '../molecules/Modal.tsx';
-import { Input } from '../atoms/forms/Input.tsx';
-import { Action, ActionStyleTypes } from '../atoms/Action.tsx';
-import { SearchIcon } from '../../../build/iconset/icons/SearchIcon.tsx';
-import { SimulatorCard } from './simulators/SimulatorCard.tsx';
-import { SimulatorPackCard } from './simulators/SimulatorPackCard.tsx';
+import { Modal } from '../../molecules/Modal.tsx';
+import { Input } from '../../atoms/forms/Input.tsx';
+import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
+import { SearchIcon } from '../../../../build/iconset/icons/SearchIcon.tsx';
+import { SimulatorCard } from '../simulators/SimulatorCard.tsx';
+import { SimulatorPackCard } from '../simulators/SimulatorPackCard.tsx';
 import {
   SimulatorDefinition,
   SimulatorPackDefinition,
-} from '../../../src/flow/managers/SimulatorLibraryManager.ts';
-import { WorkspaceManager } from '../../../src/flow/managers/WorkspaceManager.ts'; // 🧠 Your actual path may vary
+} from '../../../../src/flow/managers/SimulatorLibraryManager.ts';
+import { WorkspaceManager } from '../../../../src/flow/managers/WorkspaceManager.ts'; // 🧠 Your actual path may vary
 
 type SimulatorLibraryModalProps = {
   workspaceMgr: WorkspaceManager;

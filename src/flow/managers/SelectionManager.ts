@@ -4,42 +4,43 @@ import { FlowNodeData } from '../types/react/FlowNodeData.ts';
 type SelectionChangedCallback = () => void;
 
 export class SelectionManager {
-  private selectedNodeIds = new Set<string>();
-  private listeners: Set<SelectionChangedCallback> = new Set();
+  protected selectedNodeIds = new Set<string>();
+  protected listeners: Set<SelectionChangedCallback> = new Set();
 
-  GetSelectedNodes(nodes: Node<FlowNodeData>[]): Node<FlowNodeData>[] {
+  // === State Access ===
+
+  public GetSelectedNodes(nodes: Node<FlowNodeData>[]): Node<FlowNodeData>[] {
     return nodes.filter((n) => this.selectedNodeIds.has(n.id));
   }
 
-  GetSelectedNodeIDs(): string[] {
+  public GetSelectedNodeIDs(): string[] {
     return Array.from(this.selectedNodeIds);
   }
 
-  SelectNode(id: string): void {
-    this.selectedNodeIds = new Set([id]);
-    this.Emit();
-  }
-
-  ClearSelection(): void {
-    this.selectedNodeIds.clear();
-    this.Emit();
-  }
-
-  IsSelected(id: string): boolean {
+  public IsSelected(id: string): boolean {
     return this.selectedNodeIds.has(id);
   }
 
-  OnSelectionChanged(cb: SelectionChangedCallback): void {
+  // === Mutators ===
+
+  public SelectNode(id: string): void {
+    this.selectedNodeIds = new Set([id]);
+    this.emit();
+  }
+
+  public ClearSelection(): void {
+    this.selectedNodeIds.clear();
+    this.emit();
+  }
+
+  // === Listener Management ===
+
+  public OnSelectionChanged(cb: SelectionChangedCallback): () => void {
     this.listeners.add(cb);
+    return () => this.listeners.delete(cb);
   }
 
-  OffSelectionChanged(cb: SelectionChangedCallback): void {
-    this.listeners.delete(cb);
-  }
-
-  private Emit(): void {
-    for (const cb of this.listeners) {
-      cb();
-    }
+  protected emit(): void {
+    for (const cb of this.listeners) cb();
   }
 }

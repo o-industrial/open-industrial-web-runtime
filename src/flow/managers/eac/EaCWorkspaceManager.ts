@@ -1,12 +1,12 @@
 import { EaCManager } from './EaCManager.ts';
-import { FlowGraph } from '../types/graph/FlowGraph.ts';
-import { FlowGraphNode } from '../types/graph/FlowGraphNode.ts';
-import { FlowGraphEdge } from '../types/graph/FlowGraphEdge.ts';
+import { FlowGraph } from '../../types/graph/FlowGraph.ts';
+import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
+import { FlowGraphEdge } from '../../types/graph/FlowGraphEdge.ts';
 
-import { GraphStateManager } from './GraphStateManager.ts';
-import { PresetManager } from './PresetManager.ts';
+import { GraphStateManager } from '../GraphStateManager.ts';
+import { PresetManager } from '../PresetManager.ts';
 
-import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
+import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
 import {
   EaCDataConnectionAsCode,
   EaCSurfaceAsCode,
@@ -14,7 +14,7 @@ import {
 } from '@o-industrial/common/eac';
 
 import { Edge, EdgeChange } from 'reactflow';
-import { HistoryManager } from './HistoryManager.ts';
+import { HistoryManager } from '../HistoryManager.ts';
 
 /**
  * Workspace-level Everything-as-Code manager.
@@ -31,9 +31,6 @@ export class EaCWorkspaceManager extends EaCManager {
     super(eac, 'workspace', graph, presets, history);
   }
 
-  /**
-   * Translates current EaC structure into FlowGraph (nodes + edges).
-   */
   protected buildGraph(eac: OpenIndustrialEaC): FlowGraph {
     const nodes: FlowGraphNode[] = [];
     const edges: FlowGraphEdge[] = [];
@@ -47,13 +44,6 @@ export class EaCWorkspaceManager extends EaCManager {
         Type: 'connection',
         Label: conn.Details?.Name ?? key,
         Metadata: conn.Metadata,
-        // {
-        //   Enabled: conn.Metadata?.Enabled,
-        //   Position: {
-        //     X: conn.Metadata?.Position?.X || 0,
-        //     Y: conn.Metadata?.Position?.Y || 0,
-        //   }
-        // },
         Details: conn.Details,
       });
     }
@@ -68,7 +58,6 @@ export class EaCWorkspaceManager extends EaCManager {
         Details: sim.Details,
       });
 
-      // Link: simulator → data connection
       for (const [connKey, conn] of Object.entries(wks.DataConnections ?? {})) {
         if (conn.SimulatorLookup === key) {
           edges.push({
@@ -91,7 +80,6 @@ export class EaCWorkspaceManager extends EaCManager {
         Details: surf.Details,
       });
 
-      // Link: connection → surface
       for (const connKey of Object.keys(surf.DataConnections ?? {})) {
         edges.push({
           ID: `${connKey}->${key}`,
@@ -101,7 +89,6 @@ export class EaCWorkspaceManager extends EaCManager {
         });
       }
 
-      // Link: parent surface → surface
       if (surf.ParentSurfaceLookup) {
         edges.push({
           ID: `${surf.ParentSurfaceLookup}->${key}`,
@@ -115,10 +102,6 @@ export class EaCWorkspaceManager extends EaCManager {
     return { Nodes: nodes, Edges: edges };
   }
 
-  /**
-   * Applies a new relationship between two nodes in the graph.
-   * Returns a partial EaC update if the connection is valid.
-   */
   public CreateConnectionEdge(
     source: string,
     target: string,
@@ -178,19 +161,21 @@ export class EaCWorkspaceManager extends EaCManager {
     return partial;
   }
 
-  /**
-   * Returns true if the source → target connection already exists in the current graph.
-   */
-  private hasConnection(source: string, target: string): boolean {
+  protected updateConnections(
+    _changes: EdgeChange[],
+    _updated: Edge[],
+  ): OpenIndustrialEaC | null {
+    // Future implementation: diff edges and update EaC
+    return null;
+  }
+
+  protected hasConnection(source: string, target: string): boolean {
     return this.graph
       .GetGraph()
       .Edges.some((e) => e.Source === source && e.Target === target);
   }
 
-  /**
-   * Removes a connection relationship by ID. Decodes relationship type from edge ID prefix.
-   */
-  private removeConnectionEdge(edgeId: string): void {
+  protected removeConnectionEdge(edgeId: string): void {
     const [source, target] = edgeId.split('->');
     const wks = this.GetEaC() as EverythingAsCodeOIWorkspace;
 
@@ -243,24 +228,5 @@ export class EaCWorkspaceManager extends EaCManager {
     if (partial) {
       this.MergePartial(partial);
     }
-  }
-
-  /**
-   * Handles edge list changes by removing deleted edges and adding new connections.
-   */
-  protected updateConnections(
-    _changes: EdgeChange[],
-    _updated: Edge[],
-  ): OpenIndustrialEaC | null {
-    // TODO(mcgear): Diff current vs. new edge structure, then build:
-    const partial: OpenIndustrialEaC = {
-      DataConnections: {
-        // Populate from new edge structure
-      },
-    };
-
-    const changed = true; // Your diff logic here
-
-    return changed ? partial : null;
   }
 }

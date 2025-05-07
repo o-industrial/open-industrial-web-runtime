@@ -1,5 +1,3 @@
-// components/organisms/inspectors/SurfaceInspector.tsx
-import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { InspectorBase } from './InspectorBase.tsx';
 import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
 import { SurfaceManagementForm } from '../../molecules/SurfaceManagementForm.tsx';
@@ -31,12 +29,12 @@ function SurfaceStreamTab() {
 export function SurfaceInspector({
   details,
   enabled,
-  getStats,
+  useStats,
   onDelete,
   onDetailsChanged,
   onToggleEnabled,
 }: SurfaceInspectorProps) {
-  const stats = useLiveStats(getStats);
+  const stats = useStats();
 
   return (
     <InspectorBase

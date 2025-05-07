@@ -10,8 +10,11 @@ import AziPanel from '../components/organisms/AziPanel.tsx';
 import StreamPanel from '../components/organisms/StreamPanel.tsx';
 import TimelinePanel from '../components/organisms/TimelinePanel.tsx';
 import { WorkspaceManager } from '../../src/flow/managers/WorkspaceManager.ts';
-import { SimulatorLibraryModal } from '../components/organisms/SimulatorLibraryModal.tsx';
+import { SimulatorLibraryModal } from '../components/organisms/modals/SimulatorLibraryModal.tsx';
 import { OpenIndustrialEaC } from '../../src/types/OpenIndustrialEaC.ts';
+import BreadcrumbBar from '../components/molecules/BreadcrumbBar.tsx';
+import { WorkspaceSettingsModal } from '../components/organisms/modals/WorkspaceSettingsModal.tsx';
+import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 
 export const IsIsland = true;
 
@@ -41,13 +44,19 @@ export default function WorkspacePage({
 }: PageProps<WorkspacePageData>) {
   console.log('🌀 WorkspacePage mounted');
 
+  const origin = location?.origin ?? 'https://server.com';
+
+  const root = `${origin}${oiApiRoot}`;
+  const oiSvc = new OpenIndustrialAPIClient(new URL(root), oiApiToken);
+
   const workspaceMgr = useMemo(() => {
-    const mgr = new WorkspaceManager({}, 'workspace');
+    const mgr = new WorkspaceManager({}, oiSvc, 'workspace');
     console.log('🧩 New FlowManager created');
     return mgr;
   }, []);
 
   const [showMarketplace, setShowMarketplace] = useState(false);
+  const [showWorkspaceSettings, setShowWorkspaceSettings] = useState(false);
 
   useEffect(() => {
     if (EaC) {
@@ -64,6 +73,13 @@ export default function WorkspacePage({
           onClose={() => setShowMarketplace(false)}
         />
       )}
+
+      {showWorkspaceSettings && (
+        <WorkspaceSettingsModal
+          workspaceMgr={workspaceMgr}
+          onClose={() => setShowWorkspaceSettings(false)}
+        />
+      )}
     </>
   );
 
@@ -71,9 +87,10 @@ export default function WorkspacePage({
     <RuntimeWorkspaceDashboardTemplate
       azi={<AziPanel workspaceMgr={workspaceMgr} />}
       breadcrumb={
-        <div class='-:w-full -:text-xs -:text-neutral-400 -:bg-neutral-900 -:tracking-wide -:font-light -:px-4 -:pt-1.5 -:pb-1'>
-          {EaC.Details?.Name} (Workspace) / <span class='-:text-white'>Management</span>
-        </div>
+        <BreadcrumbBar
+          pathParts={[EaC.Details!.Name!, 'Workspace']}
+          onSettingsClick={() => setShowWorkspaceSettings(true)}
+        />
       }
       inspector={<InspectorPanel workspaceMgr={workspaceMgr} />}
       stream={<StreamPanel />}
@@ -81,8 +98,6 @@ export default function WorkspacePage({
       modals={modals}
     >
       <FlowPanel
-        oiApiRoot={oiApiRoot}
-        oiApiToken={oiApiToken}
         workspaceMgr={workspaceMgr}
         onShowSimulatorLibrary={() => setShowMarketplace(true)}
       />

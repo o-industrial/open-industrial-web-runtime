@@ -4,7 +4,7 @@ export type FlowNodeData<
   TEaC extends EaCVertexDetails = EaCVertexDetails,
   TStats extends Record<string, unknown> = Record<string, unknown>,
 > = {
-  /** Internal type*/
+  /** Internal type */
   type: string;
 
   /** Optional label for UI display */
@@ -16,8 +16,8 @@ export type FlowNodeData<
   /** Canonical EaC details object */
   details: TEaC;
 
-  /** Runtime node stats (live sim, metrics, etc.) */
-  getStats?: () => Promise<TStats>;
+  /** Hook that returns runtime stats (deferred to render) */
+  useStats: () => TStats | undefined;
 
   /** UI interaction */
   isSelected?: boolean;

@@ -1,4 +1,3 @@
-import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { InspectorBase } from './InspectorBase.tsx';
 import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
@@ -44,12 +43,12 @@ function SimulatorStreamTab() {
 export function SimulatorInspector({
   details,
   enabled,
-  getStats,
+  useStats,
   onDelete,
   onDetailsChanged: _onDetailsChanged,
   onToggleEnabled,
 }: SimulatorInspectorProps) {
-  const stats = useLiveStats(getStats);
+  const stats = useStats();
 
   return (
     <InspectorBase

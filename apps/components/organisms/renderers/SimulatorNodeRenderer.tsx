@@ -8,7 +8,6 @@ import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
-import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { parseTimeAgoString } from '../../../../src/utils/parseTimeAgoString.tsx';
 
 import { FlowNodeData } from '../../../../src/flow/types/react/FlowNodeData.ts';
@@ -26,9 +25,7 @@ export type SimulatorNodeData = FlowNodeData<EaCSimulatorDetails, SimulatorStats
 export default function SimulatorNodeRenderer({
   data,
 }: NodeProps<SimulatorNodeData>) {
-  if (!data || !data.getStats) return null;
-
-  const stats = useLiveStats(data.getStats);
+  const stats = data.useStats();
   const {
     impulseRates = [],
     instanceCount = 0,

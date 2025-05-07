@@ -2,16 +2,13 @@ import { NodeProps, Position } from 'reactflow';
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
 import NodeHandle from '../../atoms/NodeHandle.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
-import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 import { parseTimeAgoString } from '../../../../src/utils/parseTimeAgoString.tsx';
 import { AgentNodeData } from '../../../../src/flow/types/AgentNodeData.tsx';
 
 export default function AgentNodeRenderer({ data }: NodeProps<AgentNodeData>) {
-  if (!data || !data.getStats) return null;
-
-  const stats = useLiveStats(data.getStats);
+  const stats = data.useStats();
 
   const {
     impulseRates = [],

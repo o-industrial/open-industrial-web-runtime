@@ -2,7 +2,6 @@ import { NodeProps, Position } from 'reactflow';
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
 import NodeHandle from '../../atoms/NodeHandle.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
-import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { FlowNodeData } from '../../../../src/flow/types/react/FlowNodeData.ts';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 import { EaCSchemaDetails } from '@o-industrial/common/eac';
@@ -16,9 +15,7 @@ export type SchemaNodeData = FlowNodeData<EaCSchemaDetails, SchemaStats>;
 export default function SchemaNodeRenderer({
   data,
 }: NodeProps<SchemaNodeData>) {
-  if (!data || !data.getStats) return null;
-
-  const stats = useLiveStats(data.getStats);
+  const stats = data.useStats();
   const impulseRates = stats?.impulseRates ?? [];
   const latest = impulseRates.at(-1);
 

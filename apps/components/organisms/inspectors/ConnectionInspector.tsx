@@ -1,4 +1,3 @@
-import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { InspectorBase } from './InspectorBase.tsx';
 import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
 import { ConnectionManagementForm } from '../../molecules/ConnectionManagementForm.tsx';
@@ -18,12 +17,12 @@ export function ConnectionInspector({
   config,
   details,
   enabled,
-  getStats,
+  useStats,
   onDelete,
   onDetailsChanged,
   onToggleEnabled,
 }: ConnectionInspectorProps) {
-  const stats = useLiveStats(getStats);
+  const stats = useStats();
   const ingestOptions = config?.ingestOptions ?? [];
 
   return (

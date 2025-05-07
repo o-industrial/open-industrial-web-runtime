@@ -1,57 +1,36 @@
-import { FlowNodeData } from '../types/react/FlowNodeData.ts';
+import { useEffect, useState } from 'preact/hooks';
 
 export class StatManager {
-  public Enrich(type: string, base: FlowNodeData): FlowNodeData {
+  protected buffers: Record<string, number[]> = {};
+
+  public GetStats(
+    type: string,
+    id: string,
+  ): Promise<Record<string, unknown>> {
+    const buffer = this.getOrCreateBuffer(type, id);
+
+    const next = this.randomValueForType(type);
+
+    buffer.push(next);
+
+    if (buffer.length > 20) buffer.shift();
+
+    let stats: Record<string, unknown>;
+
     switch (type) {
-      case 'agent':
-        return this.BuildAgent(base);
-      case 'connection':
-        return this.BuildConnection(base);
-      case 'device':
-        return this.BuildDevice(base);
-      case 'schema':
-        return this.BuildSchema(base);
-      case 'surface':
-        return this.BuildSurface(base);
-      case 'simulator':
-        return this.BuildSimulator(base);
-      case 'empty':
-      default:
-        return this.BuildEmpty(base);
-    }
-  }
-
-  private BuildBuffer(seed: number, range: number, length = 20): number[] {
-    return Array.from({ length }, () => Number((seed + Math.random() * range).toFixed(2)));
-  }
-
-  private BuildAgent(base: FlowNodeData): FlowNodeData {
-    const buffer = this.BuildBuffer(10, 5);
-    return {
-      ...base,
-      getStats: () => {
-        const next = Number((10 + Math.random() * 5).toFixed(2));
-        buffer.push(next);
-        if (buffer.length > 20) buffer.shift();
-        return Promise.resolve({
+      case 'agent': {
+        stats = {
           impulseRates: [...buffer],
           matchesHandled: Math.floor(Math.random() * 200),
           avgLatencyMs: Number((Math.random() * 40 + 10).toFixed(1)),
           lastRunAgo: `${Math.floor(Math.random() * 90)}s ago`,
-        });
-      },
-    };
-  }
+        };
 
-  private BuildConnection(base: FlowNodeData): FlowNodeData {
-    const buffer = this.BuildBuffer(20, 10);
-    return {
-      ...base,
-      getStats: () => {
-        const next = Number((20 + Math.random() * 10).toFixed(2));
-        buffer.push(next);
-        if (buffer.length > 20) buffer.shift();
-        return Promise.resolve({
+        break;
+      }
+
+      case 'connection': {
+        stats = {
           impulseRates: [...buffer],
           connectionInfo: {
             BaseURL: 'https://api.mock.local',
@@ -59,82 +38,110 @@ export class StatManager {
             AuthType: 'SAS Token',
             Status: 'Healthy',
           },
-        });
-      },
-    };
-  }
+        };
 
-  private BuildSimulator(base: FlowNodeData): FlowNodeData {
-    const buffer = this.BuildBuffer(15, 8);
-    return {
-      ...base,
-      getStats: () => {
-        const next = Number((15 + Math.random() * 8).toFixed(2));
-        buffer.push(next);
-        if (buffer.length > 20) buffer.shift();
-        return Promise.resolve({
+        break;
+      }
+
+      case 'simulator': {
+        stats = {
           impulseRates: [...buffer],
           devicesSimulated: Math.floor(Math.random() * 10) + 1,
           messageRatePerDevice: Number((Math.random() * 2 + 1).toFixed(2)),
-        });
-      },
-    };
-  }
+        };
 
-  private BuildDevice(base: FlowNodeData): FlowNodeData {
-    const buffer = this.BuildBuffer(5, 5);
-    return {
-      ...base,
-      getStats: () => {
-        const next = Number((5 + Math.random() * 5).toFixed(2));
-        buffer.push(next);
-        if (buffer.length > 20) buffer.shift();
-        return Promise.resolve({ impulseRates: [...buffer] });
-      },
-    };
-  }
+        break;
+      }
 
-  private BuildSchema(base: FlowNodeData): FlowNodeData {
-    const buffer = this.BuildBuffer(10, 10);
-    return {
-      ...base,
-      getStats: () => {
-        const next = Number((10 + Math.random() * 10).toFixed(2));
-        buffer.push(next);
-        if (buffer.length > 20) buffer.shift();
-        return Promise.resolve({ impulseRates: [...buffer] });
-      },
-    };
-  }
-
-  private BuildSurface(base: FlowNodeData): FlowNodeData {
-    const buffer = this.BuildBuffer(10, 5);
-    return {
-      ...base,
-      getStats: () => {
-        const next = Number((10 + Math.random() * 5).toFixed(2));
-        buffer.push(next);
-        if (buffer.length > 20) buffer.shift();
-        return Promise.resolve({
+      case 'surface': {
+        stats = {
           impulseRates: [...buffer],
           inputCount: Math.floor(Math.random() * 4) + 1,
           agentCount: Math.floor(Math.random() * 3) + 1,
           lastSignalAt: `${Math.floor(Math.random() * 60)}s ago`,
-        });
-      },
-    };
+        };
+
+        break;
+      }
+
+      default: {
+        stats = { impulseRates: [...buffer] };
+
+        break;
+      }
+    }
+
+    return Promise.resolve(stats);
   }
 
-  private BuildEmpty(base: FlowNodeData): FlowNodeData {
-    const buffer = this.BuildBuffer(5, 3);
-    return {
-      ...base,
-      getStats: () => {
-        const next = Number((5 + Math.random() * 3).toFixed(2));
-        buffer.push(next);
-        if (buffer.length > 20) buffer.shift();
-        return Promise.resolve({ impulseRates: [...buffer] });
-      },
-    };
+  public UseStats<TStats extends Record<string, unknown>>(
+    type: string,
+    id: string,
+    intervalMs = 1000,
+  ): TStats | undefined {
+    const [stats, setStats] = useState<TStats>({} as TStats);
+
+    useEffect(() => {
+      let mounted = true;
+
+      const fetch = async () => {
+        try {
+          const res = await this.GetStats(type, id);
+          if (mounted) setStats(res as TStats);
+        } catch (err) {
+          console.warn(`[StatManager.UseStats] Failed for ${id}`, err);
+        }
+      };
+
+      fetch(); // Prime
+      const interval = setInterval(fetch, intervalMs);
+
+      return () => {
+        mounted = false;
+        clearInterval(interval);
+      };
+    }, [id]);
+
+    return stats;
+  }
+
+  protected getOrCreateBuffer(type: string, id: string): number[] {
+    if (!this.buffers[id]) {
+      this.buffers[id] = this.buildBufferForType(type);
+    }
+
+    return this.buffers[id];
+  }
+
+  protected buildBufferForType(type: string, length = 20): number[] {
+    const [seed, range] = {
+      agent: [10, 5],
+      connection: [20, 10],
+      simulator: [15, 8],
+      device: [5, 5],
+      schema: [10, 10],
+      surface: [10, 5],
+      empty: [5, 3],
+    }[type] ?? [5, 3];
+
+    return Array.from({ length }, () => this.randomValue(seed, range));
+  }
+
+  protected randomValue(seed: number, range: number): number {
+    return Number((seed + Math.random() * range).toFixed(2));
+  }
+
+  protected randomValueForType(type: string): number {
+    const [seed, range] = {
+      agent: [10, 5],
+      connection: [20, 10],
+      simulator: [15, 8],
+      device: [5, 5],
+      schema: [10, 10],
+      surface: [10, 5],
+      empty: [5, 3],
+    }[type] ?? [5, 3];
+
+    return this.randomValue(seed, range);
   }
 }

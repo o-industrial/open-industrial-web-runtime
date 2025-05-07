@@ -5,16 +5,13 @@ import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { TriggerMatchIcon } from '../../../../build/iconset/icons/TriggerMatchIcon.tsx';
 import { DeleteIcon } from '../../../../build/iconset/icons/DeleteIcon.tsx';
-import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 import { DataConnectionNodeData } from '../../../../src/flow/types/DataConnectionNodeData.tsx';
 
 export default function ConnectionNodeRenderer({
   data,
 }: NodeProps<DataConnectionNodeData>) {
-  if (!data || !data.getStats) return null;
-
-  const stats = useLiveStats(data.getStats);
+  const stats = data.useStats();
 
   const { impulseRates = [], connectionInfo = {} } = stats ?? {};
 

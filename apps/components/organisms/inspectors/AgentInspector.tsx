@@ -1,4 +1,3 @@
-import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { InspectorBase } from './InspectorBase.tsx';
 import { InspectorCommonProps } from '../InspectorPanel.tsx';
@@ -10,12 +9,12 @@ type AgentInspectorProps = InspectorCommonProps<EaCAgentDetails, AgentStats>;
 export function AgentInspector({
   details,
   enabled,
-  getStats,
+  useStats,
   onDelete,
   onDetailsChanged: _onDetailsChanged,
   onToggleEnabled,
 }: AgentInspectorProps) {
-  const stats = useLiveStats(getStats);
+  const stats = useStats();
 
   return (
     <InspectorBase

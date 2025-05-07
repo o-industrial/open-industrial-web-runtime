@@ -10,12 +10,16 @@ import { PresetManager } from './PresetManager.ts';
 import { SelectionManager } from './SelectionManager.ts';
 import { AziManager } from './AziManager.ts';
 import { SimulatorLibraryManager } from './SimulatorLibraryManager.ts';
-import { EaCManager } from './EaCManager.ts';
+import { EaCManager } from './eac/EaCManager.ts';
 import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
 import { StatManager } from './StatManager.ts';
-import { EaCWorkspaceManager } from './EaCWorkspaceManager.ts';
+import { EaCWorkspaceManager } from './eac/EaCWorkspaceManager.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
 import { HistoryManager } from './HistoryManager.ts';
+import { WorkspaceSummary } from '../../types/WorkspaceSummary.ts';
+import { EaCEnterpriseDetails } from '@fathym/eac';
+import { TeamMember } from '../../types/TeamMember.ts';
+import { TeamManager } from './TeamManager.ts';
 
 export class WorkspaceManager {
   public Scope: NodeScopeTypes;
@@ -26,10 +30,15 @@ export class WorkspaceManager {
   public Runtime: InteractionManager;
   public Simulators: SimulatorLibraryManager;
   public Stats: StatManager;
+  public Team: TeamManager;
   public EaC: EaCManager;
   public History: HistoryManager;
 
-  constructor(eac: OpenIndustrialEaC, scope: NodeScopeTypes = 'workspace') {
+  constructor(
+    eac: OpenIndustrialEaC,
+    protected oiSvc: OpenIndustrialAPIClient,
+    scope: NodeScopeTypes = 'workspace',
+  ) {
     this.Scope = scope;
     this.Azi = new AziManager();
     this.Selection = new SelectionManager();
@@ -37,6 +46,7 @@ export class WorkspaceManager {
     this.Stats = new StatManager();
     this.Simulators = new SimulatorLibraryManager();
     this.History = new HistoryManager();
+    this.Team = new TeamManager();
     this.Graph = new GraphStateManager(this.Selection, this.Stats);
     this.EaC = this.createEaCManager(eac);
     this.Runtime = new InteractionManager(
@@ -58,16 +68,27 @@ export class WorkspaceManager {
     const [messages, setMessages] = useState(this.Azi.GetMessages());
 
     useEffect(() => {
-      const update = () => setMessages(this.Azi.GetMessages());
-      this.Azi.OnMessagesChanged(update);
-      return () => this.Azi.OffMessagesChanged(update);
+      const unsubscribe = this.Azi.OnMessagesChanged(() => {
+        setMessages(this.Azi.GetMessages());
+      });
+
+      return unsubscribe;
     }, []);
 
     const send = (text: string) => {
       this.Azi.Send(text);
     };
 
-    return { messages, send };
+    const reset = () => {
+      this.Azi.Reset();
+      setMessages(this.Azi.GetMessages()); // optional: triggers immediate UI update
+    };
+
+    return {
+      messages,
+      send,
+      reset,
+    };
   }
 
   public UseGraphView() {
@@ -76,15 +97,90 @@ export class WorkspaceManager {
 
     useEffect(() => {
       const update = () => {
-        setNodes([...this.Graph.GetNodes()]);
-        setEdges([...this.Graph.GetEdges()]);
+        setNodes(this.Graph.GetNodes());
+        setEdges(this.Graph.GetEdges());
       };
 
-      this.Graph.OnGraphChanged(update);
-      return () => this.Graph.OffGraphChanged(update);
+      const unsubscribe = this.Graph.OnGraphChanged(update);
+      return unsubscribe;
     }, []);
 
     return { nodes, edges };
+  }
+
+  public UseHistory() {
+    const [canUndo, setCanUndo] = useState(this.History.CanUndo());
+    const [canRedo, setCanRedo] = useState(this.History.CanRedo());
+    const [hasChanges, setHasChanges] = useState(
+      this.History.HasUnsavedChanges(),
+    );
+    const [version, setVersion] = useState(this.History.GetVersion());
+
+    useEffect(() => {
+      const update = () => {
+        setCanUndo(this.History.CanUndo());
+        setCanRedo(this.History.CanRedo());
+        setHasChanges(this.History.HasUnsavedChanges());
+        setVersion(this.History.GetVersion());
+      };
+
+      const unsubscribe = this.History.OnChange(update);
+
+      return () => unsubscribe();
+    }, []);
+
+    useEffect(() => {
+      const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+        if (this.History.HasUnsavedChanges()) {
+          e.preventDefault();
+          e.returnValue = ''; // Required for Chrome
+        }
+      };
+
+      addEventListener('beforeunload', handleBeforeUnload);
+
+      return () => {
+        removeEventListener('beforeunload', handleBeforeUnload);
+      };
+    }, []);
+
+    return {
+      canUndo,
+      canRedo,
+      hasChanges,
+      version,
+      undo: () => this.Undo(),
+      redo: () => this.Redo(),
+      commit: () => this.Commit(),
+      revert: () => this.RevertToLastCommit(),
+      fork: () => this.Fork(),
+    };
+  }
+
+  public UseInspectorSettings() {
+    const { selected } = this.UseSelection();
+    const [settings, setSettings] = useState<Partial<FlowNodeData>>({});
+
+    useEffect(() => {
+      if (selected) {
+        setSettings({ ...selected.data });
+      }
+    }, [selected]);
+
+    const updateSettings = (next: Partial<FlowNodeData>) => {
+      setSettings((prev) => ({ ...prev, ...next }));
+    };
+
+    const saveSettings = () => {
+      if (!selected) return;
+      selected.data = { ...selected.data, ...settings };
+    };
+
+    return {
+      settings,
+      updateSettings,
+      saveSettings,
+    };
   }
 
   public UseInteraction() {
@@ -131,64 +227,6 @@ export class WorkspaceManager {
     };
   }
 
-  public UseHistory(oiSvc: OpenIndustrialAPIClient) {
-    const [canUndo, setCanUndo] = useState(this.History.CanUndo());
-    const [canRedo, setCanRedo] = useState(this.History.CanRedo());
-    const [hasChanges, setHasChanges] = useState(
-      this.History.HasUnsavedChanges(),
-    );
-    const [version, setVersion] = useState(this.History.GetVersion());
-
-    useEffect(() => {
-      const update = () => {
-        setCanUndo(this.History.CanUndo());
-        setCanRedo(this.History.CanRedo());
-        setHasChanges(this.History.HasUnsavedChanges());
-        setVersion(this.History.GetVersion());
-      };
-
-      this.History.OnChange(update);
-      return () => this.History.OnChange(() => {});
-    }, []);
-
-    useEffect(() => {
-      const update = () => {
-        setCanUndo(this.History.CanUndo());
-        setCanRedo(this.History.CanRedo());
-        setHasChanges(this.History.HasUnsavedChanges());
-        setVersion(this.History.GetVersion());
-      };
-
-      this.History.OnChange(update);
-
-      const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-        if (this.History.HasUnsavedChanges()) {
-          e.preventDefault();
-          e.returnValue = ''; // For some browsers (Chrome)
-        }
-      };
-
-      addEventListener('beforeunload', handleBeforeUnload);
-
-      return () => {
-        this.History.OnChange(() => {});
-        removeEventListener('beforeunload', handleBeforeUnload);
-      };
-    }, []);
-
-    return {
-      canUndo,
-      canRedo,
-      hasChanges,
-      version,
-      undo: () => this.Undo(),
-      redo: () => this.Redo(),
-      commit: () => this.Commit(oiSvc),
-      revert: () => this.RevertToLastCommit(),
-      fork: () => this.Fork(),
-    };
-  }
-
   public UseSelection() {
     const [selected, setSelected] = useState<Node<FlowNodeData> | null>(
       this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null,
@@ -199,51 +237,136 @@ export class WorkspaceManager {
         const node = this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null;
         setSelected(node);
       };
-      this.Selection.OnSelectionChanged(update);
-      return () => this.Selection.OffSelectionChanged(update);
+
+      const unsubscribe = this.Selection.OnSelectionChanged(update);
+      return () => unsubscribe();
     }, []);
 
     return { selected, setSelected };
   }
 
-  public UseInspectorSettings() {
-    const { selected } = this.UseSelection();
-    const [settings, setSettings] = useState<Partial<FlowNodeData>>({});
-
-    useEffect(() => {
-      if (selected) {
-        setSettings({ ...selected.data });
-      }
-    }, [selected]);
-
-    const updateSettings = (next: Partial<FlowNodeData>) => {
-      setSettings((prev) => ({ ...prev, ...next }));
-    };
-
-    const saveSettings = () => {
-      if (!selected) return;
-      selected.data = { ...selected.data, ...settings };
-    };
+  public UseUIContext() {
+    const presetsForScope = this.Presets.GetPresetsForScope(this.Scope);
+    const rendererMap = this.Presets.GetRendererMap();
 
     return {
-      settings,
-      updateSettings,
-      saveSettings,
+      presets: presetsForScope,
+      nodeTypes: rendererMap,
     };
   }
 
-  public UseUIContext() {
-    const presets = this.Presets.GetPresetsForScope(this.Scope);
-    const nodeTypes = this.Presets.GetRendererMap();
-    return { presets, nodeTypes };
+  public UseWorkspaceSettings() {
+    const getCurrentWorkspace = (): WorkspaceSummary => {
+      const eac = this.EaC.GetEaC();
+
+      return {
+        Lookup: eac.EnterpriseLookup!,
+        Details: eac.Details!,
+      };
+    };
+
+    const [current, setCurrent] = useState<WorkspaceSummary>(
+      getCurrentWorkspace(),
+    );
+    const [hasChanges, setHasChanges] = useState(
+      this.History.HasUnsavedChanges(),
+    );
+
+    useEffect(() => {
+      const update = () => {
+        setCurrent(getCurrentWorkspace());
+        setHasChanges(this.History.HasUnsavedChanges());
+      };
+
+      const unsubscribe = this.History.OnChange(update);
+      return () => unsubscribe();
+    }, []);
+
+    const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+
+    useEffect(() => {
+      const members = this.Team?.ListUsers?.() ?? [
+        { Email: 'admin@factory.com', Role: 'Owner' },
+        { Email: 'engineer@factory.com', Role: 'Editor' },
+      ];
+
+      setTeamMembers(members);
+    }, []);
+
+    const [workspaces, setWorkspaces] = useState<WorkspaceSummary[]>([]);
+
+    useEffect(() => {
+      const results = this.EaC.List?.() ?? [];
+      setWorkspaces(results);
+    }, []);
+
+    const update = (next: Partial<EaCEnterpriseDetails>) => {
+      this.EaC.UpdateWorkspace(next);
+
+      setCurrent(getCurrentWorkspace());
+    };
+
+    const save = () => {
+      this.Commit();
+
+      console.log('💾 Saved workspace details');
+    };
+
+    const archive = () => {
+      const name = current.Details.Name ?? 'this workspace';
+
+      const confirmed = confirm(
+        `Are you sure you want to archive ${name}? This will remove it from the current session.`,
+      );
+
+      if (!confirmed) return;
+
+      this.EaC.Archive?.(current.Lookup);
+
+      location.reload(); // Soft reset of session
+    };
+
+    const inviteMember = (email: string, role: string) => {
+      if (!email) return;
+      this.Team?.InviteUser?.(email, role);
+      setTeamMembers((prev) => [...prev, { Email: email, Role: role }]);
+    };
+
+    const removeMember = (email: string) => {
+      this.Team?.RemoveUser?.(email);
+      setTeamMembers((prev) => prev.filter((m) => m.Email !== email));
+    };
+
+    const listWorkspaces = (): WorkspaceSummary[] => {
+      return workspaces;
+    };
+
+    const switchToWorkspace = (lookup: string) => {
+      this.EaC.SwitchTo?.(lookup);
+
+      setCurrent(getCurrentWorkspace());
+    };
+
+    return {
+      currentWorkspace: current,
+      teamMembers,
+      inviteMember,
+      removeMember,
+      update,
+      save,
+      archive,
+      hasChanges,
+      listWorkspaces,
+      switchToWorkspace,
+    };
   }
 
   // === History Actions ===
 
-  public async Commit(oiSvc: OpenIndustrialAPIClient): Promise<void> {
+  public async Commit(): Promise<void> {
     const history = this.History.GetCurrent();
 
-    const status = await oiSvc.Workspaces.Commit(history);
+    const status = await this.oiSvc.Workspaces.Commit(history);
 
     console.log(`✅ Runtime committed: CommitID ${status.ID}`);
 

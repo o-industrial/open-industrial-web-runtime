@@ -13,8 +13,10 @@ export type InspectorCommonProps<
   config?: TConfig;
   details: Partial<TDetails>;
   enabled: boolean;
-  getStats?: () => Promise<TStats>;
-  onDelete: () => void; // 👈 new
+
+  useStats: () => TStats | undefined;
+
+  onDelete: () => void;
   onDetailsChanged: (next: Partial<TDetails>) => void;
   onToggleEnabled: (enabled: boolean) => void;
 };
@@ -106,7 +108,7 @@ export default function InspectorPanel({ workspaceMgr }: InspectorPanelProps) {
       config: presetConfig,
       details,
       enabled,
-      getStats: selected.data.getStats,
+      useStats: selected.data.useStats,
       onDelete: handleDeleteNode,
       onDetailsChanged: handleDetailsChanged,
       onToggleEnabled: handleToggleEnabled,

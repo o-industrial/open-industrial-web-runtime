@@ -9,7 +9,7 @@ export type SystemControlsProps = {
 
 export function SystemControls({
   onOpenSimulatorLibrary,
-  simIntent = IntentTypes.Tertiary,
+  simIntent = IntentTypes.Info,
 }: SystemControlsProps) {
   return (
     <div class='flex flex-row items-center justify-center gap-2 px-2 py-1 bg-neutral-900/80 backdrop-blur-sm border border-neutral-700 rounded-md shadow-sm'>

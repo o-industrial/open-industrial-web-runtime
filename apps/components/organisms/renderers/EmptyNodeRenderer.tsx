@@ -1,7 +1,6 @@
 import { NodeProps, Position } from 'reactflow';
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
 import NodeHandle from '../../atoms/NodeHandle.tsx';
-import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { FlowNodeData } from '../../../../src/flow/types/react/FlowNodeData.ts';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
@@ -14,9 +13,7 @@ type EmptyStats = {
 export type EmptyNodeData = FlowNodeData<EaCVertexDetails, EmptyStats>;
 
 export default function EmptyNodeRenderer({ data }: NodeProps<EmptyNodeData>) {
-  if (!data || !data.getStats) return null;
-
-  const stats = useLiveStats(data.getStats);
+  const stats = data.useStats();
   const impulses = stats?.impulseRates ?? [];
   const latest = impulses.at(-1);
 

@@ -5,7 +5,6 @@ import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
 import NodeHandle from '../../atoms/NodeHandle.tsx';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
-import { useLiveStats } from '../../../../src/hooks/useLiveStats.ts';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 
@@ -25,9 +24,7 @@ export type SurfaceNodeData = FlowNodeData<EaCSurfaceDetails, SurfaceStats>;
 export default function SurfaceNodeRenderer({
   data,
 }: NodeProps<SurfaceNodeData>) {
-  if (!data || !data.getStats) return null;
-
-  const stats = useLiveStats(data.getStats);
+  const stats = data.useStats();
 
   const impulseRates = stats?.impulseRates ?? [];
   const inputCount = stats?.inputCount ?? 0;

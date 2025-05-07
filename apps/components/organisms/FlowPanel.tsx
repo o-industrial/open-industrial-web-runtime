@@ -22,21 +22,16 @@ import { FlowControls } from '../molecules/flows/FlowControls.tsx';
 import { ManagementControls } from '../molecules/flows/ManagementControls.tsx';
 import { SystemControls } from '../molecules/flows/SystemControls.tsx';
 import { neonColors } from '../../../tailwind.config.ts';
-import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 
 export const IsIsland = true;
 
 type FlowPanelProps = {
   workspaceMgr: WorkspaceManager;
-  oiApiRoot: string;
-  oiApiToken: string;
   onShowSimulatorLibrary?: () => void;
 };
 
 function FlowPanel({
   workspaceMgr,
-  oiApiRoot,
-  oiApiToken,
   onShowSimulatorLibrary,
 }: FlowPanelProps) {
   const [showMap, setShowMap] = useState(true);
@@ -52,10 +47,7 @@ function FlowPanel({
   } = workspaceMgr.UseInteraction();
   const { presets, nodeTypes } = workspaceMgr.UseUIContext();
 
-  const root = `${location.origin}${oiApiRoot}`;
-  const oiSvc = new OpenIndustrialAPIClient(new URL(root), oiApiToken);
-
-  const history = workspaceMgr.UseHistory(oiSvc);
+  const history = workspaceMgr.UseHistory();
 
   return (
     <FlowPanelTemplate
