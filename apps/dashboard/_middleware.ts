@@ -20,7 +20,7 @@ export default [
  * and commits runtime state into `OpenIndustrialWebState`.
  */
 export function buildOpenIndustrialRuntimeMiddleware(
-  kvLookup: string = 'eac'
+  kvLookup: string = 'eac',
 ): EaCRuntimeHandler<OpenIndustrialWebState> {
   return async (_req, ctx) => {
     const username = ctx.State.Username!;
@@ -48,7 +48,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
     ctx.State.OIClient = new OpenIndustrialAPIClient(
       apiBaseUrl,
-      ctx.State.OIJWT
+      ctx.State.OIJWT,
     );
 
     const userWorkspaces = await ctx.State.OIClient.Workspaces.ListForUser();
@@ -69,7 +69,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
         ctx.State.OIClient = new OpenIndustrialAPIClient(
           apiBaseUrl,
-          ctx.State.OIJWT
+          ctx.State.OIJWT,
         );
       }
     }
@@ -85,7 +85,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
       };
 
       const createResp = await ctx.State.OIClient.Workspaces.Create(
-        newWorkspace
+        newWorkspace,
       );
 
       lookup = createResp.EnterpriseLookup;
@@ -99,7 +99,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
       ctx.State.OIClient = new OpenIndustrialAPIClient(
         apiBaseUrl,
-        ctx.State.OIJWT
+        ctx.State.OIJWT,
       );
     }
 
@@ -133,7 +133,7 @@ export function buildAgreementsRedirectMiddleware(): EaCRuntimeHandler<OpenIndus
           `/dashboard/agreements?returnUrl=${returnUrl}`,
           false,
           false,
-          req
+          req,
         );
       }
     }

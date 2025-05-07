@@ -15,15 +15,15 @@ import {
 } from '@fathym/eac-applications/processors';
 import { EaCDenoKVDetails, EverythingAsCodeDenoKV } from '@fathym/eac-deno-kv';
 import {
-  EaCJSRDistributedFileSystemDetails,
-  EaCLocalDistributedFileSystemDetails,
-} from '@fathym/eac-dfs';
-import {
   EaCBaseHREFModifierDetails,
   EaCKeepAliveModifierDetails,
   EaCOAuthModifierDetails,
 } from '@fathym/eac-applications/modifiers';
-import { EaCAzureBlobStorageDistributedFileSystemDetails } from '@fathym/eac/dfs';
+import {
+  EaCAzureBlobStorageDistributedFileSystemDetails,
+  EaCJSRDistributedFileSystemDetails,
+  EaCLocalDistributedFileSystemDetails,
+} from '@fathym/eac/dfs';
 import { EaCAzureADB2CProviderDetails } from '@fathym/eac-identity';
 
 export default class RuntimePlugin implements EaCRuntimePlugin {
@@ -371,7 +371,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Type: 'JSR',
               Package: '@fathym/atomic',
               Version: '',
-              WorkerPath: import.meta.resolve('@fathym/eac-dfs/workers/jsr'),
+              WorkerPath: import.meta.resolve('@fathym/eac/dfs/workers/jsr'),
             } as EaCJSRDistributedFileSystemDetails,
           },
           'jsr:@fathym/atomic-design-kit': {
@@ -379,7 +379,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Type: 'JSR',
               Package: '@fathym/atomic-design-kit',
               Version: '',
-              WorkerPath: import.meta.resolve('@fathym/eac-dfs/workers/jsr'),
+              WorkerPath: import.meta.resolve('@fathym/eac/dfs/workers/jsr'),
             } as EaCJSRDistributedFileSystemDetails,
           },
         },
