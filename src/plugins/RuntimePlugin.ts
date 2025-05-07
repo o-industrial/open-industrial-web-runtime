@@ -63,6 +63,9 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               'www.openindustrial.co': {
                 Hostname: 'www.openindustrial.co',
               },
+              'open-industrial-web-runtime.azurewebsites.net': {
+                Hostname: 'open-industrial-web-runtime.azurewebsites.net',
+              },
             },
             ModifierResolvers: {
               keepAlive: {
