@@ -51,6 +51,23 @@ export function buildOpenIndustrialRuntimeMiddleware(
       ctx.State.OIJWT,
     );
 
+    ctx.State.Workspace = await ctx.State.OIClient.Workspaces.Get();
+
+    // Verify it exists
+    if (!ctx.State.Workspace?.EnterpriseLookup) {
+      lookup = '';
+
+      ctx.State.OIJWT = await loadJwtConfig().Create({
+        Username: username,
+        WorkspaceLookup: lookup,
+      } as OpenIndustrialJWTPayload);
+
+      ctx.State.OIClient = new OpenIndustrialAPIClient(
+        apiBaseUrl,
+        ctx.State.OIJWT,
+      );
+    }
+
     const userWorkspaces = await ctx.State.OIClient.Workspaces.ListForUser();
 
     ctx.State.UserWorkspaces = userWorkspaces;
