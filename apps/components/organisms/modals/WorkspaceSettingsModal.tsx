@@ -4,11 +4,13 @@ import { Modal } from '../../molecules/Modal.tsx';
 import { Input } from '../../atoms/forms/Input.tsx';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { Badge } from '../../atoms/Badge.tsx';
+
 import { WorkspaceManager } from '../../../../src/flow/managers/WorkspaceManager.ts';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { EaCEnterpriseDetails } from '@fathym/eac';
 import { WorkspaceSummary } from '../../../../src/types/WorkspaceSummary.ts';
-import { Select } from '@fathym/atomic';
+import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
+import { Select } from '../../atoms/forms/Select.tsx';
 
 type WorkspaceSettingsModalProps = {
   workspaceMgr: WorkspaceManager;
@@ -19,8 +21,6 @@ export function WorkspaceSettingsModal({
   workspaceMgr,
   onClose,
 }: WorkspaceSettingsModalProps): JSX.Element {
-  const [tab, setTab] = useState<'details' | 'team' | 'switch'>('details');
-
   const {
     currentWorkspace,
     teamMembers,
@@ -38,47 +38,46 @@ export function WorkspaceSettingsModal({
 
   return (
     <Modal title='Workspace Settings' onClose={onClose}>
-      <div class='flex h-full'>
-        {/* Sidebar */}
-        <div class='w-48 border-r border-neutral-700 pr-4'>
-          <div class='space-y-1 text-sm'>
-            <Action onClick={() => setTab('details')}>
-              🛠️ Workspace Details
-            </Action>
-            <Action onClick={() => setTab('team')}>👥 Team Members</Action>
-            <Action onClick={() => setTab('switch')}>
-              🔄 Switch Workspace
-            </Action>
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div class='flex-1 pl-4 overflow-y-auto'>
-          {tab === 'details' && (
-            <WorkspaceDetailsTab
-              details={details}
-              onUpdate={update}
-              onSave={save}
-              onArchive={archive}
-              hasChanges={hasChanges}
-            />
-          )}
-          {tab === 'team' && (
-            <TeamMembersTab
-              teamMembers={teamMembers}
-              onInvite={inviteMember}
-              onRemove={removeMember}
-            />
-          )}
-          {tab === 'switch' && (
-            <SwitchWorkspaceTab
-              currentId={currentWorkspace.Lookup}
-              listWorkspaces={listWorkspaces}
-              onSwitch={switchToWorkspace}
-            />
-          )}
-        </div>
-      </div>
+      <TabbedPanel
+        direction='vertical'
+        tabs={[
+          {
+            key: 'details',
+            label: '🛠️ Workspace Details',
+            content: (
+              <WorkspaceDetailsTab
+                details={details}
+                onUpdate={update}
+                onSave={save}
+                onArchive={archive}
+                hasChanges={hasChanges}
+              />
+            ),
+          },
+          {
+            key: 'team',
+            label: '👥 Team Members',
+            content: (
+              <TeamMembersTab
+                teamMembers={teamMembers}
+                onInvite={inviteMember}
+                onRemove={removeMember}
+              />
+            ),
+          },
+          {
+            key: 'switch',
+            label: '🔄 Switch Workspace',
+            content: (
+              <SwitchWorkspaceTab
+                currentId={currentWorkspace.Lookup}
+                listWorkspaces={listWorkspaces}
+                onSwitch={switchToWorkspace}
+              />
+            ),
+          },
+        ]}
+      />
     </Modal>
   );
 }
@@ -122,7 +121,11 @@ function WorkspaceDetailsTab({
           Save Changes
         </Action>
         <Action
-          onClick={onArchive}
+          onClick={() => {
+            if (confirm('Are you sure you want to archive this workspace?')) {
+              onArchive();
+            }
+          }}
           intentType={IntentTypes.Error}
           styleType={ActionStyleTypes.Outline}
         >

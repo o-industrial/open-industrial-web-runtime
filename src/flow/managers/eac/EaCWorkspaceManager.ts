@@ -1,4 +1,4 @@
-import { EaCManager } from './EaCManager.ts';
+import { EaCManager } from '../EaCManager.ts';
 import { FlowGraph } from '../../types/graph/FlowGraph.ts';
 import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../../types/graph/FlowGraphEdge.ts';
@@ -15,6 +15,7 @@ import {
 
 import { Edge, EdgeChange } from 'reactflow';
 import { HistoryManager } from '../HistoryManager.ts';
+import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 
 /**
  * Workspace-level Everything-as-Code manager.
@@ -24,11 +25,12 @@ import { HistoryManager } from '../HistoryManager.ts';
 export class EaCWorkspaceManager extends EaCManager {
   constructor(
     eac: EverythingAsCodeOIWorkspace,
+    oiSvc: OpenIndustrialAPIClient,
     graph: GraphStateManager,
     presets: PresetManager,
     history: HistoryManager,
   ) {
-    super(eac, 'workspace', graph, presets, history);
+    super(eac, oiSvc, 'workspace', graph, presets, history);
   }
 
   protected buildGraph(eac: OpenIndustrialEaC): FlowGraph {

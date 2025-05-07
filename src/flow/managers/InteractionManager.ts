@@ -3,7 +3,7 @@ import { Edge, EdgeChange, Node, NodeChange, XYPosition } from 'reactflow';
 import { SelectionManager } from './SelectionManager.ts';
 import { PresetManager } from './PresetManager.ts';
 import { FlowNodeData } from '../types/react/FlowNodeData.ts';
-import { EaCManager } from './eac/EaCManager.ts';
+import { EaCManager } from './EaCManager.ts';
 
 export class InteractionManager {
   private refreshCallback: (() => void) | null = null;

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useMemo, useState } from 'preact/hooks';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
 
@@ -20,9 +20,7 @@ export const IsIsland = true;
 
 type WorkspacePageData = {
   OIAPIRoot: string;
-
   OIAPIToken: string;
-
   Workspace: OpenIndustrialEaC;
 };
 
@@ -40,30 +38,25 @@ export const handler: EaCRuntimeHandlerSet<
 };
 
 export default function WorkspacePage({
-  Data: { Workspace: EaC, OIAPIRoot: oiApiRoot, OIAPIToken: oiApiToken },
+  Data: { Workspace: initialEaC, OIAPIRoot: oiApiRoot, OIAPIToken: oiApiToken },
 }: PageProps<WorkspacePageData>) {
   console.log('🌀 WorkspacePage mounted');
 
   const origin = location?.origin ?? 'https://server.com';
-
   const root = `${origin}${oiApiRoot}`;
   const oiSvc = new OpenIndustrialAPIClient(new URL(root), oiApiToken);
 
   const workspaceMgr = useMemo(() => {
-    const mgr = new WorkspaceManager({}, oiSvc, 'workspace');
-    console.log('🧩 New FlowManager created');
+    const mgr = new WorkspaceManager(initialEaC, oiSvc, 'workspace');
+    console.log('🧩 New WorkspaceManager created');
     return mgr;
   }, []);
 
   const [showMarketplace, setShowMarketplace] = useState(false);
   const [showWorkspaceSettings, setShowWorkspaceSettings] = useState(false);
 
-  useEffect(() => {
-    if (EaC) {
-      console.log('📥 Merging partial EaC:', EaC);
-      workspaceMgr.EaC.MergePartial(EaC);
-    }
-  }, [EaC]);
+  // 🔁 Get reactive EaC and use it to update pathParts
+  const pathParts = workspaceMgr.UseWorkspaceBreadcrumb();
 
   const modals = (
     <>
@@ -88,7 +81,7 @@ export default function WorkspacePage({
       azi={<AziPanel workspaceMgr={workspaceMgr} />}
       breadcrumb={
         <BreadcrumbBar
-          pathParts={[EaC.Details!.Name!, 'Workspace']}
+          pathParts={pathParts}
           onSettingsClick={() => setShowWorkspaceSettings(true)}
         />
       }

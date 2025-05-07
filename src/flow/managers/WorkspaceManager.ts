@@ -10,7 +10,7 @@ import { PresetManager } from './PresetManager.ts';
 import { SelectionManager } from './SelectionManager.ts';
 import { AziManager } from './AziManager.ts';
 import { SimulatorLibraryManager } from './SimulatorLibraryManager.ts';
-import { EaCManager } from './eac/EaCManager.ts';
+import { EaCManager } from './EaCManager.ts';
 import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
 import { StatManager } from './StatManager.ts';
 import { EaCWorkspaceManager } from './eac/EaCWorkspaceManager.ts';
@@ -89,6 +89,35 @@ export class WorkspaceManager {
       send,
       reset,
     };
+  }
+
+  public UseWorkspaceBreadcrumb(): string[] {
+    const eac = this.UseEaC();
+    const [pathParts, setPathParts] = useState<string[]>([
+      'Loading...',
+      'Workspace',
+    ]);
+
+    useEffect(() => {
+      const name = eac?.Details?.Name ?? 'Loading...';
+      setPathParts([name, 'Workspace']);
+    }, [eac?.Details?.Name]);
+
+    return pathParts;
+  }
+
+  public UseEaC(): OpenIndustrialEaC {
+    const [eac, setEaC] = useState(this.EaC.GetEaC());
+
+    useEffect(() => {
+      const unsubscribe = this.EaC.OnEaCChanged(() => {
+        setEaC(this.EaC.GetEaC());
+      });
+
+      return unsubscribe;
+    }, []);
+
+    return eac;
   }
 
   public UseGraphView() {
@@ -321,9 +350,9 @@ export class WorkspaceManager {
 
       if (!confirmed) return;
 
-      this.EaC.Archive?.(current.Lookup);
-
-      location.reload(); // Soft reset of session
+      this.EaC.Archive?.(current.Lookup).then(() => {
+        location.reload();
+      });
     };
 
     const inviteMember = (email: string, role: string) => {
@@ -366,9 +395,7 @@ export class WorkspaceManager {
   public async Commit(): Promise<void> {
     const history = this.History.GetCurrent();
 
-    const status = await this.oiSvc.Workspaces.Commit(history);
-
-    console.log(`✅ Runtime committed: CommitID ${status.ID}`);
+    const status = await this.EaC.Commit(history);
 
     if (status.Processing === EaCStatusProcessingTypes.COMPLETE) {
       this.History.Commit();
@@ -415,6 +442,7 @@ export class WorkspaceManager {
       case 'workspace':
         return new EaCWorkspaceManager(
           eac,
+          this.oiSvc,
           this.Graph,
           this.Presets,
           this.History,

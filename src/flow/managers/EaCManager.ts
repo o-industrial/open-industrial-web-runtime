@@ -1,23 +1,25 @@
 import { jsonMapSetClone, merge, NullableArrayOrObject } from '@fathym/common';
 import { applyNodeChanges, Edge, EdgeChange, Node, NodeChange } from 'reactflow';
 
-import { HistoryManager } from '../HistoryManager.ts';
-import { PresetManager } from '../PresetManager.ts';
-import { GraphStateManager } from '../GraphStateManager.ts';
-import { FlowNodeData } from '../../types/react/FlowNodeData.ts';
-import { SimulatorDefinition } from '../SimulatorLibraryManager.ts';
-import { FlowGraph } from '../../types/graph/FlowGraph.ts';
-import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
-import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
-import { Position } from '../../../types/Position.ts';
-import { NodeScopeTypes } from '../../types/graph/NodeScopeTypes.ts';
+import { HistoryManager } from './HistoryManager.ts';
+import { PresetManager } from './PresetManager.ts';
+import { GraphStateManager } from './GraphStateManager.ts';
+import { FlowNodeData } from '../types/react/FlowNodeData.ts';
+import { SimulatorDefinition } from './SimulatorLibraryManager.ts';
+import { FlowGraph } from '../types/graph/FlowGraph.ts';
+import { FlowGraphNode } from '../types/graph/FlowGraphNode.ts';
+import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
+import { Position } from '../../types/Position.ts';
+import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
 import { EaCAzureDockerSimulatorDetails, EaCFlowNodeMetadata } from '@o-industrial/common/eac';
 import { EaCHistorySnapshot } from '@o-industrial/common/types';
 import { EaCEnterpriseDetails, EaCVertexDetails } from '@fathym/eac';
 
-import { EaCNodeInspectorManager } from './EaCNodeInspectorManager.ts';
-import { EaCDiffManager } from './EaCDiffManager.ts';
-import { WorkspaceSummary } from '../../../types/WorkspaceSummary.ts';
+import { EaCNodeInspectorManager } from './eac/EaCNodeInspectorManager.ts';
+import { EaCDiffManager } from './eac/EaCDiffManager.ts';
+import { WorkspaceSummary } from '../../types/WorkspaceSummary.ts';
+import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
+import { EaCStatus } from '@fathym/eac/steward/status';
 
 /**
  * Base manager for Everything-as-Code state. This class is the canonical interface for
@@ -35,6 +37,7 @@ export abstract class EaCManager {
 
   constructor(
     protected eac: OpenIndustrialEaC,
+    protected oiSvc: OpenIndustrialAPIClient,
     protected scope: NodeScopeTypes,
     protected graph: GraphStateManager,
     protected presets: PresetManager,
@@ -88,15 +91,28 @@ export abstract class EaCManager {
     if (partial) this.MergePartial(partial);
   }
 
-  public Archive(lookup: string): void {
-    console.warn(`[EaCManager] Archive requested for workspace: ${lookup}`);
-    // Future: call deletion logic, persist flag, or move to archived list
+  public async Archive(): Promise<void> {
+    console.warn(
+      `[EaCManager] Archive requested for current workspace: ${this.eac.EnterpriseLookup}`,
+    );
+
+    await this.oiSvc.Workspaces.Archive();
+
+    // TODO(mcgear): Ensure that after archiving, any user with an archived EaC should get moved off of it...  Some how handle more centrally in ensuring sstandard EaC retrieval doesn't return archived intsances
   }
 
   public abstract CreateConnectionEdge(
     source: string,
     target: string,
   ): Partial<OpenIndustrialEaC> | null;
+
+  public async Commit(history: EaCHistorySnapshot): Promise<EaCStatus> {
+    const status = await this.oiSvc.Workspaces.Commit(history);
+
+    console.log(`✅ Runtime committed: CommitID ${status.ID}`);
+
+    return status;
+  }
 
   public CreateNodeFromPreset(
     type: string,
@@ -212,7 +228,9 @@ export abstract class EaCManager {
   }
 
   public SwitchTo(lookup: string): void {
-    console.warn(`[EaCManager] SwitchTo not implemented — requested: ${lookup}`);
+    console.warn(
+      `[EaCManager] SwitchTo not implemented — requested: ${lookup}`,
+    );
     // Placeholder logic
     location.reload();
   }
