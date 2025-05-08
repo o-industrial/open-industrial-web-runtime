@@ -84,8 +84,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 PathPattern: '/icons*',
                 Priority: 200,
               },
-              dashboard: {
-                PathPattern: '/dashboard*',
+              workspace: {
+                PathPattern: '/workspace*',
                 Priority: 500,
                 IsPrivate: true,
                 IsTriggerSignIn: true,
@@ -141,10 +141,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Config: './configs/atomic-icons.config.json',
             } as EaCAtomicIconsProcessor,
           },
-          dashboard: {
+          workspace: {
             Details: {
-              Name: 'Dashboard Site',
-              Description: 'Dashboard site.',
+              Name: 'Workspace Site',
+              Description: 'Workspace site.',
             },
             ModifierResolvers: {
               baseHref: {
@@ -153,10 +153,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             },
             Processor: {
               Type: 'PreactApp',
-              AppDFSLookup: 'local:apps/dashboard',
+              AppDFSLookup: 'local:apps/workspace',
               ComponentDFSLookups: [
                 ['local:apps/components', ['tsx']],
-                ['local:apps/dashboard', ['tsx']],
+                ['local:apps/workspace', ['tsx']],
                 ['jsr:@fathym/atomic', ['tsx']],
                 ['jsr:@fathym/atomic-design-kit', ['tsx']],
               ],
@@ -316,10 +316,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Extensions: ['tsx'],
             } as EaCLocalDistributedFileSystemDetails,
           },
-          'local:apps/dashboard': {
+          'local:apps/workspace': {
             Details: {
               Type: 'Local',
-              FileRoot: './apps/dashboard/',
+              FileRoot: './apps/workspace/',
               DefaultFile: 'index.tsx',
               Extensions: ['tsx'],
             } as EaCLocalDistributedFileSystemDetails,

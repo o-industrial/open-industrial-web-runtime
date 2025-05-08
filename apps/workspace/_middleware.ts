@@ -144,10 +144,10 @@ export function buildAgreementsRedirectMiddleware(): EaCRuntimeHandler<OpenIndus
 
     if (manager.AgreementsOutOfDate(agreements, accepted)) {
       const url = new URL(req.url);
-      if (!url.pathname.startsWith('/dashboard/agreements')) {
+      if (!url.pathname.startsWith('/workspace/agreements')) {
         const returnUrl = encodeURIComponent(url.pathname + url.search);
         return redirectRequest(
-          `/dashboard/agreements?returnUrl=${returnUrl}`,
+          `/workspace/agreements?returnUrl=${returnUrl}`,
           false,
           false,
           req,

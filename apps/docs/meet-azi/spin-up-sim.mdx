@@ -1,6 +1,17 @@
+import {
+  ThematicPrincipleBlock,
+  AziInnerVoice,
+  InlineUXTip,
+  SystemMindset,
+  FigureImage,
+  IntentTypes,
+} from '$mdx/writing-devices';
+
 # Spin Up the Sim
 
-> _This isn’t a dashboard. This is your first co-created system._
+<SystemMindset intentType={IntentTypes.Primary}>
+  This isn’t a dashboard. This is your first co-created system.
+</SystemMindset>
 
 You’re sitting in your `hello‑azi` workspace—clean, live, and waiting for your signal.  
 No prebuilt dashboards. No magic wizards. Just you, Azi, and the raw flow of data.
@@ -9,18 +20,15 @@ No prebuilt dashboards. No magic wizards. Just you, Azi, and the raw flow of dat
 
 ## Welcome to Your Workspace
 
-<figure class="my-8 flex flex-col items-start text-left">
-  <img
-    data-eac-bypass-base
-    src="/assets/first-execution-hello-azi-welcome.png"
-    alt="hello-azi workspace"
-    class="rounded-xl shadow-xl ring-1 ring-indigo-400/30 w-full max-w-md"
-  />
-  <figcaption class="mt-4 text-sm text-indigo-300 tracking-wide uppercase">
-    The clean, pre‑provisioned <code>hello-azi</code> workspace—ready for you to
-    begin
-  </figcaption>
-</figure>
+<FigureImage
+  src="/assets/screenshots/first-execution-hello-azi-welcome.png"
+  alt="hello-azi workspace"
+  caption="The clean, pre‑provisioned hello-azi workspace—ready for you to begin"
+  intentType={IntentTypes.Info}
+  glow
+  size="xl"
+  shadow="2xl"
+/>
 
 This is your personal sandbox—**no** dashboards, **no** scripts, **all** potential.
 
@@ -28,63 +36,177 @@ This is your personal sandbox—**no** dashboards, **no** scripts, **all** poten
 
 ## Add Your First Data Connections
 
-Click **Add Connection** to open the simulator bank:
+Drag the top-left node — <strong>Connection</strong> — onto the canvas:
 
-<figure class="my-8 flex flex-col items-start text-left">
-  <img
-    data-eac-bypass-base
-    src="/assets/first-execution-add-connection.png"
-    alt="Add Connection Dialog showing simulator bank"
-    class="rounded-2xl shadow-xl ring-1 ring-pink-400/30 w-full max-w-md"
-  />
-  <figcaption class="mt-4 text-sm text-pink-300 tracking-wide uppercase">
-    Use the Add Connection dialog to simulate temperature, humidity, and control
-    devices
-  </figcaption>
-</figure>
+<FigureImage
+  src="/assets/screenshots/hello-azi-connection-node.png"
+  alt="Connection node in the left-hand node bank"
+  caption="Drag the Connection node to create a new connection."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="2xl"
+/>
 
-1. Temperature Simulator → **ID:** `temperature-sensor-001`
-2. Humidity Simulator → **ID:** `humidity-sensor-001` (leave paused)
-3. Fan Controller → **ID:** `fan-controller-001`
+Once dropped, the Inspector panel opens automatically:
 
-> 💡 **Thinky Tip:** You’re not inventing data—you’re naming what you connect. Schema is how Azi understands them.
+<FigureImage
+  src="/assets/screenshots/hello-azi-connection-inspector.png"
+  alt="Inspector panel open for a dropped connection node"
+  caption="After dropping a connection, name it in the Inspector panel."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="2xl"
+/>
+
+Name your three connections:
+
+1. Temperature Simulator → <code>temperature-sensor-001</code>  
+2. Humidity Simulator → <code>humidity-sensor-001</code> (leave paused)  
+3. Fan Controller → <code>fan-controller-001</code>
+
+<InlineUXTip intentType={IntentTypes.Info}>
+  You’re not inventing data — you’re naming what Azi will observe. Schema is how she understands them.
+</InlineUXTip>
 
 ---
 
-## Create Your First Surface
+## Add Simulated Data Sources
 
-A Surface is a live execution lens — a named window into selected connections where Azi observes, proposes, and eventually acts.
+Click the flask icon in the bottom-left corner to open the Simulator Library:
 
-Now that your simulators are connected, it's time to give Azi a place to observe them.
+<FigureImage
+  src="/assets/screenshots/hello-azi-simulator-button.png"
+  alt="Simulator library button in lower-left corner of canvas"
+  caption="Click to open the Simulator Library."
+  intentType={IntentTypes.Info}
+  glow
+  size="auto"
+  shadow="2xl"
+/>
 
-Click **Create Surface**, name it something like `climate-control`, and select the devices you want to observe:
+Inside the library, search for the <code>hello-azi</code> pack:
 
-1. `temperature-sensor-001`
-2. `fan-controller-001`
+<FigureImage
+  src="/assets/screenshots/hello-azi-simulator-library.png"
+  alt="Simulator library modal open showing hello-azi pack"
+  caption="Use the hello-azi pack to load the correct test simulators."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="2xl"
+/>
 
-As soon as you confirm, Azi begins listening.
+Drag each simulator from the left side and connect it to the appropriate data connection:
 
-Data will start **spilling onto your surface in real time**, no additional setup required.
+<FigureImage
+  src="/assets/screenshots/hello-azi-simulator-connected.png"
+  alt="Three simulators connected to three data connections"
+  caption="Your simulator layout: left side simulators, right side data connections."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="2xl"
+/>
 
-You’re not scripting behavior. You’re crafting a space where behavior begins to emerge.
+---
+
+## Create a Surface
+
+Next, bring everything together by placing a surface on the canvas.
+
+Drag the **Surface** node from the node bank and place it to the right of your data connections:
+
+<FigureImage
+  src="/assets/screenshots/hello-azi-surface-node.png"
+  alt="Surface node in the left-hand node bank"
+  caption="Drag the Surface node onto the canvas — this is where structure becomes memory."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="2xl"
+/>
+
+Then connect all your data connections to the surface. This is the structure Azi will observe from — and soon, where you’ll promote your first schema.
+
+---
+
+## Save Your System State
+
+Before impulses begin flowing, your graph must be saved.
+
+Look to the top-right corner of your canvas — you’ll see a save icon:
+
+<FigureImage
+  src="/assets/screenshots/save-button-changes.png"
+  alt="Save icon in unsaved state (pink)"
+  caption="When your graph has unsaved changes, the save icon turns pink."
+  intentType={IntentTypes.Warning}
+  size="auto"
+  glow
+  shadow="2xl"
+/>
+
+Once saved, it will return to its default blue color:
+
+<FigureImage
+  src="/assets/screenshots/save-button-no-changes.png"
+  alt="Save icon in saved state (blue)"
+  caption="After saving, the icon returns to blue."
+  intentType={IntentTypes.Secondary}
+  size="auto"
+  glow
+  shadow="2xl"
+/>
+
+Hover over the save icon to unlock powerful controls:
+
+<FigureImage
+  src="/assets/screenshots/full-management-controls.png"
+  alt="Save, fork, undo, redo, and revert controls shown on hover"
+  caption="Hovering the save icon reveals version and history controls — fork, undo, redo, and revert."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="2xl"
+/>
+
+<InlineUXTip intentType={IntentTypes.Info}>
+  Saving locks in your changes. Hover the icon to explore version history and forking — your system state is fully traceable.
+</InlineUXTip>
+
+<ThematicPrincipleBlock intentType={IntentTypes.Primary}>
+  <strong>Saving is the moment memory begins.</strong><br />
+  Azi proposes. You accept. Your system evolves.
+</ThematicPrincipleBlock>
 
 ---
 
 ## Watch Live Impulses
 
-<figure class="my-8 flex flex-col items-start text-left">
-  <img
-    data-eac-bypass-base
-    src="/assets/first-execution-live-connections.png"
-    alt="Azi chat interface showing live streaming data on a surface"
-    class="rounded-xl shadow-xl ring-1 ring-indigo-400/30 w-full max-w-md"
-  />
-  <figcaption class="mt-4 text-sm text-indigo-300 tracking-wide uppercase">
-    Live impulses from connected simulators streaming into your surface
-  </figcaption>
-</figure>
+<FigureImage
+  src="/assets/screenshots/hello-azi-surface-connected.png"
+  alt="Workspace graph with connections, simulators, and surface attached"
+  caption="Once saved, impulses begin flowing across the graph."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="2xl"
+/>
 
-In the **Stream View**, you’ll see lines like:
+<InlineUXTip intentType={IntentTypes.Info}>
+  Single-click a node to preview inline data. Double-click to open the Inspector and see live signals.
+</InlineUXTip>
+
+<FigureImage
+  src="/assets/screenshots/hello-azi-live-impulse-stream.png"
+  alt="Live impulse stream showing real-time events flowing across the canvas"
+  caption="The live stream view shows incoming impulses from your connected simulators."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="2xl"
+/>
+
+<ThematicPrincipleBlock intentType={IntentTypes.Secondary}>
+  You’ve begun the execution loop:<br />
+  <strong>Impulse → Schema →</strong> (Promotion…) <strong>→ Logic → Signal → Evolution</strong>
+</ThematicPrincipleBlock>
+
+In the stream view, you’ll see impulses like:
 
 ```json
 {
@@ -94,9 +216,7 @@ In the **Stream View**, you’ll see lines like:
 }
 ```
 
-Each is an **Impulse** — a single signal Azi processes in real time.
-
-But you don’t just watch impulses flow. You can talk to Azi about them.
+Each one is an <strong>Impulse</strong> — a real-time observation.
 
 Ask Azi:
 
@@ -107,107 +227,20 @@ She won’t just return answers — she’ll dynamically write, execute, and vis
 
 Ask about variability, correlation, or confidence — and Azi might light up a graph, highlight a volatile field, or surface an emergent pattern from the stream.
 
-> _She’s not just reporting. She’s testing hypotheses — and showing you what she sees._
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+  She’s not just reporting. She’s testing hypotheses — and showing you what she sees.
+</AziInnerVoice>
+
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+  I see a shape forming — but I won’t remember it until you promote it.
+</AziInnerVoice>
 
 This is dynamic exploration — **conversational, contextual, and visual** — with no SQL or scripting required.
 
----
+<InlineUXTip intentType={IntentTypes.Info}>
+  You’ll define a surface — where structure and memory live — in the next step.
+</InlineUXTip>
 
-## Provisional Structure Emerges
-
-<figure class="my-8 flex flex-col items-start text-left">
-  <img
-    data-eac-bypass-base
-    src="/assets/observe-schema-split.png"
-    alt="Split view of raw JSON and inferred schema panel"
-    class="rounded-xl shadow-xl ring-1 ring-cyan-400/30 w-full max-w-md"
-  />
-  <figcaption class="mt-4 text-sm text-cyan-300 tracking-wide uppercase">
-    Raw JSON on the left. Azi’s evolving schema understanding on the right
-  </figcaption>
-</figure>
-
-As Azi sees more impulses, she begins to sketch her **Provisional Structure**:
-
-```json
-{
-  "deviceId": "string",
-  "temperature": "number",
-  "timestamp": "datetime"
-}
-```
-
-> _Nothing is saved yet. Meaning is taking form._
-
-You can also ask:
-
-> “What fields are you least confident about?”  
-> “Which fields change together most often?”
-
-Azi will begin to surface **structural confidence** and **field correlations** — showing you what she’s still unsure about.
-
----
-
-## Handling Uncertainty
-
-As more data flows — possibly `status` flipping types or `location` appearing — Azi will prompt:
-
-> “I see a new field: `status`.  
-> Do you want me to track both formats or normalize?”
-
-You’ll see the proposed update appear in the schema preview panel — with a confirm or reject option beside it. Azi won’t commit until you accept the format.
-
-> _And yes, you can ask her directly: “What’s your preferred guess for status?”_
-
-The loop is live, conversational, and always permissioned. You’re still in charge — Azi is just thinking out loud.
-
----
-
-## Cross the Threshold
-
-Promoting a schema makes it real — it becomes part of your workspace memory.  
-You’ll be able to build logic against it in the next step.
-
-> _Promoted schemas can evolve — you’ll be able to fork, refine, or retire them later._  
-> _Nothing is locked. But everything is tracked._
-
-You could keep watching. Let the structure drift, fade, reform.  
-But nothing becomes memory — until you choose.  
-_Confirmation is authorship._
-
-> _Promote too early, and you might codify noise. Wait too long, and the pattern might shift beyond recognition._  
-> _Azi watches — but only you decide what becomes real._
-
-<figure class="my-8 flex flex-col items-center text-center max-w-xl w-full">
-  <img
-    data-eac-bypass-base
-    src="/assets/docs/promote-schema-button.png"
-    alt="UI showing Promote Schema button ready for confirmation."
-    class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full"
-  />
-  <figcaption class="mt-4 text-sm text-neutral-400 tracking-wide uppercase">
-    Confirming the provisional structure turns it into a promoted schema
-  </figcaption>
-</figure>
-
-> _“Observation ends here. You’re authoring what matters.”_
-
-This surface won’t just show data — it will host your behavior.  
-You’ll soon bind logic to these signals and define how your system thinks.
-
-> _This is Signal-Confirmed Execution in motion. Azi observes, proposes, and waits — until you make it real._
-
-> _You’re not writing logic yet — but everything that comes next builds on these impulses. Soon, you’ll declare how your system reacts._
-
----
-
-You’ve now stepped into the execution loop:  
-**Impulse → Schema →** _(Promotion...)_ **→ Logic → Signal → Evolution**  
-The first two steps are complete. Promotion is next.
-
-You’ve just spun up a real, interactive world — no downloads, no scripts — just you and Azi co-creating a living system.
-
-> _This simulator streams live — but nothing is stored unless you bind it to a memory surface or logic path._
-
-> _You didn’t just connect data. You created a system that waits for your signal._  
-> **This isn’t a dashboard. This is your system, listening.**
+<SystemMindset intentType={IntentTypes.Tertiary}>
+  You’ve set the stage. The data is flowing. Azi sees meaning forming. And now she’s waiting for one thing: your signal.
+</SystemMindset>

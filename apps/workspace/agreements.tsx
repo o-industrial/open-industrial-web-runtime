@@ -27,7 +27,7 @@ export const handler: EaCRuntimeHandlerSet<
     });
 
     const url = new URL(req.url);
-    const returnUrl = url.searchParams.get('returnUrl') || '/dashboard';
+    const returnUrl = url.searchParams.get('returnUrl') || '/workspace';
 
     return ctx.Render({ agreements: agreementsToAccept, returnUrl });
   },
@@ -56,7 +56,7 @@ export default function AgreementsPage({
 }: PageProps<AgreementsPageData>) {
   async function handleAllAccepted() {
     try {
-      const res = await fetch('/dashboard/agreements', {
+      const res = await fetch('/workspace/agreements', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -69,7 +69,7 @@ export default function AgreementsPage({
         throw new Error(err.error || 'Unknown error accepting agreements.');
       }
 
-      location.href = Data.returnUrl || '/dashboard';
+      location.href = Data.returnUrl || '/workspace';
     } catch (error) {
       alert((error as Error).message);
     }

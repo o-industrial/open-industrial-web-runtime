@@ -14,11 +14,11 @@ export const agreementsBlockerMiddleware: EaCRuntimeHandler<
   if (manager.AgreementsOutOfDate(agreements, userAccepted)) {
     const url = new URL(req.url);
 
-    if (!url.pathname.startsWith('/dashboard/agreements')) {
+    if (!url.pathname.startsWith('/workspace/agreements')) {
       const returnUrl = encodeURIComponent(url.pathname + url.search);
 
       return redirectRequest(
-        `/dashboard/agreements?returnUrl=${returnUrl}`,
+        `/workspace/agreements?returnUrl=${returnUrl}`,
         false,
         false,
         req,
