@@ -20,7 +20,7 @@ export function SystemMindset({
       {...rest}
       class={classSet(
         ['border-l-4 pl-4 italic text-sm leading-relaxed', border, text],
-        rest
+        rest,
       )}
     >
       {children}

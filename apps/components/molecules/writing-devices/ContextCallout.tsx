@@ -20,7 +20,7 @@ export function ContextCallout({
       {...rest}
       class={classSet(
         ['mt-6 mb-8 px-6 py-4 border-l-4 rounded', intentClasses],
-        rest
+        rest,
       )}
     >
       {children}

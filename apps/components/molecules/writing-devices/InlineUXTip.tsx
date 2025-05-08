@@ -18,9 +18,8 @@ export function InlineUXTip({
     <div
       class={`mt-4 mb-6 px-4 py-2 text-sm leading-relaxed border-l-4 rounded ${text} ${border} ${background}`}
     >
-      <strong class={classSet(["font-semibold", text])}>{label}</strong>{' '}
-      
-      <span class="text-neutral-700 dark:text-neutral-300">{children}</span>
+      <strong class={classSet(['font-semibold', text])}>{label}</strong>{' '}
+      <span class='text-neutral-700 dark:text-neutral-300'>{children}</span>
     </div>
   );
 }

@@ -18,7 +18,7 @@ export function AziInnerVoice({
       {...rest}
       class={classSet(
         [`border-l-4 pl-4 italic rounded-sm`, getIntentClasses(intentType)],
-        rest
+        rest,
       )}
     >
       {children}

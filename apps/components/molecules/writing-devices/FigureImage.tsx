@@ -52,7 +52,7 @@ export function FigureImage({
       center ? 'items-center text-center' : 'items-start text-left',
       sizeMap[size],
     ],
-    imgProps
+    imgProps,
   );
 
   const imageClasses = classSet([
