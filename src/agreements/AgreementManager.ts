@@ -33,22 +33,18 @@ export class AgreementManager {
    * @returns A Promise resolving to an array of AgreementData.
    */
   async LoadAgreements(): Promise<AgreementData[]> {
-    const agreementsDir = import.meta.resolve('../../apps/assets/agreements');
+    const agreementsDir = import.meta.resolve('../../apps/assets/agreements').replace('file:///', '');
 
+    console.log(
+      '----------------------------------agreementsDir-------------------------------------------------------------',
+    );
+    console.log(agreementsDir);
+    
     const agreements = await Promise.all(
       AgreementManager.Definitions.map(async (def) => {
-        const filePath = `${agreementsDir}/${def.file}`.replace('file:///', '');
+        const filePath = `${agreementsDir}/${def.file}`;
 
         try {
-          console.log(
-            '-------------------------------------filePath----------------------------------------------------------',
-          );
-          console.log(
-            '------------------------------------filePath-----------------------------------------------------------',
-          );
-          console.log(
-            '---------------------------------filePath--------------------------------------------------------------',
-          );
           console.log(
             '----------------------------------filePath-------------------------------------------------------------',
           );

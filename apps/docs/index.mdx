@@ -1,3 +1,12 @@
+import {
+  ThematicPrincipleBlock,
+  AziInnerVoice,
+  InlineUXTip,
+  SystemMindset,
+  FigureImage,
+  IntentTypes,
+} from '$mdx/writing-devices';
+
 # Meet Azi
 
 You've spent years watching systems. Azi helps you build them.
@@ -12,13 +21,15 @@ You’re not logging into a dashboard. You’re stepping into a system that list
 
 Azi isn’t just an assistant. Azi is a collaborator: schema-aware, impulse-driven, and memory-safe. Azi helps you build real-time execution systems, grounded in what you teach it, not what it guesses.
 
-<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
-  Think of her like a second brain. She never assumes — only proposes. And she only remembers what you make real.
-</aside>
+Think of her like a second brain. She never assumes — only proposes. And she only remembers what you make real.
 
-In the next screen, you’ll stream data. Azi will observe. She’ll propose a structure. And she’ll wait for your confirmation before acting.
+Soon, you’ll open your workspace — a live surface where impulses stream, agents reason, and Azi begins to observe.
 
-<p><span class="font-semibold text-indigo-700 dark:text-indigo-300">Thinking Tip:</span> <code>Schema</code> and <code>Impulse</code> are system-native types. You’ll teach these as you go — and the system won’t remember them until you say they matter.</p>
+<InlineUXTip intentType={IntentTypes.Info}>
+  <code>Schema</code> and <code>Impulse</code> are system-native types. You’ll
+  teach these as you go — and the system won’t remember them until you say they
+  matter.
+</InlineUXTip>
 
 ## The Execution Loop
 
@@ -26,10 +37,12 @@ Every action Azi takes follows the same rhythm:
 
 **Impulse → Schema → Logic → Signal → Evolution**
 
-<div class="mt-6 mb-8 px-6 py-4 border-l-4 border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-100 rounded">
-  <strong>Signal-Confirmed Execution</strong><br />
-  Azi observes, proposes, and remembers — but never runs logic until you confirm the structure.
-</div>
+<ThematicPrincipleBlock intentType={IntentTypes.Primary}>
+  <strong>Signal-Confirmed Execution</strong>
+  <br />
+  Azi observes, proposes, and remembers — but never runs logic until you confirm
+  the structure.
+</ThematicPrincipleBlock>
 
 An event happens. Azi understands its shape. Your logic runs. A signal might emerge. You decide what evolves.
 
@@ -48,104 +61,75 @@ No black boxes. No surprises. Just structured collaboration.
 Azi never acts without your confirmation.  
 Never guesses. Never surprises. Always remembers.
 
-<div class="mt-6 mb-8 px-6 py-4 border-l-4 border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-100 rounded">
-  <strong>Structure must be earned. Memory must be confirmed.</strong><br />
+<ThematicPrincipleBlock intentType={IntentTypes.Secondary}>
+  <strong>Structure must be earned. Memory must be confirmed.</strong>
+  <br />
   This is the core belief behind collaborative execution.
-</div>
+</ThematicPrincipleBlock>
 
-<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
-  Before, your system ran from logs and guesswork. Now it runs with memory and intent.
-</aside>
+<ThematicPrincipleBlock intentType={IntentTypes.Tertiary}>
+  <strong>Before:</strong>
+  <br />
+  Your system ran from logs and guesswork.
+  <br />
+  <strong>Now:</strong>
+  <br />
+  It runs with memory and intent.
+</ThematicPrincipleBlock>
 
 ## What You’re Building
 
 You’re not building a toolchain.  
 You’re building **an execution system that understands**:
 
-- What happened  
-- What should happen  
-- What changed  
+- What happened
+- What should happen
+- What changed
 - What to remember
 
-<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
-  And when behavior starts to drift — or stakes shift — Azi can fork that logic into a variant. You can observe, compare, and promote again. What starts as structure becomes evolution.
-</aside>
+And when behavior starts to drift — or stakes shift — Azi can fork that logic into a variant. You can observe, compare, and promote again. What starts as structure becomes evolution.
 
-<figure class="my-16 flex flex-col items-center text-center max-w-xl w-full">
-  <img
-    src="/assets/docs/impulse-schema-example.png"
-    alt="Azi observing a live impulse and proposing structure."
-    class="rounded-2xl shadow-2xl ring-1 ring-white/10 w-full"
-  />
-  <figcaption class="mt-4 text-sm text-neutral-400 tracking-wide uppercase">
-    When structure emerges, Azi asks for confirmation — not permission.
-  </figcaption>
-</figure>
+<FigureImage
+  src="/mnt/data/15fbc9fd-3cd3-477b-be2c-56b3d6e78047.png"
+  alt="Open Industrial dashboard showing Azi observing telemetry, surfaces, and signals across a live execution graph."
+  caption="Azi watches impulses flow across surfaces — recording memory, raising signals, and waiting for your promotion."
+  intentType={IntentTypes.Primary}
+  glow
+  shadow="2xl"
+/>
 
-<p><span class="font-semibold text-indigo-700 dark:text-indigo-300">Example:</span> A device reports a voltage spike. Azi sees the pattern. She proposes a new schema: <code>VoltageWarning.v3</code>. You accept it — and from that moment, it becomes structure. Every time the pattern returns, the system knows what to do.</p>
+<p>
+  <strong>Example:</strong> A device reports a voltage spike. Azi sees the
+  pattern. She proposes a new schema: <code>VoltageWarning.v3</code>. You accept
+  it — and from that moment, it becomes structure. Every time the pattern
+  returns, the system knows what to do.
+</p>
 
-<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
-  You could reject it. Azi will forget — and keep watching. But if the pattern returns, she’ll remember the moment, and try again. Every confirmation — or refusal — sharpens her understanding of what matters.
-</aside>
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+  You could reject it. Azi will forget — and keep watching. But if the pattern
+  returns, she’ll remember the moment, and try again. Every confirmation — or
+  refusal — sharpens her understanding of what matters.
+</AziInnerVoice>
 
-## Before / After
+## Next Step: Launch the Workspace
 
-<div class="mt-6 mb-8 px-6 py-4 border-l-4 border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-100 rounded">
-  <strong>Before</strong><br />
-  You wrote code. Shipped. Waited for logs. You guessed what mattered. You patched what broke.
-</div>
+In the next guide, you’ll enter your real-time workspace:
 
-<div class="mt-6 mb-8 px-6 py-4 border-l-4 border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-100 rounded">
-  <strong>After</strong><br />
-  You teach structure. Azi proposes logic. You watch behavior — and evolve it with a signal.
-</div>
-
-## What It Looks Like
-
-```json
-{
-  "impulse": {
-    "sensor": "temperature",
-    "value": 92.3,
-    "unit": "F"
-  }
-}
-```
-
-<p><span class="font-semibold text-indigo-700 dark:text-indigo-300">System View:</span> When Azi sees this impulse, she may propose a <code>HighTempAlert</code> schema. But it waits. Nothing happens until you promote it.</p>
-
-```ts
-export default Neuron("HighTempAlert")
-  .Impulses.In(TemperatureSchema)
-  .OnImpulse((impulse, ctx) => {
-    if (impulse.value > 90) ctx.Signals.Alert({ message: "Too hot!" });
-  });
-```
-
-<p><span class="font-semibold text-indigo-700 dark:text-indigo-300">Thinking Tip:</span> One schema. One signal. Logic, bound to structure — and governed by you.</p>
-
-## Next Step: Launch the Simulator
-
-In the next doc, you’ll:
-
-- Open the in-browser simulator  
-- Trigger a live telemetry pulse  
-- Watch Azi observe, respond, and wait for your confirmation
-
-<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
-  In one click, you’ll light the fuse. Azi will listen. Propose structure. And wait — silently — for your signal.
-</aside>
+- Set up your first surface
+- Connect a simulator stream
+- Watch Azi observe, propose, and wait for your signal
+- Promote your first schema — and watch the loop begin
 
 This is how it starts.  
 **Structure is promoted. Execution is remembered.**
 
-<aside class="border-l-4 border-neon-blue pl-4 italic text-neon-blue">
-  And if you ever remove Azi? She forgets everything. Your system stays yours. She’s a teammate — not a tether.
-</aside>
+<SystemMindset intentType={IntentTypes.Secondary}>
+  If you ever remove Azi? She forgets everything. Your system stays yours. She’s
+  a teammate — not a tether.
+</SystemMindset>
 
----
-
-<div class="mt-6 mb-8 px-6 py-4 border-l-4 border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-100 rounded">
-  <strong>You don’t monitor the system.</strong><br />
+<ThematicPrincipleBlock intentType={IntentTypes.Primary}>
+  <strong>You don’t monitor the system.</strong>
+  <br />
   You become it.
-</div>
+</ThematicPrincipleBlock>

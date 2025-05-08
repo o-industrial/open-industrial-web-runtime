@@ -1,6 +1,6 @@
 import { PageProps } from '@fathym/eac-applications/preact';
 
-export default function Layout({
+export default function DashboardLayout({
   Data: _Data,
   Component,
   Revision,
@@ -33,7 +33,7 @@ export default function Layout({
         />
       </head>
 
-      <body class='h-full bg-neutral-50 dark:bg-neutral-900 text-black dark:text-white'>
+      <body class='h-full bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50'>
         <div class='relative w-screen h-screen max-w-full flex flex-col overflow-hidden'>
           <Component />
         </div>

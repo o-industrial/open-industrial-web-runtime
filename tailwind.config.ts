@@ -210,69 +210,86 @@ const typoConfig = (theme: (path: string) => any) => ({
   DEFAULT: {
     css: {
       fontFamily: theme('fontFamily.sans').join(', '),
-      color: theme('colors.slate.700'),
+      color: theme('colors.neutral.700'),
+
       a: {
         color: theme('colors.neon-blue.600'),
         '&:hover': { color: theme('colors.neon-blue.700') },
       },
+
+      strong: {
+        color: theme('colors.neutral.900'),
+        fontWeight: '700',
+      },
+
       h1: {
-        color: theme('colors.slate.900'),
+        color: theme('colors.neutral.900'),
         fontWeight: '700',
       },
       h2: {
-        color: theme('colors.slate.900'),
+        color: theme('colors.neutral.900'),
         fontWeight: '600',
       },
       h3: {
-        color: theme('colors.slate.800'),
+        color: theme('colors.neutral.800'),
         fontWeight: '600',
       },
       h4: {
-        color: theme('colors.slate-800'),
+        color: theme('colors.neutral.800'),
       },
       h5: {
-        color: theme('colors.slate-700'),
+        color: theme('colors.neutral.700'),
       },
       h6: {
-        color: theme('colors.slate-700'),
+        color: theme('colors.neutral.700'),
       },
+
       blockquote: {
         fontStyle: 'italic',
         borderLeftColor: theme('colors.neon-violet.400'),
-        color: theme('colors.slate.800'),
+        color: theme('colors.neutral.800'),
       },
     },
   },
+
   dark: {
     css: {
       fontFamily: theme('fontFamily.sans').join(', '),
-      color: theme('colors.slate.300'),
+      color: theme('colors.neutral.300'),
+
       a: {
         color: theme('colors.neon-blue.400'),
         '&:hover': { color: theme('colors.neon-blue.300') },
       },
+
+      strong: {
+        color: theme('colors.white'),
+        fontWeight: '700',
+      },
+
       h1: {
         color: theme('colors.white'),
       },
       h2: {
-        color: theme('colors.slate.100'),
+        color: theme('colors.neutral.100'),
       },
       h3: {
-        color: theme('colors.slate.200'),
+        color: theme('colors.neutral.200'),
       },
       h4: {
-        color: theme('colors.slate.300'),
+        color: theme('colors.neutral.300'),
       },
       h5: {
-        color: theme('colors.slate.400'),
+        color: theme('colors.neutral.400'),
       },
       h6: {
-        color: theme('colors.slate.400'),
+        color: theme('colors.neutral.400'),
       },
+
       blockquote: {
         fontStyle: 'italic',
         borderLeftColor: theme('colors.neon-violet.300'),
-        color: theme('colors.slate.100'),
+        color: theme('colors.neutral.100'),
       },
     },
   },
@@ -356,7 +373,8 @@ const config: Config = {
         'in-out-expo': 'cubic-bezier(0.87, 0, 0.13, 1)',
       },
 
-      typography: typoConfig,
+      // typography: typoConfig,
+      typography: ['dark'],
     },
   },
   plugins: [scrollbar, typography, unimportant],

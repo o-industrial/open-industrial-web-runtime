@@ -68,9 +68,9 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             },
             ModifierResolvers: {
-              keepAlive: {
-                Priority: 5000,
-              },
+              // keepAlive: {
+              //   Priority: 5000,
+              // },
               oauth: {
                 Priority: 10000,
               },
@@ -90,7 +90,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 IsPrivate: true,
                 IsTriggerSignIn: true,
               },
-              docs: {
+              docs2: {
                 PathPattern: '/docs*',
                 Priority: 500,
                 IsPrivate: true,
@@ -157,7 +157,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               ComponentDFSLookups: [
                 ['local:apps/components', ['tsx']],
                 ['local:apps/dashboard', ['tsx']],
-                // ['local:apps/islands', ['tsx']],
                 ['jsr:@fathym/atomic', ['tsx']],
                 ['jsr:@fathym/atomic-design-kit', ['tsx']],
               ],
@@ -177,6 +176,26 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Type: 'MDX',
               DFSLookup: 'local:apps/docs',
             } as EaCMDXProcessor,
+          },
+          docs2: {
+            Details: {
+              Name: 'Documentation Site 2',
+              Description: 'Documentation site 2.',
+            },
+            ModifierResolvers: {
+              baseHref: {
+                Priority: 10000,
+              },
+            },
+            Processor: {
+              Type: 'PreactApp',
+              AppDFSLookup: 'local:apps/docs',
+              DocPageConfigPath: './.config.ts',
+              ComponentDFSLookups: [
+                ['local:apps/components', ['tsx']],
+                ['local:apps/docs', ['tsx']],
+              ],
+            } as EaCPreactAppProcessor,
           },
           home: {
             Details: {
@@ -243,6 +262,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 'local:apps/components',
                 'local:apps/docs',
                 'local:apps/home',
+                'local:apps/src',
                 // 'local:apps/islands',
                 'jsr:@fathym/atomic',
                 'jsr:@fathym/atomic-design-kit',
@@ -309,7 +329,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Type: 'Local',
               FileRoot: './apps/docs/',
               DefaultFile: 'index.mdx',
-              Extensions: ['mdx', 'md'],
+              Extensions: ['tsx', 'mdx', 'md'],
             } as EaCLocalDistributedFileSystemDetails,
           },
           'local:apps/home': {
@@ -318,6 +338,12 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               FileRoot: './apps/home/',
               DefaultFile: 'index.tsx',
               Extensions: ['tsx'],
+            } as EaCLocalDistributedFileSystemDetails,
+          },
+          'local:apps/src': {
+            Details: {
+              Type: 'Local',
+              FileRoot: './src/',
             } as EaCLocalDistributedFileSystemDetails,
           },
           // 'local:apps/islands': {
