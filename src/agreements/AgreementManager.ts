@@ -35,25 +35,25 @@ export class AgreementManager {
   async LoadAgreements(): Promise<AgreementData[]> {
     const agreementsDir = import.meta.resolve('../../apps/assets/agreements');
 
-    console.log(
-      '-----------------------------------------------------------------------------------------------',
-    );
-    console.log(
-      '-----------------------------------------------------------------------------------------------',
-    );
-    console.log(
-      '-----------------------------------------------------------------------------------------------',
-    );
-    console.log(
-      '-----------------------------------------------------------------------------------------------',
-    );
-    console.log(agreementsDir);
-
     const agreements = await Promise.all(
       AgreementManager.Definitions.map(async (def) => {
         const filePath = `${agreementsDir}/${def.file}`.replace('file:///', '');
 
         try {
+          console.log(
+            '-------------------------------------filePath----------------------------------------------------------',
+          );
+          console.log(
+            '------------------------------------filePath-----------------------------------------------------------',
+          );
+          console.log(
+            '---------------------------------filePath--------------------------------------------------------------',
+          );
+          console.log(
+            '----------------------------------filePath-------------------------------------------------------------',
+          );
+          console.log(filePath);
+
           const stat = await Deno.stat(filePath);
           const version = stat.mtime?.toISOString() ?? new Date().toISOString();
 
