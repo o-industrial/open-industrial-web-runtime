@@ -7,12 +7,12 @@ import { CloseIcon } from '../../../../build/iconset/icons/CloseIcon.tsx';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 
 export type WorkspaceNodeState = 'default' | 'expanded';
-
 export type WorkspaceNodeStatus = 'normal' | 'warning' | 'error' | 'proposal';
 
 export type WorkspaceNodeRendererBaseProps = {
   iconKey?: string;
   label?: string;
+  showLabel?: boolean;
   status?: WorkspaceNodeStatus;
   isSelected?: boolean;
 
@@ -30,15 +30,10 @@ export type WorkspaceNodeRendererBaseProps = {
   onDoubleClick?: () => void;
 } & JSX.HTMLAttributes<HTMLDivElement>;
 
-/**
- * WorkspaceNodeRendererBase
- *
- * Base layout and interaction shell for any node.
- * Supports expand/collapse, icon injection, status styling, and slot customization.
- */
 export default function WorkspaceNodeRendererBase({
   iconKey,
   label,
+  showLabel = true,
   status = 'normal',
   isSelected,
   class: className,
@@ -53,12 +48,10 @@ export default function WorkspaceNodeRendererBase({
   ...props
 }: WorkspaceNodeRendererBaseProps) {
   const [state, setState] = useState<WorkspaceNodeState>('default');
-
   let clickTimer: number | null = null;
 
   const handleClick = (e: MouseEvent) => {
     e.stopPropagation();
-
     if (clickTimer) {
       clearTimeout(clickTimer);
       clickTimer = null;
@@ -72,12 +65,10 @@ export default function WorkspaceNodeRendererBase({
 
   const handleDoubleClick = (e: MouseEvent) => {
     e.stopPropagation();
-
     if (clickTimer) {
       clearTimeout(clickTimer);
       clickTimer = null;
     }
-
     onDoubleClick?.();
   };
 
@@ -101,18 +92,17 @@ export default function WorkspaceNodeRendererBase({
   };
 
   const statusMap = statiMap[status ?? 'normal'];
-
   const statusClasses = `${statusMap.border} ${statusMap.background}`;
+  const isPill = state === 'default' && showLabel;
 
   return (
     <div
       class={classSet(
         [
           '-:relative -:flex -:flex-row -:items-center -:align-middle',
-          !enabled ? 'opacity-40' : '',
-          !enabled ? 'pointer-events-none' : '',
+          !enabled ? 'opacity-40 pointer-events-none' : '',
         ],
-        { class: outerClass },
+        { class: outerClass }
       )}
       style={{ pointerEvents: 'auto', zIndex: 1 }}
       onClick={enabled === false ? undefined : handleClick}
@@ -126,11 +116,15 @@ export default function WorkspaceNodeRendererBase({
         class={classSet(
           [
             '-:transition-all -:duration-300 -:ease-in-out',
-            '-:relative -:rounded-full -:flex -:items-start -:justify-start',
-            state === 'default' ? '-:w-14 -:h-14' : '-:w-[250px] -:h-14',
+            '-:relative -:rounded-full -:flex -:items-center -:justify-center',
+            isPill
+              ? '-:inline-flex -:px-3 -:h-14 -:max-w-xs'
+              : state === 'default'
+              ? '-:w-14 -:h-14'
+              : '-:w-[250px] -:h-14',
             statusClasses,
           ],
-          { class: className },
+          { class: className }
         )}
         {...props}
       >
@@ -138,18 +132,19 @@ export default function WorkspaceNodeRendererBase({
 
         <div
           class={classSet([
-            'relative w-full',
-            state === 'expanded' ? 'h-auto' : 'h-full',
+            'relative',
+            state === 'expanded' ? 'w-full h-auto' : 'w-full h-full',
           ])}
         >
           <div
             class={classSet([
-              'pointer-events-none absolute',
-              '-:flex -:flex-row -:items-center -:justify-center',
-              '-:transition-all -:duration-300 -:ease-in-out',
-              state === 'default'
+              '-:flex -:items-center -:justify-center',
+              isPill ? 'w-full h-full' : 'pointer-events-none absolute',
+              isPill
+                ? ''
+                : state === 'default'
                 ? 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
-                : 'top-2 left-2 translate-x-0 translate-y-0',
+                : 'top-2 left-2',
             ])}
           >
             {iconKey && (
@@ -163,14 +158,14 @@ export default function WorkspaceNodeRendererBase({
               />
             )}
 
-            {label && (
+            {label && showLabel && (
               <span
                 class={classSet([
-                  '-:transition-all -:duration-750 -:ease-in-out',
-                  state === 'default' ? '-:ml-0 -:opacity-0' : '-:ml-1 -:opacity-100',
+                  '-:ml-2 -:text-sm -:font-medium -:truncate -:overflow-hidden -:text-ellipsis',
+                  isPill ? '-:max-w-[8rem]' : '',
                 ])}
               >
-                {state !== 'default' && label}
+                {label}
               </span>
             )}
           </div>

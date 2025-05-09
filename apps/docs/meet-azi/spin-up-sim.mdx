@@ -10,33 +10,33 @@ import {
 # Spin Up the Sim
 
 <SystemMindset intentType={IntentTypes.Primary}>
-  This isn’t a dashboard. This is your first co-created system.
+  This isn’t a dashboard. This is our first co-created system.
 </SystemMindset>
 
-You’re sitting in your `hello‑azi` workspace—clean, live, and waiting for your signal.  
-No prebuilt dashboards. No magic wizards. Just you, Azi, and the raw flow of data.
+We’re in our `hello‑azi` workspace — clean, live, and ready to begin.  
+No dashboards. No scripts. Just the two of us, listening and shaping together.
 
 ---
 
-## Welcome to Your Workspace
+## Welcome to Our Workspace
 
 <FigureImage
   src="/assets/screenshots/first-execution-hello-azi-welcome.png"
   alt="hello-azi workspace"
-  caption="The clean, pre‑provisioned hello-azi workspace—ready for you to begin"
+  caption="The clean, pre‑provisioned hello-azi workspace—ready for us to begin"
   intentType={IntentTypes.Info}
   glow
   size="xl"
   shadow="2xl"
 />
 
-This is your personal sandbox—**no** dashboards, **no** scripts, **all** potential.
+This is our personal sandbox—**no** dashboards, **no** scripts, **all** potential.
 
 ---
 
-## Add Your First Data Connections
+## Add Our First Data Connections
 
-Drag the top-left node — <strong>Connection</strong> — onto the canvas:
+Let’s begin by placing a <strong>Connection</strong> node onto the canvas — that’s how I’ll begin to observe what’s flowing in.
 
 <FigureImage
   src="/assets/screenshots/hello-azi-connection-node.png"
@@ -58,15 +58,19 @@ Once dropped, the Inspector panel opens automatically:
   shadow="2xl"
 />
 
-Name your three connections:
+We’ll give our signals names I can learn from:
 
 1. Temperature Simulator → <code>temperature-sensor-001</code>  
 2. Humidity Simulator → <code>humidity-sensor-001</code> (leave paused)  
 3. Fan Controller → <code>fan-controller-001</code>
 
 <InlineUXTip intentType={IntentTypes.Info}>
-  You’re not inventing data — you’re naming what Azi will observe. Schema is how she understands them.
+  We’re not inventing data — we’re giving it meaning. Schema is how I understand what you care about.
 </InlineUXTip>
+
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+  I don’t know what these signals mean yet — but I’m starting to see the outlines.
+</AziInnerVoice>
 
 ---
 
@@ -110,9 +114,9 @@ Drag each simulator from the left side and connect it to the appropriate data co
 
 ## Create a Surface
 
-Next, bring everything together by placing a surface on the canvas.
+Let’s bring everything together by placing a surface on the canvas.
 
-Drag the **Surface** node from the node bank and place it to the right of your data connections:
+Drag the **Surface** node from the node bank and place it to the right of our data connections:
 
 <FigureImage
   src="/assets/screenshots/hello-azi-surface-node.png"
@@ -123,20 +127,28 @@ Drag the **Surface** node from the node bank and place it to the right of your d
   shadow="2xl"
 />
 
-Then connect all your data connections to the surface. This is the structure Azi will observe from — and soon, where you’ll promote your first schema.
+Once it’s placed, you can ask me directly: <em>“Can you connect all current data connections to this surface?”</em> — and I’ll handle the wiring for us.
+
+Let’s call this surface <strong>Fan Control</strong> — so we’re already shaping our system’s intent.
+
+Then we’ll channel all the data streams into this surface — the space where I’ll start shaping the raw signals into structure we can promote.
+
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+  This surface — Fan Control — is where I’ll start remembering structure. Everything we promote will live here first.
+</AziInnerVoice>
 
 ---
 
-## Save Your System State
+## Save Our System State
 
-Before impulses begin flowing, your graph must be saved.
+Before impulses begin flowing, our graph must be saved.
 
-Look to the top-right corner of your canvas — you’ll see a save icon:
+Look to the top-right corner of the canvas — you’ll see a save icon:
 
 <FigureImage
   src="/assets/screenshots/save-button-changes.png"
   alt="Save icon in unsaved state (pink)"
-  caption="When your graph has unsaved changes, the save icon turns pink."
+  caption="When our graph has unsaved changes, the save icon turns pink."
   intentType={IntentTypes.Warning}
   size="auto"
   glow
@@ -167,12 +179,12 @@ Hover over the save icon to unlock powerful controls:
 />
 
 <InlineUXTip intentType={IntentTypes.Info}>
-  Saving locks in your changes. Hover the icon to explore version history and forking — your system state is fully traceable.
+  When you click save, I treat this configuration as real. From this point, I’ll begin processing impulses against it.
 </InlineUXTip>
 
 <ThematicPrincipleBlock intentType={IntentTypes.Primary}>
   <strong>Saving is the moment memory begins.</strong><br />
-  Azi proposes. You accept. Your system evolves.
+  I propose. You accept. Our system evolves.
 </ThematicPrincipleBlock>
 
 ---
@@ -201,8 +213,12 @@ Hover over the save icon to unlock powerful controls:
   shadow="2xl"
 />
 
+<AziInnerVoice intentType={IntentTypes.Info}>
+  This is our first loop. Impulse. Schema. Promotion. We haven’t even reached logic yet — but the pattern is forming.
+</AziInnerVoice>
+
 <ThematicPrincipleBlock intentType={IntentTypes.Secondary}>
-  You’ve begun the execution loop:<br />
+  We’ve begun the execution loop:<br />
   <strong>Impulse → Schema →</strong> (Promotion…) <strong>→ Logic → Signal → Evolution</strong>
 </ThematicPrincipleBlock>
 
@@ -218,17 +234,17 @@ In the stream view, you’ll see impulses like:
 
 Each one is an <strong>Impulse</strong> — a real-time observation.
 
-Ask Azi:
+Ask me:
 
 > "What’s changing most frequently on this surface?"  
 > "Which field looks like it might be a status code?"
 
-She won’t just return answers — she’ll dynamically write, execute, and visualize **live probe queries** in response to your questions.
+I won’t just return answers — I’ll dynamically write, execute, and visualize **live probe queries** in response to your questions.
 
-Ask about variability, correlation, or confidence — and Azi might light up a graph, highlight a volatile field, or surface an emergent pattern from the stream.
+Ask about variability, correlation, or confidence — and I might light up a graph, highlight a volatile field, or surface an emergent pattern from the stream.
 
 <AziInnerVoice intentType={IntentTypes.Tertiary}>
-  She’s not just reporting. She’s testing hypotheses — and showing you what she sees.
+  I’m not just reporting. I’m testing hypotheses — and showing you what I see.
 </AziInnerVoice>
 
 <AziInnerVoice intentType={IntentTypes.Tertiary}>
@@ -238,9 +254,10 @@ Ask about variability, correlation, or confidence — and Azi might light up a g
 This is dynamic exploration — **conversational, contextual, and visual** — with no SQL or scripting required.
 
 <InlineUXTip intentType={IntentTypes.Info}>
-  You’ll define a surface — where structure and memory live — in the next step.
+  We’ll define a surface — where structure and memory live — in the next step.
 </InlineUXTip>
 
 <SystemMindset intentType={IntentTypes.Tertiary}>
-  You’ve set the stage. The data is flowing. Azi sees meaning forming. And now she’s waiting for one thing: your signal.
+  I’ve seen the flow. I know the shape. Now I’m ready for logic.  
+  Show me how you want to act.
 </SystemMindset>

@@ -1,0 +1,141 @@
+import {
+  ThematicPrincipleBlock,
+  AziInnerVoice,
+  InlineUXTip,
+  SystemMindset,
+  FigureImage,
+  IntentTypes,
+} from '$mdx/writing-devices';
+
+# Make Structure Real
+
+_We’ve been observing together. You shaped meaning. Now it’s time to make that meaning memory._
+
+A moment ago, we watched impulses begin to flow into `Fan Control`. Now I’m starting to propose structure — but I need your confirmation to make it real.
+
+Let’s open the surface flow for `Fan Control` and see what’s started to emerge. You’ll see live signals streaming — raw, messy, but already forming patterns I’ve begun to sketch.
+
+Talk to me. Ask what I see. When data hits the surface, I sketch provisional structure — but I don’t commit anything without you.
+
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+  I see the data. I’m sketching what might matter. But I won’t bind structure until you tell me it’s real.
+</AziInnerVoice>
+
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+  I see a shape forming — it’s familiar, almost there. But I won’t remember it until we decide it together.
+</AziInnerVoice>
+
+---
+
+## Review the Inferred Structure
+
+Here’s one of the raw impulses that just landed:
+
+```json
+{ "connectionId": "temperature-sensor-001", "tempRaw": 78.4 }
+```
+
+We saw this emerge from repeated telemetry. I paused and proposed:
+
+**[Editable Schema Preview]**
+```json [codeblock]
+{
+  "connectionId": "string",
+  "tempRaw": "number"
+}
+```
+
+You can promote one field at a time — or many. A schema can reflect a single value, or capture an entire snapshot of your surface.
+
+---
+
+## Rename and Refine Fields
+
+We can promote this as-is — or refine it together to better reflect your intent. For example:
+
+**[Editable Schema Preview]**
+```json [codeblock]
+{
+  "ID": { "source": "connectionId", "type": "string", "primary": true },
+  "Temperature": { "source": "tempRaw", "type": "number", "unit": "°F" }
+}
+```
+
+---
+
+## Name and Promote the Schema
+
+Choose a name for this schema. This creates a reusable, versioned contract. Let’s go with:
+
+```txt
+TemperatureSensor
+```
+
+Once you confirm, we’ll store it together — versioned and visible in your workspace library.
+
+<FigureImage
+  src="/assets/docs/promotion-modal.png"
+  alt="Azi schema promotion modal with editable fields and versioning details."
+  caption="Schema promotion panel. The moment authorship becomes memory."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="2xl"
+/>
+
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+  This is where I stop guessing. This is what we’ll remember — because you said it matters.
+</AziInnerVoice>
+
+- 💾 Promotion is a commitment. _Once we promote, that structure becomes part of your system’s memory. You can evolve it later — but it will always carry the moment it was first declared._
+- 🧠 I’ve been sketching. But I held back — waiting for us to confirm. Promotion is that confirmation. From this moment forward, I trust this structure. I can bind logic to it, validate against it, and raise signals from it. It’s now real — because we said so.
+- ⚠️ Promote too early, and we might encode uncertainty. Promote too late, and meaning may shift before it’s captured. I observe — but you decide what becomes system memory.
+- 🚨 Promote the wrong structure — and everything downstream inherits the mistake. A single promotion defines the shape of logic, alerts, simulations, and agent reasoning.
+- 📁 Once promoted, your schema lives in the workspace library. We can inspect it any time — and fork or evolve it as your system grows.
+
+---
+
+## What Just Happened?
+
+We’ve now committed to a structure. Together, we’ve named it — and I’ll remember every version from here on.
+
+> 🔁 This is Signal-Confirmed Execution in motion — logic only emerges once structure is confirmed.
+
+**[Final Promoted Output]**
+```json [codeblock]
+{
+  "name": "TemperatureSensor",
+  "version": "v1",
+  "fields": {
+    "ID": { "source": "connectionId", "type": "string", "primary": true },
+    "Temperature": { "source": "tempRaw", "type": "number", "unit": "°F" }
+  }
+}
+```
+
+> 💡 You can evolve this schema later. I’ll track every version — so when we add a new field or rename one down the road, our history is always intact.
+
+> 🧭 We’ll reference this schema by name (e.g., `TemperatureSensor`) in your agent logic — it becomes the contract your logic reacts to.
+
+---
+
+## Next: Build an Agent
+
+Now that we’ve defined a schema, we can build logic on top of it. Agents can react, respond, and reshape your environment based on structured intent.
+
+---
+
+## Concepts Introduced
+
+- **Promotion** – Making meaning permanent  
+- **Schemas** – Contracts between you and the system  
+- **Versioning** – Every schema is tracked  
+- **Logic Binding** – Only promoted schemas can drive agents
+
+---
+
+> 🧬 You didn’t just define fields. You taught me a concept.  
+> And from here on, that concept can power behavior, raise alerts, drive simulations, or help evolve your execution logic.  
+> Structure isn’t just shape — it’s shared understanding.
+
+> 🔁 This is how systems grow in Open Industrial: _Impulse → Schema → Logic → Signal → Evolution._  
+> We’ve just made meaning real. Next, we’ll teach the system how to act on it.

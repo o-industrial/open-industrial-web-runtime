@@ -1,4 +1,4 @@
-import { DocsConfig } from '@fathym/eac-applications/runtime/processors';
+import { DocsConfig } from 'jsr:@fathym/eac-applications@^0.0.142/runtime/processors';
 
 /**
  * Asynchronously loads the documentation configuration.
@@ -14,8 +14,8 @@ function loadDocsConfig(): Promise<DocsConfig> {
         Children: [
           { Title: 'Spin Up the Sim', Path: '/meet-azi/spin-up-sim' },
           {
-            Title: 'Promote Your First Schema',
-            Path: '/meet-azi/promote-schema',
+            Title: 'Make Structure Real',
+            Path: '/meet-azi/make-structure-real',
           },
           { Title: 'Deploy Your First Agent', Path: '/meet-azi/deploy-agent' },
         ],
