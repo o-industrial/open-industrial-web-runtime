@@ -1,45 +1,27 @@
-import { EaCManager } from '../EaCManager.ts';
+import { EaCScopeManager } from './EaCScopeManager.ts';
 import { FlowGraph } from '../../types/graph/FlowGraph.ts';
-import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../../types/graph/FlowGraphEdge.ts';
-
-import { GraphStateManager } from '../GraphStateManager.ts';
-import { PresetManager } from '../PresetManager.ts';
-
-import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
+import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
 import {
   EaCDataConnectionAsCode,
   EaCSurfaceAsCode,
   EverythingAsCodeOIWorkspace,
 } from '@o-industrial/common/eac';
-
 import { Edge, EdgeChange } from 'reactflow';
-import { HistoryManager } from '../HistoryManager.ts';
-import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
+import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
 
 /**
- * Workspace-level Everything-as-Code manager.
- * Handles conversion between structured EaC and flow graph representation,
- * as well as tracking simulator, connection, and surface relationships.
+ * Workspace-scoped logic handler for EaC state.
+ * Converts the workspace EaC into a flow graph and defines connection logic.
  */
-export class EaCWorkspaceManager extends EaCManager {
-  constructor(
-    eac: EverythingAsCodeOIWorkspace,
-    oiSvc: OpenIndustrialAPIClient,
-    graph: GraphStateManager,
-    presets: PresetManager,
-    history: HistoryManager,
-  ) {
-    super(eac, oiSvc, 'workspace', graph, presets, history);
-  }
+export class EaCWorkspaceScopeManager extends EaCScopeManager {
+  public BuildGraph(eac: OpenIndustrialEaC): FlowGraph {
+    const wks = eac as EverythingAsCodeOIWorkspace;
 
-  protected buildGraph(eac: OpenIndustrialEaC): FlowGraph {
     const nodes: FlowGraphNode[] = [];
     const edges: FlowGraphEdge[] = [];
 
-    const wks = eac as EverythingAsCodeOIWorkspace;
-
-    // === Data Connections ===
+    // Data Connections
     for (const [key, conn] of Object.entries(wks.DataConnections ?? {})) {
       nodes.push({
         ID: key,
@@ -50,7 +32,7 @@ export class EaCWorkspaceManager extends EaCManager {
       });
     }
 
-    // === Simulators ===
+    // Simulators
     for (const [key, sim] of Object.entries(wks.Simulators ?? {})) {
       nodes.push({
         ID: key,
@@ -72,7 +54,7 @@ export class EaCWorkspaceManager extends EaCManager {
       }
     }
 
-    // === Surfaces ===
+    // Surfaces
     for (const [key, surf] of Object.entries(wks.Surfaces ?? {})) {
       nodes.push({
         ID: key,
@@ -105,10 +87,11 @@ export class EaCWorkspaceManager extends EaCManager {
   }
 
   public CreateConnectionEdge(
+    eac: OpenIndustrialEaC,
     source: string,
-    target: string,
+    target: string
   ): Partial<OpenIndustrialEaC> | null {
-    const wks = this.GetEaC() as EverythingAsCodeOIWorkspace;
+    const wks = eac as EverythingAsCodeOIWorkspace;
 
     const src = this.graph.GetGraph().Nodes.find((n) => n.ID === source);
     const tgt = this.graph.GetGraph().Nodes.find((n) => n.ID === target);
@@ -156,37 +139,29 @@ export class EaCWorkspaceManager extends EaCManager {
       };
     }
 
-    if (partial) {
-      this.MergePartial(partial);
-    }
-
     return partial;
   }
 
-  protected updateConnections(
-    _changes: EdgeChange[],
-    _updated: Edge[],
-  ): OpenIndustrialEaC | null {
-    // Future implementation: diff edges and update EaC
-    return null;
-  }
-
-  protected hasConnection(source: string, target: string): boolean {
+  public HasConnection(source: string, target: string): boolean {
     return this.graph
       .GetGraph()
       .Edges.some((e) => e.Source === source && e.Target === target);
   }
-
-  protected removeConnectionEdge(edgeId: string): void {
+  
+  public RemoveConnectionEdge(
+    eac: OpenIndustrialEaC,
+    edgeId: string
+  ): Partial<OpenIndustrialEaC> | null {
+    const wks = eac as EverythingAsCodeOIWorkspace;
+  
     const [source, target] = edgeId.split('->');
-    const wks = this.GetEaC() as EverythingAsCodeOIWorkspace;
-
+  
     const src = this.graph.GetGraph().Nodes.find((n) => n.ID === source);
     const tgt = this.graph.GetGraph().Nodes.find((n) => n.ID === target);
-    if (!src || !tgt) return;
-
+    if (!src || !tgt) return null;
+  
     let partial: Partial<EverythingAsCodeOIWorkspace> | null = null;
-
+  
     if (src.Type === 'simulator' && tgt.Type === 'connection') {
       if (wks.DataConnections?.[tgt.ID]?.SimulatorLookup === src.ID) {
         partial = {
@@ -203,7 +178,7 @@ export class EaCWorkspaceManager extends EaCManager {
       if (surface?.DataConnections?.[src.ID]) {
         const updatedConnections = { ...surface.DataConnections };
         delete updatedConnections[src.ID];
-
+  
         partial = {
           Surfaces: {
             [tgt.ID]: {
@@ -226,9 +201,16 @@ export class EaCWorkspaceManager extends EaCManager {
         };
       }
     }
+  
+    return partial;
+  }  
 
-    if (partial) {
-      this.MergePartial(partial);
-    }
+  public UpdateConnections(
+    _changes: EdgeChange[],
+    _updated: Edge[],
+    _eac: OpenIndustrialEaC
+  ): OpenIndustrialEaC | null {
+    // TODO: implement connection diffing logic if needed
+    return null;
   }
 }

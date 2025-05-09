@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useState } from 'preact/hooks';
-import { Connection, Edge, EdgeChange, Node, NodeChange, XYPosition } from 'reactflow';
+import {
+  Connection,
+  Edge,
+  EdgeChange,
+  Node,
+  NodeChange,
+  XYPosition,
+} from 'reactflow';
 import { EaCStatusProcessingTypes } from '@fathym/eac/steward/status';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 
@@ -13,7 +20,6 @@ import { SimulatorLibraryManager } from './SimulatorLibraryManager.ts';
 import { EaCManager } from './EaCManager.ts';
 import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
 import { StatManager } from './StatManager.ts';
-import { EaCWorkspaceManager } from './eac/EaCWorkspaceManager.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
 import { HistoryManager } from './HistoryManager.ts';
 import { WorkspaceSummary } from '../../types/WorkspaceSummary.ts';
@@ -37,7 +43,7 @@ export class WorkspaceManager {
   constructor(
     eac: OpenIndustrialEaC,
     protected oiSvc: OpenIndustrialAPIClient,
-    scope: NodeScopeTypes = 'workspace',
+    scope: NodeScopeTypes = 'workspace'
   ) {
     this.Scope = scope;
     this.Azi = new AziManager();
@@ -52,7 +58,7 @@ export class WorkspaceManager {
     this.Runtime = new InteractionManager(
       this.Selection,
       this.Presets,
-      this.EaC,
+      this.EaC
     );
 
     console.log('🚀 FlowManager initialized:', {
@@ -141,7 +147,7 @@ export class WorkspaceManager {
     const [canUndo, setCanUndo] = useState(this.History.CanUndo());
     const [canRedo, setCanRedo] = useState(this.History.CanRedo());
     const [hasChanges, setHasChanges] = useState(
-      this.History.HasUnsavedChanges(),
+      this.History.HasUnsavedChanges()
     );
     const [version, setVersion] = useState(this.History.GetVersion());
 
@@ -217,7 +223,7 @@ export class WorkspaceManager {
       (event: DragEvent, toFlow: (point: XYPosition) => XYPosition) => {
         this.Runtime.HandleDrop(event, this.Graph.GetNodes(), toFlow);
       },
-      [],
+      []
     );
 
     const handleConnect = useCallback((params: Connection) => {
@@ -230,21 +236,21 @@ export class WorkspaceManager {
       (_e: unknown, node: Node<FlowNodeData>) => {
         this.Selection.SelectNode(node.id);
       },
-      [],
+      []
     );
 
     const handleNodesChange = useCallback(
       (changes: NodeChange[], nodes: Node[]) => {
         this.Runtime.OnNodesChange(changes, nodes ?? this.Graph.GetNodes());
       },
-      [],
+      []
     );
 
     const handleEdgesChange = useCallback(
       (changes: EdgeChange[], edges: Edge[]) => {
         this.Runtime.OnEdgesChange(changes, edges ?? this.Graph.GetEdges());
       },
-      [],
+      []
     );
 
     return {
@@ -258,12 +264,13 @@ export class WorkspaceManager {
 
   public UseSelection() {
     const [selected, setSelected] = useState<Node<FlowNodeData> | null>(
-      this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null,
+      this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null
     );
 
     useEffect(() => {
       const update = () => {
-        const node = this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null;
+        const node =
+          this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null;
         setSelected(node);
       };
 
@@ -295,10 +302,10 @@ export class WorkspaceManager {
     };
 
     const [current, setCurrent] = useState<WorkspaceSummary>(
-      getCurrentWorkspace(),
+      getCurrentWorkspace()
     );
     const [hasChanges, setHasChanges] = useState(
-      this.History.HasUnsavedChanges(),
+      this.History.HasUnsavedChanges()
     );
 
     useEffect(() => {
@@ -345,12 +352,12 @@ export class WorkspaceManager {
       const name = current.Details.Name ?? 'this workspace';
 
       const confirmed = confirm(
-        `Are you sure you want to archive ${name}? This will remove it from the current session.`,
+        `Are you sure you want to archive ${name}? This will remove it from the current session.`
       );
 
       if (!confirmed) return;
 
-      this.EaC.Archive?.(current.Lookup).then(() => {
+      this.EaC.Archive?.().then(() => {
         location.reload();
       });
     };
@@ -438,17 +445,14 @@ export class WorkspaceManager {
   // === Internals ===
 
   protected createEaCManager(eac: OpenIndustrialEaC): EaCManager {
-    switch (this.Scope) {
-      case 'workspace':
-        return new EaCWorkspaceManager(
-          eac,
-          this.oiSvc,
-          this.Graph,
-          this.Presets,
-          this.History,
-        );
-      case 'surface':
-        throw new Error('Surface scope not yet implemented');
-    }
+    // Always use the new concrete EaCManager
+    return new EaCManager(
+      eac,
+      this.oiSvc,
+      this.Scope,
+      this.Graph,
+      this.Presets,
+      this.History
+    );
   }
 }
