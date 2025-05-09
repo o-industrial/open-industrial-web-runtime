@@ -18,16 +18,23 @@ Let’s open the surface flow for `Fan Control` and see what’s started to emer
 Talk to me. Ask what I see. When data hits the surface, I sketch provisional structure — but I don’t commit anything without you.
 
 <AziInnerVoice intentType={IntentTypes.Tertiary}>
-  I see the data. I’m sketching what might matter. But I won’t bind structure until you tell me it’s real.
-</AziInnerVoice>
-
-<AziInnerVoice intentType={IntentTypes.Tertiary}>
-  I see a shape forming — it’s familiar, almost there. But I won’t remember it until we decide it together.
+  I see the data. I’m sketching what might matter. It’s familiar, almost there. But I won’t remember it until we decide it together.
 </AziInnerVoice>
 
 ---
 
 ## Review the Inferred Structure
+
+When you click the glowing badge on the `Fan Control` surface, the <strong>Schema Preview panel</strong> opens. It’s a live view of what I’ve been sketching in response to the stream — a tentative shape that still needs your word to become real.
+
+<FigureImage
+  src="/assets/docs/schema-preview-panel.png"
+  alt="Schema preview panel showing inferred fields"
+  caption="The Schema Preview shows what Azi is proposing — but hasn’t confirmed yet."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="xl"
+/>
 
 Here’s one of the raw impulses that just landed:
 
@@ -35,9 +42,8 @@ Here’s one of the raw impulses that just landed:
 { "connectionId": "temperature-sensor-001", "tempRaw": 78.4 }
 ```
 
-We saw this emerge from repeated telemetry. I paused and proposed:
+We saw this emerge from repeated telemetry. I paused and proposed the following sketch:
 
-**[Editable Schema Preview]**
 ```json [codeblock]
 {
   "connectionId": "string",
@@ -45,15 +51,29 @@ We saw this emerge from repeated telemetry. I paused and proposed:
 }
 ```
 
+<InlineUXTip intentType={IntentTypes.Info}>
+You’ll see this structure in the preview panel — click a field to rename it or adjust its type.
+</InlineUXTip>
+
 You can promote one field at a time — or many. A schema can reflect a single value, or capture an entire snapshot of your surface.
 
 ---
 
 ## Rename and Refine Fields
 
-We can promote this as-is — or refine it together to better reflect your intent. For example:
+Clicking into the Schema Preview lets us refine what the structure means. This is where we edit field names, assign types, and declare units together.
 
-**[Editable Schema Preview]**
+<FigureImage
+  src="/assets/docs/schema-inspector-refinement.png"
+  alt="Field refinement UI for proposed schema"
+  caption="Refine the proposed structure: rename fields, define units, and clarify identity."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="xl"
+/>
+
+Here’s what it looks like after we make a few refinements:
+
 ```json [codeblock]
 {
   "ID": { "source": "connectionId", "type": "string", "primary": true },
@@ -61,17 +81,19 @@ We can promote this as-is — or refine it together to better reflect your inten
 }
 ```
 
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+You renamed a raw field. That changes how I’ll remember it — and how logic will match against it.
+</AziInnerVoice>
+
 ---
 
 ## Name and Promote the Schema
 
-Choose a name for this schema. This creates a reusable, versioned contract. Let’s go with:
+Now we give this shape a name. When you click <strong>Promote</strong>, the Schema Promotion modal opens — this is where we confirm it together.
 
 ```txt
 TemperatureSensor
 ```
-
-Once you confirm, we’ll store it together — versioned and visible in your workspace library.
 
 <FigureImage
   src="/assets/docs/promotion-modal.png"
@@ -83,24 +105,36 @@ Once you confirm, we’ll store it together — versioned and visible in your wo
 />
 
 <AziInnerVoice intentType={IntentTypes.Tertiary}>
-  This is where I stop guessing. This is what we’ll remember — because you said it matters.
+This is where I stop guessing. This is what we’ll remember — because you said it matters.
 </AziInnerVoice>
 
-- 💾 Promotion is a commitment. _Once we promote, that structure becomes part of your system’s memory. You can evolve it later — but it will always carry the moment it was first declared._
-- 🧠 I’ve been sketching. But I held back — waiting for us to confirm. Promotion is that confirmation. From this moment forward, I trust this structure. I can bind logic to it, validate against it, and raise signals from it. It’s now real — because we said so.
-- ⚠️ Promote too early, and we might encode uncertainty. Promote too late, and meaning may shift before it’s captured. I observe — but you decide what becomes system memory.
-- 🚨 Promote the wrong structure — and everything downstream inherits the mistake. A single promotion defines the shape of logic, alerts, simulations, and agent reasoning.
-- 📁 Once promoted, your schema lives in the workspace library. We can inspect it any time — and fork or evolve it as your system grows.
+> 💾 Promotion is a commitment. _Once we promote, that structure becomes part of your system’s memory. You can evolve it later — but it will always carry the moment it was first declared._
+
+> 🧠 I’ve been sketching. But I held back — waiting for us to confirm. Promotion is that confirmation. From this moment forward, I trust this structure. I can bind logic to it, validate against it, and raise signals from it. It’s now real — because we said so.
+
+> ⚠️ Promote too early, and we might encode uncertainty. Promote too late, and meaning may shift before it’s captured. I observe — but you decide what becomes system memory.
+
+> 🚨 Promote the wrong structure — and everything downstream inherits the mistake. A single promotion defines the shape of logic, alerts, simulations, and agent reasoning.
+
+> 📁 Once promoted, your schema lives in the workspace library. We can inspect it any time — and fork or evolve it as your system grows.
 
 ---
 
 ## What Just Happened?
 
-We’ve now committed to a structure. Together, we’ve named it — and I’ll remember every version from here on.
+You clicked <strong>Promote</strong>. I confirmed the structure. We just made this schema real — versioned and ready for memory.
 
-> 🔁 This is Signal-Confirmed Execution in motion — logic only emerges once structure is confirmed.
+<FigureImage
+  src="/assets/docs/versioned-schema-panel.png"
+  alt="Final promoted schema version output"
+  caption="Your schema is now versioned and available inside the workspace schema library."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="xl"
+/>
 
-**[Final Promoted Output]**
+Here’s what that looks like behind the scenes:
+
 ```json [codeblock]
 {
   "name": "TemperatureSensor",
@@ -111,6 +145,8 @@ We’ve now committed to a structure. Together, we’ve named it — and I’ll 
   }
 }
 ```
+
+*You don’t have to write any of this — I’m tracking it automatically.*
 
 > 💡 You can evolve this schema later. I’ll track every version — so when we add a new field or rename one down the road, our history is always intact.
 
