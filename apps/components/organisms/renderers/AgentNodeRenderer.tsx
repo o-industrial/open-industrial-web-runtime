@@ -5,7 +5,7 @@ import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 import { parseTimeAgoString } from '../../../../src/utils/parseTimeAgoString.tsx';
-import { AgentNodeData } from '../../../../src/flow/types/AgentNodeData.tsx';
+import { AgentNodeData } from '../../../../src/flow/types/nodes/agents/AgentNodeData.tsx';
 
 export default function AgentNodeRenderer({ data }: NodeProps<AgentNodeData>) {
   const stats = data.useStats();

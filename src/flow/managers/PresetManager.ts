@@ -11,7 +11,7 @@ import {
 import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
 import { NodePreset } from '../types/react/NodePreset.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
-import { Position } from '../../types/Position.ts';
+import { FlowPosition } from '../types/graph/FlowPosition.ts';
 
 import AgentNodeRenderer from '../../../apps/components/organisms/renderers/AgentNodeRenderer.tsx';
 import ConnectionNodeRenderer from '../../../apps/components/organisms/renderers/ConnectionNodeRenderer.tsx';
@@ -72,7 +72,7 @@ export class PresetManager {
   public CreatePartialEaCFromPreset(
     type: string,
     id: string,
-    position: Position,
+    position: FlowPosition,
     parentId?: string,
   ): Partial<OpenIndustrialEaC> {
     const metadata: EaCFlowNodeMetadata = {

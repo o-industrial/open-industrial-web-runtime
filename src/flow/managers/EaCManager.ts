@@ -14,7 +14,7 @@ import { FlowNodeData } from '../types/react/FlowNodeData.ts';
 import { SimulatorDefinition } from './SimulatorLibraryManager.ts';
 import { FlowGraphNode } from '../types/graph/FlowGraphNode.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
-import { Position } from '../../types/Position.ts';
+import { FlowPosition } from '../types/graph/FlowPosition.ts';
 import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
 import {
   EaCAzureDockerSimulatorDetails,
@@ -31,6 +31,7 @@ import { EaCStatus } from '@fathym/eac/steward/status';
 
 import { EaCWorkspaceScopeManager } from './eac/EaCWorkspaceScopeManager.ts';
 import { EaCScopeManager } from './eac/EaCScopeManager.ts';
+import { EaCSurfaceScopeManager } from './eac/EaCSurfaceScopeManager.ts';
 
 export class EaCManager {
   protected deleteEaC: NullableArrayOrObject<OpenIndustrialEaC> = {};
@@ -39,7 +40,7 @@ export class EaCManager {
   protected inspector: EaCNodeInspectorManager;
   protected diff: EaCDiffManager;
 
-  protected scopeMgr: EaCScopeManager;
+  protected scopeMgr!: EaCScopeManager;
 
   constructor(
     protected eac: OpenIndustrialEaC,
@@ -53,10 +54,7 @@ export class EaCManager {
     this.diff = new EaCDiffManager(history, this.emitEaCChanged.bind(this));
 
     // 🔁 Currently hardcoded to workspace scope
-    this.scopeMgr = new EaCWorkspaceScopeManager(this.graph);
-
-    const initialGraph = this.scopeMgr.BuildGraph(jsonMapSetClone(this.eac));
-    this.graph.LoadFromGraph(initialGraph);
+    this.SwitchTo(scope, undefined);
   }
 
   public ApplyReactFlowNodeChanges(
@@ -68,7 +66,7 @@ export class EaCManager {
     let modified = false;
 
     for (const node of updated) {
-      const pos: Position = { X: node.position.x, Y: node.position.y };
+      const pos: FlowPosition = { X: node.position.x, Y: node.position.y };
       const asCode = this.inspector.FindAsCode({
         Type: node.type!,
         ID: node.id,
@@ -134,7 +132,7 @@ export class EaCManager {
 
   public CreateNodeFromPreset(
     type: string,
-    position: Position,
+    position: FlowPosition,
     parentId?: string
   ): FlowGraphNode {
     const id = `${type}-${Date.now()}`;
@@ -173,6 +171,14 @@ export class EaCManager {
       const changes = edges.map((e) => ({ id: e.ID, type: 'remove' as const }));
       this.ApplyReactFlowEdgeChanges(changes, []);
     }
+  }
+
+  public GetDetailsForNode(id: string): EaCVertexDetails | null {
+    return this.inspector.GetDetails(id);
+  }
+
+  public GetMetadataForNode(id: string): EaCFlowNodeMetadata | null {
+    return this.inspector.GetMetadata(id);
   }
 
   public InstallSimulators(simDefs: SimulatorDefinition[]): void {
@@ -279,14 +285,6 @@ export class EaCManager {
     }
   }
 
-  public GetDetailsForNode(id: string): EaCVertexDetails | null {
-    return this.inspector.GetDetails(id);
-  }
-
-  public GetMetadataForNode(id: string): EaCFlowNodeMetadata | null {
-    return this.inspector.GetMetadata(id);
-  }
-
   public GetEaC(): OpenIndustrialEaC {
     return jsonMapSetClone(this.eac);
   }
@@ -309,11 +307,36 @@ export class EaCManager {
     await this.oiSvc.Workspaces.Archive();
   }
 
-  public SwitchTo(lookup: string): void {
-    console.warn(
-      `[EaCManager] SwitchTo not implemented — requested: ${lookup}`
-    );
-    location.reload();
+  public SwitchTo(scope: NodeScopeTypes, lookup?: string): void {
+    console.log(`[EaCManager] Switching to scope: ${scope} (${lookup})`);
+
+    this.scope = scope;
+
+    switch (scope) {
+      case 'workspace': {
+        this.scopeMgr = new EaCWorkspaceScopeManager(this.graph);
+        break;
+      }
+
+      case 'surface': {
+        if (lookup) {
+          this.scopeMgr = new EaCSurfaceScopeManager(this.graph, lookup);
+        } else {
+          throw new Error(`Lookup must be defined for scope: ${scope}`);
+        }
+
+        break;
+      }
+
+      default: {
+        throw new Error(`Unsupported scope: ${scope}`);
+      }
+    }
+
+    const rebuilt = this.scopeMgr.BuildGraph(this.eac);
+    this.graph.LoadFromGraph(rebuilt);
+
+    this.emitEaCChanged();
   }
 
   protected emitEaCChanged(): void {

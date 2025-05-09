@@ -262,6 +262,30 @@ export class WorkspaceManager {
     };
   }
 
+  public UseScopeSwitcher() {
+    const [currentScope, setScope] = useState(this.Scope);
+
+    useEffect(() => {
+      const unsubscribe = this.Graph.OnGraphChanged(() => {
+        // Optional: Scope doesn't directly change from graph, but if you wire up
+        // a more proper observer (e.g., this.OnScopeChanged) you can hook into that instead
+        setScope(this.Scope);
+      });
+
+      return unsubscribe;
+    }, []);
+
+    const switchToScope = (scope: NodeScopeTypes, lookup: string) => {
+      this.SwitchToScope(scope, lookup);
+      setScope(scope); // manually trigger update
+    };
+
+    return {
+      currentScope,
+      switchToScope,
+    };
+  }
+
   public UseSelection() {
     const [selected, setSelected] = useState<Node<FlowNodeData> | null>(
       this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null
@@ -378,7 +402,9 @@ export class WorkspaceManager {
     };
 
     const switchToWorkspace = (lookup: string) => {
-      this.EaC.SwitchTo?.(lookup);
+      //  TODO(mcgear): Set the kv Current EaC value for the user
+
+      location.reload();
 
       setCurrent(getCurrentWorkspace());
     };
@@ -440,6 +466,24 @@ export class WorkspaceManager {
       this.EaC.ResetFromSnapshot(snapshot);
       console.log('↪️ Redo successful');
     }
+  }
+
+  public SwitchToScope(scope: NodeScopeTypes, lookup: string): void {
+    console.log(`🔀 Switching scope to: ${scope} (${lookup})`);
+
+    // Update internal scope reference
+    this.Scope = scope;
+
+    // Clear selection before switching
+    this.Selection.ClearSelection();
+
+    // Delegate the actual scope swap and graph rebuild to the EaCManager
+    this.EaC.SwitchTo(scope, lookup);
+
+    // You may also want to trigger a stat refresh or reset other managers if needed
+    // e.g., this.Stats.Reset(); this.Runtime.Rebind();
+
+    // Optionally, you could emit a custom hook event or callback here
   }
 
   // === Internals ===

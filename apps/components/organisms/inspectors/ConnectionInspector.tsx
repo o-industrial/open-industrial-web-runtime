@@ -3,9 +3,9 @@ import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
 import { ConnectionManagementForm } from '../../molecules/ConnectionManagementForm.tsx';
 import { InspectorCommonProps } from '../InspectorPanel.tsx';
 import { EaCDataConnectionDetails } from '@o-industrial/common/eac';
-import { DataConnectionStats } from '../../../../src/flow/types/DataConnectionStats.ts';
 import { ConnectionInfoPanel } from '../../atoms/ConnectionInfoPanel.tsx';
-import { DataConnectionConfig } from '../../../../src/flow/types/DataConnectionConfig.ts';
+import { DataConnectionConfig } from '../../../../src/flow/types/nodes/connections/DataConnectionConfig.ts';
+import { DataConnectionStats } from '../../../../src/flow/types/nodes/connections/DataConnectionStats.ts';
 
 type ConnectionInspectorProps = InspectorCommonProps<
   EaCDataConnectionDetails,

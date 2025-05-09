@@ -1,7 +1,7 @@
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { InspectorBase } from './InspectorBase.tsx';
 import { InspectorCommonProps } from '../InspectorPanel.tsx';
-import { AgentStats } from '../../../../src/flow/types/AgentStats.tsx';
+import { AgentStats } from '../../../../src/flow/types/nodes/agents/AgentStats.tsx';
 import { EaCAgentDetails } from '@o-industrial/common/eac';
 
 type AgentInspectorProps = InspectorCommonProps<EaCAgentDetails, AgentStats>;

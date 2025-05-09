@@ -2,7 +2,10 @@ import { EaCAtomicIconsProcessor } from '@fathym/atomic-icons';
 import { FathymAtomicIconsPlugin } from '@fathym/atomic-icons/plugin';
 import { DefaultMyCoreProcessorHandlerResolver } from './DefaultMyCoreProcessorHandlerResolver.ts';
 import { IoCContainer } from '@fathym/ioc';
-import { EaCRuntimeConfig, EaCRuntimePluginConfig } from '@fathym/eac/runtime/config';
+import {
+  EaCRuntimeConfig,
+  EaCRuntimePluginConfig,
+} from '@fathym/eac/runtime/config';
 import { EaCRuntimePlugin } from '@fathym/eac/runtime/plugins';
 import { EverythingAsCode } from '@fathym/eac';
 import { EverythingAsCodeApplications } from '@fathym/eac-applications';
@@ -11,6 +14,7 @@ import {
   EaCMDXProcessor,
   EaCOAuthProcessor,
   EaCPreactAppProcessor,
+  EaCRedirectProcessor,
   EaCTailwindProcessor,
 } from '@fathym/eac-applications/processors';
 import { EaCDenoKVDetails, EverythingAsCodeDenoKV } from '@fathym/eac-deno-kv';
@@ -68,27 +72,25 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             },
             ModifierResolvers: {
-              // keepAlive: {
-              //   Priority: 5000,
-              // },
+              keepAlive: {
+                Priority: 5000,
+              },
               oauth: {
                 Priority: 10000,
               },
             },
             ApplicationResolvers: {
+              automateConference: {
+                PathPattern: '/automateconference*',
+                Priority: 500,
+              },
               assets: {
                 PathPattern: '/assets*',
                 Priority: 500,
               },
               atomicIcons: {
                 PathPattern: '/icons*',
-                Priority: 200,
-              },
-              workspace: {
-                PathPattern: '/workspace*',
                 Priority: 500,
-                IsPrivate: true,
-                IsTriggerSignIn: true,
               },
               docs2: {
                 PathPattern: '/docs*',
@@ -108,6 +110,12 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 PathPattern: '/tailwind*',
                 Priority: 500,
               },
+              workspace: {
+                PathPattern: '/workspace*',
+                Priority: 500,
+                IsPrivate: true,
+                IsTriggerSignIn: true,
+              },
             },
           },
         },
@@ -124,9 +132,15 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               CacheControl: {
                 'text\\/html': `private, max-age=${60 * 5}`,
                 'image\\/': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/javascript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/typescript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'application\\/javascript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'application\\/typescript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'text\\/css': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
               },
             } as EaCDFSProcessor,
           },
@@ -141,26 +155,16 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Config: './configs/atomic-icons.config.json',
             } as EaCAtomicIconsProcessor,
           },
-          workspace: {
+          automateConference: {
             Details: {
-              Name: 'Workspace Site',
-              Description: 'Workspace site.',
-            },
-            ModifierResolvers: {
-              baseHref: {
-                Priority: 10000,
-              },
+              Name: 'Automate Conference Redirect',
             },
             Processor: {
-              Type: 'PreactApp',
-              AppDFSLookup: 'local:apps/workspace',
-              ComponentDFSLookups: [
-                ['local:apps/components', ['tsx']],
-                ['local:apps/workspace', ['tsx']],
-                ['jsr:@fathym/atomic', ['tsx']],
-                ['jsr:@fathym/atomic-design-kit', ['tsx']],
-              ],
-            } as EaCPreactAppProcessor,
+              Type: 'Redirect',
+              Redirect: '/',
+              Permanent: true,
+              PreserveMethod: false
+            } as EaCRedirectProcessor,
           },
           docs: {
             Details: {
@@ -213,9 +217,15 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               CacheControl: {
                 'text\\/html': `private, max-age=${60 * 5}`,
                 'image\\/': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/javascript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/typescript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'application\\/javascript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'application\\/typescript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'text\\/css': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
               },
             } as EaCDFSProcessor,
           },
@@ -270,9 +280,32 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               ConfigPath: './tailwind.config.ts',
               StylesTemplatePath: './apps/tailwind/styles.css',
               CacheControl: {
-                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'text\\/css': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
               },
             } as EaCTailwindProcessor,
+          },
+          workspace: {
+            Details: {
+              Name: 'Workspace Site',
+              Description: 'Workspace site.',
+            },
+            ModifierResolvers: {
+              baseHref: {
+                Priority: 10000,
+              },
+            },
+            Processor: {
+              Type: 'PreactApp',
+              AppDFSLookup: 'local:apps/workspace',
+              ComponentDFSLookups: [
+                ['local:apps/components', ['tsx']],
+                ['local:apps/workspace', ['tsx']],
+                ['jsr:@fathym/atomic', ['tsx']],
+                ['jsr:@fathym/atomic-design-kit', ['tsx']],
+              ],
+            } as EaCPreactAppProcessor,
           },
         },
         DenoKVs: {
@@ -288,8 +321,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'DenoKV',
               Name: 'OI',
-              Description: 'The Deno KV database to use for open industrial web',
-              DenoKVPath: Deno.env.get('OPEN_INDUSTRIAL_DENO_KV_PATH') || undefined,
+              Description:
+                'The Deno KV database to use for open industrial web',
+              DenoKVPath:
+                Deno.env.get('OPEN_INDUSTRIAL_DENO_KV_PATH') || undefined,
             } as EaCDenoKVDetails,
           },
         },
@@ -298,7 +333,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'AzureBlobStorage',
               Container: 'deployments',
-              FileRoot: 'fathym/v1-fathym-public-web-openindustrial/latest',
+              FileRoot: 'o-industrial/v2-oi-automate-lp/latest',
               DefaultFile: 'index.html',
               ConnectionString: Deno.env.get('AZURE_STORAGE_CONNECTION_STRING'),
             } as EaCAzureBlobStorageDistributedFileSystemDetails,
@@ -375,14 +410,16 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'BaseHREF',
               Name: 'Base HREF',
-              Description: 'Adjusts the base HREF of a response based on configureation.',
+              Description:
+                'Adjusts the base HREF of a response based on configureation.',
             } as EaCBaseHREFModifierDetails,
           },
           keepAlive: {
             Details: {
               Type: 'KeepAlive',
               Name: 'Deno KV Cache',
-              Description: 'Lightweight cache to use that stores data in a DenoKV database.',
+              Description:
+                'Lightweight cache to use that stores data in a DenoKV database.',
               KeepAlivePath: '/_eac/alive',
             } as EaCKeepAliveModifierDetails,
           },
@@ -390,7 +427,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'OAuth',
               Name: 'OAuth',
-              Description: 'Used to restrict user access to various applications.',
+              Description:
+                'Used to restrict user access to various applications.',
               ProviderLookup: 'adb2c',
               SignInPath: '/oauth/signin',
             } as EaCOAuthModifierDetails,
@@ -401,7 +439,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             DatabaseLookup: 'oauth',
             Details: {
               Name: 'Azure ADB2C OAuth Provider',
-              Description: 'The provider used to connect with our azure adb2c instance',
+              Description:
+                'The provider used to connect with our azure adb2c instance',
               ClientID: Deno.env.get('AZURE_ADB2C_CLIENT_ID')!,
               ClientSecret: Deno.env.get('AZURE_ADB2C_CLIENT_SECRET')!,
               Scopes: ['openid', Deno.env.get('AZURE_ADB2C_CLIENT_ID')!],

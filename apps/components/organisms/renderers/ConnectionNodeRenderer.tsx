@@ -6,7 +6,7 @@ import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
 import { TriggerMatchIcon } from '../../../../build/iconset/icons/TriggerMatchIcon.tsx';
 import { DeleteIcon } from '../../../../build/iconset/icons/DeleteIcon.tsx';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
-import { DataConnectionNodeData } from '../../../../src/flow/types/DataConnectionNodeData.tsx';
+import { DataConnectionNodeData } from '../../../../src/flow/types/nodes/connections/DataConnectionNodeData.tsx';
 
 export default function ConnectionNodeRenderer({
   data,
