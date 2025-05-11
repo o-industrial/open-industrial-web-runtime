@@ -7,7 +7,10 @@ import { FigureImage } from '../../../molecules/writing-devices/FigureImage.tsx'
 
 const HeroSection: FunctionalComponent = () => {
   return (
-    <section class="relative isolate overflow-hidden bg-neutral-950 py-32 sm:py-48">
+    <section
+      id="hero"
+      class="relative isolate overflow-hidden bg-neutral-950 py-32 sm:py-48"
+    >
       {/* Background Glow */}
       <div class="absolute inset-0 -z-10 bg-gradient-to-br from-neon-blue-900/30 via-transparent to-neon-purple-900/20 pointer-events-none" />
 
@@ -58,14 +61,16 @@ const HeroSection: FunctionalComponent = () => {
         <FigureImage
           intentType={IntentTypes.Info}
           src="/assets/screenshots/live-workspace-example.png"
-          alt="Forkable runtime topology with Azi agent"
+          alt="Open Industrial workspace showing Azi-controlled RoomState logic flow with real-time telemetry and inspector"
           caption="Azi forks a new agent to control RoomState from real-time telemetry and schema joins."
           center
-          size="full"
+          size="xl"
           shadow="2xl"
           glow
         />
       </div>
+
+      <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-b from-transparent to-neutral-950 pointer-events-none" />
     </section>
   );
 };

@@ -49,7 +49,7 @@ export function FigureImage({
   const figureClasses = classSet(
     [
       'my-8 flex flex-col w-full',
-      center ? 'items-center text-center' : 'items-start text-left',
+      center ? 'mx-auto items-center text-center' : 'items-start text-left',
       sizeMap[size],
     ],
     imgProps,
