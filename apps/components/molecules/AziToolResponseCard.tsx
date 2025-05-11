@@ -1,6 +1,6 @@
 import { IntentTypes } from '../../../src/types/IntentTypes.ts';
 import { classSet } from '@fathym/atomic';
-import { getIntentStyles } from '../../../src/utils/getIntentClasses.ts';
+import { getIntentStyles } from '../../../src/utils/getIntentStyles.ts';
 
 export type AziToolResponseCardProps = {
   title: string;

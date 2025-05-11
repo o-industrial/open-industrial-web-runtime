@@ -1,11 +1,11 @@
-import { JSX } from 'preact';
+import { ComponentChildren, JSX } from 'preact';
 import { classSet } from '@fathym/atomic';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
-import { getIntentClasses } from '../../../../src/utils/getIntentClasses.ts';
+import { getIntentClasses } from '../../../../src/utils/getIntentStyles.ts';
 
 export type ContextCalloutProps = {
   intentType?: IntentTypes;
-  children: JSX.Element | string | (JSX.Element | string)[];
+  children: ComponentChildren;
 } & JSX.HTMLAttributes<HTMLDivElement>;
 
 export function ContextCallout({

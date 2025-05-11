@@ -1,8 +1,8 @@
-import { JSX } from 'preact';
+import { ComponentChildren, JSX } from 'preact';
 import { classSet } from '@fathym/atomic';
 
 export type DeveloperNoteProps = {
-  children: JSX.Element | string;
+  children: ComponentChildren;
 } & JSX.HTMLAttributes<HTMLElement>;
 
 export function DeveloperNote({ children, ...rest }: DeveloperNoteProps) {

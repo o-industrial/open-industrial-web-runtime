@@ -4,7 +4,7 @@ import { IntentTypes } from '../../../src/types/IntentTypes.ts';
 
 export type BadgeProps = {
   intentType?: IntentTypes;
-  children: JSX.Element | string;
+  children: ComponentChildren;
 } & JSX.HTMLAttributes<HTMLDivElement>;
 
 function getIntentClasses(intent: IntentTypes = IntentTypes.Info) {

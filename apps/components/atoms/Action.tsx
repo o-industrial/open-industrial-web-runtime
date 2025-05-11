@@ -17,7 +17,7 @@ export enum ActionStyleTypes {
 export type ActionBaseProps = {
   styleType?: ActionStyleTypes;
   intentType?: IntentTypes;
-  children?: JSX.Element | string | (JSX.Element | string)[];
+  children?: ComponentChildren;
 };
 
 export type ActionButtonProps =

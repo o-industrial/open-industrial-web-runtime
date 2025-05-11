@@ -1,6 +1,6 @@
-import { JSX } from 'preact';
+import { ComponentChildren, JSX } from 'preact';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
-import { getIntentStyles } from '../../../../src/utils/getIntentClasses.ts';
+import { getIntentStyles } from '../../../../src/utils/getIntentStyles.ts';
 import { classSet } from '@fathym/atomic';
 
 export function InlineUXTip({
@@ -9,7 +9,7 @@ export function InlineUXTip({
   intentType = IntentTypes.Secondary,
 }: {
   label?: string;
-  children: JSX.Element | string;
+  children: ComponentChildren;
   intentType?: IntentTypes;
 }) {
   const { text, border, background } = getIntentStyles(intentType);

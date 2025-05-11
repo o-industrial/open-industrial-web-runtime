@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 import { classSet } from '@fathym/atomic';
 import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
-import { getIntentStyles } from '../../../../src/utils/getIntentClasses.ts';
+import { getIntentStyles } from '../../../../src/utils/getIntentStyles.ts';
 
 export type FigureImageSize =
   | 'auto'

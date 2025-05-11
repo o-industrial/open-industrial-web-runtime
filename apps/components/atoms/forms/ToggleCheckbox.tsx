@@ -11,8 +11,8 @@ export type ToggleCheckboxProps = {
   checkedIntentType?: IntentTypes | string;
   uncheckedIntentType?: IntentTypes | string;
 
-  checkedIcon?: JSX.Element | string;
-  uncheckedIcon?: JSX.Element | string;
+  checkedIcon?: ComponentChildren;
+  uncheckedIcon?: ComponentChildren;
 };
 
 // Tailwind-safe text class map

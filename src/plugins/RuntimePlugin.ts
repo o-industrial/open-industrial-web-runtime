@@ -102,6 +102,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 PathPattern: '*',
                 Priority: 100,
               },
+              home2: {
+                PathPattern: '/landing*',
+                Priority: 300,
+              },
               oauth: {
                 PathPattern: '/oauth/*',
                 Priority: 500,
@@ -163,7 +167,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Type: 'Redirect',
               Redirect: '/',
               Permanent: true,
-              PreserveMethod: false
+              PreserveMethod: false,
             } as EaCRedirectProcessor,
           },
           docs: {
@@ -229,28 +233,25 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             } as EaCDFSProcessor,
           },
-          // home: {
-          //   Details: {
-          //     Name: 'Home Site',
-          //     Description: 'Home site.',
-          //   },
-          //   ModifierResolvers: {
-          //     baseHref: {
-          //       Priority: 10000,
-          //     },
-          //   },
-          //   Processor: {
-          //     Type: 'PreactApp',
-          //     AppDFSLookup: 'local:apps/home',
-          //     ComponentDFSLookups: [
-          //       ['local:apps/components', ['tsx']],
-          //       ['local:apps/home', ['tsx']],
-          //       ['local:apps/islands', ['tsx']],
-          //       ['jsr:@fathym/atomic', ['tsx']],
-          //       ['jsr:@fathym/atomic-design-kit', ['tsx']],
-          //     ],
-          //   } as EaCPreactAppProcessor,
-          // },
+          home2: {
+            Details: {
+              Name: 'Home Site',
+              Description: 'Home site.',
+            },
+            ModifierResolvers: {
+              baseHref: {
+                Priority: 10000,
+              },
+            },
+            Processor: {
+              Type: 'PreactApp',
+              AppDFSLookup: 'local:apps/home',
+              ComponentDFSLookups: [
+                ['local:apps/components', ['tsx']],
+                ['local:apps/home', ['tsx']],
+              ],
+            } as EaCPreactAppProcessor,
+          },
           oauth: {
             Details: {
               Name: 'OAuth Site',

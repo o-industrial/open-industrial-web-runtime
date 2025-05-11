@@ -6,7 +6,7 @@ import { Badge } from '../../atoms/Badge.tsx';
 export type AziChatMessageProps = {
   align?: 'left' | 'right';
   content: string;
-  badge: JSX.Element | string;
+  badge: ComponentChildren;
   intentType?: IntentTypes;
   inline?: boolean;
 } & JSX.HTMLAttributes<HTMLDivElement>;

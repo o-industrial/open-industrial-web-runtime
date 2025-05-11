@@ -1,4 +1,4 @@
-import { IntentTypes } from '../../src/types/IntentTypes.ts';
+import { IntentTypes } from '../types/IntentTypes.ts';
 
 type IntentStyleMap = {
   text: string;
