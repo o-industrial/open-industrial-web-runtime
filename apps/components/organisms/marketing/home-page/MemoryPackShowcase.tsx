@@ -1,4 +1,4 @@
-import { IntentTypes } from '$mdx/writing-devices';
+import { IntentTypes } from '@o-industrial/common/types';
 import { FigureImage } from '../../../molecules/writing-devices/FigureImage.tsx';
 import { SystemMindset } from '../../../molecules/writing-devices/SystemMindset.tsx';
 import { AziInnerVoice } from '../../../molecules/writing-devices/AziInnerVoice.tsx';

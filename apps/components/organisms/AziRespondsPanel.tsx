@@ -1,4 +1,4 @@
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { AziToolResponseCard } from '../molecules/AziToolResponseCard.tsx';
 import AziRespondsPanelTemplate from '../templates/AziRespondsPanelTemplate.tsx';
 

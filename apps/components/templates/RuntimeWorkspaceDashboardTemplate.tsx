@@ -5,7 +5,7 @@ import { PanelShell } from '../molecules/PanelShell.tsx';
 import { Action, ActionStyleTypes } from '../atoms/Action.tsx';
 import { CloseIcon } from '../../../build/iconset/icons/CloseIcon.tsx';
 import { ExpandIcon } from '../../../build/iconset/icons/ExpandIcon.tsx';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 
 export type RuntimeWorkspaceDashboardTemplateProps = {
   azi?: preact.ComponentChildren;

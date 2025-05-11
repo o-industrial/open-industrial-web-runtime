@@ -3,7 +3,7 @@ import { useMemo } from 'preact/hooks';
 
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
 import NodeHandle from '../../atoms/NodeHandle.tsx';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';

@@ -1,5 +1,5 @@
 import { Action, ActionStyleTypes } from '../../../atoms/Action.tsx';
-import { IntentTypes } from '$mdx/writing-devices';
+import { IntentTypes } from '@o-industrial/common/types';
 import { AziInnerVoice } from '../../../molecules/writing-devices/AziInnerVoice.tsx';
 
 export default function FinalCTASection() {

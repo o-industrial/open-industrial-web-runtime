@@ -1,4 +1,4 @@
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { classSet } from '@fathym/atomic';
 import { getIntentStyles } from '../../../src/utils/getIntentStyles.ts';
 

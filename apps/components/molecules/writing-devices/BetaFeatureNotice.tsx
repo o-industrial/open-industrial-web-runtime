@@ -1,6 +1,6 @@
 import { ComponentChildren, JSX } from 'preact';
 import { classSet } from '@fathym/atomic';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { getIntentClasses } from '../../../../src/utils/getIntentStyles.ts';
 
 export type BetaFeatureNoticeProps = {

@@ -37,7 +37,27 @@
       "search": "https://api.iconify.design/lucide:search.svg",
       "send": "https://api.iconify.design/lucide:send.svg",
       "settings": "https://api.iconify.design/lucide:settings.svg",
-      "users": "https://api.iconify.design/lucide:users.svg"
+      "users": "https://api.iconify.design/lucide:users.svg",
+
+      "runtime": "https://api.iconify.design/lucide:cpu.svg",
+      "build": "https://api.iconify.design/lucide:hammer.svg",
+      "blocked": "https://api.iconify.design/lucide:shield-alert.svg",
+      "noAccess": "https://api.iconify.design/lucide:lock.svg",
+      "broken": "https://api.iconify.design/lucide:alert-triangle.svg",
+      "slow": "https://api.iconify.design/lucide:hourglass.svg",
+      "expensive": "https://api.iconify.design/lucide:dollar-sign.svg",
+      "outdated": "https://api.iconify.design/lucide:monitor.svg",
+      "frustrated": "https://api.iconify.design/lucide:ban.svg",
+      "reflex": "https://api.iconify.design/lucide:activity.svg",
+      "cli": "https://api.iconify.design/lucide:terminal.svg",
+      "gitops": "https://api.iconify.design/lucide:git-branch.svg",
+      "topology": "https://api.iconify.design/lucide:network.svg",
+      "visibility": "https://api.iconify.design/lucide:eye.svg",
+      "rocket": "https://api.iconify.design/lucide:rocket.svg",
+      "install": "https://api.iconify.design/lucide:download.svg",
+      "walkthrough": "https://api.iconify.design/lucide:compass.svg",
+      "stack": "https://api.iconify.design/lucide:layers-3.svg",
+      "timeline": "https://api.iconify.design/lucide:list-tree.svg"
     }
   },
   "Generate": true,

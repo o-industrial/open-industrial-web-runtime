@@ -1,4 +1,4 @@
-import { IntentTypes } from '$mdx/writing-devices';
+import { IntentTypes } from '@o-industrial/common/types';
 import { SystemMindset } from '../../../molecules/writing-devices/SystemMindset.tsx';
 
 const journeys = [

@@ -1,4 +1,4 @@
-import { IntentTypes } from '../types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 
 type IntentStyleMap = {
   text: string;

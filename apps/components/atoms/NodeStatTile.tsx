@@ -1,5 +1,5 @@
 import { JSX } from 'preact';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 
 type NodeStatTileProps = {
   label: string;

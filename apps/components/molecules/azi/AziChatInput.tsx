@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { Input } from '../../atoms/forms/Input.tsx';
 import { SendIcon } from '../../../../build/iconset/icons/SendIcon.tsx';
 

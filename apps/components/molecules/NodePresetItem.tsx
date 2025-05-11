@@ -1,5 +1,5 @@
 import { Icon } from '@fathym/atomic-icons/browser';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { classSet } from '@fathym/atomic';
 
 export default function NodePresetItem({

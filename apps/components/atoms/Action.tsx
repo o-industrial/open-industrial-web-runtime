@@ -1,5 +1,5 @@
-import { JSX } from 'preact';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { ComponentChildren, JSX } from 'preact';
+import { IntentTypes } from '@o-industrial/common/types';
 import { classSet } from '@fathym/atomic';
 
 export enum ActionStyleTypes {

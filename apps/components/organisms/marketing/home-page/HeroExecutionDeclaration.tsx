@@ -1,4 +1,4 @@
-import { IntentTypes } from '$mdx/writing-devices';
+import { IntentTypes } from '@o-industrial/common/types';
 import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
 import { AziInnerVoice } from '../../../molecules/writing-devices/AziInnerVoice.tsx';
 import { ThematicPrincipleBlock } from '../../../molecules/writing-devices/ThematicPrincipleBlock.tsx';

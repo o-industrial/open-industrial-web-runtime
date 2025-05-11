@@ -2,7 +2,7 @@
 
 import { JSX } from 'preact';
 import { classSet } from '@fathym/atomic';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { Action, ActionStyleTypes } from '../atoms/Action.tsx';
 import { SettingsIcon } from '../../../build/iconset/icons/SettingsIcon.tsx';
 

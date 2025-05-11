@@ -1,6 +1,6 @@
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { Badge } from '../../atoms/Badge.tsx';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 
 export type SimulatorPackCardProps = {
   id: string;

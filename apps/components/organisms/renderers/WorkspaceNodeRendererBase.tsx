@@ -4,7 +4,7 @@ import { ComponentChildren, JSX } from 'preact';
 import { Icon } from '@fathym/atomic-icons/browser';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { CloseIcon } from '../../../../build/iconset/icons/CloseIcon.tsx';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 
 export type WorkspaceNodeState = 'default' | 'expanded';
 export type WorkspaceNodeStatus = 'normal' | 'warning' | 'error' | 'proposal';

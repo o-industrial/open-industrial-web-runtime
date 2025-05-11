@@ -6,7 +6,7 @@ import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 import { Badge } from '../../atoms/Badge.tsx';
 
 import { WorkspaceManager } from '../../../../src/flow/managers/WorkspaceManager.ts';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { EaCEnterpriseDetails } from '@fathym/eac';
 import { WorkspaceSummary } from '../../../../src/types/WorkspaceSummary.ts';
 import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';

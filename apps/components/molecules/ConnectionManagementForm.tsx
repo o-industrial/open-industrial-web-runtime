@@ -1,8 +1,11 @@
 import { JSX } from 'preact';
 import { Input } from '../atoms/forms/Input.tsx';
 import { MultiSelectCheckboxGroup } from './MultiSelectCheckboxGroup.tsx';
-import { EaCDataConnectionDetails, MultiProtocolIngestOption } from '@o-industrial/common/eac';
-import { IngestOption } from '../../../src/types/IngestOption.ts';
+import {
+  EaCDataConnectionDetails,
+  MultiProtocolIngestOption,
+} from '@o-industrial/common/eac';
+import { IngestOption } from '@o-industrial/common/types';
 
 type Props = {
   details: Partial<EaCDataConnectionDetails>;
@@ -24,15 +27,15 @@ export function ConnectionManagementForm({
   };
 
   return (
-    <div class='space-y-3 pt-2'>
+    <div class="space-y-3 pt-2">
       <Input
-        label='Connection Label'
+        label="Connection Label"
         value={details.Name ?? ''}
         onInput={handleLabelInput}
       />
 
       <MultiSelectCheckboxGroup
-        label='Ingest Protocols'
+        label="Ingest Protocols"
         options={ingestOptions}
         selected={details.MultiProtocolIngest ?? []}
         onChange={handleProtocolsChange}
