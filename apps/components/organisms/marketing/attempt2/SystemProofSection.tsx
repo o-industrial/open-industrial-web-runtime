@@ -1,67 +1,97 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
+import { FigureImage } from '../../../molecules/writing-devices/FigureImage.tsx';
 
-import { ReferenceSchemaIcon } from '../../../../../build/iconset/icons/ReferenceSchemaIcon.tsx';
-import { ForkIcon } from '../../../../../build/iconset/icons/ForkIcon.tsx';
-import { SurfaceIcon } from '../../../../../build/iconset/icons/SurfaceIcon.tsx';
-import { ReflexIcon } from '../../../../../build/iconset/icons/ReflexIcon.tsx';
-import { CliIcon } from '../../../../../build/iconset/icons/CliIcon.tsx';
-import { TimelineIcon } from '../../../../../build/iconset/icons/TimelineIcon.tsx';
+import { ImpulseIcon } from '../../../../../build/iconset/icons/ImpulseIcon.tsx';
+import { SchemaIcon } from '../../../../../build/iconset/icons/SchemaIcon.tsx';
+import { SignalIcon } from '../../../../../build/iconset/icons/SignalIcon.tsx';
+import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
 
-const features = [
+const systemSteps = [
   {
-    icon: ReferenceSchemaIcon,
-    title: 'Reference Schemas',
-    description: 'Enrich telemetry with device metadata, location context, and expected behavior.',
+    id: 'step-1',
+    icon: ImpulseIcon,
+    title: 'Reclaim the Feed',
+    intent: IntentTypes.Info,
+    caption: 'Live surfaces stream data directly into your runtime.',
+    description: `No more vendor silos or IT lockout. Connect any source — REST, MQTT, WebSocket — and start listening.`,
+    image: '/assets/screenshots/hello-azi-live-impulse-stream.png',
   },
   {
-    icon: ForkIcon,
-    title: 'Forkable Agents',
-    description: 'Version your logic, compare behaviors, and promote runtime changes safely.',
+    id: 'step-2',
+    icon: SchemaIcon,
+    title: 'Compose Your Intelligence',
+    intent: IntentTypes.Tertiary,
+    caption: 'Schemas filter structure. Reflexes author logic.',
+    description: `Build explainable logic you can fork, diff, and govern. Your AI isn’t a black box — it’s authored by your team.`,
+    image: '/assets/screenshots/hello-azi-surface-connected.png',
   },
   {
-    icon: SurfaceIcon,
-    title: 'Live Surfaces',
-    description: 'Ingest telemetry in real time and connect memory to reflex execution.',
-  },
-  {
-    icon: ReflexIcon,
-    title: 'Explainable Reflexes',
-    description: 'Build traceable AI that explains every decision it makes — live, in your system.',
-  },
-  {
-    icon: CliIcon,
-    title: 'CLI + GitOps',
-    description: 'Fork, diff, deploy, and rollback with full CLI parity and Git-native flows.',
-  },
-  {
-    icon: TimelineIcon,
-    title: 'Execution Timeline',
-    description: 'Trace memory and reflex chains across time with a built-in causal replay log.',
+    id: 'step-3',
+    icon: SignalIcon,
+    title: 'Evolve in Place',
+    intent: IntentTypes.Primary,
+    caption: 'Signals fire when your logic confirms it’s ready.',
+    description: `Every signal is versioned and observable. Your system evolves without breaking production or losing memory.`,
+    image: '/assets/screenshots/hello-azi-execution-timeline.png',
   },
 ];
 
 const SystemProofSection: FunctionalComponent = () => {
   return (
-    <section class="bg-neutral-950 py-32 px-6 lg:px-8">
-      <div class="max-w-7xl mx-auto text-center space-y-10">
+    <section class="bg-gradient-to-b from-neutral-950 via-neon-blue-900/20 to-neutral-950 py-32 px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto text-center space-y-12">
         <h2 class="text-3xl sm:text-4xl font-bold text-white">
-          This isn’t a demo. It’s your new runtime.
+          Open Industrial doesn’t just run code. It evolves your runtime.
         </h2>
         <p class="text-lg text-neutral-300 max-w-2xl mx-auto">
-          Open Industrial is built on deployable primitives you can fork, trace, and evolve — today.
+          From reclaiming your data to governing AI behavior — you control how
+          your system listens, reasons, and evolves.
         </p>
 
-        <div class="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {features.map(({ icon: Icon, title, description }) => (
-            <div class="bg-neutral-900 rounded-xl p-6 border border-white/5 hover:border-white/20 transition-colors">
-              <div class="flex items-center justify-center w-12 h-12 rounded-full bg-neon-cyan-500/10 text-neon-cyan-400 mb-4 mx-auto">
-                <Icon class="w-6 h-6" />
-              </div>
-              <h3 class="text-lg font-semibold text-white mb-2">{title}</h3>
-              <p class="text-sm text-neutral-400">{description}</p>
-            </div>
-          ))}
+        <div class="mt-20 flex flex-col space-y-24">
+          {systemSteps.map(
+            ({
+              id,
+              icon: Icon,
+              title,
+              intent,
+              description,
+              caption,
+              image,
+            }) => {
+              const { text, background } = getIntentStyles(intent);
+
+              return (
+                <div key={id} class="flex flex-col lg:flex-row items-center gap-12 text-left">
+                  {/* Icon + Text Content */}
+                  <div class="flex-1 space-y-6 max-w-xl">
+                    <div class="flex items-center gap-4">
+                      <div class={`w-12 h-12 flex items-center justify-center rounded-full ${background} ${text}`}>
+                        <Icon class="w-6 h-6" />
+                      </div>
+                      <h3 class="text-xl font-semibold text-white">{title}</h3>
+                    </div>
+                    <p class="text-neutral-400 text-sm leading-relaxed">{description}</p>
+                  </div>
+  
+                  {/* Visual */}
+                  <div class="flex-1">
+                    <FigureImage
+                      src={image}
+                      alt={caption}
+                      caption={caption}
+                      intentType={intent}
+                      center
+                      size="xl"
+                      shadow="2xl"
+                      glow
+                    />
+                  </div>
+                </div>
+              );
+            }
+          )}
         </div>
       </div>
     </section>

@@ -4,8 +4,12 @@ import { IntentTypes } from '@o-industrial/common/types';
 import { RuntimeIcon } from '../../../../../build/iconset/icons/RuntimeIcon.tsx';
 import { BuildIcon } from '../../../../../build/iconset/icons/BuildIcon.tsx';
 import { FigureImage } from '../../../molecules/writing-devices/FigureImage.tsx';
+import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
 
 const HeroSection: FunctionalComponent = () => {
+  const primaryStyles = getIntentStyles(IntentTypes.Primary);
+  const secondaryStyles = getIntentStyles(IntentTypes.Secondary);
+
   return (
     <section
       id="hero"
@@ -39,8 +43,12 @@ const HeroSection: FunctionalComponent = () => {
               ActionStyleTypes.Fat
             }
           >
-            <RuntimeIcon class="w-5 h-5 mr-2" />
-            Try the Runtime
+            <div
+              class={`w-6 h-6 flex items-center justify-center rounded-full ${primaryStyles.background} ${primaryStyles.text}`}
+            >
+              <RuntimeIcon class="w-4 h-4" />
+            </div>
+            <span class="ml-2">Try the Runtime</span>
           </Action>
 
           <Action
@@ -52,8 +60,12 @@ const HeroSection: FunctionalComponent = () => {
               ActionStyleTypes.Fat
             }
           >
-            <BuildIcon class="w-5 h-5 mr-2" />
-            Watch Azi Build
+            <div
+              class={`w-6 h-6 flex items-center justify-center rounded-full ${secondaryStyles.background} ${secondaryStyles.text}`}
+            >
+              <BuildIcon class="w-4 h-4" />
+            </div>
+            <span class="ml-2">Watch Azi Build</span>
           </Action>
         </div>
 

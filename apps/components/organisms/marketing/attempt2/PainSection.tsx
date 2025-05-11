@@ -1,5 +1,6 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
+import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
 
 import { NoAccessIcon } from '../../../../../build/iconset/icons/NoAccessIcon.tsx';
 import { BlockedIcon } from '../../../../../build/iconset/icons/BlockedIcon.tsx';
@@ -42,6 +43,8 @@ const painPoints = [
 ];
 
 const PainSection: FunctionalComponent = () => {
+  const { background, text } = getIntentStyles(IntentTypes.Secondary);
+
   return (
     <section class="bg-neutral-950 py-24 px-6 lg:px-8">
       <div class="max-w-7xl mx-auto text-center space-y-10">
@@ -55,7 +58,7 @@ const PainSection: FunctionalComponent = () => {
         <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {painPoints.map(({ icon: Icon, title, description }) => (
             <div class="bg-neutral-900 rounded-xl p-6 border border-white/5 hover:border-white/20 transition-colors">
-              <div class="flex items-center justify-center w-12 h-12 rounded-full bg-neon-indigo-500/10 text-neon-indigo-400 mb-4 mx-auto">
+              <div class={`flex items-center justify-center w-12 h-12 rounded-full mb-4 mx-auto ${background} ${text}`}>
                 <Icon class="w-6 h-6" />
               </div>
               <h3 class="text-lg font-semibold text-white mb-2">{title}</h3>
