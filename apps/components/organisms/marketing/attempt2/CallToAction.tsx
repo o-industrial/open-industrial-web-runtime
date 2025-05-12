@@ -1,15 +1,12 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
 import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
-import { Action, ActionStyleTypes } from '../../../atoms/Action.tsx';
 
-import { RuntimeIcon } from '../../../../../build/iconset/icons/RuntimeIcon.tsx';
-import { BuildIcon } from '../../../../../build/iconset/icons/BuildIcon.tsx';
 import { HubspotForm } from '../HubspotForm.tsx';
 
 const CallToAction: FunctionalComponent = () => {
   const primary = getIntentStyles(IntentTypes.Primary);
-  const secondary = getIntentStyles(IntentTypes.Secondary);
+  const _secondary = getIntentStyles(IntentTypes.Secondary);
 
   return (
     <section class="bg-neutral-950 py-32 px-6 lg:px-8">
