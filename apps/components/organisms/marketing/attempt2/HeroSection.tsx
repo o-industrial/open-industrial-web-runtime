@@ -10,10 +10,10 @@ const HeroSection: FunctionalComponent = () => {
   return (
     <section
       id="hero"
-      class="relative isolate overflow-hidden dark bg-neutral-950 py-32 sm:py-48 text-white"
+      class="relative isolate overflow-hidden dark bg-neutral-950 py-32 sm:py-48 text-netural-50"
     >
       {/* Background Glow */}
-      <div class="absolute inset-0 -z-10 bg-gradient-to-br from-neon-blue-900/30 via-transparent to-neon-purple-900/20 pointer-events-none" />
+      <div class="absolute inset-0 -z-10 bg-gradient-to-br from-neon-blue-900/40 via-transparent to-neon-purple-900/40 pointer-events-none" />
 
       <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center space-y-10">
         {/* Headline */}
@@ -53,9 +53,6 @@ const HeroSection: FunctionalComponent = () => {
           <HubspotForm />
         </div>
       </div>
-
-      {/* Footer Gradient */}
-      <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-b from-transparent to-neutral-950 pointer-events-none" />
     </section>
   );
 };
