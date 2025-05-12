@@ -128,8 +128,10 @@ export class PresetManager {
         return {
           ingestOptions: [
             { label: 'Default', value: 'Default', enabled: true },
-            { label: 'REST', value: 'HTTP', enabled: true },
+            { label: 'HTTP', value: 'HTTP', enabled: true },
             { label: 'MQTT', value: 'MQTT', enabled: false },
+            { label: 'ModBUS', value: 'ModBUS', enabled: false },
+            { label: 'OPC', value: 'OPC', enabled: false },
             { label: 'Web Socket', value: 'WebSocket', enabled: false },
           ],
         };

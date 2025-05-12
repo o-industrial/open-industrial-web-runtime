@@ -13,10 +13,10 @@ const JourneySection: FunctionalComponent = () => {
         {/* Section Heading */}
         <div class="space-y-6">
           <h2 class="text-4xl font-bold text-white">
-            From stuck to sovereign.
+            From blocked and brittle — to forkable and fearless.
           </h2>
           <p class="text-lg text-neutral-300 max-w-2xl mx-auto">
-            What used to take months now takes minutes — and your runtime keeps evolving without vendor roadblocks or operational fear.
+            What used to take quarters now takes minutes — with every change versioned, governed, and explainable.
           </p>
         </div>
 
@@ -59,16 +59,16 @@ const JourneySection: FunctionalComponent = () => {
             <h3 class={`text-xl font-semibold ${afterStyles.text}`}>After Open Industrial</h3>
             <div class="space-y-4 text-sm">
               <p class={`text-neutral-200 border-l-4 pl-4 ${afterStyles.border}`}>
-                Forked an agent in 30 seconds
+                Forked an agent in 30 seconds — no central approval loop
               </p>
               <p class={`text-neutral-200 border-l-4 pl-4 ${afterStyles.border}`}>
                 Live surface connected to RoomState in minutes
               </p>
               <p class={`text-neutral-200 border-l-4 pl-4 ${afterStyles.border}`}>
-                Schema + reflex version diff confirmed before deploy
+                Schema and reflex changes diffed, confirmed, and versioned
               </p>
               <p class={`text-neutral-200 border-l-4 pl-4 ${afterStyles.border}`}>
-                Signal fired, traceable in execution timeline
+                Signals traceable in the execution timeline
               </p>
               <p class={`text-neutral-200 border-l-4 pl-4 ${afterStyles.border}`}>
                 No black boxes. No breakage. Just runtime evolution.

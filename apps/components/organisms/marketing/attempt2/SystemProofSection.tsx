@@ -11,28 +11,28 @@ const systemSteps = [
   {
     id: 'step-1',
     icon: ImpulseIcon,
-    title: 'Reclaim the Feed',
+    title: 'Reclaim your data feed',
     intent: IntentTypes.Info,
     caption: 'Live surfaces stream data directly into your runtime.',
-    description: `No more vendor silos or IT lockout. Connect any source — REST, MQTT, WebSocket — and start listening.`,
+    description: `No more vendor silos or IT delays. Stream data from REST, MQTT, WebSocket — and make it useful instantly.`,
     image: '/assets/screenshots/hello-azi-live-impulse-stream.png',
   },
   {
     id: 'step-2',
     icon: SchemaIcon,
-    title: 'Compose Your Intelligence',
+    title: 'Compose your intelligence',
     intent: IntentTypes.Tertiary,
     caption: 'Schemas filter structure. Reflexes author logic.',
-    description: `Build explainable logic you can fork, diff, and govern. Your AI isn’t a black box — it’s authored by your team.`,
+    description: `Build explainable, forkable logic you can govern over time. Your AI isn’t a black box — it’s structured memory.`,
     image: '/assets/screenshots/hello-azi-surface-connected.png',
   },
   {
     id: 'step-3',
     icon: SignalIcon,
-    title: 'Evolve in Place',
+    title: 'Evolve without fear',
     intent: IntentTypes.Primary,
     caption: 'Signals fire when your logic confirms it’s ready.',
-    description: `Every signal is versioned and observable. Your system evolves without breaking production or losing memory.`,
+    description: `Every signal is versioned, observable, and traceable. Evolve your system — without breaking what's live.`,
     image: '/assets/screenshots/hello-azi-execution-timeline.png',
   },
 ];
@@ -42,11 +42,10 @@ const SystemProofSection: FunctionalComponent = () => {
     <section class="bg-gradient-to-b from-neutral-950 via-neon-blue-900/20 to-neutral-950 py-32 px-6 lg:px-8">
       <div class="max-w-7xl mx-auto text-center space-y-12">
         <h2 class="text-3xl sm:text-4xl font-bold text-white">
-          Open Industrial doesn’t just run code. It evolves your runtime.
+          Not just AI inside dashboards — AI inside your runtime.
         </h2>
         <p class="text-lg text-neutral-300 max-w-2xl mx-auto">
-          From reclaiming your data to governing AI behavior — you control how
-          your system listens, reasons, and evolves.
+          From reclaiming your feed to structuring reflexes and firing signals — you control how your system listens, reasons, and evolves.
         </p>
 
         <div class="mt-20 flex flex-col space-y-24">
@@ -74,7 +73,7 @@ const SystemProofSection: FunctionalComponent = () => {
                     </div>
                     <p class="text-neutral-400 text-sm leading-relaxed">{description}</p>
                   </div>
-  
+
                   {/* Visual */}
                   <div class="flex-1">
                     <FigureImage

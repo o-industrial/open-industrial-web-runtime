@@ -13,32 +13,38 @@ const painPoints = [
   {
     icon: NoAccessIcon,
     title: 'We can’t even get our own data.',
-    description: 'Everything lives in someone else’s system — or buried under IT lockout.',
+    description:
+      'Data lives in systems we don’t control. Open Industrial connects your surfaces directly.',
   },
   {
     icon: BlockedIcon,
-    title: 'We’re blocked by the SI.',
-    description: 'We need a multi-year SOW to add a single column to a dashboard.',
+    title: 'Change takes months.',
+    description:
+      'Every tweak needs approvals, SOWs, or middleware. We let you fork, test, and deploy in minutes.',
   },
   {
     icon: BrokenIcon,
     title: 'If we touch anything, it breaks.',
-    description: 'Legacy systems are brittle. Every change is a risk to uptime.',
+    description:
+      'Legacy systems are brittle by design. Our versioned reflex logic evolves safely in place.',
   },
   {
     icon: ExpensiveIcon,
     title: 'It’s “too expensive” to try anything.',
-    description: 'Even simple improvements get buried in politics, price, or procurement.',
+    description:
+      'Simple ideas get buried in procurement. With runtime control, experimentation is safe — and fast.',
   },
   {
     icon: OutdatedIcon,
     title: 'Our software looks like Windows 95.',
-    description: 'Modern teams are stuck using tools designed for a past era.',
+    description:
+      'The UI changed. The architecture didn’t. Open Industrial gives your team modern control primitives.',
   },
   {
     icon: FrustratedIcon,
     title: 'We know what’s possible — we just can’t do it.',
-    description: 'Other industries have velocity. We have red tape and regrets.',
+    description:
+      'Other industries move fast. You deserve the same autonomy. Azi helps you reclaim it.',
   },
 ];
 
@@ -52,13 +58,15 @@ const PainSection: FunctionalComponent = () => {
           Every industrial team we’ve met says the same thing...
         </h2>
         <p class="text-lg text-neutral-300 max-w-2xl mx-auto">
-          They're not blocked by ambition — they're blocked by infrastructure.
+          They're not blocked by ambition — they're blocked by the systems they inherited.
         </p>
 
         <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {painPoints.map(({ icon: Icon, title, description }) => (
             <div class="bg-neutral-900 rounded-xl p-6 border border-white/5 hover:border-white/20 transition-colors">
-              <div class={`flex items-center justify-center w-12 h-12 rounded-full mb-4 mx-auto ${background} ${text}`}>
+              <div
+                class={`flex items-center justify-center w-12 h-12 rounded-full mb-4 mx-auto ${background} ${text}`}
+              >
                 <Icon class="w-6 h-6" />
               </div>
               <h3 class="text-lg font-semibold text-white mb-2">{title}</h3>

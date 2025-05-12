@@ -16,10 +16,10 @@ const CallToAction: FunctionalComponent = () => {
         class={`max-w-4xl mx-auto bg-neutral-900 rounded-2xl border border-white/10 p-12 text-center shadow-xl ring-2 ring-inset ring-neon-violet-500/10 ${primary.glow}`}
       >
         <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
-          Ready to run your own runtime?
+          Ready to compose your intelligence?
         </h2>
         <p class="text-neutral-300 text-lg max-w-xl mx-auto mb-10">
-          Azi is ready. No installs. No gatekeepers. Just telemetry, logic, and runtime control — on your terms.
+          Azi helps you structure logic, deploy reflexes, and evolve agents — all inside your own runtime.
         </p>
 
         <div class="flex flex-col sm:flex-row justify-center gap-6">

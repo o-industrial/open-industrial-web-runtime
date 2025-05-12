@@ -22,14 +22,15 @@ const HeroSection: FunctionalComponent = () => {
       <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center space-y-10">
         {/* Headline */}
         <h1 class="text-4xl font-extrabold tracking-tight sm:text-6xl text-white leading-tight">
-          Fire your black box. <br />
-          <span class="text-neon-blue-400">Command your own runtime.</span>
+          Compose your intelligence. <br />
+          <span class="text-neon-blue-400">
+            Take back your stack — for the age of AI.
+          </span>
         </h1>
 
         {/* Subheadline */}
         <p class="mt-6 text-lg leading-8 text-neutral-300 max-w-2xl mx-auto">
-          Azi lets your team deploy forkable logic, real-time telemetry, and
-          explainable agents — no SaaS, no SIs, no lock-in.
+          Azi helps you deploy forkable logic, connect live telemetry, and evolve explainable agents — with no SaaS traps or integrator dependencies.
         </p>
 
         {/* CTA Actions */}
