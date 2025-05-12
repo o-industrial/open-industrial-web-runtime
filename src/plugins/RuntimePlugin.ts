@@ -92,7 +92,11 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 PathPattern: '/icons*',
                 Priority: 500,
               },
-              docs2: {
+              blog: {
+                PathPattern: '/blog*',
+                Priority: 500,
+              },
+              docs: {
                 PathPattern: '/docs*',
                 Priority: 500,
                 IsPrivate: true,
@@ -170,10 +174,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               PreserveMethod: false,
             } as EaCRedirectProcessor,
           },
-          docs: {
+          blog: {
             Details: {
-              Name: 'Documentation Site',
-              Description: 'Documentation site.',
+              Name: 'Blog',
+              Description: 'Blog.',
             },
             ModifierResolvers: {
               baseHref: {
@@ -181,11 +185,16 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             },
             Processor: {
-              Type: 'MDX',
-              DFSLookup: 'local:apps/docs',
-            } as EaCMDXProcessor,
+              Type: 'PreactApp',
+              AppDFSLookup: 'local:apps/blog',
+              DocPageConfigPath: './.config.ts',
+              ComponentDFSLookups: [
+                ['local:apps/components', ['tsx']],
+                ['local:apps/blog', ['tsx']],
+              ],
+            } as EaCPreactAppProcessor,
           },
-          docs2: {
+          docs: {
             Details: {
               Name: 'Documentation Site 2',
               Description: 'Documentation site 2.',
@@ -345,18 +354,18 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               FileRoot: './apps/assets/',
             } as EaCLocalDistributedFileSystemDetails,
           },
+          'local:apps/blog': {
+            Details: {
+              Type: 'Local',
+              FileRoot: './apps/blog/',
+              DefaultFile: 'index.tsx',
+              Extensions: ['tsx'],
+            } as EaCLocalDistributedFileSystemDetails,
+          },
           'local:apps/components': {
             Details: {
               Type: 'Local',
               FileRoot: './apps/components/',
-              Extensions: ['tsx'],
-            } as EaCLocalDistributedFileSystemDetails,
-          },
-          'local:apps/workspace': {
-            Details: {
-              Type: 'Local',
-              FileRoot: './apps/workspace/',
-              DefaultFile: 'index.tsx',
               Extensions: ['tsx'],
             } as EaCLocalDistributedFileSystemDetails,
           },
@@ -380,6 +389,14 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'Local',
               FileRoot: './src/',
+            } as EaCLocalDistributedFileSystemDetails,
+          },
+          'local:apps/workspace': {
+            Details: {
+              Type: 'Local',
+              FileRoot: './apps/workspace/',
+              DefaultFile: 'index.tsx',
+              Extensions: ['tsx'],
             } as EaCLocalDistributedFileSystemDetails,
           },
           // 'local:apps/islands': {
