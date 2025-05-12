@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'preact/hooks';
 
+export const IsIsland = true;
+
 // deno-lint-ignore no-explicit-any
 declare const hbspt: any;
 
@@ -14,31 +16,34 @@ export function HubspotForm({
 }) {
   const formRef = useRef<HTMLDivElement>(null);
 
+  console.log(`[HubspotForm] Form #${id} loading`);
+  
   useEffect(() => {
-    if (!formRef.current) {
-      console.warn(`[HubspotForm] No DOM ref available for target: #${id}`);
-      return;
-    }
+    const waitForHbspt = () => {
+      if (
+        typeof hbspt !== 'undefined' &&
+        typeof hbspt.forms?.create === 'function'
+      ) {
+        console.log(`[HubspotForm] Initializing form #${id}`);
+        hbspt.forms.create({
+          portalId,
+          formId,
+          region: 'na1',
+          target: `#${id}`,
+          onFormReady: () => {
+            console.log(`[HubspotForm] Form #${id} ready`);
+          },
+          onFormSubmit: () => {
+            console.log(`[HubspotForm] Form #${id} submitted`);
+          },
+        });
+      } else {
+        console.log('[HubspotForm] hbspt not ready yet, retrying...');
+        setTimeout(waitForHbspt, 100); // retry until loaded
+      }
+    };
 
-    if (!hbspt || typeof hbspt.forms?.create !== 'function') {
-      console.warn('[HubspotForm] hbspt not available or not ready');
-      return;
-    }
-
-    console.log(`[HubspotForm] Initializing form #${id} with formId=${formId}`);
-
-    hbspt.forms.create({
-      portalId,
-      formId,
-      region: 'na1',
-      target: `#${id}`,
-      onFormReady: () => {
-        console.log(`[HubspotForm] Form #${id} ready`);
-      },
-      onFormSubmit: () => {
-        console.log(`[HubspotForm] Form #${id} submitted`);
-      },
-    });
+    waitForHbspt();
   }, [id, portalId, formId]);
 
   return <div ref={formRef} id={id} class="w-full max-w-xl mx-auto" />;

@@ -5,6 +5,7 @@ import { Action, ActionStyleTypes } from '../../../atoms/Action.tsx';
 
 import { RuntimeIcon } from '../../../../../build/iconset/icons/RuntimeIcon.tsx';
 import { BuildIcon } from '../../../../../build/iconset/icons/BuildIcon.tsx';
+import { HubspotForm } from '../HubspotForm.tsx';
 
 const CallToAction: FunctionalComponent = () => {
   const primary = getIntentStyles(IntentTypes.Primary);
@@ -19,11 +20,12 @@ const CallToAction: FunctionalComponent = () => {
           Ready to compose your intelligence?
         </h2>
         <p class="text-neutral-300 text-lg max-w-xl mx-auto mb-10">
-          Azi helps you structure logic, deploy reflexes, and evolve agents — all inside your own runtime.
+          Azi helps you structure logic, deploy reflexes, and evolve agents —
+          all inside your own runtime.
         </p>
 
         <div class="flex flex-col sm:flex-row justify-center gap-6">
-          <Action
+          {/* <Action
             href="/sim"
             intentType={IntentTypes.Primary}
             styleType={
@@ -55,7 +57,9 @@ const CallToAction: FunctionalComponent = () => {
               <BuildIcon class="w-4 h-4" />
             </div>
             <span class="ml-2">Explore the System</span>
-          </Action>
+          </Action> */}
+
+          <HubspotForm id="cta-hubspot-form" />
         </div>
       </div>
     </section>

@@ -8,6 +8,8 @@ import SystemProofSection from '../components/organisms/marketing/attempt2/Syste
 import JourneySection from '../components/organisms/marketing/attempt2/JourneySection.tsx';
 import CallToAction from '../components/organisms/marketing/attempt2/CallToAction.tsx';
 
+export const IsIsland = true;
+
 export type HomepageData = {};
 
 export const handler: EaCRuntimeHandlerSet<

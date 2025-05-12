@@ -5,6 +5,7 @@ import { RuntimeIcon } from '../../../../../build/iconset/icons/RuntimeIcon.tsx'
 import { BuildIcon } from '../../../../../build/iconset/icons/BuildIcon.tsx';
 import { FigureImage } from '../../../molecules/writing-devices/FigureImage.tsx';
 import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
+import { HubspotForm } from '../HubspotForm.tsx';
 
 const HeroSection: FunctionalComponent = () => {
   const primaryStyles = getIntentStyles(IntentTypes.Primary);
@@ -30,12 +31,28 @@ const HeroSection: FunctionalComponent = () => {
 
         {/* Subheadline */}
         <p class="mt-6 text-lg leading-8 text-neutral-300 max-w-2xl mx-auto">
-          Azi helps you deploy forkable logic, connect live telemetry, and evolve explainable agents — with no SaaS traps or integrator dependencies.
+          Azi helps you deploy forkable logic, connect live telemetry, and
+          evolve explainable agents — with no SaaS traps or integrator
+          dependencies.
         </p>
 
+        {/* Hero Visual */}
+        <div class="max-w-4xl mx-auto">
+          <FigureImage
+            intentType={IntentTypes.Info}
+            src="/assets/screenshots/live-workspace-example.png"
+            alt="Open Industrial workspace showing Azi-controlled RoomState logic flow with real-time telemetry and inspector"
+            caption="Azi forks a new agent to control RoomState from real-time telemetry and schema joins."
+            center
+            size="full"
+            shadow="2xl"
+            glow
+          />
+        </div>
+
         {/* CTA Actions */}
-        <div class="mt-10 flex justify-center flex-wrap gap-6">
-          <Action
+        <div class="mt-10 flex justify-center flex-wrap gap-6 max-w-xs mx-auto">
+          {/* <Action
             href="/sim"
             intentType={IntentTypes.Primary}
             styleType={
@@ -68,19 +85,10 @@ const HeroSection: FunctionalComponent = () => {
             </div>
             <span class="ml-2">Watch Azi Build</span>
           </Action>
-        </div>
+         */}
 
-        {/* Hero Visual */}
-        <FigureImage
-          intentType={IntentTypes.Info}
-          src="/assets/screenshots/live-workspace-example.png"
-          alt="Open Industrial workspace showing Azi-controlled RoomState logic flow with real-time telemetry and inspector"
-          caption="Azi forks a new agent to control RoomState from real-time telemetry and schema joins."
-          center
-          size="xl"
-          shadow="2xl"
-          glow
-        />
+          <HubspotForm />
+        </div>
       </div>
 
       <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-b from-transparent to-neutral-950 pointer-events-none" />
