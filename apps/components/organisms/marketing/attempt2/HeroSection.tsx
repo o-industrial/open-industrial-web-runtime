@@ -31,9 +31,15 @@ const HeroSection: FunctionalComponent = () => {
 
         {/* Subheadline */}
         <p class="mt-6 text-lg leading-8 text-neutral-300 max-w-2xl mx-auto">
-          Azi helps you deploy forkable logic, connect live telemetry, and
-          evolve explainable agents — with no SaaS traps or integrator
-          dependencies.
+          Compose forkable logic, connect real-time telemetry, and evolve agents
+          — all inside your own runtime.
+        </p>
+
+        {/* Azi Intro */}
+        <p class="text-neutral-400 text-sm leading-6 max-w-md mx-auto">
+          <strong class="text-white">OpenIndustrial’s Azi™</strong> isn’t just
+          an agent — she’s a runtime-aware co-designer who helps you version
+          logic, govern decisions, and evolve automation flows over time.
         </p>
 
         {/* Hero Visual */}
