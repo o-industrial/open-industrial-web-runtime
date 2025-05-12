@@ -1,61 +1,26 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
 import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
-
 import { HubspotForm } from '../HubspotForm.tsx';
 
 const CallToAction: FunctionalComponent = () => {
   const primary = getIntentStyles(IntentTypes.Primary);
-  const _secondary = getIntentStyles(IntentTypes.Secondary);
 
   return (
-    <section class="bg-neutral-950 py-32 px-6 lg:px-8">
+    <section class="bg-neutral-100 dark:bg-neutral-950 py-32 px-6 lg:px-8">
       <div
-        class={`max-w-4xl mx-auto bg-neutral-900 rounded-2xl border border-white/10 p-12 text-center shadow-xl ring-2 ring-inset ring-neon-violet-500/10 ${primary.glow}`}
+        class={`max-w-4xl mx-auto rounded-2xl border p-12 text-center shadow-lg ring-2 ring-inset ${primary.ring} ${primary.glow} bg-white dark:bg-neutral-900 border-neutral-200 dark:border-white/10`}
       >
-        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+        <h2 class="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
           Ready to compose your intelligence?
         </h2>
-        <p class="text-neutral-300 text-lg max-w-xl mx-auto mb-10">
+        <p class="text-lg text-neutral-600 dark:text-neutral-300 max-w-xl mx-auto mb-10">
           Azi helps you structure logic, deploy reflexes, and evolve agents —
           all inside your own runtime.
         </p>
 
         <div class="flex flex-col sm:flex-row justify-center gap-6">
-          {/* <Action
-            href="/sim"
-            intentType={IntentTypes.Primary}
-            styleType={
-              ActionStyleTypes.Solid |
-              ActionStyleTypes.Rounded |
-              ActionStyleTypes.Fat
-            }
-          >
-            <div
-              class={`w-6 h-6 flex items-center justify-center rounded-full ${primary.background} ${primary.text}`}
-            >
-              <RuntimeIcon class="w-4 h-4" />
-            </div>
-            <span class="ml-2">Try the Runtime</span>
-          </Action>
-
-          <Action
-            href="/docs/system-overview"
-            intentType={IntentTypes.Secondary}
-            styleType={
-              ActionStyleTypes.Outline |
-              ActionStyleTypes.Rounded |
-              ActionStyleTypes.Fat
-            }
-          >
-            <div
-              class={`w-6 h-6 flex items-center justify-center rounded-full ${secondary.background} ${secondary.text}`}
-            >
-              <BuildIcon class="w-4 h-4" />
-            </div>
-            <span class="ml-2">Explore the System</span>
-          </Action> */}
-
+          {/* <Action> buttons available if re-enabled later */}
           <HubspotForm id="cta-hubspot-form" />
         </div>
       </div>

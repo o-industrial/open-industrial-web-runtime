@@ -1,11 +1,10 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
 import { FigureImage } from '../../../molecules/writing-devices/FigureImage.tsx';
-
+import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
 import { ImpulseIcon } from '../../../../../build/iconset/icons/ImpulseIcon.tsx';
 import { SchemaIcon } from '../../../../../build/iconset/icons/SchemaIcon.tsx';
 import { SignalIcon } from '../../../../../build/iconset/icons/SignalIcon.tsx';
-import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
 
 const systemSteps = [
   {
@@ -14,7 +13,8 @@ const systemSteps = [
     title: 'Reclaim your data feed',
     intent: IntentTypes.Info,
     caption: 'Live surfaces stream data directly into your runtime.',
-    description: `No more vendor silos or IT delays. Stream data from REST, MQTT, WebSocket — and make it useful instantly.`,
+    description:
+      'No more vendor silos or IT delays. Stream data from REST, MQTT, WebSocket — and make it useful instantly.',
     image: '/assets/screenshots/hello-azi-live-impulse-stream.png',
   },
   {
@@ -23,7 +23,8 @@ const systemSteps = [
     title: 'Compose your intelligence',
     intent: IntentTypes.Tertiary,
     caption: 'Schemas filter structure. Reflexes author logic.',
-    description: `Build explainable, forkable logic you can govern over time. Your AI isn’t a black box — it’s structured memory.`,
+    description:
+      'Build explainable, forkable logic you can govern over time. Your AI isn’t a black box — it’s structured memory.',
     image: '/assets/screenshots/hello-azi-surface-connected.png',
   },
   {
@@ -32,20 +33,22 @@ const systemSteps = [
     title: 'Evolve without fear',
     intent: IntentTypes.Primary,
     caption: 'Signals fire when your logic confirms it’s ready.',
-    description: `Every signal is versioned, observable, and traceable. Evolve your system — without breaking what's live.`,
+    description:
+      'Every signal is versioned, observable, and traceable. Evolve your system — without breaking what’s live.',
     image: '/assets/screenshots/hello-azi-execution-timeline.png',
   },
 ];
 
 const SystemProofSection: FunctionalComponent = () => {
   return (
-    <section class="bg-gradient-to-b from-neutral-950 via-neon-blue-900/20 to-neutral-950 py-32 px-6 lg:px-8">
+    <section class="bg-gradient-to-b from-neutral-100 dark:from-neutral-950 via-neon-blue-500/20 dark:via-neon-blue-500/20 to-neutral-100 dark:to-neutral-950 py-32 px-6 lg:px-8">
       <div class="max-w-7xl mx-auto text-center space-y-12">
-        <h2 class="text-3xl sm:text-4xl font-bold text-white">
+        <h2 class="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white">
           Not just AI inside dashboards — AI inside your runtime.
         </h2>
-        <p class="text-lg text-neutral-300 max-w-2xl mx-auto">
-          From reclaiming your feed to structuring reflexes and firing signals — you control how your system listens, reasons, and evolves.
+        <p class="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
+          From reclaiming your feed to structuring reflexes and firing signals —
+          you control how your system listens, reasons, and evolves.
         </p>
 
         <div class="mt-20 flex flex-col space-y-24">
@@ -62,16 +65,27 @@ const SystemProofSection: FunctionalComponent = () => {
               const { text, background } = getIntentStyles(intent);
 
               return (
-                <div key={id} class="flex flex-col lg:flex-row items-center gap-12 text-left">
-                  {/* Icon + Text Content */}
+                <div
+                  key={id}
+                  class="flex flex-col lg:flex-row items-center gap-12 text-left"
+                >
+                  {/* Icon + Text */}
                   <div class="flex-1 space-y-6 max-w-xl">
                     <div class="flex items-center gap-4">
-                      <div class={`w-12 h-12 flex items-center justify-center rounded-full ${background} ${text}`}>
+                      <div
+                        class={`w-12 h-12 flex items-center justify-center rounded-full ${background} ${text}`}
+                      >
                         <Icon class="w-6 h-6" />
                       </div>
-                      <h3 class="text-xl font-semibold text-white">{title}</h3>
+                      <h3
+                        class={`text-xl font-semibold text-neutral-900 dark:text-white`}
+                      >
+                        {title}
+                      </h3>
                     </div>
-                    <p class="text-neutral-400 text-sm leading-relaxed">{description}</p>
+                    <p class="text-sm text-neutral-700 dark:text-neutral-400 leading-relaxed">
+                      {description}
+                    </p>
                   </div>
 
                   {/* Visual */}
