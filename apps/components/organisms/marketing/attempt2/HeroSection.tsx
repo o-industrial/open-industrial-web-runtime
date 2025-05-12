@@ -17,7 +17,7 @@ const HeroSection: FunctionalComponent = () => {
 
       <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center space-y-10">
         {/* Headline */}
-        <h1 class="text-4xl font-extrabold tracking-tight sm:text-6xl leading-tight">
+        <h1 class="text-4xl text-neutral-50 font-extrabold tracking-tight sm:text-6xl leading-tight">
           Compose your intelligence. <br />
           <span class={info.text}>
             Take back your stack — for the age of AI.
