@@ -1,8 +1,10 @@
 import { EaCVertexDetails } from '@fathym/eac';
+import { BaseNodeEvent } from './BaseNodeEvent.ts';
 
 export type FlowNodeData<
   TEaC extends EaCVertexDetails = EaCVertexDetails,
   TStats extends Record<string, unknown> = Record<string, unknown>,
+  TEvent extends BaseNodeEvent = BaseNodeEvent
 > = {
   /** Internal type */
   type: string;
@@ -21,7 +23,10 @@ export type FlowNodeData<
 
   /** UI interaction */
   isSelected?: boolean;
+  
   onDoubleClick?: () => void;
+  
+  onNodeEvent?: (event: TEvent) => void;
 
   /** Optional icon override */
   iconKey?: string;

@@ -3,7 +3,7 @@ import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
 import { SurfaceManagementForm } from '../../molecules/SurfaceManagementForm.tsx';
 import { InspectorCommonProps } from '../InspectorPanel.tsx';
 import { EaCSurfaceDetails } from '@o-industrial/common/eac';
-import { SurfaceStats } from '../renderers/SurfaceNodeRenderer.tsx';
+import { SurfaceStats } from '../../../../src/flow/types/nodes/surfaces/SurfaceStats.ts';
 
 type SurfaceInspectorProps = InspectorCommonProps<
   EaCSurfaceDetails,

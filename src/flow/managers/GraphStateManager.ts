@@ -6,6 +6,8 @@ import { FlowGraphNode } from '../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../types/graph/FlowGraphEdge.ts';
 import { StatManager } from './StatManager.ts';
 import { SelectionManager } from './SelectionManager.ts';
+import { InteractionManager } from './InteractionManager.ts';
+import { NodeEventManager } from './NodeEventManager.ts';
 
 export class GraphStateManager {
   protected graph: FlowGraph = { Nodes: [], Edges: [] };
@@ -14,8 +16,9 @@ export class GraphStateManager {
   protected listeners = new Set<() => void>();
 
   constructor(
-    protected selection: SelectionManager,
+    protected interaction: InteractionManager,
     protected stats: StatManager,
+    protected nodeEvents: NodeEventManager
   ) {}
 
   // === Public API ===
@@ -140,8 +143,10 @@ export class GraphStateManager {
         details,
         useStats: () => this.stats.UseStats(n.Type, n.ID),
         onDoubleClick: () => {
-          console.log('🖱️ [FlowNode] double clicked → selecting', id);
-          this.selection.SelectNode(id);
+          this.interaction.OnNodeDoubleClick(id);
+        },
+        onNodeEvent: (evt) => {
+          this.nodeEvents.Emit(n.Type, { ...evt, NodeID: id });
         },
       };
 

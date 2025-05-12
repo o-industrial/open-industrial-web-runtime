@@ -43,7 +43,7 @@ const JourneySection: FunctionalComponent = () => {
                 </p>
               ))}
             </div>
-            <FigureImage
+            {/* <FigureImage
               src="/assets/before-legacy-stack2.png"
               alt="Legacy industrial software stack before Open Industrial"
               caption="Tangled legacy systems and brittle integrations slowed every change."
@@ -52,7 +52,7 @@ const JourneySection: FunctionalComponent = () => {
               size="xl"
               shadow="xl"
               glow
-            />
+            /> */}
           </div>
 
           {/* After */}
@@ -75,7 +75,7 @@ const JourneySection: FunctionalComponent = () => {
                 </p>
               ))}
             </div>
-            <FigureImage
+            {/* <FigureImage
               src="/assets/screenshots/hello-azi-surface-connected.png"
               alt="Runtime diffing and signal timeline after Open Industrial"
               caption="Forked, governed, and deployed with confidence."
@@ -84,7 +84,7 @@ const JourneySection: FunctionalComponent = () => {
               size="xl"
               shadow="2xl"
               glow
-            />
+            /> */}
           </div>
         </div>
       </div>

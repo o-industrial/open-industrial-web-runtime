@@ -26,19 +26,22 @@ import { WorkspaceSummary } from '../../types/WorkspaceSummary.ts';
 import { EaCEnterpriseDetails } from '@fathym/eac';
 import { TeamMember } from '../../types/TeamMember.ts';
 import { TeamManager } from './TeamManager.ts';
+import { NodeEventManager } from './NodeEventManager.ts';
 
 export class WorkspaceManager {
   public Scope: NodeScopeTypes;
+
   public Azi: AziManager;
+  public EaC: EaCManager;
   public Graph: GraphStateManager;
-  public Selection: SelectionManager;
+  public History: HistoryManager;
+  public Interaction: InteractionManager;
+  public NodeEvents: NodeEventManager;
   public Presets: PresetManager;
-  public Runtime: InteractionManager;
+  public Selection: SelectionManager;
   public Simulators: SimulatorLibraryManager;
   public Stats: StatManager;
   public Team: TeamManager;
-  public EaC: EaCManager;
-  public History: HistoryManager;
 
   constructor(
     eac: OpenIndustrialEaC,
@@ -47,19 +50,32 @@ export class WorkspaceManager {
   ) {
     this.Scope = scope;
     this.Azi = new AziManager();
-    this.Selection = new SelectionManager();
-    this.Presets = new PresetManager();
-    this.Stats = new StatManager();
-    this.Simulators = new SimulatorLibraryManager();
     this.History = new HistoryManager();
+    this.NodeEvents = new NodeEventManager();
+    this.Presets = new PresetManager();
+    this.Selection = new SelectionManager();
+    this.Simulators = new SimulatorLibraryManager();
+    this.Stats = new StatManager();
     this.Team = new TeamManager();
-    this.Graph = new GraphStateManager(this.Selection, this.Stats);
-    this.EaC = this.createEaCManager(eac);
-    this.Runtime = new InteractionManager(
-      this.Selection,
-      this.Presets,
-      this.EaC
+
+    this.Interaction = new InteractionManager(this.Selection, this.Presets);
+
+    this.Graph = new GraphStateManager(
+      this.Interaction,
+      this.Stats,
+      this.NodeEvents
     );
+
+    this.EaC = new EaCManager(
+      eac,
+      this.oiSvc,
+      this.Scope,
+      this.Graph,
+      this.Presets,
+      this.History
+    );
+
+    this.Interaction.BindEaCManager(this.EaC);
 
     console.log('🚀 FlowManager initialized:', {
       scope: this.Scope,
@@ -221,14 +237,14 @@ export class WorkspaceManager {
   public UseInteraction() {
     const handleDrop = useCallback(
       (event: DragEvent, toFlow: (point: XYPosition) => XYPosition) => {
-        this.Runtime.HandleDrop(event, this.Graph.GetNodes(), toFlow);
+        this.Interaction.HandleDrop(event, this.Graph.GetNodes(), toFlow);
       },
       []
     );
 
     const handleConnect = useCallback((params: Connection) => {
       if (params.source && params.target) {
-        this.Runtime.ConnectNodes(params.source, params.target);
+        this.Interaction.ConnectNodes(params.source, params.target);
       }
     }, []);
 
@@ -241,14 +257,14 @@ export class WorkspaceManager {
 
     const handleNodesChange = useCallback(
       (changes: NodeChange[], nodes: Node[]) => {
-        this.Runtime.OnNodesChange(changes, nodes ?? this.Graph.GetNodes());
+        this.Interaction.OnNodesChange(changes, nodes ?? this.Graph.GetNodes());
       },
       []
     );
 
     const handleEdgesChange = useCallback(
       (changes: EdgeChange[], edges: Edge[]) => {
-        this.Runtime.OnEdgesChange(changes, edges ?? this.Graph.GetEdges());
+        this.Interaction.OnEdgesChange(changes, edges ?? this.Graph.GetEdges());
       },
       []
     );
@@ -484,19 +500,5 @@ export class WorkspaceManager {
     // e.g., this.Stats.Reset(); this.Runtime.Rebind();
 
     // Optionally, you could emit a custom hook event or callback here
-  }
-
-  // === Internals ===
-
-  protected createEaCManager(eac: OpenIndustrialEaC): EaCManager {
-    // Always use the new concrete EaCManager
-    return new EaCManager(
-      eac,
-      this.oiSvc,
-      this.Scope,
-      this.Graph,
-      this.Presets,
-      this.History
-    );
   }
 }
