@@ -3,8 +3,11 @@ import { IntentTypes } from '@o-industrial/common/types';
 import { FigureImage } from '../../../molecules/writing-devices/FigureImage.tsx';
 import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
 import { HubspotForm } from '../HubspotForm.tsx';
+import { Action, ActionStyleTypes } from '../../../atoms/Action.tsx';
 
 const HeroSection: FunctionalComponent = () => {
+  const primary = getIntentStyles(IntentTypes.Primary);
+
   const info = getIntentStyles(IntentTypes.Info);
 
   return (
@@ -26,12 +29,15 @@ const HeroSection: FunctionalComponent = () => {
 
         {/* Subheadline */}
         <p class="mt-6 text-lg leading-8 text-neutral-300 max-w-2xl mx-auto">
-          Compose forkable logic, connect real-time telemetry, and evolve agents — all inside your own runtime.
+          Compose forkable logic, connect real-time telemetry, and evolve agents
+          — all inside your own runtime.
         </p>
 
         {/* Azi Intro */}
         <p class="text-sm leading-6 text-neutral-400 max-w-md mx-auto italic">
-          <strong class="text-white">OpenIndustrial’s Azi™</strong> isn’t just an agent — she’s a runtime-aware co-designer who helps you version logic, govern decisions, and evolve automation flows over time.
+          <strong class="text-white">OpenIndustrial’s Azi™</strong> isn’t just
+          an agent — she’s a runtime-aware co-designer who helps you version
+          logic, govern decisions, and evolve automation flows over time.
         </p>
 
         {/* Visual */}
@@ -49,8 +55,29 @@ const HeroSection: FunctionalComponent = () => {
         </div>
 
         {/* CTA / Hubspot */}
-        <div class="mt-8 flex justify-center flex-wrap gap-6 max-w-xs mx-auto">
-          <HubspotForm />
+        <div
+          class={`max-w-xl mx-auto rounded-2xl border p-12 text-center shadow-lg ring-2 ring-inset ${primary.ring} ${primary.glow} bg-neutral-50 dark:bg-neutral-900 border-neutral-200 dark:border-neutral-50/10`}
+        >
+          <h2 class="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4 max-w-md mx-auto">
+            We’re Launching Soon. Want a First Look?
+          </h2>
+          <p class="text-md text-neutral-600 dark:text-neutral-300 max-w-sm mx-auto mb-10">
+            Enter your email address to be the first to get access. For a demo,
+            reach out to{' '}
+            <Action
+              class="inline"
+              href="mailto:invite@openIndustrial.co"
+              styleType={ActionStyleTypes.Thin | ActionStyleTypes.Link}
+              intentType={IntentTypes.Info}
+            >
+              invite@openIndustrial.co
+            </Action>
+          </p>
+
+          <div class="flex flex-col sm:flex-row justify-center gap-6">
+            {/* <Action> buttons available if re-enabled later */}
+            <HubspotForm id="hero-hubspot-form" />
+          </div>
         </div>
       </div>
     </section>
