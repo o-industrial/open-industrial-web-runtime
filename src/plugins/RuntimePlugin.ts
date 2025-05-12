@@ -214,7 +214,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               ],
             } as EaCPreactAppProcessor,
           },
-          home: {
+          home2: {
             Details: {
               Name: 'Marketing Plasmic Site',
               Description: 'Marketing Plasmic Home site.',
@@ -242,7 +242,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             } as EaCDFSProcessor,
           },
-          home2: {
+          home: {
             Details: {
               Name: 'Home Site',
               Description: 'Home site.',

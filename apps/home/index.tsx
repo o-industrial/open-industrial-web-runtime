@@ -2,16 +2,13 @@ import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 
-// ✅ Homepage Sections
-import HeroExecutionDeclaration from '../components/organisms/marketing/home-page/HeroExecutionDeclaration.tsx';
-import ExecutionLogPreview from '../components/organisms/marketing/home-page/ExecutionLogPreview.tsx';
-import NotADashboardSection from '../components/organisms/marketing/home-page/NotADashboardSection.tsx';
-import YourSystemNotOursSection from '../components/organisms/marketing/home-page/YourSystemNotOursSection.tsx';
-import StructureFirstThinking from '../components/organisms/marketing/home-page/StructureFirstThinking.tsx';
-import MemoryPackShowcase from '../components/organisms/marketing/home-page/MemoryPackShowcase.tsx';
-import ExecutionJourneyCards from '../components/organisms/marketing/home-page/ExecutionJourneyCards.tsx';
-import GitRuntimeLayout from '../components/organisms/marketing/home-page/GitRuntimeLayout.tsx';
-import FinalCTASection from '../components/organisms/marketing/home-page/FinalCTASection.tsx';
+import HeroSection from '../components/organisms/marketing/attempt2/HeroSection.tsx';
+import PainSection from '../components/organisms/marketing/attempt2/PainSection.tsx';
+import SystemProofSection from '../components/organisms/marketing/attempt2/SystemProofSection.tsx';
+import JourneySection from '../components/organisms/marketing/attempt2/JourneySection.tsx';
+import CallToAction from '../components/organisms/marketing/attempt2/CallToAction.tsx';
+
+export const IsIsland = true;
 
 export type HomepageData = {};
 
@@ -25,26 +22,14 @@ export const handler: EaCRuntimeHandlerSet<
   },
 };
 
-export default function Homepage({}: PageProps<HomepageData>) {
+export default function HomepageAttempt2({}: PageProps<HomepageData>) {
   return (
-    <div class="flex flex-col space-y-16 bg-neutral-900 text-white">
-      <HeroExecutionDeclaration />
-
-      <ExecutionLogPreview />
-
-      <NotADashboardSection />
-
-      <YourSystemNotOursSection />
-
-      <StructureFirstThinking />
-
-      <MemoryPackShowcase />
-
-      <ExecutionJourneyCards />
-
-      <GitRuntimeLayout />
-
-      <FinalCTASection />
+    <div class="flex flex-col">
+      <HeroSection />
+      <PainSection />
+      <SystemProofSection />
+      <JourneySection />
+      <CallToAction />
     </div>
   );
 }
