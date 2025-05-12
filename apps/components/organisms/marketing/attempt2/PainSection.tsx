@@ -51,7 +51,7 @@ const PainSection: FunctionalComponent = () => {
   const { background, text } = getIntentStyles(IntentTypes.Secondary);
 
   return (
-    <section class="bg-gradient-to-b from-neutral-50 dark:from-neutral-950 via-neon-cyan-500/20 dark:via-neon-cyan-500/20 to-neutral-50 dark:to-neutral-950 py-32 px-6 lg:px-8">
+    <section class="bg-gradient-to-b from-neutral-50 dark:from-neutral-950 via-neon-cyan-500/10 dark:via-neon-cyan-500/10 to-neutral-50 dark:to-neutral-950 py-32 px-6 lg:px-8">
       <div class="max-w-7xl mx-auto text-center space-y-10">
         <h2 class="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white">
           Every industrial team we’ve met says the same thing...

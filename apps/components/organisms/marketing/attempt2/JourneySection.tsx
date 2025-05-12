@@ -8,7 +8,7 @@ const JourneySection: FunctionalComponent = () => {
   const after = getIntentStyles(IntentTypes.Primary);
 
   return (
-    <section class="bg-gradient-to-b from-neutral-50 dark:from-neutral-950 via-neon-violet-500/20 dark:via-neon-violet-500/20 to-neutral-50 dark:to-neutral-950 py-32 px-6 lg:px-8">
+    <section class="bg-gradient-to-b from-neutral-50 dark:from-neutral-950 via-neon-violet-500/10 dark:via-neon-violet-500/10 to-neutral-50 dark:to-neutral-950 py-32 px-6 lg:px-8">
       <div class="max-w-7xl mx-auto space-y-16 text-center">
         {/* Section Heading */}
         <div class="space-y-6">
