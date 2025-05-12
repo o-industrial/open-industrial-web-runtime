@@ -33,7 +33,7 @@ export default function HomeLayout({
         ></script>
       </head>
 
-      <body class="bg-neutral-50 text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50">
+      <body class="bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
         <div class="min-h-screen flex flex-col">
           {/* Sticky Header with Logo */}
           <header class="fixed top-0 z-50 w-full backdrop-blur transition-all bg-white/20 dark:bg-neutral-950/20 border-b border-neutral-200 dark:border-white/10">
