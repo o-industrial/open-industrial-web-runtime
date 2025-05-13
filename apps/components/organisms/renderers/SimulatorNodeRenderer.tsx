@@ -10,17 +10,7 @@ import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { parseTimeAgoString } from '../../../../src/utils/parseTimeAgoString.tsx';
 
-import { FlowNodeData } from '../../../../src/flow/types/react/FlowNodeData.ts';
-import { EaCSimulatorDetails } from '@o-industrial/common/eac';
-
-export type SimulatorStats = {
-  impulseRates?: number[];
-  instanceCount?: number;
-  avgStartupMs?: number;
-  lastDeploymentAt?: string;
-};
-
-export type SimulatorNodeData = FlowNodeData<EaCSimulatorDetails, SimulatorStats>;
+import { SimulatorNodeData } from '../../../../src/flow/types/nodes/simulators/SimulatorNodeData.tsx';
 
 export default function SimulatorNodeRenderer({
   data,

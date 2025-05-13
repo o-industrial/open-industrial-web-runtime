@@ -15,9 +15,9 @@ import { FlowPosition } from '../types/graph/FlowPosition.ts';
 
 import AgentNodeRenderer from '../../../apps/components/organisms/renderers/AgentNodeRenderer.tsx';
 import ConnectionNodeRenderer from '../../../apps/components/organisms/renderers/ConnectionNodeRenderer.tsx';
-import DeviceNodeRenderer from '../../../apps/components/organisms/renderers/DeviceNodeRenderer.tsx';
 import EmptyNodeRenderer from '../../../apps/components/organisms/renderers/EmptyNodeRenderer.tsx';
 import SchemaNodeRenderer from '../../../apps/components/organisms/renderers/SchemaNodeRenderer.tsx';
+import SurfaceConnectionNodeRenderer from '../../../apps/components/organisms/renderers/SurfaceConnectionNodeRenderer.tsx';
 import SurfaceNodeRenderer from '../../../apps/components/organisms/renderers/SurfaceNodeRenderer.tsx';
 import SimulatorNodeRenderer from '../../../apps/components/organisms/renderers/SimulatorNodeRenderer.tsx';
 
@@ -25,6 +25,7 @@ import { AgentInspector } from '../../../apps/components/organisms/inspectors/Ag
 import { ConnectionInspector } from '../../../apps/components/organisms/inspectors/ConnectionInspector.tsx';
 import { SimulatorInspector } from '../../../apps/components/organisms/inspectors/SimulatorInspector.tsx';
 import { SurfaceInspector } from '../../../apps/components/organisms/inspectors/SurfaceInspector.tsx';
+import { SurfaceConnectionInspector } from '../../../apps/components/organisms/inspectors/SurfaceConnectionInspector.tsx';
 
 type InspectorMap = Record<string, ComponentType<any>>;
 type RendererMap = Record<string, ComponentType<any>>;
@@ -36,25 +37,29 @@ export class PresetManager {
     agent: AgentInspector,
     connection: ConnectionInspector,
     surface: SurfaceInspector,
+    'surface->connection': SurfaceConnectionInspector,
     simulator: SimulatorInspector,
   };
 
   protected static nodeTypes: RendererMap = {
     agent: memo(AgentNodeRenderer),
     connection: memo(ConnectionNodeRenderer),
-    device: memo(DeviceNodeRenderer),
     empty: memo(EmptyNodeRenderer),
     schema: memo(SchemaNodeRenderer),
     surface: memo(SurfaceNodeRenderer),
+    'surface->connection': memo(SurfaceConnectionNodeRenderer),
     simulator: memo(SimulatorNodeRenderer),
   };
 
   protected static presets: PresetMap = {
     empty: { Type: 'empty', Label: 'Empty Node', IconKey: 'empty' },
-    connection: { Type: 'connection', Label: 'Connection', IconKey: 'connection' },
+    connection: {
+      Type: 'connection',
+      Label: 'Connection',
+      IconKey: 'connection',
+    },
     schema: { Type: 'schema', Label: 'Schema', IconKey: 'schema' },
     surface: { Type: 'surface', Label: 'Surface', IconKey: 'surface' },
-    device: { Type: 'device', Label: 'Device', IconKey: 'device' },
     agent: { Type: 'agent', Label: 'Agent', IconKey: 'agent' },
     simulator: { Type: 'simulator', Label: 'Simulator', IconKey: 'simulator' },
   };
@@ -65,6 +70,7 @@ export class PresetManager {
     device: [],
     schema: ['surface'],
     surface: ['surface', 'workspace'],
+    'surface->connection': [],
     simulator: [],
     empty: [],
   };
@@ -73,7 +79,7 @@ export class PresetManager {
     type: string,
     id: string,
     position: FlowPosition,
-    parentId?: string,
+    parentId?: string
   ): Partial<OpenIndustrialEaC> {
     const metadata: EaCFlowNodeMetadata = {
       Position: position,
@@ -122,7 +128,10 @@ export class PresetManager {
     }
   }
 
-  public GetConfigForType(_nodeId: string, type: string): Record<string, unknown> {
+  public GetConfigForType(
+    _nodeId: string,
+    type: string
+  ): Record<string, unknown> {
     switch (type) {
       case 'connection':
         return {
@@ -154,7 +163,7 @@ export class PresetManager {
     return Object.fromEntries(
       Object.entries(PresetManager.presets).filter(([type]) =>
         PresetManager.scopeMap[type]?.includes(scope)
-      ),
+      )
     );
   }
 

@@ -29,18 +29,29 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
     const schemaEntries = wks.Schemas ?? {};
 
     // --- Surface-Mapped Connections
-    for (const [connKey, settings] of Object.entries(
+    for (const [connKey, dcSettings] of Object.entries(
       surf.DataConnections ?? {}
     )) {
+      const { Metadata, ...settings } = dcSettings;
+
       const conn = wks.DataConnections?.[connKey];
-      if (!conn || settings?.Enabled === false) continue;
+
+      if (!conn || Metadata?.Enabled === false) {
+        continue;
+      }
 
       nodes.push({
-        ID: connKey,
-        Type: 'surface-connection',
+        ID: `${this.surfaceLookup}->${connKey}`,
+        Type: 'surface->connection',
         Label: conn.Details?.Name ?? connKey,
-        Metadata: conn.Metadata,
-        Details: conn.Details,
+        Metadata: {
+          ...(conn.Metadata || {}),
+          ...Metadata,
+        },
+        Details: {
+          Name: conn.Details?.Name ?? connKey,
+          ...settings,
+        },
       });
     }
 
@@ -169,6 +180,12 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
     return null;
   }
 
+  public HasConnection(source: string, target: string): boolean {
+    return this.graph
+      .GetGraph()
+      .Edges.some((e) => e.Source === source && e.Target === target);
+  }
+
   public RemoveConnectionEdge(
     eac: OpenIndustrialEaC,
     edgeId: string
@@ -219,12 +236,6 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
     }
 
     return null;
-  }
-
-  public HasConnection(source: string, target: string): boolean {
-    return this.graph
-      .GetGraph()
-      .Edges.some((e) => e.Source === source && e.Target === target);
   }
 
   public UpdateConnections(

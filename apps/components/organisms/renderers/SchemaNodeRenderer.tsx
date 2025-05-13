@@ -2,15 +2,8 @@ import { NodeProps, Position } from 'reactflow';
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
 import NodeHandle from '../../atoms/NodeHandle.tsx';
 import { IntentTypes } from '@o-industrial/common/types';
-import { FlowNodeData } from '../../../../src/flow/types/react/FlowNodeData.ts';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
-import { EaCSchemaDetails } from '@o-industrial/common/eac';
-
-type SchemaStats = {
-  impulseRates?: number[];
-};
-
-export type SchemaNodeData = FlowNodeData<EaCSchemaDetails, SchemaStats>;
+import { SchemaNodeData } from '../../../../src/flow/types/nodes/schemas/SchemaNodeData.tsx';
 
 export default function SchemaNodeRenderer({
   data,

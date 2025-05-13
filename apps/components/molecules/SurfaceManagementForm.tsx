@@ -1,4 +1,3 @@
-// components/molecules/SurfaceManagementForm.tsx
 import { JSX } from 'preact';
 import { Input } from '../atoms/forms/Input.tsx';
 import { EaCSurfaceDetails } from '@o-industrial/common/eac';

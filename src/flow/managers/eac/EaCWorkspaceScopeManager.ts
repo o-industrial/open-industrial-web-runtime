@@ -6,6 +6,7 @@ import {
   EaCDataConnectionAsCode,
   EaCSurfaceAsCode,
   EverythingAsCodeOIWorkspace,
+  SurfaceDataConnectionSettings,
 } from '@o-industrial/common/eac';
 import { Edge, EdgeChange } from 'reactflow';
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
@@ -112,9 +113,13 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
         },
       };
     } else if (src.Type === 'connection' && tgt.Type === 'surface') {
-      const connSet = {
+      const connSet: Record<string, SurfaceDataConnectionSettings> = {
         ...(wks.Surfaces?.[tgt.ID]?.DataConnections ?? {}),
-        [src.ID]: {},
+        [src.ID]: {
+          Metadata: {
+            Enabled: true,
+          },
+        },
       };
 
       partial = {
@@ -147,21 +152,21 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
       .GetGraph()
       .Edges.some((e) => e.Source === source && e.Target === target);
   }
-  
+
   public RemoveConnectionEdge(
     eac: OpenIndustrialEaC,
     edgeId: string
   ): Partial<OpenIndustrialEaC> | null {
     const wks = eac as EverythingAsCodeOIWorkspace;
-  
+
     const [source, target] = edgeId.split('->');
-  
+
     const src = this.graph.GetGraph().Nodes.find((n) => n.ID === source);
     const tgt = this.graph.GetGraph().Nodes.find((n) => n.ID === target);
     if (!src || !tgt) return null;
-  
+
     let partial: Partial<EverythingAsCodeOIWorkspace> | null = null;
-  
+
     if (src.Type === 'simulator' && tgt.Type === 'connection') {
       if (wks.DataConnections?.[tgt.ID]?.SimulatorLookup === src.ID) {
         partial = {
@@ -178,7 +183,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
       if (surface?.DataConnections?.[src.ID]) {
         const updatedConnections = { ...surface.DataConnections };
         delete updatedConnections[src.ID];
-  
+
         partial = {
           Surfaces: {
             [tgt.ID]: {
@@ -201,9 +206,9 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
         };
       }
     }
-  
+
     return partial;
-  }  
+  }
 
   public UpdateConnections(
     _changes: EdgeChange[],

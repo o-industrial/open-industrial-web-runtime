@@ -5,12 +5,11 @@ import { FlowGraph } from '../types/graph/FlowGraph.ts';
 import { FlowGraphNode } from '../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../types/graph/FlowGraphEdge.ts';
 import { StatManager } from './StatManager.ts';
-import { SelectionManager } from './SelectionManager.ts';
 import { InteractionManager } from './InteractionManager.ts';
 import { NodeEventManager } from './NodeEventManager.ts';
 
 export class GraphStateManager {
-  protected graph: FlowGraph = { Nodes: [], Edges: [] };
+  protected graph!: FlowGraph;
   protected nodeCache: Record<string, Node<FlowNodeData>> = {};
   protected edgeCache: Record<string, Edge> = {};
   protected listeners = new Set<() => void>();
@@ -19,7 +18,9 @@ export class GraphStateManager {
     protected interaction: InteractionManager,
     protected stats: StatManager,
     protected nodeEvents: NodeEventManager
-  ) {}
+  ) {
+    this.ResetGraph();
+  }
 
   // === Public API ===
 
@@ -106,6 +107,10 @@ export class GraphStateManager {
   public OnGraphChanged(cb: () => void): () => void {
     this.listeners.add(cb);
     return () => this.listeners.delete(cb);
+  }
+
+  public ResetGraph(): void {
+    this.graph = { Nodes: [], Edges: [] };
   }
 
   // === Internal Emit ===
