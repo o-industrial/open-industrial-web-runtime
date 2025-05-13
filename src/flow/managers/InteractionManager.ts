@@ -52,12 +52,6 @@ export class InteractionManager {
       );
     });
 
-    const scope = surfaceParent ? 'surface' : 'workspace';
-    if (!this.presets.IsTypeAllowedInScope(type, scope)) {
-      console.warn(`[Drop] Disallowed node type: ${type} in scope: ${scope}`);
-      return null;
-    }
-
     const relativePosition = surfaceParent
       ? {
           x: position.x - surfaceParent.position.x,
@@ -69,14 +63,13 @@ export class InteractionManager {
       screen: { x: event.clientX, y: event.clientY },
       flow: position,
       relative: relativePosition,
-      scope,
       parent: surfaceParent?.id,
     });
 
     const newGraphNode = this.eacMgr.CreateNodeFromPreset(
       type,
-      { X: relativePosition.x, Y: relativePosition.y },
-      surfaceParent?.id
+      { X: relativePosition.x, Y: relativePosition.y }
+      // surfaceParent?.id
     );
 
     this.selection.SelectNode(newGraphNode.ID);

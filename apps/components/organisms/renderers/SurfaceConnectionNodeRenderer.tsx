@@ -19,6 +19,7 @@ export default function SurfaceConnectionNodeRenderer({
       enabled={data.enabled}
       onDoubleClick={data.onDoubleClick}
       isSelected={data.isSelected}
+      pulseIntent={IntentTypes.Info}
       class='data-[state=expanded]:w-[300px] data-[state=expanded]:h-auto data-[state=expanded]:rounded-md'
       postMain={
         <NodeHandle

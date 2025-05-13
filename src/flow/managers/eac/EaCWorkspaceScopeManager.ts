@@ -10,6 +10,7 @@ import {
 } from '@o-industrial/common/eac';
 import { Edge, EdgeChange } from 'reactflow';
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
+import { FlowPosition } from '../../types/graph/FlowPosition.ts';
 
 /**
  * Workspace-scoped logic handler for EaC state.
@@ -22,7 +23,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
     const nodes: FlowGraphNode[] = [];
     const edges: FlowGraphEdge[] = [];
 
-    // Data Connections
+    // --- Data Connections
     for (const [key, conn] of Object.entries(wks.DataConnections ?? {})) {
       nodes.push({
         ID: key,
@@ -33,7 +34,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
       });
     }
 
-    // Simulators
+    // --- Simulators
     for (const [key, sim] of Object.entries(wks.Simulators ?? {})) {
       nodes.push({
         ID: key,
@@ -55,8 +56,10 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
       }
     }
 
-    // Surfaces
+    // --- Root Surfaces Only
     for (const [key, surf] of Object.entries(wks.Surfaces ?? {})) {
+      if (surf.ParentSurfaceLookup) continue; // ❌ Skip nested surfaces
+
       nodes.push({
         ID: key,
         Type: 'surface',
@@ -74,14 +77,8 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
         });
       }
 
-      if (surf.ParentSurfaceLookup) {
-        edges.push({
-          ID: `${surf.ParentSurfaceLookup}->${key}`,
-          Source: surf.ParentSurfaceLookup,
-          Target: key,
-          Label: 'parent',
-        });
-      }
+      // ⚠️ Optional: could include edge to known children if needed
+      // but rendering of those will occur in surface scope
     }
 
     return { Nodes: nodes, Edges: edges };
@@ -145,6 +142,14 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
     }
 
     return partial;
+  }
+
+  public CreatePartialEaCFromPreset(
+    type: string,
+    id: string,
+    position: FlowPosition
+  ): Partial<OpenIndustrialEaC> {
+    return this.presets.CreatePartialEaCFromPreset(type, id, position);
   }
 
   public HasConnection(source: string, target: string): boolean {

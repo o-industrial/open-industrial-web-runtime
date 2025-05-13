@@ -102,7 +102,6 @@ export default function InspectorPanel({ workspaceMgr }: InspectorPanelProps) {
       workspaceMgr.Presets?.GetConfigForType?.(selected.id, selected.type!) ??
       {};
 
-    debugger;
     const latestMetadata = workspaceMgr.EaC.GetMetadataForNode?.(selected.id);
     const enabled = latestMetadata?.Enabled ?? false;
 

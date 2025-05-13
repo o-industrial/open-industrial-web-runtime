@@ -1,9 +1,6 @@
 import { jsonMapSetClone, NullableArrayOrObject } from '@fathym/common';
 import { EaCVertexDetails } from '@fathym/eac';
-import {
-  EaCFlowNodeMetadata,
-  EaCFlowSettings,
-} from '@o-industrial/common/eac';
+import { EaCFlowNodeMetadata, EaCFlowSettings } from '@o-industrial/common/eac';
 import { GraphStateManager } from '../GraphStateManager.ts';
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
 
@@ -11,6 +8,7 @@ import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
  * Normalize an embedded block (like a surface DataConnection) into { Metadata, Details }
  */
 function extractEmbeddedAsCode<T extends EaCFlowSettings>(
+  eacBlock: EaCVertexDetails,
   block: T | undefined
 ): { Metadata?: EaCFlowNodeMetadata; Details: EaCVertexDetails } | null {
   if (!block) return null;
@@ -18,7 +16,7 @@ function extractEmbeddedAsCode<T extends EaCFlowSettings>(
   const { Metadata, ...details } = block;
   return {
     Metadata: Metadata ?? {},
-    Details: details ?? {},
+    Details: { ...(details ?? {}), Name: eacBlock.Name },
   };
 }
 
@@ -65,7 +63,10 @@ export class EaCNodeInspectorManager {
       const collectionKey = this.getEaCKeyForType(to);
       const outerKey = this.getEaCKeyForType(from);
 
-      const parentBlock = { ...jsonMapSetClone(parent.AsCode) } as Record<string, any>;
+      const parentBlock = { ...jsonMapSetClone(parent.AsCode) } as Record<
+        string,
+        any
+      >;
 
       if (!parentBlock[collectionKey]) parentBlock[collectionKey] = {};
       parentBlock[collectionKey][childId] = updateBlock;
@@ -108,7 +109,10 @@ export class EaCNodeInspectorManager {
       const collectionKey = this.getEaCKeyForType(to);
       const outerKey = this.getEaCKeyForType(from);
 
-      const parentBlock = { ...jsonMapSetClone(parent.AsCode) } as Record<string, any>;
+      const parentBlock = { ...jsonMapSetClone(parent.AsCode) } as Record<
+        string,
+        any
+      >;
 
       if (!parentBlock[collectionKey]) return null;
       parentBlock[collectionKey][childId] = null;
@@ -129,10 +133,7 @@ export class EaCNodeInspectorManager {
   /**
    * Returns a normalized { Metadata, Details } object for a given node.
    */
-  public FindAsCode(node: {
-    ID: string;
-    Type: string;
-  }): {
+  public FindAsCode(node: { ID: string; Type: string }): {
     ID: string;
     Type: string;
     AsCode: {
@@ -153,6 +154,7 @@ export class EaCNodeInspectorManager {
 
       const collectionKey = this.getEaCKeyForType(to);
       const embedded = extractEmbeddedAsCode(
+        this.FindAsCode({ ID: childId, Type: to })?.AsCode.Details!,
         (parent.AsCode as any)?.[collectionKey]?.[childId]
       );
 

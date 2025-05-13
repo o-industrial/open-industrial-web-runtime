@@ -158,23 +158,18 @@ export class EaCManager {
 
   public CreateNodeFromPreset(
     type: string,
-    position: FlowPosition,
-    parentId?: string
+    position: FlowPosition
   ): FlowGraphNode {
     const id = `${type}-${Date.now()}`;
-
-    const partial = this.presets.CreatePartialEaCFromPreset(
+    const partial = this.scopeMgr.CreatePartialEaCFromPreset(
       type,
       id,
-      position,
-      parentId
+      position
     );
-
     this.MergePartial(partial);
 
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
     if (!node) throw new Error(`Failed to locate node after create: ${id}`);
-
     return node;
   }
 
@@ -280,13 +275,17 @@ export class EaCManager {
 
     switch (scope) {
       case 'workspace': {
-        this.scopeMgr = new EaCWorkspaceScopeManager(this.graph);
+        this.scopeMgr = new EaCWorkspaceScopeManager(this.graph, this.presets);
         break;
       }
 
       case 'surface': {
         if (lookup) {
-          this.scopeMgr = new EaCSurfaceScopeManager(this.graph, lookup);
+          this.scopeMgr = new EaCSurfaceScopeManager(
+            this.graph,
+            this.presets,
+            lookup
+          );
         } else {
           throw new Error(`Lookup must be defined for scope: ${scope}`);
         }

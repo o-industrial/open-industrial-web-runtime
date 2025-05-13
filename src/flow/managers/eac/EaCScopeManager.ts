@@ -2,13 +2,15 @@ import { Edge, EdgeChange } from 'reactflow';
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
 import { FlowGraph } from '../../types/graph/FlowGraph.ts';
 import { GraphStateManager } from '../GraphStateManager.ts';
+import { FlowPosition } from '../../types/graph/FlowPosition.ts';
+import { PresetManager } from '../PresetManager.ts';
 
 /**
  * Abstract base for scoped EaC logic (workspace, surface, etc.).
  * Handles flow derivation and relationship management.
  */
 export abstract class EaCScopeManager {
-  constructor(protected graph: GraphStateManager) {}
+  constructor(protected graph: GraphStateManager, protected presets: PresetManager) {}
 
   /**
    * Build the graph (nodes + edges) for this scope.
@@ -25,13 +27,18 @@ export abstract class EaCScopeManager {
   ): Partial<OpenIndustrialEaC> | null;
 
   /**
-   * Optionally implement edge diffing logic.
+   * Construct a partial EaC update from a preset.
    */
-  abstract UpdateConnections(
-    changes: EdgeChange[],
-    edges: Edge[],
-    eac: OpenIndustrialEaC
-  ): OpenIndustrialEaC | null;
+  abstract CreatePartialEaCFromPreset(
+    type: string,
+    id: string,
+    position: FlowPosition
+  ): Partial<OpenIndustrialEaC>;
+
+  /**
+   * Check if an edge already exists between two nodes in the current graph.
+   */
+  abstract HasConnection(source: string, target: string): boolean;
 
   /**
    * Reverse an existing edge into a partial EaC delete/update payload.
@@ -42,7 +49,11 @@ export abstract class EaCScopeManager {
   ): Partial<OpenIndustrialEaC> | null;
 
   /**
-   * Check if an edge already exists between two nodes in the current graph.
+   * Optionally implement edge diffing logic.
    */
-  abstract HasConnection(source: string, target: string): boolean;
+  abstract UpdateConnections(
+    changes: EdgeChange[],
+    edges: Edge[],
+    eac: OpenIndustrialEaC
+  ): OpenIndustrialEaC | null;
 }

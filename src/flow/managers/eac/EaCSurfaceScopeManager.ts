@@ -12,10 +12,16 @@ import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
 import { FlowGraph } from '../../types/graph/FlowGraph.ts';
 import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../../types/graph/FlowGraphEdge.ts';
+import { FlowPosition } from '../../types/graph/FlowPosition.ts';
+import { PresetManager } from '../PresetManager.ts';
 
 export class EaCSurfaceScopeManager extends EaCScopeManager {
-  constructor(graph: GraphStateManager, protected surfaceLookup: string) {
-    super(graph);
+  constructor(
+    graph: GraphStateManager,
+    presets: PresetManager,
+    protected surfaceLookup: string
+  ) {
+    super(graph, presets);
   }
 
   public BuildGraph(eac: OpenIndustrialEaC): FlowGraph {
@@ -49,7 +55,7 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
           ...Metadata,
         },
         Details: {
-          Name: conn.Details?.Name ?? connKey,
+          Name: conn.Details?.Name,
           ...settings,
         },
       });
@@ -127,6 +133,19 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
       }
     }
 
+    // --- Child Surfaces (nested inside this surface)
+    for (const [key, child] of Object.entries(wks.Surfaces ?? {})) {
+      if (child.ParentSurfaceLookup !== this.surfaceLookup) continue;
+
+      nodes.push({
+        ID: key,
+        Type: 'surface',
+        Label: child.Details?.Name ?? key,
+        Metadata: child.Metadata,
+        Details: child.Details,
+      });
+    }
+
     return { Nodes: nodes, Edges: edges };
   }
 
@@ -177,7 +196,51 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
       };
     }
 
+    if (src.Type === 'surface->connection' && tgt.Type?.includes('schema')) {
+      const schema = wks.Schemas?.[tgt.ID];
+      if (!schema) return null;
+
+      return {
+        Schemas: {
+          [tgt.ID]: {
+            ...schema,
+            DataConnection: { Lookup: source.split('->')[1] },
+          },
+        },
+      };
+    }
+
+    if (src.Type?.includes('schema') && tgt.Type === 'surface') {
+      const surf = wks.Surfaces?.[tgt.ID];
+      if (!surf) return null;
+
+      return {
+        Surfaces: {
+          [tgt.ID]: {
+            ...surf,
+            Schemas: {
+              ...(surf.Schemas ?? {}),
+              [src.ID]: { Metadata: { Enabled: true } },
+            },
+          },
+        },
+      };
+    }
+
     return null;
+  }
+
+  public CreatePartialEaCFromPreset(
+    type: string,
+    id: string,
+    position: FlowPosition
+  ): Partial<OpenIndustrialEaC> {
+    return this.presets.CreatePartialEaCFromPreset(
+      type,
+      id,
+      position,
+      this.surfaceLookup
+    );
   }
 
   public HasConnection(source: string, target: string): boolean {
@@ -243,30 +306,32 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
     edges: Edge[],
     eac: OpenIndustrialEaC
   ): OpenIndustrialEaC | null {
-    let changed = false;
-    const partial: OpenIndustrialEaC = {};
+    // let changed = false;
+    // const partial: OpenIndustrialEaC = {};
 
-    for (const change of changes) {
-      if (change.type === 'add') {
-        const edge = edges.find((e) => e.id === change.item.id);
-        if (!edge) continue;
+    // for (const change of changes) {
+    //   if (change.type === 'add') {
+    //     const edge = edges.find((e) => e.id === change.item.id);
+    //     if (!edge) continue;
 
-        const update = this.CreateConnectionEdge(eac, edge.source, edge.target);
-        if (update) {
-          merge(partial, update);
-          changed = true;
-        }
-      }
+    //     const update = this.CreateConnectionEdge(eac, edge.source, edge.target);
+    //     if (update) {
+    //       merge(partial, update);
+    //       changed = true;
+    //     }
+    //   }
 
-      if (change.type === 'remove') {
-        const update = this.RemoveConnectionEdge(eac, change.id);
-        if (update) {
-          merge(partial, update);
-          changed = true;
-        }
-      }
-    }
+    //   if (change.type === 'remove') {
+    //     const update = this.RemoveConnectionEdge(eac, change.id);
+    //     if (update) {
+    //       merge(partial, update);
+    //       changed = true;
+    //     }
+    //   }
+    // }
 
-    return changed ? partial : null;
+    // return changed ? partial : null;
+
+    return null;
   }
 }
