@@ -158,6 +158,7 @@ export class GraphStateManager {
       };
 
       const cached = this.nodeCache[id];
+      
       this.nodeCache[id] = cached ? Object.assign(cached, updated) : updated;
 
       return this.nodeCache[id];

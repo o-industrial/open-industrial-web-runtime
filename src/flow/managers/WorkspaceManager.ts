@@ -27,9 +27,15 @@ import { EaCEnterpriseDetails } from '@fathym/eac';
 import { TeamMember } from '../../types/TeamMember.ts';
 import { TeamManager } from './TeamManager.ts';
 import { NodeEventManager } from './NodeEventManager.ts';
+import { IntentTypes } from '@o-industrial/common/types';
+import { BreadcrumbPart } from '../../../apps/components/molecules/BreadcrumbBar.tsx';
 
 export class WorkspaceManager {
-  public Scope: NodeScopeTypes;
+  protected currentScope: {
+    Scope: NodeScopeTypes;
+
+    Lookup?: string;
+  };
 
   public Azi: AziManager;
   public EaC: EaCManager;
@@ -48,15 +54,17 @@ export class WorkspaceManager {
     protected oiSvc: OpenIndustrialAPIClient,
     scope: NodeScopeTypes = 'workspace'
   ) {
-    this.Scope = scope;
+    this.currentScope = { Scope: scope };
+
     this.Azi = new AziManager();
     this.History = new HistoryManager();
-    this.NodeEvents = new NodeEventManager();
     this.Presets = new PresetManager();
     this.Selection = new SelectionManager();
     this.Simulators = new SimulatorLibraryManager();
     this.Stats = new StatManager();
     this.Team = new TeamManager();
+
+    this.NodeEvents = new NodeEventManager(this);
 
     this.Interaction = new InteractionManager(this.Selection, this.Presets);
 
@@ -69,7 +77,7 @@ export class WorkspaceManager {
     this.EaC = new EaCManager(
       eac,
       this.oiSvc,
-      this.Scope,
+      this.currentScope.Scope,
       this.Graph,
       this.Presets,
       this.History
@@ -78,7 +86,7 @@ export class WorkspaceManager {
     this.Interaction.BindEaCManager(this.EaC);
 
     console.log('🚀 FlowManager initialized:', {
-      scope: this.Scope,
+      scope: this.currentScope,
       nodes: this.Graph.GetNodes().length,
       edges: this.Graph.GetEdges().length,
     });
@@ -113,17 +121,40 @@ export class WorkspaceManager {
     };
   }
 
-  public UseWorkspaceBreadcrumb(): string[] {
+  public UseBreadcrumb(): BreadcrumbPart[] {
     const eac = this.UseEaC();
-    const [pathParts, setPathParts] = useState<string[]>([
-      'Loading...',
-      'Workspace',
+    const { currentScope, currentScopeData } = this.UseScopeSwitcher();
+
+    const [pathParts, setPathParts] = useState<BreadcrumbPart[]>([
+      { label: 'Loading...', intentType: IntentTypes.Info },
+      { label: 'Workspace', intentType: IntentTypes.Primary },
     ]);
 
     useEffect(() => {
       const name = eac?.Details?.Name ?? 'Loading...';
-      setPathParts([name, 'Workspace']);
-    }, [eac?.Details?.Name]);
+
+      if (currentScope === 'workspace') {
+        setPathParts([
+          {
+            label: `${name} (Workspace)`,
+          },
+        ]);
+      } else {
+        const surfaceLookup = currentScopeData.Lookup!;
+        const surfaceName =
+          eac.Surfaces?.[surfaceLookup]?.Details?.Name ?? 'Unknown Surface';
+
+        setPathParts([
+          {
+            label: `${name} (Workspace)`,
+            onClick: () => this.SwitchToScope('workspace'),
+          },
+          {
+            label: `${surfaceName} (Surface)`,
+          },
+        ]);
+      }
+    }, [eac?.Details?.Name, currentScope]);
 
     return pathParts;
   }
@@ -279,25 +310,27 @@ export class WorkspaceManager {
   }
 
   public UseScopeSwitcher() {
-    const [currentScope, setScope] = useState(this.Scope);
+    const [scopeCtx, setScopeCtx] = useState({ ...this.currentScope });
 
     useEffect(() => {
       const unsubscribe = this.Graph.OnGraphChanged(() => {
         // Optional: Scope doesn't directly change from graph, but if you wire up
         // a more proper observer (e.g., this.OnScopeChanged) you can hook into that instead
-        setScope(this.Scope);
+        setScopeCtx(this.currentScope);
       });
 
       return unsubscribe;
     }, []);
 
-    const switchToScope = (scope: NodeScopeTypes, lookup: string) => {
+    const switchToScope = (scope: NodeScopeTypes, lookup?: string) => {
       this.SwitchToScope(scope, lookup);
-      setScope(scope); // manually trigger update
+
+      setScopeCtx({ Scope: scope, Lookup: lookup });
     };
 
     return {
-      currentScope,
+      currentScope: scopeCtx.Scope,
+      currentScopeData: scopeCtx,
       switchToScope,
     };
   }
@@ -322,7 +355,9 @@ export class WorkspaceManager {
   }
 
   public UseUIContext() {
-    const presetsForScope = this.Presets.GetPresetsForScope(this.Scope);
+    const presetsForScope = this.Presets.GetPresetsForScope(
+      this.currentScope.Scope
+    );
     const rendererMap = this.Presets.GetRendererMap();
 
     return {
@@ -484,11 +519,11 @@ export class WorkspaceManager {
     }
   }
 
-  public SwitchToScope(scope: NodeScopeTypes, lookup: string): void {
+  public SwitchToScope(scope: NodeScopeTypes, lookup?: string): void {
     console.log(`🔀 Switching scope to: ${scope} (${lookup})`);
 
     // Update internal scope reference
-    this.Scope = scope;
+    this.currentScope = { Scope: scope, Lookup: lookup };
 
     // Clear selection before switching
     this.Selection.ClearSelection();

@@ -56,7 +56,7 @@ export default function WorkspacePage({
   const [showWorkspaceSettings, setShowWorkspaceSettings] = useState(false);
 
   // 🔁 Get reactive EaC and use it to update pathParts
-  const pathParts = workspaceMgr.UseWorkspaceBreadcrumb();
+  const pathParts = workspaceMgr.UseBreadcrumb();
 
   const modals = (
     <>

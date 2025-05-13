@@ -1,29 +1,24 @@
-type NodeEvent = {
-  Type: string;
-  NodeID: string;
-};
-
-type NodeEventCallback = (event: NodeEvent) => void;
+import { WorkspaceManager } from './WorkspaceManager.ts';
+import { NodeEvent, NodeEventRouter } from './node-events/NodeEventRouter.ts';
+import { SurfaceEventRouter } from './node-events/SurfaceEventRouter.ts';
 
 export class NodeEventManager {
-  protected handlers: Record<string, Set<NodeEventCallback>> = {};
+  protected eventRouters: Record<string, NodeEventRouter>;
+
+  constructor(protected workspace: WorkspaceManager) {
+    this.eventRouters = {
+      surface: new SurfaceEventRouter(this.workspace),
+    };
+  }
 
   public Emit(nodeType: string, event: NodeEvent): void {
     console.log(`[NodeEvent] ${event.Type} from ${event.NodeID} of node type ${nodeType}`);
 
-    const key = nodeType.toLowerCase();
-    for (const handler of this.handlers[key] ?? []) {
-      handler(event);
+    const router = this.eventRouters[nodeType.toLowerCase()];
+    if (router) {
+      router.Handle(event);
+    } else {
+      console.warn(`⚠️ No event router found for node type: ${nodeType}`);
     }
-  }
-
-  public On(nodeType: string, callback: NodeEventCallback): () => void {
-    const key = nodeType.toLowerCase();
-    this.handlers[key] ??= new Set();
-    this.handlers[key]!.add(callback);
-
-    return () => {
-      this.handlers[key]!.delete(callback);
-    };
   }
 }
