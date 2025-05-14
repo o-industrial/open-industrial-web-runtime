@@ -19,7 +19,7 @@ export class EaCProposalManager {
 
   constructor(
     protected api: OpenIndustrialAPIClient,
-    protected eacManager: EaCManager
+    protected eacManager: EaCManager,
   ) {}
 
   /**
@@ -56,10 +56,10 @@ export class EaCProposalManager {
    */
   public GetForTarget<T extends RecordKind>(
     kind: T,
-    key: string
+    key: string,
   ): Proposal<T>[] {
     return this.proposals.filter(
-      (p) => p.Kind === kind && p.Key === key
+      (p) => p.Kind === kind && p.Key === key,
     ) as Proposal<T>[];
   }
 
@@ -106,7 +106,7 @@ export class EaCProposalManager {
    */
   public async Fork<T extends RecordKind>(
     id: string,
-    delta: Partial<Proposal<T>>
+    delta: Partial<Proposal<T>>,
   ): Promise<string> {
     const proposal = this.GetByID(id) as Proposal<T>;
     if (!proposal) throw new Error(`Proposal not found: ${id}`);

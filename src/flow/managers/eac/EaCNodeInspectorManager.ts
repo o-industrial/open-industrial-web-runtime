@@ -9,7 +9,7 @@ import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
  */
 function extractEmbeddedAsCode<T extends EaCFlowSettings>(
   eacBlock: EaCVertexDetails,
-  block: T | undefined
+  block: T | undefined,
 ): { Metadata?: EaCFlowNodeMetadata; Details: EaCVertexDetails } | null {
   if (!block) return null;
 
@@ -20,13 +20,55 @@ function extractEmbeddedAsCode<T extends EaCFlowSettings>(
   };
 }
 
+function extractSurfaceSchemaOverlay(
+  globalSchema: EaCVertexDetails | undefined,
+  surfaceSchemaEntry: Record<string, unknown> | undefined,
+): { Metadata?: EaCFlowNodeMetadata; Details: EaCVertexDetails } | null {
+  if (!globalSchema || !surfaceSchemaEntry) return null;
+
+  const { Metadata, ...overrides } = surfaceSchemaEntry;
+
+  return {
+    Metadata: Metadata as EaCFlowNodeMetadata,
+    Details: {
+      ...globalSchema,
+      ...overrides,
+    },
+  };
+}
+
+function extractAsCode(
+  from: string,
+  to: string,
+  parent: { Details: EaCVertexDetails } | null | undefined,
+  child: Record<string, any> | undefined,
+): { Metadata?: EaCFlowNodeMetadata; Details: EaCVertexDetails } | null {
+  if (!parent || !child) return null;
+
+  // Special case: surface-scoped schema override
+  if (from === 'surface' && to === 'schema') {
+    const { Metadata, ...overrides } = child;
+
+    return {
+      Metadata: Metadata as EaCFlowNodeMetadata,
+      Details: {
+        ...parent.Details,
+        ...overrides,
+      },
+    };
+  }
+
+  // Default case: use standard embedded extractor
+  return extractEmbeddedAsCode(parent.Details, child);
+}
+
 /**
  * Central inspector and mutator for EaC-backed node state.
  */
 export class EaCNodeInspectorManager {
   constructor(
     protected graph: GraphStateManager,
-    protected getEaC: () => OpenIndustrialEaC
+    protected getEaC: () => OpenIndustrialEaC,
   ) {}
 
   /**
@@ -37,20 +79,19 @@ export class EaCNodeInspectorManager {
     update: Partial<{
       Metadata: EaCFlowNodeMetadata;
       Details: EaCVertexDetails;
-    }>
+    }>,
   ): Partial<OpenIndustrialEaC> | null {
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
     if (!node) return null;
 
     const typePath = node.Type.toLowerCase();
 
-    const updateBlock =
-      update.Details || update.Metadata
-        ? {
-            ...(update.Details ?? {}),
-            ...(update.Metadata ? { Metadata: update.Metadata } : {}),
-          }
-        : null;
+    const updateBlock = update.Details || update.Metadata
+      ? {
+        ...(update.Details ?? {}),
+        ...(update.Metadata ? { Metadata: update.Metadata } : {}),
+      }
+      : null;
 
     if (!updateBlock) return null;
 
@@ -93,7 +134,7 @@ export class EaCNodeInspectorManager {
    * Build a delete payload for the specified node, including embedded types.
    */
   public BuildPartialForNodeDelete(
-    id: string
+    id: string,
   ): NullableArrayOrObject<OpenIndustrialEaC> | null {
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
     if (!node) return null;
@@ -155,15 +196,15 @@ export class EaCNodeInspectorManager {
       const collectionKey = this.getEaCKeyForType(to);
       const embedded = extractEmbeddedAsCode(
         this.FindAsCode({ ID: childId, Type: to })?.AsCode.Details!,
-        (parent.AsCode as any)?.[collectionKey]?.[childId]
+        (parent.AsCode as any)?.[collectionKey]?.[childId],
       );
 
       return embedded
         ? {
-            ID: id,
-            Type: typePath,
-            AsCode: embedded,
-          }
+          ID: id,
+          Type: typePath,
+          AsCode: embedded,
+        }
         : null;
     }
 

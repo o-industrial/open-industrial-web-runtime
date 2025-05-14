@@ -8,27 +8,27 @@ const JourneySection: FunctionalComponent = () => {
   const after = getIntentStyles(IntentTypes.Primary);
 
   return (
-    <section class="bg-gradient-to-b from-neutral-50 dark:from-neutral-950 via-neon-violet-500/10 dark:via-neon-violet-500/10 to-neutral-50 dark:to-neutral-950 py-32 px-6 lg:px-8">
-      <div class="max-w-7xl mx-auto space-y-16 text-center">
+    <section class='bg-gradient-to-b from-neutral-50 dark:from-neutral-950 via-neon-violet-500/10 dark:via-neon-violet-500/10 to-neutral-50 dark:to-neutral-950 py-32 px-6 lg:px-8'>
+      <div class='max-w-7xl mx-auto space-y-16 text-center'>
         {/* Section Heading */}
-        <div class="space-y-6">
-          <h2 class="text-4xl font-bold text-neutral-900 dark:text-white">
+        <div class='space-y-6'>
+          <h2 class='text-4xl font-bold text-neutral-900 dark:text-white'>
             From blocked and brittle — to forkable and fearless.
           </h2>
-          <p class="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
-            What used to take quarters now takes minutes — with every change
-            versioned, governed, and explainable.
+          <p class='text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto'>
+            What used to take quarters now takes minutes — with every change versioned, governed,
+            and explainable.
           </p>
         </div>
 
         {/* Before / After Comparison */}
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 text-left">
+        <div class='grid grid-cols-1 lg:grid-cols-2 gap-12 text-left'>
           {/* Before */}
-          <div class="bg-white dark:bg-neutral-900 border border-white/20 dark:border-white/10 rounded-xl p-8 space-y-6 shadow-sm dark:shadow-inner">
+          <div class='bg-white dark:bg-neutral-900 border border-white/20 dark:border-white/10 rounded-xl p-8 space-y-6 shadow-sm dark:shadow-inner'>
             <h3 class={`text-xl font-semibold ${before.text}`}>
               Before Open Industrial
             </h3>
-            <div class="space-y-4 text-sm">
+            <div class='space-y-4 text-sm'>
               {[
                 'Rule changes required long MSA cycles and vendor approval',
                 'Data was siloed behind integrators and outdated APIs',
@@ -43,7 +43,8 @@ const JourneySection: FunctionalComponent = () => {
                 </p>
               ))}
             </div>
-            {/* <FigureImage
+            {
+              /* <FigureImage
               src="/assets/before-legacy-stack2.png"
               alt="Legacy industrial software stack before Open Industrial"
               caption="Tangled legacy systems and brittle integrations slowed every change."
@@ -52,15 +53,16 @@ const JourneySection: FunctionalComponent = () => {
               size="xl"
               shadow="xl"
               glow
-            /> */}
+            /> */
+            }
           </div>
 
           {/* After */}
-          <div class="bg-white dark:bg-neutral-900 border border-white/20 dark:border-white/10 rounded-xl p-8 space-y-6 shadow-sm dark:shadow-inner">
+          <div class='bg-white dark:bg-neutral-900 border border-white/20 dark:border-white/10 rounded-xl p-8 space-y-6 shadow-sm dark:shadow-inner'>
             <h3 class={`text-xl font-semibold ${after.text}`}>
               After Open Industrial
             </h3>
-            <div class="space-y-4 text-sm">
+            <div class='space-y-4 text-sm'>
               {[
                 'Forked an agent in 30 seconds — no central approval loop',
                 'Live surface connected to RoomState in minutes',
@@ -75,7 +77,8 @@ const JourneySection: FunctionalComponent = () => {
                 </p>
               ))}
             </div>
-            {/* <FigureImage
+            {
+              /* <FigureImage
               src="/assets/screenshots/hello-azi-surface-connected.png"
               alt="Runtime diffing and signal timeline after Open Industrial"
               caption="Forked, governed, and deployed with confidence."
@@ -84,7 +87,8 @@ const JourneySection: FunctionalComponent = () => {
               size="xl"
               shadow="2xl"
               glow
-            /> */}
+            /> */
+            }
           </div>
         </div>
       </div>

@@ -17,7 +17,7 @@ export class GraphStateManager {
   constructor(
     protected interaction: InteractionManager,
     protected stats: StatManager,
-    protected nodeEvents: NodeEventManager
+    protected nodeEvents: NodeEventManager,
   ) {
     this.ResetGraph();
   }
@@ -163,7 +163,7 @@ export class GraphStateManager {
       };
 
       const cached = this.nodeCache[id];
-      
+
       this.nodeCache[id] = cached ? Object.assign(cached, updated) : updated;
 
       return this.nodeCache[id];

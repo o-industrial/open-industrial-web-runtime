@@ -3,10 +3,7 @@ import { Edge, EdgeChange } from 'reactflow';
 import { merge } from '@fathym/common';
 import { GraphStateManager } from '../GraphStateManager.ts';
 
-import {
-  EverythingAsCodeOIWorkspace,
-  EaCCompositeSchemaDetails,
-} from '@o-industrial/common/eac';
+import { EaCCompositeSchemaDetails, EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
 import { FlowGraph } from '../../types/graph/FlowGraph.ts';
@@ -19,7 +16,7 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
   constructor(
     graph: GraphStateManager,
     presets: PresetManager,
-    protected surfaceLookup: string
+    protected surfaceLookup: string,
   ) {
     super(graph, presets);
   }
@@ -35,9 +32,11 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
     const schemaEntries = wks.Schemas ?? {};
 
     // --- Surface-Mapped Connections
-    for (const [connKey, dcSettings] of Object.entries(
-      surf.DataConnections ?? {}
-    )) {
+    for (
+      const [connKey, dcSettings] of Object.entries(
+        surf.DataConnections ?? {},
+      )
+    ) {
       const { Metadata, ...settings } = dcSettings;
 
       const conn = wks.DataConnections?.[connKey];
@@ -62,8 +61,12 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
     }
 
     // --- Surface-Mapped Schemas (Root, Reference, Composite)
-    for (const [schemaKey, settings] of Object.entries(surf.Schemas ?? {})) {
-      if (!settings?.Enabled) continue;
+    for (
+      const [schemaKey, { Metadata, ...settings }] of Object.entries(
+        surf.Schemas ?? {},
+      )
+    ) {
+      if (!Metadata?.Enabled) continue;
 
       const schema = wks.Schemas?.[schemaKey];
       if (!schema) continue;
@@ -77,8 +80,8 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
         ID: schemaKey,
         Type: nodeType,
         Label: schema.Details?.Name ?? schemaKey,
-        Metadata: schema.Metadata,
-        Details: schema.Details,
+        Metadata: Metadata,
+        Details: { ...schema.Details, ...settings },
       });
 
       // --- Edge: DataConnection feeds schema (now pulled from schema.DataConnection)
@@ -94,10 +97,15 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
 
       // --- Edge: joined into Composite
       for (const [compKey, compSchema] of Object.entries(schemaEntries)) {
-        if (compSchema?.Details?.Type !== 'Composite') continue;
+        if (
+          compSchema?.Details?.Type !== 'Composite' &&
+          compSchema?.Details?.Type !== 'Reference'
+        ) {
+          continue;
+        }
 
-        const compJoins =
-          (compSchema.Details as EaCCompositeSchemaDetails).SchemaJoins ?? {};
+        const compJoins = (compSchema.Details as EaCCompositeSchemaDetails).SchemaJoins ?? {};
+
         if (Object.values(compJoins).includes(schemaKey)) {
           edges.push({
             ID: `${schemaKey}->${compKey}`,
@@ -152,7 +160,7 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
   public CreateConnectionEdge(
     eac: OpenIndustrialEaC,
     source: string,
-    target: string
+    target: string,
   ): Partial<OpenIndustrialEaC> | null {
     const wks = eac as EverythingAsCodeOIWorkspace;
     const src = this.graph.GetGraph().Nodes.find((n) => n.ID === source);
@@ -233,13 +241,13 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
   public CreatePartialEaCFromPreset(
     type: string,
     id: string,
-    position: FlowPosition
+    position: FlowPosition,
   ): Partial<OpenIndustrialEaC> {
     return this.presets.CreatePartialEaCFromPreset(
       type,
       id,
       position,
-      this.surfaceLookup
+      this.surfaceLookup,
     );
   }
 
@@ -251,7 +259,7 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
 
   public RemoveConnectionEdge(
     eac: OpenIndustrialEaC,
-    edgeId: string
+    edgeId: string,
   ): Partial<OpenIndustrialEaC> | null {
     const wks = eac as EverythingAsCodeOIWorkspace;
     const [source, target] = edgeId.split('->');
@@ -304,7 +312,7 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
   public UpdateConnections(
     changes: EdgeChange[],
     edges: Edge[],
-    eac: OpenIndustrialEaC
+    eac: OpenIndustrialEaC,
   ): OpenIndustrialEaC | null {
     // let changed = false;
     // const partial: OpenIndustrialEaC = {};

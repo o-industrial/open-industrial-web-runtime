@@ -1,11 +1,5 @@
 import { jsonMapSetClone, merge, NullableArrayOrObject } from '@fathym/common';
-import {
-  applyNodeChanges,
-  Edge,
-  EdgeChange,
-  Node,
-  NodeChange,
-} from 'reactflow';
+import { applyNodeChanges, Edge, EdgeChange, Node, NodeChange } from 'reactflow';
 
 import { HistoryManager } from './HistoryManager.ts';
 import { PresetManager } from './PresetManager.ts';
@@ -16,15 +10,8 @@ import { FlowGraphNode } from '../types/graph/FlowGraphNode.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
 import { FlowPosition } from '../types/graph/FlowPosition.ts';
 import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
-import {
-  EaCAzureDockerSimulatorDetails,
-  EaCFlowNodeMetadata,
-} from '@o-industrial/common/eac';
-import {
-  EaCHistorySnapshot,
-  Proposal,
-  RecordKind,
-} from '@o-industrial/common/types';
+import { EaCAzureDockerSimulatorDetails, EaCFlowNodeMetadata } from '@o-industrial/common/eac';
+import { EaCHistorySnapshot, Proposal, RecordKind } from '@o-industrial/common/types';
 import { EaCEnterpriseDetails, EaCVertexDetails } from '@fathym/eac';
 
 import { EaCNodeInspectorManager } from './eac/EaCNodeInspectorManager.ts';
@@ -56,7 +43,7 @@ export class EaCManager {
     protected scope: NodeScopeTypes,
     protected graph: GraphStateManager,
     protected presets: PresetManager,
-    protected history: HistoryManager
+    protected history: HistoryManager,
   ) {
     this.diff = new EaCDiffManager(history, this.emitEaCChanged.bind(this));
     this.inspector = new EaCNodeInspectorManager(graph, () => this.eac);
@@ -68,7 +55,7 @@ export class EaCManager {
 
   public ApplyReactFlowNodeChanges(
     changes: NodeChange[],
-    currentNodes: Node<FlowNodeData>[]
+    currentNodes: Node<FlowNodeData>[],
   ): void {
     console.log('🌀 ApplyReactFlowNodeChanges called');
     console.log('📥 Changes received:', changes);
@@ -110,7 +97,7 @@ export class EaCManager {
 
       if (!update) {
         console.warn(
-          `🚫 BuildPartialForNodeUpdate returned null for ${node.id}`
+          `🚫 BuildPartialForNodeUpdate returned null for ${node.id}`,
         );
         continue;
       }
@@ -132,12 +119,12 @@ export class EaCManager {
 
   public ApplyReactFlowEdgeChanges(
     changes: EdgeChange[],
-    currentEdges: Edge[]
+    currentEdges: Edge[],
   ): void {
     const partial = this.scopeMgr.UpdateConnections(
       changes,
       currentEdges,
-      this.eac
+      this.eac,
     );
 
     if (partial) this.MergePartial(partial);
@@ -157,7 +144,7 @@ export class EaCManager {
     const partial = this.scopeMgr.CreateConnectionEdge(
       this.eac,
       source,
-      target
+      target,
     );
 
     if (partial) {
@@ -167,13 +154,13 @@ export class EaCManager {
 
   public CreateNodeFromPreset(
     type: string,
-    position: FlowPosition
+    position: FlowPosition,
   ): FlowGraphNode {
     const id = `${type}-${Date.now()}`;
     const partial = this.scopeMgr.CreatePartialEaCFromPreset(
       type,
       id,
-      position
+      position,
     );
     this.MergePartial(partial);
 
@@ -300,7 +287,7 @@ export class EaCManager {
           this.scopeMgr = new EaCSurfaceScopeManager(
             this.graph,
             this.presets,
-            lookup
+            lookup,
           );
         } else {
           throw new Error(`Lookup must be defined for scope: ${scope}`);
@@ -350,7 +337,7 @@ export class EaCManager {
 
   public UpdateMetadataForNode(
     id: string,
-    metadata: Partial<EaCFlowNodeMetadata>
+    metadata: Partial<EaCFlowNodeMetadata>,
   ): void {
     const prev = this.GetMetadataForNode(id);
     if (!prev) return;
@@ -375,14 +362,13 @@ export class EaCManager {
 
     if (!this.proposals || this.overlayMode === 'none') return base;
 
-    const overlays =
-      this.overlayMode === 'pending'
-        ? this.proposals.GetPending()
-        : 'ids' in this.overlayMode
-        ? this.overlayMode.ids
-            .map((id) => this.proposals.GetByID(id))
-            .filter((p): p is Proposal<RecordKind> => !!p)
-        : [];
+    const overlays = this.overlayMode === 'pending'
+      ? this.proposals.GetPending()
+      : 'ids' in this.overlayMode
+      ? this.overlayMode.ids
+        .map((id) => this.proposals.GetByID(id))
+        .filter((p): p is Proposal<RecordKind> => !!p)
+      : [];
 
     for (const proposal of overlays) {
       const patch = {

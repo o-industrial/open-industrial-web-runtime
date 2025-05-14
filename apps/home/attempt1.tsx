@@ -27,7 +27,7 @@ export const handler: EaCRuntimeHandlerSet<
 
 export default function Homepage({}: PageProps<HomepageData>) {
   return (
-    <div class="flex flex-col space-y-16 bg-neutral-900 text-white">
+    <div class='flex flex-col space-y-16 bg-neutral-900 text-white'>
       <HeroExecutionDeclaration />
 
       <ExecutionLogPreview />

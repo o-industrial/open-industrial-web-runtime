@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 import { classSet } from '@fathym/atomic';
 import { IntentTypes } from '@o-industrial/common/types';
-import { Action, ActionStyleTypes, ActionProps } from '../atoms/Action.tsx';
+import { Action, ActionProps, ActionStyleTypes } from '../atoms/Action.tsx';
 import { SettingsIcon } from '../../../build/iconset/icons/SettingsIcon.tsx';
 
 export type BreadcrumbPart = Partial<ActionProps> & {
@@ -29,25 +29,20 @@ export default function BreadcrumbBar({
         '-:flex -:items-center -:justify-between',
       ])}
     >
-      <div class="-:truncate -:flex -:flex-wrap -:items-center">
+      <div class='-:truncate -:flex -:flex-wrap -:items-center'>
         {pathParts.map((part, idx) => {
           const isLast = idx === pathParts.length - 1;
           const hasAction = part.onClick || part.href;
 
-          const intent =
-            part.intentType ??
-            (isLast
-              ? IntentTypes.None
-              : hasAction
-              ? IntentTypes.Info
-              : IntentTypes.Tertiary);
+          const intent = part.intentType ??
+            (isLast ? IntentTypes.None : hasAction ? IntentTypes.Info : IntentTypes.Tertiary);
 
           const styleType = hasAction
             ? part.styleType ?? ActionStyleTypes.Link
             : ActionStyleTypes.None;
 
           return (
-            <span key={idx} class="-:flex -:items-center">
+            <span key={idx} class='-:flex -:items-center'>
               <Action
                 {...part}
                 intentType={intent}
@@ -57,13 +52,13 @@ export default function BreadcrumbBar({
                     '-:px-0 -:underline-offset-2 -:hover:no-underline',
                     hasAction ? '' : 'pointer-events-none',
                   ],
-                  part
+                  part,
                 )}
               >
                 {part.label}
               </Action>
 
-              {!isLast && <span class="-:text-neutral-600">/</span>}
+              {!isLast && <span class='-:text-neutral-600'>/</span>}
             </span>
           );
         })}
@@ -76,7 +71,7 @@ export default function BreadcrumbBar({
           styleType={ActionStyleTypes.Icon | ActionStyleTypes.Thin}
           intentType={settingsIntentType}
         >
-          <SettingsIcon class="w-4 h-4" />
+          <SettingsIcon class='w-4 h-4' />
         </Action>
       )}
     </div>

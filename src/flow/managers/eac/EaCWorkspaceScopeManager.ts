@@ -87,7 +87,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
   public CreateConnectionEdge(
     eac: OpenIndustrialEaC,
     source: string,
-    target: string
+    target: string,
   ): Partial<OpenIndustrialEaC> | null {
     const wks = eac as EverythingAsCodeOIWorkspace;
 
@@ -147,7 +147,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
   public CreatePartialEaCFromPreset(
     type: string,
     id: string,
-    position: FlowPosition
+    position: FlowPosition,
   ): Partial<OpenIndustrialEaC> {
     return this.presets.CreatePartialEaCFromPreset(type, id, position);
   }
@@ -160,7 +160,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
 
   public RemoveConnectionEdge(
     eac: OpenIndustrialEaC,
-    edgeId: string
+    edgeId: string,
   ): Partial<OpenIndustrialEaC> | null {
     const wks = eac as EverythingAsCodeOIWorkspace;
 
@@ -218,7 +218,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
   public UpdateConnections(
     _changes: EdgeChange[],
     _updated: Edge[],
-    _eac: OpenIndustrialEaC
+    _eac: OpenIndustrialEaC,
   ): OpenIndustrialEaC | null {
     // TODO: implement connection diffing logic if needed
     return null;

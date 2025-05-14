@@ -1,5 +1,5 @@
 export type BaseNodeEvent = {
-  Type: string; 
+  Type: string;
 
   NodeID?: string;
 };

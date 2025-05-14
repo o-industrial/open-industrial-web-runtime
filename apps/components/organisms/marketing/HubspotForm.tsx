@@ -17,7 +17,7 @@ export function HubspotForm({
   const formRef = useRef<HTMLDivElement>(null);
 
   console.log(`[HubspotForm] Form #${id} loading`);
-  
+
   useEffect(() => {
     const waitForHbspt = () => {
       if (
@@ -46,5 +46,5 @@ export function HubspotForm({
     waitForHbspt();
   }, [id, portalId, formId]);
 
-  return <div ref={formRef} id={id} class="w-full max-w-xl mx-auto" />;
+  return <div ref={formRef} id={id} class='w-full max-w-xl mx-auto' />;
 }

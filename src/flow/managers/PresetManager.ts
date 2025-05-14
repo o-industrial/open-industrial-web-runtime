@@ -4,6 +4,8 @@ import {
   EaCAzureIoTHubDataConnectionDetails,
   EaCDataConnectionAsCode,
   EaCFlowNodeMetadata,
+  EaCRootSchemaDetails,
+  EaCSchemaAsCode,
   EaCSimulatorAsCode,
   EaCSurfaceAsCode,
 } from '@o-industrial/common/eac';
@@ -79,7 +81,7 @@ export class PresetManager {
     type: string,
     id: string,
     position: FlowPosition,
-    parentId?: string
+    parentId?: string,
   ): Partial<OpenIndustrialEaC> {
     const metadata: EaCFlowNodeMetadata = {
       Position: position,
@@ -112,6 +114,31 @@ export class PresetManager {
           },
         };
 
+      case 'schema':
+        debugger;
+        return {
+          Schemas: {
+            [id]: {
+              Metadata: metadata,
+              Details: { ...details, Type: 'Root' } as EaCRootSchemaDetails,
+            } as EaCSchemaAsCode,
+          },
+          ...(parentId
+            ? {
+              Surfaces: {
+                [parentId]: {
+                  Schemas: {
+                    [id]: {
+                      DisplayMode: 'table',
+                      Metadata: metadata,
+                    },
+                  },
+                },
+              },
+            }
+            : {}),
+        };
+
       case 'surface':
         return {
           Surfaces: {
@@ -130,7 +157,7 @@ export class PresetManager {
 
   public GetConfigForType(
     _nodeId: string,
-    type: string
+    type: string,
   ): Record<string, unknown> {
     switch (type) {
       case 'connection':
@@ -163,7 +190,7 @@ export class PresetManager {
     return Object.fromEntries(
       Object.entries(PresetManager.presets).filter(([type]) =>
         PresetManager.scopeMap[type]?.includes(scope)
-      )
+      ),
     );
   }
 

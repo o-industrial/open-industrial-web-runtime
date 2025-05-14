@@ -1,4 +1,3 @@
-
 export type SurfaceStats = {
   impulseRates?: number[];
   inputCount?: number;

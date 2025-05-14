@@ -8,7 +8,7 @@ import InspectorPanelTemplate from '../templates/InspectorPanelTemplate.tsx';
 export type InspectorCommonProps<
   TDetails extends EaCVertexDetails = EaCVertexDetails,
   TStats extends Record<string, unknown> = Record<string, unknown>,
-  TConfig extends Record<string, unknown> = Record<string, unknown>
+  TConfig extends Record<string, unknown> = Record<string, unknown>,
 > = {
   config?: TConfig;
   details: Partial<TDetails>;
@@ -55,7 +55,7 @@ export default function InspectorPanel({ workspaceMgr }: InspectorPanelProps) {
         return merged;
       });
     },
-    [selectedId]
+    [selectedId],
   );
 
   const handleClose = useCallback(() => {
@@ -82,7 +82,7 @@ export default function InspectorPanel({ workspaceMgr }: InspectorPanelProps) {
         console.log(`🟡 Toggled enabled state for node ${selectedId} → ${val}`);
       }
     },
-    [selectedId]
+    [selectedId],
   );
 
   useEffect(() => {
@@ -98,8 +98,7 @@ export default function InspectorPanel({ workspaceMgr }: InspectorPanelProps) {
       return;
     }
 
-    const presetConfig =
-      workspaceMgr.Presets?.GetConfigForType?.(selected.id, selected.type!) ??
+    const presetConfig = workspaceMgr.Presets?.GetConfigForType?.(selected.id, selected.type!) ??
       {};
 
     const latestMetadata = workspaceMgr.EaC.GetMetadataForNode?.(selected.id);
@@ -119,7 +118,7 @@ export default function InspectorPanel({ workspaceMgr }: InspectorPanelProps) {
   const renderInspector = () => {
     if (!selected || !commonProps) {
       return (
-        <div class="text-neutral-500 text-xs italic">
+        <div class='text-neutral-500 text-xs italic'>
           No node selected. Double click a node to inspect.
         </div>
       );
@@ -129,7 +128,7 @@ export default function InspectorPanel({ workspaceMgr }: InspectorPanelProps) {
 
     if (!Inspector) {
       return (
-        <div class="text-neutral-500 text-xs italic">
+        <div class='text-neutral-500 text-xs italic'>
           No inspector available for <strong>{selected.type}</strong>.
         </div>
       );

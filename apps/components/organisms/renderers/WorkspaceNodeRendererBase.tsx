@@ -121,7 +121,7 @@ export default function WorkspaceNodeRendererBase({
           '-:relative -:flex -:flex-row -:items-center -:align-middle',
           !enabled ? 'opacity-40 pointer-events-none' : '',
         ],
-        { class: outerClass }
+        { class: outerClass },
       )}
       style={{ pointerEvents: 'auto', zIndex: 1 }}
       onClick={enabled === false ? undefined : handleClick}
@@ -144,7 +144,7 @@ export default function WorkspaceNodeRendererBase({
               : '-:w-[250px] -:h-14',
             statusClasses,
           ],
-          { class: className }
+          { class: className },
         )}
         {...props}
       >
@@ -170,7 +170,7 @@ export default function WorkspaceNodeRendererBase({
             {iconKey && (
               <Icon
                 icon={iconKey}
-                src="/icons/iconset"
+                src='/icons/iconset'
                 class={classSet([
                   '-:transition-all -:duration-300 -:ease-in-out',
                   state === 'default' ? 'w-6 h-6' : 'w-8 h-8',
@@ -190,65 +190,67 @@ export default function WorkspaceNodeRendererBase({
             )}
           </div>
 
-          <div class="pt-8">{state !== 'default' && children}</div>
+          <div class='pt-8'>{state !== 'default' && children}</div>
         </div>
 
         {enabled && postInner}
 
         {state === 'expanded' && (
           <Action
-            title="Collapse"
+            title='Collapse'
             onClick={(e: MouseEvent) => {
               e.stopPropagation();
               setState('default');
             }}
             styleType={ActionStyleTypes.Icon}
             intentType={IntentTypes.Error}
-            class="-:absolute -:top-0 -:right-0 -:font-bold -:pointer-events-auto"
+            class='-:absolute -:top-0 -:right-0 -:font-bold -:pointer-events-auto'
           >
-            <CloseIcon class="w-6 h-6" />
+            <CloseIcon class='w-6 h-6' />
           </Action>
         )}
 
-{pulseIntent && (
-    <div class="absolute inset-0 z-0 pointer-events-none">
-      {Array.from({ length: pulseSpeed === 'low' ? 6 : pulseSpeed === 'high' ? 14 : 10 }).map((_, i) => {
-        const { width, height } = nodeSize;
-        if (!width || !height) return null;
+        {pulseIntent && (
+          <div class='absolute inset-0 z-0 pointer-events-none'>
+            {Array.from({ length: pulseSpeed === 'low' ? 6 : pulseSpeed === 'high' ? 14 : 10 }).map(
+              (_, i) => {
+                const { width, height } = nodeSize;
+                if (!width || !height) return null;
 
-        const angle = Math.random() * Math.PI * 2;
-        const radiusX = width / 2 + 10 + Math.random() * 12;
-        const radiusY = height / 2 + 10 + Math.random() * 12;
+                const angle = Math.random() * Math.PI * 2;
+                const radiusX = width / 2 + 10 + Math.random() * 12;
+                const radiusY = height / 2 + 10 + Math.random() * 12;
 
-        const x = Math.cos(angle) * radiusX;
-        const y = Math.sin(angle) * radiusY;
+                const x = Math.cos(angle) * radiusX;
+                const y = Math.sin(angle) * radiusY;
 
-        const sizeBase = pulseSpeed === 'low' ? 3 : pulseSpeed === 'high' ? 5 : 4;
-        const size = sizeBase + Math.random() * (pulseSpeed === 'high' ? 6 : 4);
+                const sizeBase = pulseSpeed === 'low' ? 3 : pulseSpeed === 'high' ? 5 : 4;
+                const size = sizeBase + Math.random() * (pulseSpeed === 'high' ? 6 : 4);
 
-        const animationDelay = `${(Math.random() * 1.5).toFixed(2)}s`;
-        const pulse = getIntentStyles(pulseIntent);
+                const animationDelay = `${(Math.random() * 1.5).toFixed(2)}s`;
+                const pulse = getIntentStyles(pulseIntent);
 
-        return (
-          <div
-            key={i}
-            class={classSet([
-              'absolute rounded-full opacity-80',
-              pulse.glow,
-              pulse.pulse[pulseSpeed],
-            ])}
-            style={{
-              width: `${size}px`,
-              height: `${size}px`,
-              left: `calc(50% + ${x}px)`,
-              top: `calc(50% + ${y}px)`,
-              animationDelay,
-            }}
-          />
-        );
-      })}
-    </div>
-  )}
+                return (
+                  <div
+                    key={i}
+                    class={classSet([
+                      'absolute rounded-full opacity-80',
+                      pulse.glow,
+                      pulse.pulse[pulseSpeed],
+                    ])}
+                    style={{
+                      width: `${size}px`,
+                      height: `${size}px`,
+                      left: `calc(50% + ${x}px)`,
+                      top: `calc(50% + ${y}px)`,
+                      animationDelay,
+                    }}
+                  />
+                );
+              },
+            )}
+          </div>
+        )}
       </div>
 
       {enabled && postMain}

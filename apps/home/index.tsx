@@ -24,7 +24,7 @@ export const handler: EaCRuntimeHandlerSet<
 
 export default function HomepageAttempt2({}: PageProps<HomepageData>) {
   return (
-    <div class="flex flex-col">
+    <div class='flex flex-col'>
       <HeroSection />
       <PainSection />
       <SystemProofSection />

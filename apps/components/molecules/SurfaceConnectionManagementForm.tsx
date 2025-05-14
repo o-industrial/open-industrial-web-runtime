@@ -9,15 +9,15 @@ type Props = {
 
 export function SurfaceConnectionManagementForm({ details, onChange }: Props) {
   const handleTumblingWindowSecondsInput = (
-    e: JSX.TargetedEvent<HTMLInputElement, Event>
+    e: JSX.TargetedEvent<HTMLInputElement, Event>,
   ) => {
     onChange({ TumblingWindowSeconds: parseInt(e.currentTarget.value) });
   };
 
   return (
-    <div class="space-y-3 pt-2">
+    <div class='space-y-3 pt-2'>
       <Input
-        label="Tumbling Window Seconds"
+        label='Tumbling Window Seconds'
         value={details.TumblingWindowSeconds ?? ''}
         onInput={handleTumblingWindowSecondsInput}
       />

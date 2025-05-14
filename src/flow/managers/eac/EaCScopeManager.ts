@@ -23,7 +23,7 @@ export abstract class EaCScopeManager {
   abstract CreateConnectionEdge(
     eac: OpenIndustrialEaC,
     source: string,
-    target: string
+    target: string,
   ): Partial<OpenIndustrialEaC> | null;
 
   /**
@@ -32,7 +32,7 @@ export abstract class EaCScopeManager {
   abstract CreatePartialEaCFromPreset(
     type: string,
     id: string,
-    position: FlowPosition
+    position: FlowPosition,
   ): Partial<OpenIndustrialEaC>;
 
   /**
@@ -45,7 +45,7 @@ export abstract class EaCScopeManager {
    */
   abstract RemoveConnectionEdge(
     eac: OpenIndustrialEaC,
-    edgeId: string
+    edgeId: string,
   ): Partial<OpenIndustrialEaC> | null;
 
   /**
@@ -54,6 +54,6 @@ export abstract class EaCScopeManager {
   abstract UpdateConnections(
     changes: EdgeChange[],
     edges: Edge[],
-    eac: OpenIndustrialEaC
+    eac: OpenIndustrialEaC,
   ): OpenIndustrialEaC | null;
 }

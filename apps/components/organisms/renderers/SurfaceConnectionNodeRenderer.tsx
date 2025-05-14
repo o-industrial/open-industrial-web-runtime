@@ -14,7 +14,7 @@ export default function SurfaceConnectionNodeRenderer({
 
   return (
     <WorkspaceNodeRendererBase
-      iconKey="connection"
+      iconKey='connection'
       label={data.label}
       enabled={data.enabled}
       onDoubleClick={data.onDoubleClick}
@@ -23,24 +23,24 @@ export default function SurfaceConnectionNodeRenderer({
       class='data-[state=expanded]:w-[300px] data-[state=expanded]:h-auto data-[state=expanded]:rounded-md'
       postMain={
         <NodeHandle
-          type="source"
+          type='source'
           position={Position.Right}
           intentType={IntentTypes.Info}
         />
       }
     >
-      {impulses.length > 1 ? (
-        <LinePreviewWithValue
-          label="Impulse"
-          values={impulses}
-          currentValue={latest}
-          intent={IntentTypes.Info}
-          yMin={5}
-          yMax={20}
-        />
-      ) : (
-        <div class="text-sm text-gray-400 italic p-2">Awaiting data…</div>
-      )}
+      {impulses.length > 1
+        ? (
+          <LinePreviewWithValue
+            label='Impulse'
+            values={impulses}
+            currentValue={latest}
+            intent={IntentTypes.Info}
+            yMin={5}
+            yMax={20}
+          />
+        )
+        : <div class='text-sm text-gray-400 italic p-2'>Awaiting data…</div>}
     </WorkspaceNodeRendererBase>
   );
 }
