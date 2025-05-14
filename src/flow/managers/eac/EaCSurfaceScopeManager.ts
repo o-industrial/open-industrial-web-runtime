@@ -1,9 +1,11 @@
 import { EaCScopeManager } from './EaCScopeManager.ts';
-import { Edge, EdgeChange } from 'reactflow';
-import { merge } from '@fathym/common';
+import { Edge, EdgeChange, Node } from 'reactflow';
 import { GraphStateManager } from '../GraphStateManager.ts';
 
-import { EaCCompositeSchemaDetails, EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
+import {
+  EaCCompositeSchemaDetails,
+  EverythingAsCodeOIWorkspace,
+} from '@o-industrial/common/eac';
 
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
 import { FlowGraph } from '../../types/graph/FlowGraph.ts';
@@ -11,14 +13,17 @@ import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../../types/graph/FlowGraphEdge.ts';
 import { FlowPosition } from '../../types/graph/FlowPosition.ts';
 import { PresetManager } from '../PresetManager.ts';
+import { EaCNodeInspectorManager } from './EaCNodeInspectorManager.ts';
+import { FlowNodeData } from '../../types/react/FlowNodeData.ts';
 
 export class EaCSurfaceScopeManager extends EaCScopeManager {
   constructor(
     graph: GraphStateManager,
     presets: PresetManager,
-    protected surfaceLookup: string,
+    inspector: EaCNodeInspectorManager,
+    protected surfaceLookup: string
   ) {
-    super(graph, presets);
+    super(graph, presets, inspector);
   }
 
   public BuildGraph(eac: OpenIndustrialEaC): FlowGraph {
@@ -32,11 +37,9 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
     const schemaEntries = wks.Schemas ?? {};
 
     // --- Surface-Mapped Connections
-    for (
-      const [connKey, dcSettings] of Object.entries(
-        surf.DataConnections ?? {},
-      )
-    ) {
+    for (const [connKey, dcSettings] of Object.entries(
+      surf.DataConnections ?? {}
+    )) {
       const { Metadata, ...settings } = dcSettings;
 
       const conn = wks.DataConnections?.[connKey];
@@ -61,11 +64,9 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
     }
 
     // --- Surface-Mapped Schemas (Root, Reference, Composite)
-    for (
-      const [schemaKey, { Metadata, ...settings }] of Object.entries(
-        surf.Schemas ?? {},
-      )
-    ) {
+    for (const [schemaKey, { Metadata, ...settings }] of Object.entries(
+      surf.Schemas ?? {}
+    )) {
       if (!Metadata?.Enabled) continue;
 
       const schema = wks.Schemas?.[schemaKey];
@@ -89,7 +90,7 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
       if (dc) {
         edges.push({
           ID: `${dc}->${schemaKey}`,
-          Source: dc,
+          Source: `${this.surfaceLookup}->${dc}`,
           Target: schemaKey,
           Label: 'feeds',
         });
@@ -104,7 +105,8 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
           continue;
         }
 
-        const compJoins = (compSchema.Details as EaCCompositeSchemaDetails).SchemaJoins ?? {};
+        const compJoins =
+          (compSchema.Details as EaCCompositeSchemaDetails).SchemaJoins ?? {};
 
         if (Object.values(compJoins).includes(schemaKey)) {
           edges.push({
@@ -160,7 +162,7 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
   public CreateConnectionEdge(
     eac: OpenIndustrialEaC,
     source: string,
-    target: string,
+    target: string
   ): Partial<OpenIndustrialEaC> | null {
     const wks = eac as EverythingAsCodeOIWorkspace;
     const src = this.graph.GetGraph().Nodes.find((n) => n.ID === source);
@@ -204,15 +206,18 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
       };
     }
 
+    debugger;
     if (src.Type === 'surface->connection' && tgt.Type?.includes('schema')) {
       const schema = wks.Schemas?.[tgt.ID];
       if (!schema) return null;
+
+      const [_, connLookup] = src.ID.split('->');
 
       return {
         Schemas: {
           [tgt.ID]: {
             ...schema,
-            DataConnection: { Lookup: source.split('->')[1] },
+            DataConnection: { Lookup: connLookup },
           },
         },
       };
@@ -241,13 +246,13 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
   public CreatePartialEaCFromPreset(
     type: string,
     id: string,
-    position: FlowPosition,
+    position: FlowPosition
   ): Partial<OpenIndustrialEaC> {
     return this.presets.CreatePartialEaCFromPreset(
       type,
       id,
       position,
-      this.surfaceLookup,
+      this.surfaceLookup
     );
   }
 
@@ -259,7 +264,7 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
 
   public RemoveConnectionEdge(
     eac: OpenIndustrialEaC,
-    edgeId: string,
+    edgeId: string
   ): Partial<OpenIndustrialEaC> | null {
     const wks = eac as EverythingAsCodeOIWorkspace;
     const [source, target] = edgeId.split('->');
@@ -312,7 +317,7 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
   public UpdateConnections(
     changes: EdgeChange[],
     edges: Edge[],
-    eac: OpenIndustrialEaC,
+    eac: OpenIndustrialEaC
   ): OpenIndustrialEaC | null {
     // let changed = false;
     // const partial: OpenIndustrialEaC = {};
@@ -341,5 +346,13 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
     // return changed ? partial : null;
 
     return null;
+  }
+
+  protected override findAsCode(node: Node<FlowNodeData>) {
+    return this.inspector.FindAsCode({
+      ID: node.id,
+      Type: node.type!,
+      SurfaceLookup: this.surfaceLookup,
+    });
   }
 }

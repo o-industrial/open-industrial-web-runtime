@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 import { jsonMapSetClone, NullableArrayOrObject } from '@fathym/common';
 import { EaCVertexDetails } from '@fathym/eac';
 import {
@@ -91,7 +92,11 @@ export class EaCNodeInspectorManager {
     };
   }
 
-  public FindAsCode(node: { ID: string; Type: string }): {
+  public FindAsCode(node: {
+    ID: string;
+    Type: string;
+    SurfaceLookup?: string;
+  }): {
     ID: string;
     Type: string;
     AsCode: {
@@ -99,41 +104,24 @@ export class EaCNodeInspectorManager {
       Details: EaCVertexDetails;
     };
   } | null {
-    const eac = this.getEaC();
-    const id = node.ID;
+    const nodeId = node.ID;
+
     const typePath = node.Type.toLowerCase();
 
-    if (typePath.includes('->')) {
-      const [from, to] = typePath.split('->');
-      const [parentId, childId] = id.split('->');
+    const [from, to] = typePath.split('->');
 
-      const parent = this.FindAsCode({ ID: parentId, Type: from });
-      if (!parent) return null;
+    const [parentId, childId] = nodeId.split('->');
 
-      const collectionKey = this.getEaCKeyForType(to);
-      const childDetails = this.FindAsCode({ ID: childId, Type: to })?.AsCode;
-      const childEntry = (parent.AsCode as any)?.[collectionKey]?.[childId];
+    const embedded = this.extractAsCode(
+      nodeId,
+      from,
+      to,
+      parentId,
+      childId,
+      node.SurfaceLookup || ''
+    );
 
-      const embedded = this.extractAsCode(from, to, childDetails, childEntry);
-      return embedded ? { ID: id, Type: typePath, AsCode: embedded } : null;
-    }
-
-    const key = this.getEaCKeyForType(typePath);
-    const entry = (eac[key] as Record<string, any>)?.[id];
-    if (!entry) return null;
-
-    const cloned = jsonMapSetClone(entry);
-    cloned.Metadata ??= {};
-    cloned.Details ??= {};
-
-    return {
-      ID: id,
-      Type: typePath,
-      AsCode: {
-        ...cloned,
-        Details: cloned.Details!,
-      },
-    };
+    return embedded ? { ID: nodeId, Type: typePath, AsCode: embedded } : null;
   }
 
   public GetDetails(id: string): EaCVertexDetails | null {
@@ -176,16 +164,66 @@ export class EaCNodeInspectorManager {
   }
 
   protected extractAsCode(
+    nodeId: string,
     from: string,
     to: string,
-    global: { Details: EaCVertexDetails } | null | undefined,
-    override: Record<string, any> | undefined
+    fromId: string,
+    toId: string,
+    surfaceLookup: string
   ): { Metadata?: EaCFlowNodeMetadata; Details: EaCVertexDetails } | null {
-    if (!global || !override) return null;
-    if (from === 'surface' && to === 'schema') {
-      return this.extractSurfaceSchemaOverlay(global.Details, override);
+    if (to) {
+      const fromAsCode = this.FindAsCode({
+        ID: fromId,
+        Type: from,
+        SurfaceLookup: surfaceLookup,
+      });
+
+      if (!fromAsCode) return null;
+
+      const collectionKey = this.getEaCKeyForType(to);
+
+      const toAsCode = this.FindAsCode({
+        ID: toId,
+        Type: to,
+        SurfaceLookup: surfaceLookup,
+      })?.AsCode;
+
+      const childEntry = (fromAsCode.AsCode as any)?.[collectionKey]?.[toId];
+
+      if (!toAsCode || !childEntry) return null;
+
+      return this.extractEmbeddedAsCode(toAsCode.Details, childEntry);
     }
-    return this.extractEmbeddedAsCode(global.Details, override);
+
+    const eac = this.getEaC();
+
+    const fromCollectionKey = this.getEaCKeyForType(from);
+
+    const asCode = (eac[fromCollectionKey] as Record<string, any>)?.[nodeId];
+
+    if (!asCode) return null;
+
+    if (from === 'schema' && surfaceLookup) {
+      const surfaceAsCode = this.FindAsCode({
+        ID: surfaceLookup,
+        Type: 'surface',
+      })?.AsCode;
+
+      const settingsEntry = (surfaceAsCode as any)?.[fromCollectionKey]?.[fromId];
+
+      if (!asCode || !settingsEntry) return null;
+
+      return this.extractSurfaceSchemaOverlay(asCode.Details, settingsEntry);
+    }
+
+    const cloned = jsonMapSetClone(asCode);
+    cloned.Metadata ??= {};
+    cloned.Details ??= {};
+
+    return {
+      ...cloned,
+      Details: cloned.Details!,
+    };
   }
 
   protected buildCompoundUpdatePatch(

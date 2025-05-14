@@ -37,13 +37,6 @@ export default function SimulatorNodeRenderer({
       onDoubleClick={data.onDoubleClick}
       isSelected={data.isSelected}
       class='data-[state=expanded]:w-[300px] data-[state=expanded]:h-auto data-[state=expanded]:rounded-md'
-      // preMain={
-      //   <NodeHandle
-      //     type="target"
-      //     position={Position.Left}
-      //     intentType={IntentTypes.Secondary}
-      //   />
-      // }
       postMain={
         <NodeHandle
           type='source'
