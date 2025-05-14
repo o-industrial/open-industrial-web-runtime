@@ -1,66 +1,13 @@
 import { jsonMapSetClone, NullableArrayOrObject } from '@fathym/common';
 import { EaCVertexDetails } from '@fathym/eac';
-import { EaCFlowNodeMetadata, EaCFlowSettings } from '@o-industrial/common/eac';
+import {
+  EaCFlowNodeMetadata,
+  EaCFlowSettings,
+  EaCSchemaAsCode,
+  SurfaceSchemaSettings,
+} from '@o-industrial/common/eac';
 import { GraphStateManager } from '../GraphStateManager.ts';
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
-
-/**
- * Normalize an embedded block (like a surface DataConnection) into { Metadata, Details }
- */
-function extractEmbeddedAsCode<T extends EaCFlowSettings>(
-  eacBlock: EaCVertexDetails,
-  block: T | undefined,
-): { Metadata?: EaCFlowNodeMetadata; Details: EaCVertexDetails } | null {
-  if (!block) return null;
-
-  const { Metadata, ...details } = block;
-  return {
-    Metadata: Metadata ?? {},
-    Details: { ...(details ?? {}), Name: eacBlock.Name },
-  };
-}
-
-function extractSurfaceSchemaOverlay(
-  globalSchema: EaCVertexDetails | undefined,
-  surfaceSchemaEntry: Record<string, unknown> | undefined,
-): { Metadata?: EaCFlowNodeMetadata; Details: EaCVertexDetails } | null {
-  if (!globalSchema || !surfaceSchemaEntry) return null;
-
-  const { Metadata, ...overrides } = surfaceSchemaEntry;
-
-  return {
-    Metadata: Metadata as EaCFlowNodeMetadata,
-    Details: {
-      ...globalSchema,
-      ...overrides,
-    },
-  };
-}
-
-function extractAsCode(
-  from: string,
-  to: string,
-  parent: { Details: EaCVertexDetails } | null | undefined,
-  child: Record<string, any> | undefined,
-): { Metadata?: EaCFlowNodeMetadata; Details: EaCVertexDetails } | null {
-  if (!parent || !child) return null;
-
-  // Special case: surface-scoped schema override
-  if (from === 'surface' && to === 'schema') {
-    const { Metadata, ...overrides } = child;
-
-    return {
-      Metadata: Metadata as EaCFlowNodeMetadata,
-      Details: {
-        ...parent.Details,
-        ...overrides,
-      },
-    };
-  }
-
-  // Default case: use standard embedded extractor
-  return extractEmbeddedAsCode(parent.Details, child);
-}
 
 /**
  * Central inspector and mutator for EaC-backed node state.
@@ -68,55 +15,38 @@ function extractAsCode(
 export class EaCNodeInspectorManager {
   constructor(
     protected graph: GraphStateManager,
-    protected getEaC: () => OpenIndustrialEaC,
+    protected getEaC: () => OpenIndustrialEaC
   ) {}
 
-  /**
-   * Build a partial update payload for a given node — works for compound types too.
-   */
   public BuildPartialForNodeUpdate(
     id: string,
     update: Partial<{
       Metadata: EaCFlowNodeMetadata;
       Details: EaCVertexDetails;
-    }>,
+    }>
   ): Partial<OpenIndustrialEaC> | null {
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
     if (!node) return null;
 
     const typePath = node.Type.toLowerCase();
-
-    const updateBlock = update.Details || update.Metadata
-      ? {
-        ...(update.Details ?? {}),
-        ...(update.Metadata ? { Metadata: update.Metadata } : {}),
-      }
-      : null;
+    const updateBlock =
+      update.Details || update.Metadata
+        ? {
+            ...(update.Details ?? {}),
+            ...(update.Metadata ? { Metadata: update.Metadata } : {}),
+          }
+        : null;
 
     if (!updateBlock) return null;
 
     if (typePath.includes('->')) {
       const [from, to] = typePath.split('->');
       const [parentId, childId] = id.split('->');
-      const parent = this.FindAsCode({ ID: parentId, Type: from });
-      if (!parent) return null;
 
-      const collectionKey = this.getEaCKeyForType(to);
-      const outerKey = this.getEaCKeyForType(from);
-
-      const parentBlock = { ...jsonMapSetClone(parent.AsCode) } as Record<
-        string,
-        any
-      >;
-
-      if (!parentBlock[collectionKey]) parentBlock[collectionKey] = {};
-      parentBlock[collectionKey][childId] = updateBlock;
-
-      return {
-        [outerKey]: {
-          [parentId]: parentBlock,
-        },
-      };
+      return this.buildCompoundUpdatePatch(from, to, parentId, childId, {
+        Metadata: update.Metadata,
+        Details: update.Details,
+      });
     }
 
     const key = this.getEaCKeyForType(node.Type);
@@ -130,11 +60,8 @@ export class EaCNodeInspectorManager {
     };
   }
 
-  /**
-   * Build a delete payload for the specified node, including embedded types.
-   */
   public BuildPartialForNodeDelete(
-    id: string,
+    id: string
   ): NullableArrayOrObject<OpenIndustrialEaC> | null {
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
     if (!node) return null;
@@ -144,23 +71,16 @@ export class EaCNodeInspectorManager {
     if (typePath.includes('->')) {
       const [from, to] = typePath.split('->');
       const [parentId, childId] = id.split('->');
-      const parent = this.FindAsCode({ ID: parentId, Type: from });
-      if (!parent) return null;
-
-      const collectionKey = this.getEaCKeyForType(to);
       const outerKey = this.getEaCKeyForType(from);
-
-      const parentBlock = { ...jsonMapSetClone(parent.AsCode) } as Record<
-        string,
-        any
-      >;
-
-      if (!parentBlock[collectionKey]) return null;
-      parentBlock[collectionKey][childId] = null;
+      const collectionKey = this.getEaCKeyForType(to);
 
       return {
         [outerKey]: {
-          [parentId]: parentBlock,
+          [parentId]: {
+            [collectionKey]: {
+              [childId]: null,
+            },
+          },
         },
       };
     }
@@ -168,12 +88,9 @@ export class EaCNodeInspectorManager {
     const key = this.getEaCKeyForType(node.Type);
     return {
       [key]: { [id]: null },
-    } as NullableArrayOrObject<OpenIndustrialEaC>;
+    };
   }
 
-  /**
-   * Returns a normalized { Metadata, Details } object for a given node.
-   */
   public FindAsCode(node: { ID: string; Type: string }): {
     ID: string;
     Type: string;
@@ -194,18 +111,11 @@ export class EaCNodeInspectorManager {
       if (!parent) return null;
 
       const collectionKey = this.getEaCKeyForType(to);
-      const embedded = extractEmbeddedAsCode(
-        this.FindAsCode({ ID: childId, Type: to })?.AsCode.Details!,
-        (parent.AsCode as any)?.[collectionKey]?.[childId],
-      );
+      const childDetails = this.FindAsCode({ ID: childId, Type: to })?.AsCode;
+      const childEntry = (parent.AsCode as any)?.[collectionKey]?.[childId];
 
-      return embedded
-        ? {
-          ID: id,
-          Type: typePath,
-          AsCode: embedded,
-        }
-        : null;
+      const embedded = this.extractAsCode(from, to, childDetails, childEntry);
+      return embedded ? { ID: id, Type: typePath, AsCode: embedded } : null;
     }
 
     const key = this.getEaCKeyForType(typePath);
@@ -236,6 +146,121 @@ export class EaCNodeInspectorManager {
     return node ? this.FindAsCode(node)?.AsCode.Metadata ?? null : null;
   }
 
+  // ----------------------- Protected Helpers ------------------------
+
+  protected extractEmbeddedAsCode<T extends EaCFlowSettings>(
+    eacBlock: EaCVertexDetails,
+    block: T | undefined
+  ): { Metadata?: EaCFlowNodeMetadata; Details: EaCVertexDetails } | null {
+    if (!block) return null;
+    const { Metadata, ...details } = block;
+    return {
+      Metadata: Metadata ?? {},
+      Details: { ...(details ?? {}), Name: eacBlock.Name },
+    };
+  }
+
+  protected extractSurfaceSchemaOverlay(
+    globalSchema: EaCVertexDetails | undefined,
+    surfaceSchemaEntry: Record<string, unknown> | undefined
+  ): { Metadata?: EaCFlowNodeMetadata; Details: EaCVertexDetails } | null {
+    if (!globalSchema || !surfaceSchemaEntry) return null;
+    const { Metadata, ...overrides } = surfaceSchemaEntry;
+    return {
+      Metadata: Metadata as EaCFlowNodeMetadata,
+      Details: {
+        ...globalSchema,
+        ...overrides,
+      },
+    };
+  }
+
+  protected extractAsCode(
+    from: string,
+    to: string,
+    global: { Details: EaCVertexDetails } | null | undefined,
+    override: Record<string, any> | undefined
+  ): { Metadata?: EaCFlowNodeMetadata; Details: EaCVertexDetails } | null {
+    if (!global || !override) return null;
+    if (from === 'surface' && to === 'schema') {
+      return this.extractSurfaceSchemaOverlay(global.Details, override);
+    }
+    return this.extractEmbeddedAsCode(global.Details, override);
+  }
+
+  protected buildCompoundUpdatePatch(
+    from: string,
+    to: string,
+    parentId: string,
+    childId: string,
+    update: {
+      Metadata?: EaCFlowNodeMetadata;
+      Details?: EaCVertexDetails;
+    }
+  ): Partial<OpenIndustrialEaC> {
+    const outerKey = this.getEaCKeyForType(from);
+
+    if (from === 'surface' && to === 'schema') {
+      const patch: Partial<OpenIndustrialEaC> = {};
+
+      const { surfaceSettings, schemaDetails } =
+        this.splitFlowSettingsForSurfaceSchema({
+          ...(update.Details ?? {}),
+          ...(update.Metadata ? { Metadata: update.Metadata } : {}),
+        });
+
+      if (Object.keys(surfaceSettings).length > 0) {
+        patch.Surfaces = {
+          [parentId]: {
+            Schemas: {
+              [childId]: surfaceSettings,
+            },
+          },
+        };
+      }
+
+      if (Object.keys(schemaDetails).length > 0) {
+        patch.Schemas = {
+          [childId]: {
+            Details: schemaDetails,
+          } as EaCSchemaAsCode,
+        };
+      }
+
+      return patch;
+    }
+
+    const block: Record<string, unknown> = {};
+    if (update.Metadata) block.Metadata = update.Metadata;
+    if (update.Details) Object.assign(block, update.Details);
+
+    return {
+      [outerKey]: {
+        [parentId]: {
+          [this.getEaCKeyForType(to)]: {
+            [childId]: block,
+          },
+        },
+      },
+    };
+  }
+
+  protected splitFlowSettingsForSurfaceSchema(
+    update: EaCVertexDetails & { Metadata?: EaCFlowNodeMetadata }
+  ): {
+    surfaceSettings: SurfaceSchemaSettings;
+    schemaDetails: EaCVertexDetails;
+  } {
+    const { DisplayMode, Metadata, ...rest } = update;
+    return {
+      surfaceSettings: {
+        ...(Metadata ? { Metadata } : {}),
+        ...(DisplayMode ? { DisplayMode } : { DisplayMode: 'table' }),
+      } as SurfaceSchemaSettings,
+      schemaDetails: rest,
+    };
+  }
+
   protected getEaCKeyForType(type: string): keyof OpenIndustrialEaC {
     switch (type.toLowerCase()) {
       case 'agent':
@@ -243,6 +268,8 @@ export class EaCNodeInspectorManager {
       case 'connection':
         return 'DataConnections';
       case 'schema':
+      case 'reference-schema':
+      case 'composite-schema':
         return 'Schemas';
       case 'simulator':
         return 'Simulators';
