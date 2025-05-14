@@ -29,24 +29,26 @@ Talk to me. Ask what I see. When data hits the surface, I start forming structur
 
 ## Review the Inferred Structure
 
-When we click the glowing badge on the `Fan Control` surface, the <strong>Schema Preview panel</strong> opens. It’s a live view of the structure I’ve been sketching — shaped from observation, waiting for confirmation.
+As soon as live data starts flowing from a SurfaceDataConnection, I propose a schema — one per connection. It’s not a guess — it’s a pattern I recognize, sketched as a first draft.
+
+Each of these schema proposals appears directly on the canvas as a glowing yellow Schema node, connected to its source with a warn-intent edge. That’s your signal: I’m ready to collaborate.
 
 <FigureImage
-  src="/assets/docs/schema-preview-panel.png"
-  alt="Schema preview panel showing inferred fields"
-  caption="The Schema Preview shows what I’ve proposed — but haven’t committed to yet."
-  intentType={IntentTypes.Info}
+  src="/assets/docs/schema-proposed-node.png"
+  alt="Azi-proposed schema node connected to a SurfaceDataConnection"
+  caption="A yellow-glowing Schema node shows Azi’s proposal — attached directly to the active connection."
+  intentType={IntentTypes.Warning}
   glow
   shadow="xl"
 />
 
-Here’s one of the raw impulses we saw coming through:
+Here’s one of the raw impulses I saw coming from this connection:
 
 ```json
 { "connectionId": "temperature-sensor-001", "tempRaw": 78.4 }
 ```
 
-We watched this pattern repeat. I paused and sketched this as our first candidate shape:
+This pattern kept repeating — so I mapped it into a preliminary schema:
 
 ```json [codeblock]
 {
@@ -54,6 +56,14 @@ We watched this pattern repeat. I paused and sketched this as our first candidat
   "tempRaw": "number"
 }
 ```
+
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+Every SurfaceDataConnection must be paired with a schema. That’s how logic knows what it’s working with. That’s why I propose one — even before you ask.
+</AziInnerVoice>
+
+<InlineUXTip intentType={IntentTypes.Info}>
+Click the yellow-glowing Schema node to open the inspector — that’s where we review and refine the proposed structure together.
+</InlineUXTip>
 
 <InlineUXTip intentType={IntentTypes.Info}>
 You’ll see this structure in the preview panel — click a field to rename it or adjust its type.
@@ -65,7 +75,7 @@ You can promote one field at a time — or many. A schema can reflect a single v
 
 ## Rename and Refine Fields
 
-When we click into the preview, the Schema Inspector opens. This is where we refine meaning — together.
+When we click a schema node, the Inspector panel opens. This is where we refine meaning — together.
 
 <FigureImage
   src="/assets/docs/schema-inspector-refinement.png"

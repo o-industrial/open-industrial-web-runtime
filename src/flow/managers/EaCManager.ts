@@ -20,7 +20,11 @@ import {
   EaCAzureDockerSimulatorDetails,
   EaCFlowNodeMetadata,
 } from '@o-industrial/common/eac';
-import { EaCHistorySnapshot } from '@o-industrial/common/types';
+import {
+  EaCHistorySnapshot,
+  Proposal,
+  RecordKind,
+} from '@o-industrial/common/types';
 import { EaCEnterpriseDetails, EaCVertexDetails } from '@fathym/eac';
 
 import { EaCNodeInspectorManager } from './eac/EaCNodeInspectorManager.ts';
@@ -32,15 +36,19 @@ import { EaCStatus } from '@fathym/eac/steward/status';
 import { EaCWorkspaceScopeManager } from './eac/EaCWorkspaceScopeManager.ts';
 import { EaCScopeManager } from './eac/EaCScopeManager.ts';
 import { EaCSurfaceScopeManager } from './eac/EaCSurfaceScopeManager.ts';
+import { EaCProposalManager } from './eac/EaCProposalManager.ts';
+import { ProposalOverlayMode } from '../types/graph/ProposalOverlayMode.ts';
 
 export class EaCManager {
   protected deleteEaC: NullableArrayOrObject<OpenIndustrialEaC> = {};
   protected changeListeners = new Set<() => void>();
 
-  protected inspector: EaCNodeInspectorManager;
   protected diff: EaCDiffManager;
-
+  protected inspector: EaCNodeInspectorManager;
+  protected proposals: EaCProposalManager;
   protected scopeMgr!: EaCScopeManager;
+
+  protected overlayMode: ProposalOverlayMode = 'pending';
 
   constructor(
     protected eac: OpenIndustrialEaC,
@@ -50,8 +58,9 @@ export class EaCManager {
     protected presets: PresetManager,
     protected history: HistoryManager
   ) {
-    this.inspector = new EaCNodeInspectorManager(graph, () => this.eac);
     this.diff = new EaCDiffManager(history, this.emitEaCChanged.bind(this));
+    this.inspector = new EaCNodeInspectorManager(graph, () => this.eac);
+    this.proposals = new EaCProposalManager(oiSvc, this);
 
     // 🔁 Currently hardcoded to workspace scope
     this.SwitchTo(scope, undefined);
@@ -234,7 +243,7 @@ export class EaCManager {
     const result = this.diff.MergeDelete(this.eac, this.deleteEaC, partial);
     if (result.changed) {
       this.eac = result.updated;
-      const rebuilt = this.scopeMgr.BuildGraph(jsonMapSetClone(this.eac));
+      const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
       this.graph.LoadFromGraph(rebuilt);
     }
   }
@@ -243,7 +252,7 @@ export class EaCManager {
     const result = this.diff.MergePartial(this.eac, this.deleteEaC, partial);
     if (result.changed) {
       this.eac = result.updated;
-      const rebuilt = this.scopeMgr.BuildGraph(jsonMapSetClone(this.eac));
+      const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
       this.graph.LoadFromGraph(rebuilt);
     }
   }
@@ -262,10 +271,17 @@ export class EaCManager {
     this.eac = jsonMapSetClone(snapshot.eac);
     this.deleteEaC = jsonMapSetClone(snapshot.deletes);
 
-    const rebuilt = this.scopeMgr.BuildGraph(this.eac);
+    const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
     this.graph.LoadFromGraph(rebuilt);
 
     this.emitEaCChanged();
+  }
+
+  public SetProposalOverlayMode(mode: ProposalOverlayMode): void {
+    this.overlayMode = mode;
+
+    const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
+    this.graph.LoadFromGraph(rebuilt);
   }
 
   public SwitchTo(scope: NodeScopeTypes, lookup?: string): void {
@@ -298,7 +314,7 @@ export class EaCManager {
       }
     }
 
-    const rebuilt = this.scopeMgr.BuildGraph(this.eac);
+    const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
 
     this.graph.ResetGraph();
 
@@ -352,5 +368,32 @@ export class EaCManager {
 
   protected emitEaCChanged(): void {
     for (const cb of this.changeListeners) cb();
+  }
+
+  protected getEaCWithProposals(): OpenIndustrialEaC {
+    const base = jsonMapSetClone(this.eac);
+
+    if (!this.proposals || this.overlayMode === 'none') return base;
+
+    const overlays =
+      this.overlayMode === 'pending'
+        ? this.proposals.GetPending()
+        : 'ids' in this.overlayMode
+        ? this.overlayMode.ids
+            .map((id) => this.proposals.GetByID(id))
+            .filter((p): p is Proposal<RecordKind> => !!p)
+        : [];
+
+    for (const proposal of overlays) {
+      const patch = {
+        [proposal.Kind]: {
+          [proposal.Key]: proposal.Proposed,
+        },
+      };
+
+      merge(base, patch);
+    }
+
+    return base;
   }
 }

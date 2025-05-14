@@ -29,6 +29,7 @@ import { TeamManager } from './TeamManager.ts';
 import { NodeEventManager } from './NodeEventManager.ts';
 import { IntentTypes } from '@o-industrial/common/types';
 import { BreadcrumbPart } from '../../../apps/components/molecules/BreadcrumbBar.tsx';
+import { ProposalOverlayMode } from '../types/graph/ProposalOverlayMode.ts';
 
 export class WorkspaceManager {
   protected currentScope: {
