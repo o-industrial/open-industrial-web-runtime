@@ -2,7 +2,7 @@ import { NodeProps, Position } from 'reactflow';
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
 import NodeHandle from '../../atoms/NodeHandle.tsx';
 import { FlowNodeData } from '../../../../src/flow/types/react/FlowNodeData.ts';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 import { EaCVertexDetails } from '@fathym/eac';
 

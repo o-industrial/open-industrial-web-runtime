@@ -2,7 +2,7 @@ import { NodeProps, Position } from 'reactflow';
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
 import NodeHandle from '../../atoms/NodeHandle.tsx';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { TriggerMatchIcon } from '../../../../build/iconset/icons/TriggerMatchIcon.tsx';
 import { DeleteIcon } from '../../../../build/iconset/icons/DeleteIcon.tsx';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';

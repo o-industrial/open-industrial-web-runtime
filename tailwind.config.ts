@@ -204,6 +204,8 @@ const animations = {
   signalFlash: 'signalFlash 2s ease-in-out infinite',
   surfacePulse: 'surfacePulse 6s ease-in-out infinite',
   driftShake: 'driftShake 300ms ease-in-out',
+  'ping-slow': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite',
+  'ping-fast': 'ping 0.8s cubic-bezier(0, 0, 0.2, 1) infinite',
 };
 
 const typoConfig = (theme: (path: string) => any) => ({

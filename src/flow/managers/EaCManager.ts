@@ -20,7 +20,11 @@ import {
   EaCAzureDockerSimulatorDetails,
   EaCFlowNodeMetadata,
 } from '@o-industrial/common/eac';
-import { EaCHistorySnapshot } from '@o-industrial/common/types';
+import {
+  EaCHistorySnapshot,
+  Proposal,
+  RecordKind,
+} from '@o-industrial/common/types';
 import { EaCEnterpriseDetails, EaCVertexDetails } from '@fathym/eac';
 
 import { EaCNodeInspectorManager } from './eac/EaCNodeInspectorManager.ts';
@@ -32,15 +36,19 @@ import { EaCStatus } from '@fathym/eac/steward/status';
 import { EaCWorkspaceScopeManager } from './eac/EaCWorkspaceScopeManager.ts';
 import { EaCScopeManager } from './eac/EaCScopeManager.ts';
 import { EaCSurfaceScopeManager } from './eac/EaCSurfaceScopeManager.ts';
+import { EaCProposalManager } from './eac/EaCProposalManager.ts';
+import { ProposalOverlayMode } from '../types/graph/ProposalOverlayMode.ts';
 
 export class EaCManager {
   protected deleteEaC: NullableArrayOrObject<OpenIndustrialEaC> = {};
   protected changeListeners = new Set<() => void>();
 
-  protected inspector: EaCNodeInspectorManager;
   protected diff: EaCDiffManager;
-
+  protected inspector: EaCNodeInspectorManager;
+  protected proposals: EaCProposalManager;
   protected scopeMgr!: EaCScopeManager;
+
+  protected overlayMode: ProposalOverlayMode = 'pending';
 
   constructor(
     protected eac: OpenIndustrialEaC,
@@ -50,8 +58,9 @@ export class EaCManager {
     protected presets: PresetManager,
     protected history: HistoryManager
   ) {
-    this.inspector = new EaCNodeInspectorManager(graph, () => this.eac);
     this.diff = new EaCDiffManager(history, this.emitEaCChanged.bind(this));
+    this.inspector = new EaCNodeInspectorManager(graph, () => this.eac);
+    this.proposals = new EaCProposalManager(oiSvc, this);
 
     // 🔁 Currently hardcoded to workspace scope
     this.SwitchTo(scope, undefined);
@@ -61,33 +70,13 @@ export class EaCManager {
     changes: NodeChange[],
     currentNodes: Node<FlowNodeData>[]
   ): void {
-    const updated = applyNodeChanges(changes, currentNodes);
-    const partial: OpenIndustrialEaC = {};
-    let modified = false;
+    const partial = this.scopeMgr.UpdateNodesFromChanges(
+      changes,
+      currentNodes,
+      this.eac
+    );
 
-    for (const node of updated) {
-      const pos: FlowPosition = { X: node.position.x, Y: node.position.y };
-      const asCode = this.inspector.FindAsCode({
-        Type: node.type!,
-        ID: node.id,
-      });
-      if (!asCode) continue;
-
-      const prev = asCode.AsCode.Metadata?.Position;
-      const changed = !prev || prev.X !== pos.X || prev.Y !== pos.Y;
-      if (!changed) continue;
-
-      const key = this.getEaCKeyForType(asCode.Type);
-      partial[key] ??= {};
-      (partial[key] as Record<string, unknown>)[asCode.ID] = {
-        Metadata: { ...asCode.AsCode.Metadata, Position: pos },
-        Details: {},
-      };
-
-      modified = true;
-    }
-
-    if (modified) this.MergePartial(partial);
+    if (partial) this.MergePartial(partial);
   }
 
   public ApplyReactFlowEdgeChanges(
@@ -103,6 +92,16 @@ export class EaCManager {
     if (partial) this.MergePartial(partial);
   }
 
+  public async Archive(): Promise<void> {
+    await this.oiSvc.Workspaces.Archive();
+  }
+
+  public async Commit(history: EaCHistorySnapshot): Promise<EaCStatus> {
+    const status = await this.oiSvc.Workspaces.Commit(history);
+    console.log(`✅ Runtime committed: CommitID ${status.ID}`);
+    return status;
+  }
+
   public CreateConnectionEdge(source: string, target: string): void {
     const partial = this.scopeMgr.CreateConnectionEdge(
       this.eac,
@@ -115,70 +114,53 @@ export class EaCManager {
     }
   }
 
-  public RemoveConnectionEdge(edgeId: string): void {
-    const partial = this.scopeMgr.RemoveConnectionEdge(this.eac, edgeId);
-    if (partial) this.MergePartial(partial);
-  }
-
-  public HasConnection(source: string, target: string): boolean {
-    return this.scopeMgr.HasConnection(source, target);
-  }
-
-  public async Commit(history: EaCHistorySnapshot): Promise<EaCStatus> {
-    const status = await this.oiSvc.Workspaces.Commit(history);
-    console.log(`✅ Runtime committed: CommitID ${status.ID}`);
-    return status;
-  }
-
   public CreateNodeFromPreset(
     type: string,
-    position: FlowPosition,
-    parentId?: string
+    position: FlowPosition
   ): FlowGraphNode {
     const id = `${type}-${Date.now()}`;
-
-    const partial = this.presets.CreatePartialEaCFromPreset(
+    const partial = this.scopeMgr.CreatePartialEaCFromPreset(
       type,
       id,
-      position,
-      parentId
+      position
     );
-
     this.MergePartial(partial);
 
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
     if (!node) throw new Error(`Failed to locate node after create: ${id}`);
-
     return node;
   }
 
   public DeleteNode(id: string): void {
-    const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
-    if (!node) return;
-
-    const key = this.getEaCKeyForType(node.Type);
-    const partial: OpenIndustrialEaC = {
-      [key]: { [id]: null },
-    } as OpenIndustrialEaC;
+    const partial = this.inspector.BuildPartialForNodeDelete(id);
+    if (!partial) return;
 
     this.MergeDelete(partial);
 
-    const edges = this.graph
-      .GetGraph()
-      .Edges.filter((e) => e.Source === id || e.Target === id);
+    // const edges = this.graph
+    //   .GetGraph()
+    //   .Edges.filter((e) => e.Source === id || e.Target === id);
 
-    if (edges.length) {
-      const changes = edges.map((e) => ({ id: e.ID, type: 'remove' as const }));
-      this.ApplyReactFlowEdgeChanges(changes, []);
-    }
+    // if (edges.length) {
+    //   const changes = edges.map((e) => ({ id: e.ID, type: 'remove' as const }));
+    //   this.ApplyReactFlowEdgeChanges(changes, []);
+    // }
   }
 
   public GetDetailsForNode(id: string): EaCVertexDetails | null {
     return this.inspector.GetDetails(id);
   }
 
+  public GetEaC(): OpenIndustrialEaC {
+    return jsonMapSetClone(this.eac);
+  }
+
   public GetMetadataForNode(id: string): EaCFlowNodeMetadata | null {
     return this.inspector.GetMetadata(id);
+  }
+
+  public HasConnection(source: string, target: string): boolean {
+    return this.scopeMgr.HasConnection(source, target);
   }
 
   public InstallSimulators(simDefs: SimulatorDefinition[]): void {
@@ -195,6 +177,104 @@ export class EaCManager {
     }
 
     this.MergePartial(partial);
+  }
+
+  public List(): WorkspaceSummary[] {
+    return [
+      {
+        Lookup: this.eac.EnterpriseLookup!,
+        Details: this.eac.Details!,
+      },
+    ];
+  }
+
+  public MergeDelete(partial: NullableArrayOrObject<OpenIndustrialEaC>): void {
+    const result = this.diff.MergeDelete(this.eac, this.deleteEaC, partial);
+    if (result.changed) {
+      this.eac = result.updated;
+      const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
+      this.graph.LoadFromGraph(rebuilt);
+    }
+  }
+
+  public MergePartial(partial: OpenIndustrialEaC): void {
+    const result = this.diff.MergePartial(this.eac, this.deleteEaC, partial);
+    if (result.changed) {
+      this.eac = result.updated;
+      const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
+      this.graph.LoadFromGraph(rebuilt);
+    }
+  }
+
+  public OnEaCChanged(cb: () => void): () => void {
+    this.changeListeners.add(cb);
+    return () => this.changeListeners.delete(cb);
+  }
+
+  public RemoveConnectionEdge(edgeId: string): void {
+    const partial = this.scopeMgr.RemoveConnectionEdge(this.eac, edgeId);
+    if (partial) this.MergePartial(partial);
+  }
+
+  public ResetFromSnapshot(snapshot: EaCHistorySnapshot): void {
+    this.eac = jsonMapSetClone(snapshot.eac);
+    this.deleteEaC = jsonMapSetClone(snapshot.deletes);
+
+    const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
+    this.graph.LoadFromGraph(rebuilt);
+
+    this.emitEaCChanged();
+  }
+
+  public SetProposalOverlayMode(mode: ProposalOverlayMode): void {
+    this.overlayMode = mode;
+
+    const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
+    this.graph.LoadFromGraph(rebuilt);
+  }
+
+  public SwitchTo(scope: NodeScopeTypes, lookup?: string): void {
+    console.log(`[EaCManager] Switching to scope: ${scope} (${lookup})`);
+
+    this.scope = scope;
+
+    switch (scope) {
+      case 'workspace': {
+        this.scopeMgr = new EaCWorkspaceScopeManager(
+          this.graph,
+          this.presets,
+          this.inspector
+        );
+        break;
+      }
+
+      case 'surface': {
+        if (lookup) {
+          this.scopeMgr = new EaCSurfaceScopeManager(
+            this.graph,
+            this.presets,
+            this.inspector,
+            lookup
+          );
+        } else {
+          throw new Error(`Lookup must be defined for scope: ${scope}`);
+        }
+
+        break;
+      }
+
+      default: {
+        throw new Error(`Unsupported scope: ${scope}`);
+      }
+    }
+
+    const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
+
+    this.graph.ResetGraph();
+
+    this.graph.LoadFromGraph(rebuilt);
+
+    this.emitEaCChanged();
   }
 
   public UpdateWorkspace(details: Partial<EaCEnterpriseDetails>): void {
@@ -216,19 +296,10 @@ export class EaCManager {
     const merged = { ...prev, ...next };
     if (JSON.stringify(prev) === JSON.stringify(merged)) return;
 
-    const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
-    if (!node) return;
-
-    const key = this.getEaCKeyForType(node.Type);
-    const partial: OpenIndustrialEaC = {
-      [key]: {
-        [id]: {
-          Details: merged,
-        },
-      },
-    };
-
-    this.MergePartial(partial);
+    const partial = this.inspector.BuildPartialForNodeUpdate(id, {
+      Details: merged,
+    });
+    if (partial) this.MergePartial(partial);
   }
 
   public UpdateMetadataForNode(
@@ -238,125 +309,45 @@ export class EaCManager {
     const prev = this.GetMetadataForNode(id);
     if (!prev) return;
 
-    const merged = merge(prev, metadata);
+    const merged = merge<EaCFlowNodeMetadata>(prev, metadata);
+
     if (JSON.stringify(prev) === JSON.stringify(merged)) return;
 
-    const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
-    if (!node) return;
+    const partial = this.inspector.BuildPartialForNodeUpdate(id, {
+      Metadata: merged,
+    });
 
-    const key = this.getEaCKeyForType(node.Type);
-    const partial: OpenIndustrialEaC = {
-      [key]: {
-        [id]: {
-          Metadata: merged,
-          Details: {},
-        },
-      },
-    };
-
-    this.MergePartial(partial);
-  }
-
-  public ResetFromSnapshot(snapshot: EaCHistorySnapshot): void {
-    this.eac = jsonMapSetClone(snapshot.eac);
-    this.deleteEaC = jsonMapSetClone(snapshot.deletes);
-
-    const rebuilt = this.scopeMgr.BuildGraph(this.eac);
-    this.graph.LoadFromGraph(rebuilt);
-
-    this.emitEaCChanged();
-  }
-
-  public MergePartial(partial: OpenIndustrialEaC): void {
-    const result = this.diff.MergePartial(this.eac, this.deleteEaC, partial);
-    if (result.changed) {
-      this.eac = result.updated;
-      const rebuilt = this.scopeMgr.BuildGraph(jsonMapSetClone(this.eac));
-      this.graph.LoadFromGraph(rebuilt);
-    }
-  }
-
-  public MergeDelete(partial: OpenIndustrialEaC): void {
-    const result = this.diff.MergeDelete(this.eac, this.deleteEaC, partial);
-    if (result.changed) {
-      this.eac = result.updated;
-      const rebuilt = this.scopeMgr.BuildGraph(jsonMapSetClone(this.eac));
-      this.graph.LoadFromGraph(rebuilt);
-    }
-  }
-
-  public GetEaC(): OpenIndustrialEaC {
-    return jsonMapSetClone(this.eac);
-  }
-
-  public List(): WorkspaceSummary[] {
-    return [
-      {
-        Lookup: this.eac.EnterpriseLookup!,
-        Details: this.eac.Details!,
-      },
-    ];
-  }
-
-  public OnEaCChanged(cb: () => void): () => void {
-    this.changeListeners.add(cb);
-    return () => this.changeListeners.delete(cb);
-  }
-
-  public async Archive(): Promise<void> {
-    await this.oiSvc.Workspaces.Archive();
-  }
-
-  public SwitchTo(scope: NodeScopeTypes, lookup?: string): void {
-    console.log(`[EaCManager] Switching to scope: ${scope} (${lookup})`);
-
-    this.scope = scope;
-
-    switch (scope) {
-      case 'workspace': {
-        this.scopeMgr = new EaCWorkspaceScopeManager(this.graph);
-        break;
-      }
-
-      case 'surface': {
-        if (lookup) {
-          this.scopeMgr = new EaCSurfaceScopeManager(this.graph, lookup);
-        } else {
-          throw new Error(`Lookup must be defined for scope: ${scope}`);
-        }
-
-        break;
-      }
-
-      default: {
-        throw new Error(`Unsupported scope: ${scope}`);
-      }
-    }
-
-    const rebuilt = this.scopeMgr.BuildGraph(this.eac);
-    this.graph.LoadFromGraph(rebuilt);
-
-    this.emitEaCChanged();
+    if (partial) this.MergePartial(partial);
   }
 
   protected emitEaCChanged(): void {
     for (const cb of this.changeListeners) cb();
   }
 
-  protected getEaCKeyForType(type: string): keyof OpenIndustrialEaC {
-    switch (type) {
-      case 'agent':
-        return 'Agents';
-      case 'connection':
-        return 'DataConnections';
-      case 'schema':
-        return 'Schemas';
-      case 'simulator':
-        return 'Simulators';
-      case 'surface':
-        return 'Surfaces';
-      default:
-        throw new Error(`Unsupported type: ${type}`);
+  protected getEaCWithProposals(): OpenIndustrialEaC {
+    const base = jsonMapSetClone(this.eac);
+
+    if (!this.proposals || this.overlayMode === 'none') return base;
+
+    const overlays =
+      this.overlayMode === 'pending'
+        ? this.proposals.GetPending()
+        : 'ids' in this.overlayMode
+        ? this.overlayMode.ids
+            .map((id) => this.proposals.GetByID(id))
+            .filter((p): p is Proposal<RecordKind> => !!p)
+        : [];
+
+    for (const proposal of overlays) {
+      const patch = {
+        [proposal.Kind]: {
+          [proposal.Key]: proposal.Proposed,
+        },
+      };
+
+      merge(base, patch);
     }
+
+    return base;
   }
 }

@@ -1,12 +1,5 @@
 import { useCallback, useEffect, useState } from 'preact/hooks';
-import {
-  Connection,
-  Edge,
-  EdgeChange,
-  Node,
-  NodeChange,
-  XYPosition,
-} from 'reactflow';
+import { Connection, Edge, EdgeChange, Node, NodeChange, XYPosition } from 'reactflow';
 import { EaCStatusProcessingTypes } from '@fathym/eac/steward/status';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 
@@ -26,43 +19,68 @@ import { WorkspaceSummary } from '../../types/WorkspaceSummary.ts';
 import { EaCEnterpriseDetails } from '@fathym/eac';
 import { TeamMember } from '../../types/TeamMember.ts';
 import { TeamManager } from './TeamManager.ts';
+import { NodeEventManager } from './NodeEventManager.ts';
+import { IntentTypes } from '@o-industrial/common/types';
+import { BreadcrumbPart } from '../../../apps/components/molecules/BreadcrumbBar.tsx';
+import { ProposalOverlayMode } from '../types/graph/ProposalOverlayMode.ts';
 
 export class WorkspaceManager {
-  public Scope: NodeScopeTypes;
+  protected currentScope: {
+    Scope: NodeScopeTypes;
+
+    Lookup?: string;
+  };
+
   public Azi: AziManager;
+  public EaC: EaCManager;
   public Graph: GraphStateManager;
-  public Selection: SelectionManager;
+  public History: HistoryManager;
+  public Interaction: InteractionManager;
+  public NodeEvents: NodeEventManager;
   public Presets: PresetManager;
-  public Runtime: InteractionManager;
+  public Selection: SelectionManager;
   public Simulators: SimulatorLibraryManager;
   public Stats: StatManager;
   public Team: TeamManager;
-  public EaC: EaCManager;
-  public History: HistoryManager;
 
   constructor(
     eac: OpenIndustrialEaC,
     protected oiSvc: OpenIndustrialAPIClient,
-    scope: NodeScopeTypes = 'workspace'
+    scope: NodeScopeTypes = 'workspace',
   ) {
-    this.Scope = scope;
+    this.currentScope = { Scope: scope };
+
     this.Azi = new AziManager();
-    this.Selection = new SelectionManager();
-    this.Presets = new PresetManager();
-    this.Stats = new StatManager();
-    this.Simulators = new SimulatorLibraryManager();
     this.History = new HistoryManager();
+    this.Presets = new PresetManager();
+    this.Selection = new SelectionManager();
+    this.Simulators = new SimulatorLibraryManager();
+    this.Stats = new StatManager();
     this.Team = new TeamManager();
-    this.Graph = new GraphStateManager(this.Selection, this.Stats);
-    this.EaC = this.createEaCManager(eac);
-    this.Runtime = new InteractionManager(
-      this.Selection,
-      this.Presets,
-      this.EaC
+
+    this.NodeEvents = new NodeEventManager(this);
+
+    this.Interaction = new InteractionManager(this.Selection, this.Presets);
+
+    this.Graph = new GraphStateManager(
+      this.Interaction,
+      this.Stats,
+      this.NodeEvents,
     );
 
+    this.EaC = new EaCManager(
+      eac,
+      this.oiSvc,
+      this.currentScope.Scope,
+      this.Graph,
+      this.Presets,
+      this.History,
+    );
+
+    this.Interaction.BindEaCManager(this.EaC);
+
     console.log('🚀 FlowManager initialized:', {
-      scope: this.Scope,
+      scope: this.currentScope,
       nodes: this.Graph.GetNodes().length,
       edges: this.Graph.GetEdges().length,
     });
@@ -97,17 +115,39 @@ export class WorkspaceManager {
     };
   }
 
-  public UseWorkspaceBreadcrumb(): string[] {
+  public UseBreadcrumb(): BreadcrumbPart[] {
     const eac = this.UseEaC();
-    const [pathParts, setPathParts] = useState<string[]>([
-      'Loading...',
-      'Workspace',
+    const { currentScope, currentScopeData } = this.UseScopeSwitcher();
+
+    const [pathParts, setPathParts] = useState<BreadcrumbPart[]>([
+      { label: 'Loading...', intentType: IntentTypes.Info },
+      { label: 'Workspace', intentType: IntentTypes.Primary },
     ]);
 
     useEffect(() => {
       const name = eac?.Details?.Name ?? 'Loading...';
-      setPathParts([name, 'Workspace']);
-    }, [eac?.Details?.Name]);
+
+      if (currentScope === 'workspace') {
+        setPathParts([
+          {
+            label: `${name} (Workspace)`,
+          },
+        ]);
+      } else {
+        const surfaceLookup = currentScopeData.Lookup!;
+        const surfaceName = eac.Surfaces?.[surfaceLookup]?.Details?.Name ?? 'Unknown Surface';
+
+        setPathParts([
+          {
+            label: `${name} (Workspace)`,
+            onClick: () => this.SwitchToScope('workspace'),
+          },
+          {
+            label: `${surfaceName} (Surface)`,
+          },
+        ]);
+      }
+    }, [eac?.Details?.Name, currentScope]);
 
     return pathParts;
   }
@@ -147,7 +187,7 @@ export class WorkspaceManager {
     const [canUndo, setCanUndo] = useState(this.History.CanUndo());
     const [canRedo, setCanRedo] = useState(this.History.CanRedo());
     const [hasChanges, setHasChanges] = useState(
-      this.History.HasUnsavedChanges()
+      this.History.HasUnsavedChanges(),
     );
     const [version, setVersion] = useState(this.History.GetVersion());
 
@@ -221,14 +261,14 @@ export class WorkspaceManager {
   public UseInteraction() {
     const handleDrop = useCallback(
       (event: DragEvent, toFlow: (point: XYPosition) => XYPosition) => {
-        this.Runtime.HandleDrop(event, this.Graph.GetNodes(), toFlow);
+        this.Interaction.HandleDrop(event, this.Graph.GetNodes(), toFlow);
       },
-      []
+      [],
     );
 
     const handleConnect = useCallback((params: Connection) => {
       if (params.source && params.target) {
-        this.Runtime.ConnectNodes(params.source, params.target);
+        this.Interaction.ConnectNodes(params.source, params.target);
       }
     }, []);
 
@@ -236,21 +276,21 @@ export class WorkspaceManager {
       (_e: unknown, node: Node<FlowNodeData>) => {
         this.Selection.SelectNode(node.id);
       },
-      []
+      [],
     );
 
     const handleNodesChange = useCallback(
       (changes: NodeChange[], nodes: Node[]) => {
-        this.Runtime.OnNodesChange(changes, nodes ?? this.Graph.GetNodes());
+        this.Interaction.OnNodesChange(changes, nodes ?? this.Graph.GetNodes());
       },
-      []
+      [],
     );
 
     const handleEdgesChange = useCallback(
       (changes: EdgeChange[], edges: Edge[]) => {
-        this.Runtime.OnEdgesChange(changes, edges ?? this.Graph.GetEdges());
+        this.Interaction.OnEdgesChange(changes, edges ?? this.Graph.GetEdges());
       },
-      []
+      [],
     );
 
     return {
@@ -263,38 +303,39 @@ export class WorkspaceManager {
   }
 
   public UseScopeSwitcher() {
-    const [currentScope, setScope] = useState(this.Scope);
+    const [scopeCtx, setScopeCtx] = useState({ ...this.currentScope });
 
     useEffect(() => {
       const unsubscribe = this.Graph.OnGraphChanged(() => {
         // Optional: Scope doesn't directly change from graph, but if you wire up
         // a more proper observer (e.g., this.OnScopeChanged) you can hook into that instead
-        setScope(this.Scope);
+        setScopeCtx(this.currentScope);
       });
 
       return unsubscribe;
     }, []);
 
-    const switchToScope = (scope: NodeScopeTypes, lookup: string) => {
+    const switchToScope = (scope: NodeScopeTypes, lookup?: string) => {
       this.SwitchToScope(scope, lookup);
-      setScope(scope); // manually trigger update
+
+      setScopeCtx({ Scope: scope, Lookup: lookup });
     };
 
     return {
-      currentScope,
+      currentScope: scopeCtx.Scope,
+      currentScopeData: scopeCtx,
       switchToScope,
     };
   }
 
   public UseSelection() {
     const [selected, setSelected] = useState<Node<FlowNodeData> | null>(
-      this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null
+      this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null,
     );
 
     useEffect(() => {
       const update = () => {
-        const node =
-          this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null;
+        const node = this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null;
         setSelected(node);
       };
 
@@ -306,7 +347,9 @@ export class WorkspaceManager {
   }
 
   public UseUIContext() {
-    const presetsForScope = this.Presets.GetPresetsForScope(this.Scope);
+    const presetsForScope = this.Presets.GetPresetsForScope(
+      this.currentScope.Scope,
+    );
     const rendererMap = this.Presets.GetRendererMap();
 
     return {
@@ -326,10 +369,10 @@ export class WorkspaceManager {
     };
 
     const [current, setCurrent] = useState<WorkspaceSummary>(
-      getCurrentWorkspace()
+      getCurrentWorkspace(),
     );
     const [hasChanges, setHasChanges] = useState(
-      this.History.HasUnsavedChanges()
+      this.History.HasUnsavedChanges(),
     );
 
     useEffect(() => {
@@ -376,7 +419,7 @@ export class WorkspaceManager {
       const name = current.Details.Name ?? 'this workspace';
 
       const confirmed = confirm(
-        `Are you sure you want to archive ${name}? This will remove it from the current session.`
+        `Are you sure you want to archive ${name}? This will remove it from the current session.`,
       );
 
       if (!confirmed) return;
@@ -468,11 +511,11 @@ export class WorkspaceManager {
     }
   }
 
-  public SwitchToScope(scope: NodeScopeTypes, lookup: string): void {
+  public SwitchToScope(scope: NodeScopeTypes, lookup?: string): void {
     console.log(`🔀 Switching scope to: ${scope} (${lookup})`);
 
     // Update internal scope reference
-    this.Scope = scope;
+    this.currentScope = { Scope: scope, Lookup: lookup };
 
     // Clear selection before switching
     this.Selection.ClearSelection();
@@ -484,19 +527,5 @@ export class WorkspaceManager {
     // e.g., this.Stats.Reset(); this.Runtime.Rebind();
 
     // Optionally, you could emit a custom hook event or callback here
-  }
-
-  // === Internals ===
-
-  protected createEaCManager(eac: OpenIndustrialEaC): EaCManager {
-    // Always use the new concrete EaCManager
-    return new EaCManager(
-      eac,
-      this.oiSvc,
-      this.Scope,
-      this.Graph,
-      this.Presets,
-      this.History
-    );
   }
 }

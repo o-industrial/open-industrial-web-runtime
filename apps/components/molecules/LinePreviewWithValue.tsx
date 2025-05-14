@@ -1,7 +1,7 @@
 // components/molecules/LinePreviewWithValue.tsx
 import { JSX } from 'preact';
 import { LineSparkSVG } from '../atoms/LineSparkSVG.tsx';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 
 type LinePreviewWithValueProps = {
   label?: string;

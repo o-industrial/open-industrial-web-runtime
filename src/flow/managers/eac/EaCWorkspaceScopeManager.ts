@@ -6,9 +6,11 @@ import {
   EaCDataConnectionAsCode,
   EaCSurfaceAsCode,
   EverythingAsCodeOIWorkspace,
+  SurfaceDataConnectionSettings,
 } from '@o-industrial/common/eac';
 import { Edge, EdgeChange } from 'reactflow';
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
+import { FlowPosition } from '../../types/graph/FlowPosition.ts';
 
 /**
  * Workspace-scoped logic handler for EaC state.
@@ -21,7 +23,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
     const nodes: FlowGraphNode[] = [];
     const edges: FlowGraphEdge[] = [];
 
-    // Data Connections
+    // --- Data Connections
     for (const [key, conn] of Object.entries(wks.DataConnections ?? {})) {
       nodes.push({
         ID: key,
@@ -32,7 +34,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
       });
     }
 
-    // Simulators
+    // --- Simulators
     for (const [key, sim] of Object.entries(wks.Simulators ?? {})) {
       nodes.push({
         ID: key,
@@ -54,8 +56,10 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
       }
     }
 
-    // Surfaces
+    // --- Root Surfaces Only
     for (const [key, surf] of Object.entries(wks.Surfaces ?? {})) {
+      if (surf.ParentSurfaceLookup) continue; // ❌ Skip nested surfaces
+
       nodes.push({
         ID: key,
         Type: 'surface',
@@ -73,14 +77,8 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
         });
       }
 
-      if (surf.ParentSurfaceLookup) {
-        edges.push({
-          ID: `${surf.ParentSurfaceLookup}->${key}`,
-          Source: surf.ParentSurfaceLookup,
-          Target: key,
-          Label: 'parent',
-        });
-      }
+      // ⚠️ Optional: could include edge to known children if needed
+      // but rendering of those will occur in surface scope
     }
 
     return { Nodes: nodes, Edges: edges };
@@ -89,7 +87,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
   public CreateConnectionEdge(
     eac: OpenIndustrialEaC,
     source: string,
-    target: string
+    target: string,
   ): Partial<OpenIndustrialEaC> | null {
     const wks = eac as EverythingAsCodeOIWorkspace;
 
@@ -112,9 +110,13 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
         },
       };
     } else if (src.Type === 'connection' && tgt.Type === 'surface') {
-      const connSet = {
+      const connSet: Record<string, SurfaceDataConnectionSettings> = {
         ...(wks.Surfaces?.[tgt.ID]?.DataConnections ?? {}),
-        [src.ID]: {},
+        [src.ID]: {
+          Metadata: {
+            Enabled: true,
+          },
+        },
       };
 
       partial = {
@@ -142,26 +144,34 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
     return partial;
   }
 
+  public CreatePartialEaCFromPreset(
+    type: string,
+    id: string,
+    position: FlowPosition,
+  ): Partial<OpenIndustrialEaC> {
+    return this.presets.CreatePartialEaCFromPreset(type, id, position);
+  }
+
   public HasConnection(source: string, target: string): boolean {
     return this.graph
       .GetGraph()
       .Edges.some((e) => e.Source === source && e.Target === target);
   }
-  
+
   public RemoveConnectionEdge(
     eac: OpenIndustrialEaC,
-    edgeId: string
+    edgeId: string,
   ): Partial<OpenIndustrialEaC> | null {
     const wks = eac as EverythingAsCodeOIWorkspace;
-  
+
     const [source, target] = edgeId.split('->');
-  
+
     const src = this.graph.GetGraph().Nodes.find((n) => n.ID === source);
     const tgt = this.graph.GetGraph().Nodes.find((n) => n.ID === target);
     if (!src || !tgt) return null;
-  
+
     let partial: Partial<EverythingAsCodeOIWorkspace> | null = null;
-  
+
     if (src.Type === 'simulator' && tgt.Type === 'connection') {
       if (wks.DataConnections?.[tgt.ID]?.SimulatorLookup === src.ID) {
         partial = {
@@ -178,7 +188,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
       if (surface?.DataConnections?.[src.ID]) {
         const updatedConnections = { ...surface.DataConnections };
         delete updatedConnections[src.ID];
-  
+
         partial = {
           Surfaces: {
             [tgt.ID]: {
@@ -201,14 +211,14 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
         };
       }
     }
-  
+
     return partial;
-  }  
+  }
 
   public UpdateConnections(
     _changes: EdgeChange[],
     _updated: Edge[],
-    _eac: OpenIndustrialEaC
+    _eac: OpenIndustrialEaC,
   ): OpenIndustrialEaC | null {
     // TODO: implement connection diffing logic if needed
     return null;

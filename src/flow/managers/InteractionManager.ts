@@ -6,13 +6,16 @@ import { FlowNodeData } from '../types/react/FlowNodeData.ts';
 import { EaCManager } from './EaCManager.ts';
 
 export class InteractionManager {
-  private refreshCallback: (() => void) | null = null;
+  protected eacMgr!: EaCManager;
 
   constructor(
     private selection: SelectionManager,
     private presets: PresetManager,
-    private eacMgr: EaCManager,
   ) {}
+
+  public BindEaCManager(eacMgr: EaCManager): void {
+    this.eacMgr = eacMgr;
+  }
 
   /**
    * Handles a node drop on the canvas, resolving scope, position,
@@ -49,12 +52,6 @@ export class InteractionManager {
       );
     });
 
-    const scope = surfaceParent ? 'surface' : 'workspace';
-    if (!this.presets.IsTypeAllowedInScope(type, scope)) {
-      console.warn(`[Drop] Disallowed node type: ${type} in scope: ${scope}`);
-      return null;
-    }
-
     const relativePosition = surfaceParent
       ? {
         x: position.x - surfaceParent.position.x,
@@ -66,14 +63,13 @@ export class InteractionManager {
       screen: { x: event.clientX, y: event.clientY },
       flow: position,
       relative: relativePosition,
-      scope,
       parent: surfaceParent?.id,
     });
 
     const newGraphNode = this.eacMgr.CreateNodeFromPreset(
       type,
       { X: relativePosition.x, Y: relativePosition.y },
-      surfaceParent?.id,
+      // surfaceParent?.id
     );
 
     this.selection.SelectNode(newGraphNode.ID);
@@ -91,11 +87,11 @@ export class InteractionManager {
   }
 
   /**
-   * Stores an optional callback to be triggered on UI refresh events.
+   * Applies edge changes from ReactFlow → updates GraphStateManager immediately
+   * → debounces propagation to EaC (rebuild relationships).
    */
-  public SetRefreshHandler(refresh: () => void) {
-    this.refreshCallback = refresh;
-    console.log(`[Init] Refresh handler registered`);
+  public OnEdgesChange(changes: EdgeChange[], currentEdges: Edge[]): void {
+    this.eacMgr.ApplyReactFlowEdgeChanges(changes, currentEdges);
   }
 
   /**
@@ -109,12 +105,9 @@ export class InteractionManager {
     this.eacMgr.ApplyReactFlowNodeChanges(changes, currentNodes);
   }
 
-  /**
-   * Applies edge changes from ReactFlow → updates GraphStateManager immediately
-   * → debounces propagation to EaC (rebuild relationships).
-   */
+  public OnNodeDoubleClick(id: string): void {
+    console.log('🖱️ [Interaction] double clicked → selecting', id);
 
-  public OnEdgesChange(changes: EdgeChange[], currentEdges: Edge[]): void {
-    this.eacMgr.ApplyReactFlowEdgeChanges(changes, currentEdges);
+    this.selection.SelectNode(id);
   }
 }

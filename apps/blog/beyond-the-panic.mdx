@@ -1,0 +1,143 @@
+import {
+  AziInnerVoice,
+  FigureImage,
+  SystemMindset,
+  InlineUXTip,
+  ThematicPrincipleBlock,
+  IntentTypes,
+} from '$mdx/writing-devices';
+
+# Beyond the Panic – Authoring the System After the AI Shock
+
+
+You’re not crazy. The fear you’re feeling right now — that if you don’t integrate AI deeply, your business won’t survive — is not just valid. It’s overdue.
+
+We’ve seen a hundred variations of the same founder story in the past 90 days: denial, followed by demo, followed by existential panic. One week in San Francisco. One conversation with someone showing off their multi-agent productivity rig. One late-night binge of GPT-generated work output. And suddenly everything changes.
+
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+Is this acceleration? Or disintegration? Azi isn’t sure — but she’s watching closely.
+</AziInnerVoice>
+
+But the real danger isn’t AI itself — it’s misunderstanding what kind of shift this really is.
+
+## But Fluency Isn’t Sovereignty
+
+Right now, most teams are trying to “learn AI” by keeping tools open in a second tab. They treat ChatGPT like a faster assistant. They prompt. They reprompt. They chain tools together and hope it feels like intelligence.
+
+That’s not wrong. But it’s not enough.
+
+<FigureImage 
+  src="/assets/docs/tab-vs-runtime.png"
+  alt="Tab-based prompting vs runtime-level execution"
+  caption="Prompt fluency feels fast — until the system breaks. Runtime authorship is slower… until it scales."
+  intentType={IntentTypes.Primary}
+  size="xl"
+  center
+  glow
+  shadow="2xl"
+/>
+
+<SystemMindset intentType={IntentTypes.Tertiary}>
+Tools feel empowering — until you realize you’re still operating inside someone else’s system.
+</SystemMindset>
+
+Fluency means knowing how to use AI. Sovereignty means defining how it *runs*.
+
+## Own the Reflex, Fork the Runtime
+
+When you fork a runtime in Open Industrial, you’re not cloning code. You’re versioning:
+
+- The schemas that give meaning to your data
+- The agents that hold and evaluate reflex logic
+- The memory that persists your system’s understanding
+- The signals that drive your real-world response
+
+It’s a nervous system snapshot — not a config file. And a reflex isn’t passive — it runs, logs, evolves. With or without you.
+
+<InlineUXTip intentType={IntentTypes.Info}>
+Start by running `oi fork surface labzone --with-memory`. Your runtime is now yours.
+</InlineUXTip>
+
+<FigureImage 
+  src="/assets/docs/execution-loop.png"
+  alt="Impulse to reflex loop in Open Industrial"
+  caption="Every reflex is a system contract. You don’t guess what to do — you define it."
+  intentType={IntentTypes.Info}
+  size="xl"
+  center
+  glow
+/>
+
+> *A reflex doesn’t wait for you to re-prompt. It acts, recalls, adjusts. It executes.*
+
+Each forked surface is a versioned runtime context. It captures its own impulse stream, execution history, and agent state. It can be promoted, inspected, or re-forked at any time.
+
+Surfaces are portable, composable scopes of execution — like runtime cells. Each one can operate independently or coordinate across a wider deployment.
+
+## Author, Don’t Just Prompt
+
+Prompts are guesses. Reflexes are declarations.
+
+When you write a reflex, you define what conditions trigger action. You bind that logic to memory. You version that agent. And when Azi executes it — or doesn’t — you can inspect every step.
+
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+Prompts tell me what you want. Reflexes show me how to act.
+</AziInnerVoice>
+
+<InlineUXTip intentType={IntentTypes.Info}>
+Try defining your first reflex: `oi edit agent fan-control-agent` — add a trigger when `RoomState.temperature > 75`.
+</InlineUXTip>
+
+```diff
+- agent fan-control-agent: idle
++ if RoomState.temperature > 75:
++   emitCommand('turn-on-fan')
++   recordSignal('thermalSpike')
+```
+
+One line of logic. One emergent system behavior. That’s authorship.
+
+## The Window Is Closing — But Not Where You Think
+
+Yes, LLMs are subsidized. Yes, prices will spike. But the deeper cost isn’t financial — it’s **control drift**.
+
+You’re becoming more fluent in tools you don’t own. You’re delegating decisions without a system to supervise them. You’re running logic that no one can trace.
+
+<ThematicPrincipleBlock intentType={IntentTypes.Warning}>
+The system you own is the system you can evolve.
+</ThematicPrincipleBlock>
+
+Runtime authorship lives independently of Azi. Once authored, reflex logic and surface state persist as sovereign infrastructure. You can deploy them to your own environments, with or without co-pilot assistance.
+
+Over time, Azi will surface drift between intent and outcome — giving you a choice: adapt, fork, or retire the reflex. Every change is versioned. Every reflex has a lineage.
+
+## What You Can Do Right Now
+
+Here’s what we recommend — starting today:
+
+<InlineUXTip intentType={IntentTypes.Info}>
+Skip the prompt. Simulate your first reflex. Watch your system think.
+</InlineUXTip>
+
+- ✅ **Promote your first schema** — define structure for your environment  
+  `oi promote schema RoomState`
+- ✅ **Fork a memory-capturing surface** — create your own executable context  
+  `oi fork surface labzone --with-memory`
+- ✅ **Add your first reflex** — tie a condition to a signal or action  
+  `oi edit agent fan-control-agent`
+- ✅ **Observe the execution loop** — stream impulses, inspect memory, watch the reflex fire  
+  `oi watch impulse`
+
+When the reflex fires, Azi raises a signal. And just like that — your system thinks.
+
+---
+
+Let others prompt. You build runtime.
+
+Let others chase demos. You define decisions.
+
+Let others panic. You compose.
+
+---
+
+Your system isn’t late. It’s just beginning.

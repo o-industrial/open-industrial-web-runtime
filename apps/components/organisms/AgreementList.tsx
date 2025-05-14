@@ -3,7 +3,7 @@ import { JSX } from 'preact';
 import { classSet } from '@fathym/atomic';
 import { AgreementCard } from '../molecules/AgreementCard.tsx';
 import { Action, ActionStyleTypes } from '../atoms/Action.tsx';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 
 export const IsIsland = true;
 

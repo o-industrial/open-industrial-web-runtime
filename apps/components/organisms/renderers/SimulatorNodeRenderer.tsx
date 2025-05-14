@@ -3,24 +3,14 @@ import { useMemo } from 'preact/hooks';
 
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
 import NodeHandle from '../../atoms/NodeHandle.tsx';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { parseTimeAgoString } from '../../../../src/utils/parseTimeAgoString.tsx';
 
-import { FlowNodeData } from '../../../../src/flow/types/react/FlowNodeData.ts';
-import { EaCSimulatorDetails } from '@o-industrial/common/eac';
-
-export type SimulatorStats = {
-  impulseRates?: number[];
-  instanceCount?: number;
-  avgStartupMs?: number;
-  lastDeploymentAt?: string;
-};
-
-export type SimulatorNodeData = FlowNodeData<EaCSimulatorDetails, SimulatorStats>;
+import { SimulatorNodeData } from '../../../../src/flow/types/nodes/simulators/SimulatorNodeData.tsx';
 
 export default function SimulatorNodeRenderer({
   data,
@@ -47,13 +37,6 @@ export default function SimulatorNodeRenderer({
       onDoubleClick={data.onDoubleClick}
       isSelected={data.isSelected}
       class='data-[state=expanded]:w-[300px] data-[state=expanded]:h-auto data-[state=expanded]:rounded-md'
-      // preMain={
-      //   <NodeHandle
-      //     type="target"
-      //     position={Position.Left}
-      //     intentType={IntentTypes.Secondary}
-      //   />
-      // }
       postMain={
         <NodeHandle
           type='source'

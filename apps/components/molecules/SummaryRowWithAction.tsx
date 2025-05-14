@@ -1,4 +1,4 @@
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { Action, ActionStyleTypes } from '../atoms/Action.tsx';
 
 export type SummaryRowWithActionProps = {

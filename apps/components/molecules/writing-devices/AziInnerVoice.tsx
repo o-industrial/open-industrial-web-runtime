@@ -1,10 +1,10 @@
-import { JSX } from 'preact';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
-import { getIntentClasses } from '../../../../src/utils/getIntentClasses.ts';
+import { ComponentChildren, JSX } from 'preact';
+import { IntentTypes } from '@o-industrial/common/types';
+import { getIntentClasses } from '../../../../src/utils/getIntentStyles.ts';
 import { classSet } from '@fathym/atomic';
 
 export type AziInnerVoiceProps = {
-  children: JSX.Element | string;
+  children: ComponentChildren;
   intentType?: IntentTypes;
 } & JSX.HTMLAttributes<HTMLElement>;
 

@@ -1,5 +1,5 @@
 import { useReactFlow } from 'reactflow';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
 
 import { ZoomInIcon } from '../../../../build/iconset/icons/ZoomInIcon.tsx';

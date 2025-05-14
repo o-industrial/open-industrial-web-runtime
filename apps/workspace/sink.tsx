@@ -13,7 +13,7 @@ import {
   TriggerMatchIcon,
 } from '../../build/iconset/icons/_exports.ts';
 import { Action, ActionStyleTypes } from '../components/atoms/Action.tsx';
-import { IntentTypes } from '../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { LineSparkSVG } from '../components/atoms/LineSparkSVG.tsx';
 
 // deno-lint-ignore ban-types

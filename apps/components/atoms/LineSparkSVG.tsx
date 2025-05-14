@@ -1,6 +1,6 @@
 // components/atoms/LineSparkSVG.tsx
 import { JSX } from 'preact';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { buildSmoothPath } from '../../../src/utils/buildSmoothPath.ts';
 import { buildStepPath } from '../../../src/utils/buildStepPath.ts';
 import { buildLinearPath } from '../../../src/utils/buildLinearPath.ts';

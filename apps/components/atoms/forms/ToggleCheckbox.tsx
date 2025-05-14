@@ -1,5 +1,5 @@
 import { JSX } from 'preact';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 
 export type ToggleCheckboxProps = {
   checked: boolean;
@@ -11,8 +11,8 @@ export type ToggleCheckboxProps = {
   checkedIntentType?: IntentTypes | string;
   uncheckedIntentType?: IntentTypes | string;
 
-  checkedIcon?: JSX.Element | string;
-  uncheckedIcon?: JSX.Element | string;
+  checkedIcon?: ComponentChildren;
+  uncheckedIcon?: ComponentChildren;
 };
 
 // Tailwind-safe text class map

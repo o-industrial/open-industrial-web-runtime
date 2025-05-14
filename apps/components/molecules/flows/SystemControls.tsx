@@ -1,5 +1,5 @@
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { SimulatorIcon } from '../../../../build/iconset/icons/SimulatorIcon.tsx';
 
 export type SystemControlsProps = {

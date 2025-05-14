@@ -1,10 +1,10 @@
 import { JSX } from 'preact';
 import { classSet } from '@fathym/atomic';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 
 export type BadgeProps = {
   intentType?: IntentTypes;
-  children: JSX.Element | string;
+  children: ComponentChildren;
 } & JSX.HTMLAttributes<HTMLDivElement>;
 
 function getIntentClasses(intent: IntentTypes = IntentTypes.Info) {

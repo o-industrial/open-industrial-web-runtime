@@ -1,6 +1,6 @@
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { classSet } from '@fathym/atomic';
-import { getIntentStyles } from '../../../src/utils/getIntentClasses.ts';
+import { getIntentStyles } from '../../../src/utils/getIntentStyles.ts';
 
 export type AziToolResponseCardProps = {
   title: string;
@@ -23,19 +23,19 @@ export function AziToolResponseCard({
 
   return (
     <div class={classSet(['rounded border shadow-sm p-4', border])}>
-      <div class="text-[11px] font-semibold mb-1">{title}</div>
+      <div class='text-[11px] font-semibold mb-1'>{title}</div>
       {description && (
-        <div class="text-[10px] text-neutral-400 mb-2 italic">
+        <div class='text-[10px] text-neutral-400 mb-2 italic'>
           {description}
         </div>
       )}
       {sourcePrompt && (
-        <div class="text-[10px] text-neutral-500 mb-2">
-          <span class="text-neutral-600">Prompt:</span> “{sourcePrompt}”
+        <div class='text-[10px] text-neutral-500 mb-2'>
+          <span class='text-neutral-600'>Prompt:</span> “{sourcePrompt}”
         </div>
       )}
-      <div class="mt-2">{content}</div>
-      <div class="mt-1 text-[9px] text-right text-neutral-600">
+      <div class='mt-2'>{content}</div>
+      <div class='mt-1 text-[9px] text-right text-neutral-600'>
         {new Date(timestamp).toLocaleTimeString()}
       </div>
     </div>

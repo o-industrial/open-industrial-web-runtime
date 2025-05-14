@@ -8,4 +8,4 @@ export * from './InlineUXTip.tsx';
 export * from './SystemMindset.tsx';
 export * from './ThematicPrincipleBlock.tsx';
 
-export { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+export { IntentTypes } from '@o-industrial/common/types';

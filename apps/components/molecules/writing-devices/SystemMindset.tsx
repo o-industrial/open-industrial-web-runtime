@@ -1,11 +1,11 @@
-import { JSX } from 'preact';
+import { ComponentChildren, JSX } from 'preact';
 import { classSet } from '@fathym/atomic';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
-import { getIntentStyles } from '../../../../src/utils/getIntentClasses.ts';
+import { IntentTypes } from '@o-industrial/common/types';
+import { getIntentStyles } from '../../../../src/utils/getIntentStyles.ts';
 
 export type SystemMindsetProps = {
   intentType?: IntentTypes;
-  children: JSX.Element | string;
+  children: ComponentChildren;
 } & JSX.HTMLAttributes<HTMLElement>;
 
 export function SystemMindset({

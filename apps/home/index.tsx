@@ -1,32 +1,35 @@
-// deno-lint-ignore-file ban-types
 import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
-import HeroSection from '../components/oi-mockup/homepage/HeroSection.tsx';
-import WhyOpenIndustrial from '../components/oi-mockup/homepage/WhyOpenIndustrial.tsx';
-import VirtualWorkforceShowcase from '../components/oi-mockup/homepage/VirtualWorkforceShowcase.tsx';
-import OpenIndustrialEdge from '../components/oi-mockup/homepage/OpenIndustrialEdge.tsx';
-import EnterpriseUseCases from '../components/oi-mockup/homepage/EnterpriseUseCases.tsx';
-import AIGovernance from '../components/oi-mockup/homepage/AIGovernance.tsx';
+
+import HeroSection from '../components/organisms/marketing/attempt2/HeroSection.tsx';
+import PainSection from '../components/organisms/marketing/attempt2/PainSection.tsx';
+import SystemProofSection from '../components/organisms/marketing/attempt2/SystemProofSection.tsx';
+import JourneySection from '../components/organisms/marketing/attempt2/JourneySection.tsx';
+import CallToAction from '../components/organisms/marketing/attempt2/CallToAction.tsx';
+
+export const IsIsland = true;
 
 export type HomepageData = {};
 
-export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, HomepageData> = {
+export const handler: EaCRuntimeHandlerSet<
+  OpenIndustrialWebState,
+  HomepageData
+> = {
   GET: (_req, ctx) => {
     const data: HomepageData = {};
     return ctx.Render(data);
   },
 };
 
-export default function Homepage({}: PageProps<HomepageData>) {
+export default function HomepageAttempt2({}: PageProps<HomepageData>) {
   return (
-    <div class='flex flex-col space-y-12 bg-[#0A1F44] text-white'>
+    <div class='flex flex-col'>
       <HeroSection />
-      <WhyOpenIndustrial />
-      <VirtualWorkforceShowcase />
-      <OpenIndustrialEdge />
-      <EnterpriseUseCases />
-      <AIGovernance />
+      <PainSection />
+      <SystemProofSection />
+      <JourneySection />
+      <CallToAction />
     </div>
   );
 }

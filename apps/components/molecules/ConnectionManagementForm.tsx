@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 import { Input } from '../atoms/forms/Input.tsx';
 import { MultiSelectCheckboxGroup } from './MultiSelectCheckboxGroup.tsx';
 import { EaCDataConnectionDetails, MultiProtocolIngestOption } from '@o-industrial/common/eac';
-import { IngestOption } from '../../../src/types/IngestOption.ts';
+import { IngestOption } from '@o-industrial/common/types';
 
 type Props = {
   details: Partial<EaCDataConnectionDetails>;

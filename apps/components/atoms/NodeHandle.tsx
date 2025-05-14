@@ -1,5 +1,5 @@
 import { Handle, HandleProps, Position } from 'reactflow';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { classSet } from '@fathym/atomic';
 
 export type NodeHandleProps = Partial<HandleProps> & {

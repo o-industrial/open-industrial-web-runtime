@@ -1,5 +1,5 @@
-import { JSX } from 'preact';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { ComponentChildren, JSX } from 'preact';
+import { IntentTypes } from '@o-industrial/common/types';
 import { classSet } from '@fathym/atomic';
 
 export enum ActionStyleTypes {
@@ -17,7 +17,7 @@ export enum ActionStyleTypes {
 export type ActionBaseProps = {
   styleType?: ActionStyleTypes;
   intentType?: IntentTypes;
-  children?: JSX.Element | string | (JSX.Element | string)[];
+  children?: ComponentChildren;
 };
 
 export type ActionButtonProps =

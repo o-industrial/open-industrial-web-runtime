@@ -1,4 +1,4 @@
-import { IntentTypes } from '../../../types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 
 export type NodePreset = {
   Type: string;

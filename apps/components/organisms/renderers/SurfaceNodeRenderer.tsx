@@ -4,25 +4,16 @@ import { useMemo } from 'preact/hooks';
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
 import NodeHandle from '../../atoms/NodeHandle.tsx';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
-import { IntentTypes } from '../../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 
-import { FlowNodeData } from '../../../../src/flow/types/react/FlowNodeData.ts';
-import { EaCSurfaceDetails } from '@o-industrial/common/eac';
 import { parseTimeAgoString } from '../../../../src/utils/parseTimeAgoString.tsx';
-
-export type SurfaceStats = {
-  impulseRates?: number[];
-  inputCount?: number;
-  agentCount?: number;
-  lastSignalAt?: string;
-};
-
-export type SurfaceNodeData = FlowNodeData<EaCSurfaceDetails, SurfaceStats>;
+import { SurfaceNodeData } from '../../../../src/flow/types/nodes/surfaces/SurfaceNodeData.ts';
 
 export default function SurfaceNodeRenderer({
   data,
+  id,
 }: NodeProps<SurfaceNodeData>) {
   const stats = data.useStats();
 
@@ -90,7 +81,7 @@ export default function SurfaceNodeRenderer({
             title='Manage Surface'
             styleType={ActionStyleTypes.Icon}
             intentType={IntentTypes.Info}
-            onClick={() => console.log('Open surface panel:', data.label)}
+            onClick={() => data.onNodeEvent?.({ Type: 'manage', NodeID: id })}
           >
             <svg class='w-6 h-6' viewBox='0 0 24 24' fill='none'>
               <path

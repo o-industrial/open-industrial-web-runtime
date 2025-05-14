@@ -16,7 +16,7 @@ import { IS_BROWSER } from '@fathym/atomic';
 import FlowPanelTemplate from '../templates/FlowPanelTemplate.tsx';
 import FlowPanelBank from '../molecules/flows/FlowPanelBank.tsx';
 import { LoadingSpinner } from '../atoms/LoadingSpinner.tsx';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 import { WorkspaceManager } from '../../../src/flow/managers/WorkspaceManager.ts';
 import { FlowControls } from '../molecules/flows/FlowControls.tsx';
 import { ManagementControls } from '../molecules/flows/ManagementControls.tsx';

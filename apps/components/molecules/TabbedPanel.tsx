@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 import { useState } from 'preact/hooks';
 import { classSet } from '@fathym/atomic';
 import { Action, ActionStyleTypes } from '../atoms/Action.tsx';
-import { IntentTypes } from '../../../src/types/IntentTypes.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 
 export type TabDefinition = {
   key: string;
