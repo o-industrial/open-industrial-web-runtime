@@ -23,9 +23,9 @@ const painPoints = [
   },
   {
     icon: BrokenIcon,
-    title: 'If we touch anything, it breaks.',
+    title: 'We’re afraid to touch anything.',
     description:
-      'Legacy systems are brittle by design. Our versioned reflex logic evolves safely in place.',
+      'Legacy systems are brittle and unpredictable. Open Industrial helps you evolve safely — with versioned, traceable logic.',
   },
   {
     icon: ExpensiveIcon,
