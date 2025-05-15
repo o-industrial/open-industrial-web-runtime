@@ -25,8 +25,6 @@ import { NodePreset } from '../../../types/react/NodePreset.ts';
 export abstract class EaCNodeCapabilityManager<
   TDetails extends EaCVertexDetails = EaCVertexDetails
 > {
-  protected memoizedRenderer?: ComponentType<any>;
-
   /**
    * Canonical node type string, used for matching and capability resolution.
    */
@@ -139,15 +137,7 @@ export abstract class EaCNodeCapabilityManager<
    * The result is automatically wrapped in `memo()` for performance.
    */
   public GetRenderer(): ComponentType | undefined {
-    if (!this.memoizedRenderer && this.getRenderer) {
-      const raw = this.getRenderer();
-      
-      if (raw) {
-        this.memoizedRenderer = memo(raw as FunctionalComponent<any>);
-      }
-    }
-  
-    return this.memoizedRenderer;
+    return this.getRenderer?.();
   }
   
   /**

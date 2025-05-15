@@ -1,3 +1,5 @@
+import { ComponentType, FunctionComponent } from 'preact';
+import { memo } from 'preact/compat';
 import { NullableArrayOrObject } from '@fathym/common';
 
 import {
@@ -28,6 +30,10 @@ type SurfaceConnectionNodeDetails = SurfaceDataConnectionSettings & {
  * Supports rendering, edge inference to downstream schemas, and patch generation.
  */
 export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapabilityManager<SurfaceConnectionNodeDetails> {
+  protected static renderer: ComponentType = memo(
+    SurfaceConnectionNodeRenderer as FunctionComponent
+  );
+
   public override Type = 'surface->connection';
 
   protected override buildAsCode(
@@ -201,6 +207,7 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
   }
 
   protected override getRenderer() {
-    return SurfaceConnectionNodeRenderer;
+    return EaCSurfaceConnectionNodeCapabilityManager.renderer;
   }
+    
 }

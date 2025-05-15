@@ -28,6 +28,8 @@ import { NodePreset } from '../../types/react/NodePreset.ts';
  * handler based on the `Type` of the node.
  */
 export class EaCCapabilitiesManager {
+  protected rendererMap: Record<string, ComponentType<any>>;
+
   /**
    * Internal list of active capability managers based on current scope.
    */
@@ -48,6 +50,12 @@ export class EaCCapabilitiesManager {
         new EaCSimulatorNodeCapabilityManager(),
       ];
     }
+
+    this.rendererMap = Object.fromEntries(
+      this.capabilities
+        .map((c) => [c.Type, c.GetRenderer()])
+        .filter(([, r]) => !!r)
+    );
   }
 
   /**
@@ -197,11 +205,7 @@ export class EaCCapabilitiesManager {
   }
 
   public GetRendererMap(): Record<string, ComponentType<any>> {
-    return Object.fromEntries(
-      this.capabilities
-        .map((c) => [c.Type, c.GetRenderer()])
-        .filter(([_, r]) => !!r)
-    );
+    return this.rendererMap;
   }
 
   /**

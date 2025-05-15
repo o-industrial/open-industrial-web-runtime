@@ -30,6 +30,8 @@ import { DataConnectionStats } from '../../../types/nodes/connections/DataConnec
  * Handles simulator binding, surface association, and node projection.
  */
 export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager {
+  protected static renderer: ComponentType = memo(ConnectionNodeRenderer as FunctionComponent);
+
   public override Type = 'connection';
 
   protected override buildAsCode(
@@ -229,7 +231,7 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
   }
 
   protected override getRenderer() {
-    return ConnectionNodeRenderer;
+    return EaCConnectionNodeCapabilityManager.renderer;
   }
 
   protected override async getStats(

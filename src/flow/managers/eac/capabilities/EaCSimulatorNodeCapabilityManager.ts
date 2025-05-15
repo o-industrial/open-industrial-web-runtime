@@ -1,3 +1,5 @@
+import { ComponentType, FunctionComponent } from 'preact';
+import { memo } from 'preact/compat';
 import { NullableArrayOrObject } from '@fathym/common';
 
 import { EaCNodeCapabilityManager } from './EaCNodeCapabilityManager.ts';
@@ -26,6 +28,10 @@ import { SimulatorStats } from '../../../types/nodes/simulators/SimulatorStats.t
  * and binding connections via SimulatorLookup.
  */
 export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<EaCAzureDockerSimulatorDetails> {
+  protected static renderer: ComponentType = memo(
+    SimulatorNodeRenderer as FunctionComponent
+  );
+
   public override Type = 'simulator';
 
   protected override buildAsCode(
@@ -172,7 +178,7 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
   }
 
   protected override getRenderer() {
-    return SimulatorNodeRenderer;
+    return EaCSimulatorNodeCapabilityManager.renderer;
   }
 
   protected override async getStats(

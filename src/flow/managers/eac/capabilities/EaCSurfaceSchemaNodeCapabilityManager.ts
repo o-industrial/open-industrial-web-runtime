@@ -18,13 +18,18 @@ import { EaCNodeCapabilityPatch } from '../../../types/nodes/EaCNodeCapabilityPa
 
 import { EaCNodeCapabilityManager } from './EaCNodeCapabilityManager.ts';
 import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
-import { context } from 'npm:esbuild@0.24.2';
 import SchemaNodeRenderer from '../../../../../apps/components/organisms/renderers/SchemaNodeRenderer.tsx';
+import { ComponentType, FunctionComponent } from 'preact';
+import { memo } from 'react';
 
 // ✅ Compound node detail type
 type SurfaceSchemaNodeDetails = EaCSchemaDetails & SurfaceSchemaSettings;
 
 export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityManager<SurfaceSchemaNodeDetails> {
+  protected static renderer: ComponentType = memo(
+    SchemaNodeRenderer as FunctionComponent
+  );
+
   public override Type = 'schema';
 
   protected override buildAsCode(
@@ -337,6 +342,7 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
   }
 
   protected override getRenderer() {
-    return SchemaNodeRenderer;
+    return EaCSurfaceSchemaNodeCapabilityManager.renderer;
   }
+  
 }

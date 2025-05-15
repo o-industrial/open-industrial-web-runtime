@@ -1,3 +1,5 @@
+import { ComponentType, FunctionComponent } from 'preact';
+import { memo } from 'preact/compat';
 import { OpenIndustrialEaC } from '@o-industrial/common/types';
 import {
   EaCAgentDetails,
@@ -23,6 +25,10 @@ import { AgentStats } from '../../../types/nodes/agents/AgentStats.tsx';
 type SurfaceAgentNodeDetails = EaCAgentDetails & SurfaceAgentSettings;
 
 export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManager<SurfaceAgentNodeDetails> {
+  protected static renderer: ComponentType = memo(
+    AgentNodeRenderer as FunctionComponent
+  );
+  
   public override Type = 'agent';
 
   protected override buildAsCode(
@@ -252,8 +258,8 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
   }
 
   protected override getRenderer() {
-    return AgentNodeRenderer;
-  }
+    return EaCSurfaceAgentNodeCapabilityManager.renderer;
+  }  
 
   protected override async getStats(
     type: string,

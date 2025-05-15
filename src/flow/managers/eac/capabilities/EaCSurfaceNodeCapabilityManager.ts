@@ -1,3 +1,5 @@
+import { ComponentType, FunctionComponent } from 'preact';
+import { memo } from 'preact/compat';
 import { NullableArrayOrObject } from '@fathym/common';
 
 import { EaCNodeCapabilityManager } from './EaCNodeCapabilityManager.ts';
@@ -24,6 +26,10 @@ import { SurfaceStats } from '../../../types/nodes/surfaces/SurfaceStats.ts';
  * Handles rendering and parent-child surface edge creation.
  */
 export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
+  protected static renderer: ComponentType = memo(
+    SurfaceNodeRenderer as FunctionComponent
+  );
+
   public override Type = 'surface';
 
   protected override buildAsCode(
@@ -200,9 +206,9 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
   }
 
   protected override getRenderer() {
-    return SurfaceNodeRenderer;
+    return EaCSurfaceNodeCapabilityManager.renderer;
   }
-
+  
   protected override async getStats(
     type: string,
     id: string,
