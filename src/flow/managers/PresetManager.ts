@@ -71,7 +71,7 @@ export class PresetManager {
     connection: ['workspace'],
     device: [],
     schema: ['surface'],
-    surface: ['surface', 'workspace'],
+    surface: ['workspace'], //'surface',
     'surface->connection': [],
     simulator: [],
     empty: [],
@@ -91,6 +91,30 @@ export class PresetManager {
     const details = { Name: id };
 
     switch (type) {
+      case 'agent':
+        return {
+          Agents: {
+            [id]: {
+              Metadata: metadata,
+              Details: details,
+            },
+          },
+          ...(parentId
+            ? {
+                Surfaces: {
+                  [parentId]: {
+                    Agents: {
+                      [id]: {
+                        ShowHistory: false,
+                        Metadata: metadata,
+                      },
+                    },
+                  },
+                },
+              }
+            : {}),
+        };
+
       case 'connection':
         return {
           DataConnections: {
@@ -101,16 +125,6 @@ export class PresetManager {
                 Type: 'AzureIoTHub',
               } as EaCAzureIoTHubDataConnectionDetails,
             } as EaCDataConnectionAsCode,
-          },
-        };
-
-      case 'simulator':
-        return {
-          Simulators: {
-            [id]: {
-              Metadata: metadata,
-              Details: details,
-            } as EaCSimulatorAsCode,
           },
         };
 
@@ -136,6 +150,16 @@ export class PresetManager {
                 },
               }
             : {}),
+        };
+
+      case 'simulator':
+        return {
+          Simulators: {
+            [id]: {
+              Metadata: metadata,
+              Details: details,
+            } as EaCSimulatorAsCode,
+          },
         };
 
       case 'surface':

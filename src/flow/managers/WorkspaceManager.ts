@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useState } from 'preact/hooks';
-import { Connection, Edge, EdgeChange, Node, NodeChange, XYPosition } from 'reactflow';
+import {
+  Connection,
+  Edge,
+  EdgeChange,
+  Node,
+  NodeChange,
+  XYPosition,
+} from 'reactflow';
 import { EaCStatusProcessingTypes } from '@fathym/eac/steward/status';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 
@@ -16,13 +23,14 @@ import { StatManager } from './StatManager.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
 import { HistoryManager } from './HistoryManager.ts';
 import { WorkspaceSummary } from '../../types/WorkspaceSummary.ts';
-import { EaCEnterpriseDetails } from '@fathym/eac';
+import { EaCEnterpriseDetails, EaCVertexDetails } from '@fathym/eac';
 import { TeamMember } from '../../types/TeamMember.ts';
 import { TeamManager } from './TeamManager.ts';
 import { NodeEventManager } from './NodeEventManager.ts';
 import { IntentTypes } from '@o-industrial/common/types';
 import { BreadcrumbPart } from '../../../apps/components/molecules/BreadcrumbBar.tsx';
-import { ProposalOverlayMode } from '../types/graph/ProposalOverlayMode.ts';
+import { merge } from '@fathym/common';
+import { InspectorCommonProps } from '../types/nodes/InspectorCommonProps.ts';
 
 export class WorkspaceManager {
   protected currentScope: {
@@ -46,7 +54,7 @@ export class WorkspaceManager {
   constructor(
     eac: OpenIndustrialEaC,
     protected oiSvc: OpenIndustrialAPIClient,
-    scope: NodeScopeTypes = 'workspace',
+    scope: NodeScopeTypes = 'workspace'
   ) {
     this.currentScope = { Scope: scope };
 
@@ -65,7 +73,7 @@ export class WorkspaceManager {
     this.Graph = new GraphStateManager(
       this.Interaction,
       this.Stats,
-      this.NodeEvents,
+      this.NodeEvents
     );
 
     this.EaC = new EaCManager(
@@ -74,7 +82,7 @@ export class WorkspaceManager {
       this.currentScope.Scope,
       this.Graph,
       this.Presets,
-      this.History,
+      this.History
     );
 
     this.Interaction.BindEaCManager(this.EaC);
@@ -135,7 +143,8 @@ export class WorkspaceManager {
         ]);
       } else {
         const surfaceLookup = currentScopeData.Lookup!;
-        const surfaceName = eac.Surfaces?.[surfaceLookup]?.Details?.Name ?? 'Unknown Surface';
+        const surfaceName =
+          eac.Surfaces?.[surfaceLookup]?.Details?.Name ?? 'Unknown Surface';
 
         setPathParts([
           {
@@ -187,7 +196,7 @@ export class WorkspaceManager {
     const [canUndo, setCanUndo] = useState(this.History.CanUndo());
     const [canRedo, setCanRedo] = useState(this.History.CanRedo());
     const [hasChanges, setHasChanges] = useState(
-      this.History.HasUnsavedChanges(),
+      this.History.HasUnsavedChanges()
     );
     const [version, setVersion] = useState(this.History.GetVersion());
 
@@ -232,6 +241,89 @@ export class WorkspaceManager {
     };
   }
 
+  public UseInspector() {
+    const { selected } = this.UseSelection();
+    const selectedId = selected?.id;
+  
+    const [details, setDetails] = useState<EaCVertexDetails>({});
+    const [enabled, setEnabled] = useState<boolean>(false);
+  
+    const [inspectorProps, setInspectorProps] =
+      useState<InspectorCommonProps | undefined>();
+  
+    const handleDetailsChanged = useCallback(
+      (next: Partial<EaCVertexDetails>) => {
+        setDetails((prev): EaCVertexDetails => {
+          const merged = merge<EaCVertexDetails>(prev, next);
+  
+          if (selectedId) {
+            this.EaC.UpdateNodePatch(selectedId, { Details: merged });
+            console.log(`🟢 Live-synced EaC details for node ${selectedId}`);
+          }
+  
+          return merged;
+        });
+      },
+      [selectedId]
+    );
+  
+    const handleToggleEnabled = useCallback(
+      (val: boolean) => {
+        if (selectedId) {
+          this.EaC.UpdateNodePatch(selectedId, {
+            Metadata: { Enabled: val },
+          });
+  
+          console.log(`🟡 Toggled enabled state for node ${selectedId} → ${val}`);
+          setEnabled(val);
+        }
+      },
+      [selectedId]
+    );
+  
+    const handleDeleteNode = useCallback(() => {
+      if (!selectedId) return;
+  
+      console.log(`🗑️ Deleting node ${selectedId}`);
+      this.EaC.DeleteNode(selectedId);
+      this.Selection.ClearSelection();
+    }, [selectedId]);
+  
+    useEffect(() => {
+      if (!selectedId) return;
+  
+      const code = this.EaC.GetNodeAsCode(selectedId);
+      setDetails({ ...(code?.Details ?? {}) });
+      setEnabled(code?.Metadata?.Enabled ?? false);
+    }, [selectedId]);
+  
+    useEffect(() => {
+      if (!selected) {
+        setInspectorProps(undefined);
+        return;
+      }
+  
+      const presetConfig =
+        this.Presets?.GetConfigForType?.(selected.id, selected.type!) ?? {};
+  
+      setInspectorProps({
+        config: presetConfig,
+        details,
+        enabled,
+        useStats: selected.data?.useStats ?? (() => undefined),
+        onDelete: handleDeleteNode,
+        onDetailsChanged: handleDetailsChanged,
+        onToggleEnabled: handleToggleEnabled,
+      });
+    }, [selected, selectedId, details, enabled, handleDeleteNode, handleDetailsChanged, handleToggleEnabled]);
+  
+    return {
+      selected,
+      selectedId,
+      inspectorProps,
+    };
+  }
+  
   public UseInspectorSettings() {
     const { selected } = this.UseSelection();
     const [settings, setSettings] = useState<Partial<FlowNodeData>>({});
@@ -263,7 +355,7 @@ export class WorkspaceManager {
       (event: DragEvent, toFlow: (point: XYPosition) => XYPosition) => {
         this.Interaction.HandleDrop(event, this.Graph.GetNodes(), toFlow);
       },
-      [],
+      []
     );
 
     const handleConnect = useCallback((params: Connection) => {
@@ -276,21 +368,21 @@ export class WorkspaceManager {
       (_e: unknown, node: Node<FlowNodeData>) => {
         this.Selection.SelectNode(node.id);
       },
-      [],
+      []
     );
 
     const handleNodesChange = useCallback(
       (changes: NodeChange[], nodes: Node[]) => {
         this.Interaction.OnNodesChange(changes, nodes ?? this.Graph.GetNodes());
       },
-      [],
+      []
     );
 
     const handleEdgesChange = useCallback(
       (changes: EdgeChange[], edges: Edge[]) => {
         this.Interaction.OnEdgesChange(changes, edges ?? this.Graph.GetEdges());
       },
-      [],
+      []
     );
 
     return {
@@ -330,12 +422,13 @@ export class WorkspaceManager {
 
   public UseSelection() {
     const [selected, setSelected] = useState<Node<FlowNodeData> | null>(
-      this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null,
+      this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null
     );
 
     useEffect(() => {
       const update = () => {
-        const node = this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null;
+        const node =
+          this.Selection.GetSelectedNodes(this.Graph.GetNodes())[0] ?? null;
         setSelected(node);
       };
 
@@ -348,7 +441,7 @@ export class WorkspaceManager {
 
   public UseUIContext() {
     const presetsForScope = this.Presets.GetPresetsForScope(
-      this.currentScope.Scope,
+      this.currentScope.Scope
     );
     const rendererMap = this.Presets.GetRendererMap();
 
@@ -369,10 +462,10 @@ export class WorkspaceManager {
     };
 
     const [current, setCurrent] = useState<WorkspaceSummary>(
-      getCurrentWorkspace(),
+      getCurrentWorkspace()
     );
     const [hasChanges, setHasChanges] = useState(
-      this.History.HasUnsavedChanges(),
+      this.History.HasUnsavedChanges()
     );
 
     useEffect(() => {
@@ -419,7 +512,7 @@ export class WorkspaceManager {
       const name = current.Details.Name ?? 'this workspace';
 
       const confirmed = confirm(
-        `Are you sure you want to archive ${name}? This will remove it from the current session.`,
+        `Are you sure you want to archive ${name}? This will remove it from the current session.`
       );
 
       if (!confirmed) return;

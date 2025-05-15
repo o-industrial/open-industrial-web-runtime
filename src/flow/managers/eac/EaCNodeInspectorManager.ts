@@ -124,14 +124,13 @@ export class EaCNodeInspectorManager {
     return embedded ? { ID: nodeId, Type: typePath, AsCode: embedded } : null;
   }
 
-  public GetDetails(id: string): EaCVertexDetails | null {
+  public GetNodeAsCode(id: string): {
+    Metadata?: EaCFlowNodeMetadata;
+    Details: EaCVertexDetails;
+  } | null {
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
-    return node ? this.FindAsCode(node)?.AsCode.Details ?? null : null;
-  }
-
-  public GetMetadata(id: string): EaCFlowNodeMetadata | null {
-    const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
-    return node ? this.FindAsCode(node)?.AsCode.Metadata ?? null : null;
+    
+    return node ? this.FindAsCode(node)?.AsCode ?? null : null;
   }
 
   // ----------------------- Protected Helpers ------------------------
@@ -209,7 +208,9 @@ export class EaCNodeInspectorManager {
         Type: 'surface',
       })?.AsCode;
 
-      const settingsEntry = (surfaceAsCode as any)?.[fromCollectionKey]?.[fromId];
+      const settingsEntry = (surfaceAsCode as any)?.[fromCollectionKey]?.[
+        fromId
+      ];
 
       if (!asCode || !settingsEntry) return null;
 

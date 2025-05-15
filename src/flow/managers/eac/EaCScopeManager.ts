@@ -90,6 +90,7 @@ export abstract class EaCScopeManager {
       const changed = !prev || prev.X !== pos.X || prev.Y !== pos.Y;
       if (!changed) continue;
 
+      debugger;
       const update = this.inspector.BuildPartialForNodeUpdate(node.id, {
         Metadata: {
           ...asCode.AsCode.Metadata,

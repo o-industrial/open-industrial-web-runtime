@@ -1,7 +1,7 @@
 import { InspectorBase } from './InspectorBase.tsx';
 import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
-import { InspectorCommonProps } from '../InspectorPanel.tsx';
+import { InspectorCommonProps } from '../../../../src/flow/types/nodes/InspectorCommonProps.ts';
 import { EaCSimulatorDetails } from '@o-industrial/common/eac';
 
 type SimulatorStats = {

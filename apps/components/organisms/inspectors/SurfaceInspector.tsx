@@ -1,7 +1,7 @@
 import { InspectorBase } from './InspectorBase.tsx';
 import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
 import { SurfaceManagementForm } from '../../molecules/SurfaceManagementForm.tsx';
-import { InspectorCommonProps } from '../InspectorPanel.tsx';
+import { InspectorCommonProps } from '../../../../src/flow/types/nodes/InspectorCommonProps.ts';
 import { EaCSurfaceDetails } from '@o-industrial/common/eac';
 import { SurfaceStats } from '../../../../src/flow/types/nodes/surfaces/SurfaceStats.ts';
 
