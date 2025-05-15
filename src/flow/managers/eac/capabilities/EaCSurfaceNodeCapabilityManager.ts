@@ -1,20 +1,22 @@
 import { NullableArrayOrObject } from '@fathym/common';
 
-import {
-  EaCNodeCapabilityManager,
-  EaCNodeCapabilityContext,
-  EaCNodeCapabilityAsCode,
-  EaCNodeCapabilityPatch,
-} from './EaCNodeCapabilityManager.ts';
+import { EaCNodeCapabilityManager } from './EaCNodeCapabilityManager.ts';
+import { EaCNodeCapabilityContext } from '../../../types/nodes/EaCNodeCapabilityContext.ts';
+import { EaCNodeCapabilityAsCode } from '../../../types/nodes/EaCNodeCapabilityAsCode.ts';
+import { EaCNodeCapabilityPatch } from '../../../types/nodes/EaCNodeCapabilityPatch.ts';
 
 import {
   EverythingAsCodeOIWorkspace,
   EaCSurfaceAsCode,
+  EaCFlowNodeMetadata,
+  Position,
 } from '@o-industrial/common/eac';
 
 import { OpenIndustrialEaC } from '../../../../types/OpenIndustrialEaC.ts';
 import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
+import { SurfaceInspector } from '../../../../../apps/components/organisms/inspectors/SurfaceInspector.tsx';
+import SurfaceNodeRenderer from '../../../../../apps/components/organisms/renderers/SurfaceNodeRenderer.tsx';
 
 /**
  * Capability manager for root-level surfaces (in workspace scope).
@@ -44,7 +46,7 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
     const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
 
     // surface -> surface (assign parent)
-    if (source.Type === 'surface' && target.Type === 'surface') {
+    if (source.Type === this.Type && target.Type === this.Type) {
       const existing = eac.Surfaces?.[target.ID]?.ParentSurfaceLookup;
       if (existing === source.ID) return null;
 
@@ -75,7 +77,7 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
     const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
 
     // Remove parent-child surface relationship
-    if (source.Type === 'surface' && target.Type === 'surface') {
+    if (source.Type === this.Type && target.Type === this.Type) {
       const targetSurface = eac.Surfaces?.[target.ID];
 
       if (targetSurface?.ParentSurfaceLookup === source.ID) {
@@ -147,6 +149,33 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
     };
   }
 
+  protected override buildPresetPatch(
+    id: string,
+    position: Position,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> {
+    const metadata: EaCFlowNodeMetadata = {
+      Position: position,
+      Enabled: true,
+    };
+
+    const details = { Name: id };
+
+    return {
+      Surfaces: {
+        [id]: {
+          Metadata: metadata,
+          Details: details,
+          ...(context.SurfaceLookup
+            ? {
+                ParentSurfaceLookup: context.SurfaceLookup,
+              }
+            : {}),
+        } as EaCSurfaceAsCode,
+      },
+    };
+  }
+
   protected override buildUpdatePatch(
     node: FlowGraphNode,
     update: EaCNodeCapabilityPatch
@@ -159,5 +188,17 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
         ),
       },
     };
+  }
+
+  protected override getInspector() {
+    return SurfaceInspector;
+  }
+
+  protected override getPreset() {
+    return { Type: this.Type, Label: 'Surface', IconKey: 'surface' };
+  }
+
+  protected override getRenderer() {
+    return SurfaceNodeRenderer;
   }
 }

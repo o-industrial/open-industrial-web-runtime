@@ -8,18 +8,15 @@ import {
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
 import { FlowGraph } from '../../types/graph/FlowGraph.ts';
 import { GraphStateManager } from '../GraphStateManager.ts';
-import { FlowPosition } from '../../types/graph/FlowPosition.ts';
 import { PresetManager } from '../PresetManager.ts';
 import { merge, NullableArrayOrObject } from '@fathym/common';
 import { FlowNodeData } from '../../types/react/FlowNodeData.ts';
-import { EaCFlowNodeMetadata } from '@o-industrial/common/eac';
+import { EaCFlowNodeMetadata, Position } from '@o-industrial/common/eac';
 import { EaCVertexDetails } from '@fathym/eac';
 import { SimulatorDefinition } from '../SimulatorLibraryManager.ts';
 
-import {
-  EaCNodeCapabilityContext,
-  EaCNodeCapabilityPatch,
-} from './capabilities/EaCNodeCapabilityManager.ts';
+import { EaCNodeCapabilityContext } from '../../types/nodes/EaCNodeCapabilityContext.ts';
+import { EaCNodeCapabilityPatch } from '../../types/nodes/EaCNodeCapabilityPatch.ts';
 import { EaCCapabilitiesManager } from './EaCCapabilitiesManager.ts';
 import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
 
@@ -29,7 +26,6 @@ import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
 export abstract class EaCScopeManager {
   constructor(
     protected graph: GraphStateManager,
-    protected presets: PresetManager,
     protected capabilities: EaCCapabilitiesManager,
     protected getEaC: () => OpenIndustrialEaC
   ) {}
@@ -67,11 +63,24 @@ export abstract class EaCScopeManager {
     target: string
   ): Partial<OpenIndustrialEaC> | null;
 
-  public abstract CreatePartialEaCFromPreset(
+  public CreatePartialEaCFromPreset(
     type: string,
     id: string,
-    position: FlowPosition
-  ): Partial<OpenIndustrialEaC>;
+    position: Position
+  ): Partial<OpenIndustrialEaC> {
+    return (
+      this.capabilities.BuildPresetPatch(
+        type,
+        id,
+        position,
+        this.getCapabilityContext()
+      ) ?? {}
+    );
+  }
+
+  public GetCapabilities(): EaCCapabilitiesManager {
+    return this.capabilities;
+  }
 
   public GetNodeAsCode(id: string): {
     Metadata?: EaCFlowNodeMetadata;
@@ -100,16 +109,16 @@ export abstract class EaCScopeManager {
 
     const src = this.findNode(sourceId);
     const tgt = this.findNode(targetId);
-    
+
     if (!src || !tgt) return null;
-  
+
     return this.capabilities.BuildDisconnectionPatch(
       src,
       tgt,
       this.getCapabilityContext()
     );
   }
-  
+
   public abstract UpdateConnections(
     changes: EdgeChange[],
     edges: Edge[]

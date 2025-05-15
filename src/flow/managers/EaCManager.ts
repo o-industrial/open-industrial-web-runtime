@@ -8,11 +8,11 @@ import { FlowNodeData } from '../types/react/FlowNodeData.ts';
 import { SimulatorDefinition } from './SimulatorLibraryManager.ts';
 import { FlowGraphNode } from '../types/graph/FlowGraphNode.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
-import { FlowPosition } from '../types/graph/FlowPosition.ts';
 import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
 import {
   EaCAzureDockerSimulatorDetails,
   EaCFlowNodeMetadata,
+  Position,
 } from '@o-industrial/common/eac';
 import {
   EaCHistorySnapshot,
@@ -48,7 +48,6 @@ export class EaCManager {
     protected oiSvc: OpenIndustrialAPIClient,
     protected scope: NodeScopeTypes,
     protected graph: GraphStateManager,
-    protected presets: PresetManager,
     protected history: HistoryManager
   ) {
     this.diff = new EaCDiffManager(history, this.emitEaCChanged.bind(this));
@@ -100,10 +99,7 @@ export class EaCManager {
     }
   }
 
-  public CreateNodeFromPreset(
-    type: string,
-    position: FlowPosition
-  ): FlowGraphNode {
+  public CreateNodeFromPreset(type: string, position: Position): FlowGraphNode {
     const id = `${type}-${Date.now()}`;
 
     const partial = this.scopeMgr.CreatePartialEaCFromPreset(
@@ -129,6 +125,10 @@ export class EaCManager {
     if (partial) {
       this.MergeDelete(partial);
     }
+  }
+
+  public GetCapabilities(): EaCCapabilitiesManager {
+    return this.scopeMgr.GetCapabilities();
   }
 
   public GetNodeAsCode(id: string): {
@@ -222,7 +222,6 @@ export class EaCManager {
       case 'workspace': {
         this.scopeMgr = new EaCWorkspaceScopeManager(
           this.graph,
-          this.presets,
           capabilities,
           () => this.GetEaC()
         );
@@ -235,7 +234,6 @@ export class EaCManager {
 
         this.scopeMgr = new EaCSurfaceScopeManager(
           this.graph,
-          this.presets,
           capabilities,
           () => this.GetEaC(),
           lookup

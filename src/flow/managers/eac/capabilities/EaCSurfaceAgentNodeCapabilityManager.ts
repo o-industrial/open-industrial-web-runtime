@@ -2,19 +2,21 @@ import { OpenIndustrialEaC } from '@o-industrial/common/types';
 import {
   EaCAgentDetails,
   EaCCompositeSchemaDetails,
+  EaCFlowNodeMetadata,
+  Position,
   SurfaceAgentSettings,
 } from '@o-industrial/common/eac';
 import { NullableArrayOrObject } from '@fathym/common';
 import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
 
-import {
-  EaCNodeCapabilityContext,
-  EaCNodeCapabilityAsCode,
-  EaCNodeCapabilityPatch,
-} from './EaCNodeCapabilityManager.ts';
+import { EaCNodeCapabilityContext } from '../../../types/nodes/EaCNodeCapabilityContext.ts';
+import { EaCNodeCapabilityAsCode } from '../../../types/nodes/EaCNodeCapabilityAsCode.ts';
+import { EaCNodeCapabilityPatch } from '../../../types/nodes/EaCNodeCapabilityPatch.ts';
 
 import { EaCNodeCapabilityManager } from './EaCNodeCapabilityManager.ts';
 import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
+import { AgentInspector } from '../../../../../apps/components/organisms/inspectors/AgentInspector.tsx';
+import AgentNodeRenderer from '../../../../../apps/components/organisms/renderers/AgentNodeRenderer.tsx';
 
 // ✅ Compound node detail type
 type SurfaceAgentNodeDetails = EaCAgentDetails & SurfaceAgentSettings;
@@ -167,6 +169,42 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
     };
   }
 
+  protected override buildPresetPatch(
+    id: string,
+    position: Position,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> {
+    const metadata: EaCFlowNodeMetadata = {
+      Position: position,
+      Enabled: true,
+    };
+
+    const details = { Name: id };
+
+    return {
+      Agents: {
+        [id]: {
+          Metadata: metadata,
+          Details: details,
+        },
+      },
+      ...(context.SurfaceLookup
+        ? {
+            Surfaces: {
+              [context.SurfaceLookup]: {
+                Agents: {
+                  [id]: {
+                    ShowHistory: false,
+                    Metadata: metadata,
+                  },
+                },
+              },
+            },
+          }
+        : {}),
+    };
+  }
+
   protected override buildUpdatePatch(
     node: FlowGraphNode,
     update: EaCNodeCapabilityPatch<SurfaceAgentNodeDetails>,
@@ -202,5 +240,17 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
     }
 
     return patch;
+  }
+
+  protected override getInspector() {
+    return AgentInspector;
+  }
+
+  protected override getPreset() {
+    return { Type: this.Type, Label: 'Agent', IconKey: 'agent' };
+  }
+
+  protected override getRenderer() {
+    return AgentNodeRenderer;
   }
 }

@@ -1,10 +1,17 @@
+// deno-lint-ignore-file no-explicit-any
+import { ComponentType, FunctionalComponent } from 'preact';
+import { memo } from 'preact/compat';
 import { NullableArrayOrObject } from '@fathym/common';
 import { EaCVertexDetails } from '@fathym/eac';
-import { EaCFlowNodeMetadata } from '@o-industrial/common/eac';
+import { EaCFlowNodeMetadata, Position } from '@o-industrial/common/eac';
 
 import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
 import { OpenIndustrialEaC } from '../../../../types/OpenIndustrialEaC.ts';
+import { EaCNodeCapabilityPatch } from '../../../types/nodes/EaCNodeCapabilityPatch.ts';
+import { EaCNodeCapabilityAsCode } from '../../../types/nodes/EaCNodeCapabilityAsCode.ts';
+import { EaCNodeCapabilityContext } from '../../../types/nodes/EaCNodeCapabilityContext.ts';
+import { NodePreset } from '../../../types/react/NodePreset.ts';
 
 /**
  * Abstract base class for managing scoped node capabilities in the EaC model.
@@ -24,26 +31,6 @@ export abstract class EaCNodeCapabilityManager<
   public abstract Type: string;
 
   /**
-   * Construct a FlowGraphNode from a known ID and current EaC context.
-   */
-  public BuildNode(
-    id: string,
-    context: EaCNodeCapabilityContext
-  ): FlowGraphNode | null {
-    return this.buildNode?.(id, context) ?? null;
-  }
-
-  /**
-   * Generate outbound FlowGraphEdges from the given node.
-   */
-  public BuildEdgesForNode(
-    node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
-  ): FlowGraphEdge[] {
-    return this.buildEdgesForNode?.(node, context) ?? [];
-  }
-
-  /**
    * Generate a partial EaC patch representing a valid connection from source → target.
    */
   public BuildConnectionPatch(
@@ -52,6 +39,16 @@ export abstract class EaCNodeCapabilityManager<
     context: EaCNodeCapabilityContext
   ): Partial<OpenIndustrialEaC> | null {
     return this.buildConnectionPatch?.(source, target, context) ?? null;
+  }
+
+  /**
+   * Builds a partial EaC delete patch for the given node.
+   */
+  public BuildDeletePatch(
+    node: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): NullableArrayOrObject<OpenIndustrialEaC> | null {
+    return this.buildDeletePatch(node, context);
   }
 
   /**
@@ -66,20 +63,35 @@ export abstract class EaCNodeCapabilityManager<
   }
 
   /**
-   * Checks if this capability manager supports the given node.
+   * Generate outbound FlowGraphEdges from the given node.
    */
-  public Matches(node: FlowGraphNode): boolean {
-    return node.Type === this.Type;
+  public BuildEdgesForNode(
+    node: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): FlowGraphEdge[] {
+    return this.buildEdgesForNode?.(node, context) ?? [];
   }
 
   /**
-   * Extracts the structured AsCode representation of a node’s current state.
+   * Construct a FlowGraphNode from a known ID and current EaC context.
    */
-  public GetAsCode(
-    node: FlowGraphNode,
+  public BuildNode(
+    id: string,
     context: EaCNodeCapabilityContext
-  ): EaCNodeCapabilityAsCode<TDetails> | null {
-    return this.buildAsCode(node, context);
+  ): FlowGraphNode | null {
+    return this.buildNode?.(id, context) ?? null;
+  }
+
+  /**
+   * Constructs a scoped partial EaC object for creating a new node from preset UI interaction.
+   * This method is used by scope managers when a user drops a node onto the canvas.
+   */
+  public BuildPresetPatch(
+    id: string,
+    position: Position,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> {
+    return this.buildPresetPatch?.(id, position, context) ?? {};
   }
 
   /**
@@ -94,13 +106,47 @@ export abstract class EaCNodeCapabilityManager<
   }
 
   /**
-   * Builds a partial EaC delete patch for the given node.
+   * Extracts the structured AsCode representation of a node’s current state.
    */
-  public BuildDeletePatch(
+  public GetAsCode(
     node: FlowGraphNode,
     context: EaCNodeCapabilityContext
-  ): NullableArrayOrObject<OpenIndustrialEaC> | null {
-    return this.buildDeletePatch(node, context);
+  ): EaCNodeCapabilityAsCode<TDetails> | null {
+    return this.buildAsCode(node, context);
+  }
+
+  /**
+   * Optional inspector component for the right-hand panel.
+   * Subclasses can override `buildInspector` to provide a custom inspector.
+   */
+  public GetInspector(): ComponentType | undefined {
+    return this.getInspector?.();
+  }
+
+  /**
+   * Optional preset descriptor used in scope banks.
+   * Subclasses can override `buildPreset` to define how this type appears in a node bank.
+   */
+  public GetPreset(): NodePreset | undefined {
+    return this.getPreset?.();
+  }
+
+  /**
+   * Optional ReactFlow node renderer component.
+   * Subclasses can override `buildRenderer` to define how the node should render on the canvas.
+   * The result is automatically wrapped in `memo()` for performance.
+   */
+  public GetRenderer(): ComponentType | undefined {
+    const Renderer = this.getRenderer?.();
+
+    return Renderer ? memo(Renderer as FunctionalComponent<any>) : undefined;
+  }
+
+  /**
+   * Checks if this capability manager supports the given node.
+   */
+  public Matches(node: FlowGraphNode): boolean {
+    return node.Type === this.Type;
   }
 
   // ---------------------------------------------------------------------
@@ -157,6 +203,32 @@ export abstract class EaCNodeCapabilityManager<
     context: EaCNodeCapabilityContext
   ): Partial<OpenIndustrialEaC> | null;
 
+  /**
+   * Abstract hook for creating a new node definition from a UI preset.
+   * Used to scaffold node metadata, initial settings, and surface bindings (if applicable).
+   */
+  protected buildPresetPatch?(
+    id: string,
+    position: Position,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC>;
+
+  /**
+   * Optional override to return an un-memoized inspector component.
+   */
+  protected getInspector?(): ComponentType<any>;
+
+  /**
+   * Optional override to define the preset descriptor shown in node banks.
+   */
+  protected getPreset?(): NodePreset;
+
+  /**
+   * Optional override to provide the node renderer component.
+   * This will be wrapped in `memo()` by the public accessor.
+   */
+  protected getRenderer?(): ComponentType<any>;
+
   // ---------------------------------------------------------------------
   // Shared utility helpers
   // ---------------------------------------------------------------------
@@ -200,42 +272,3 @@ export abstract class EaCNodeCapabilityManager<
     };
   }
 }
-
-// ---------------------------------------------------------------------
-// Type Signatures
-// ---------------------------------------------------------------------
-
-/**
- * Context object passed to all capability operations.
- */
-export type EaCNodeCapabilityContext = {
-  /**
-   * Read-only accessor for the current EaC model (with overlays applied).
-   */
-  GetEaC: () => OpenIndustrialEaC;
-
-  /**
-   * Optional SurfaceLookup when scoped to a specific surface.
-   */
-  SurfaceLookup?: string;
-};
-
-/**
- * Return structure for a GetAsCode call.
- */
-export type EaCNodeCapabilityAsCode<
-  TDetails extends EaCVertexDetails = EaCVertexDetails
-> = {
-  Details: TDetails;
-  Metadata?: EaCFlowNodeMetadata;
-};
-
-/**
- * Patch input used when building a node update.
- */
-export type EaCNodeCapabilityPatch<
-  TDetails extends EaCVertexDetails = EaCVertexDetails
-> = {
-  Details?: TDetails;
-  Metadata?: EaCFlowNodeMetadata;
-};

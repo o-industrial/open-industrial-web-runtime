@@ -1,11 +1,9 @@
 import { NullableArrayOrObject } from '@fathym/common';
 
-import {
-  EaCNodeCapabilityAsCode,
-  EaCNodeCapabilityContext,
-  EaCNodeCapabilityManager,
-  EaCNodeCapabilityPatch,
-} from './EaCNodeCapabilityManager.ts';
+import { EaCNodeCapabilityManager } from './EaCNodeCapabilityManager.ts';
+import { EaCNodeCapabilityContext } from '../../../types/nodes/EaCNodeCapabilityContext.ts';
+import { EaCNodeCapabilityAsCode } from '../../../types/nodes/EaCNodeCapabilityAsCode.ts';
+import { EaCNodeCapabilityPatch } from '../../../types/nodes/EaCNodeCapabilityPatch.ts';
 
 import { OpenIndustrialEaC } from '../../../../types/OpenIndustrialEaC.ts';
 import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
@@ -14,7 +12,12 @@ import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
 import {
   EverythingAsCodeOIWorkspace,
   EaCAzureDockerSimulatorDetails,
+  EaCSimulatorAsCode,
+  EaCFlowNodeMetadata,
+  Position,
 } from '@o-industrial/common/eac';
+import { SimulatorInspector } from '../../../../../apps/components/organisms/inspectors/SimulatorInspector.tsx';
+import SimulatorNodeRenderer from '../../../../../apps/components/organisms/renderers/SimulatorNodeRenderer.tsx';
 
 /**
  * Capability manager for workspace-scoped Simulators.
@@ -42,7 +45,8 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
     target: FlowGraphNode,
     ctx: EaCNodeCapabilityContext
   ): Partial<OpenIndustrialEaC> | null {
-    if (source.Type !== 'simulator' || target.Type !== 'connection') return null;
+    if (source.Type !== 'simulator' || target.Type !== 'connection')
+      return null;
 
     const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
     const existing = eac.DataConnections?.[target.ID]?.SimulatorLookup;
@@ -70,7 +74,8 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
     target: FlowGraphNode,
     ctx: EaCNodeCapabilityContext
   ): Partial<OpenIndustrialEaC> | null {
-    if (source.Type !== 'simulator' || target.Type !== 'connection') return null;
+    if (source.Type !== 'simulator' || target.Type !== 'connection')
+      return null;
 
     const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
     const conn = eac.DataConnections?.[target.ID];
@@ -125,6 +130,28 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
     };
   }
 
+  protected override buildPresetPatch(
+    id: string,
+    position: Position,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> {
+    const metadata: EaCFlowNodeMetadata = {
+      Position: position,
+      Enabled: true,
+    };
+
+    const details = { Name: id };
+
+    return {
+      Simulators: {
+        [id]: {
+          Metadata: metadata,
+          Details: details,
+        } as EaCSimulatorAsCode,
+      },
+    };
+  }
+
   protected override buildUpdatePatch(
     node: FlowGraphNode,
     update: EaCNodeCapabilityPatch<EaCAzureDockerSimulatorDetails>
@@ -137,5 +164,13 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
         ),
       },
     };
+  }
+
+  protected override getInspector() {
+    return SimulatorInspector;
+  }
+
+  protected override getRenderer() {
+    return SimulatorNodeRenderer;
   }
 }

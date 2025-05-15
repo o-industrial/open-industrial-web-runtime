@@ -4,18 +4,22 @@ import {
   EaCSchemaDetails,
   EverythingAsCodeOIWorkspace,
   EaCCompositeSchemaDetails,
+  EaCFlowNodeMetadata,
+  EaCRootSchemaDetails,
+  EaCSchemaAsCode,
+  Position,
 } from '@o-industrial/common/eac';
 import { NullableArrayOrObject } from '@fathym/common';
 import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
 
-import {
-  EaCNodeCapabilityContext,
-  EaCNodeCapabilityAsCode,
-  EaCNodeCapabilityPatch,
-} from './EaCNodeCapabilityManager.ts';
+import { EaCNodeCapabilityContext } from '../../../types/nodes/EaCNodeCapabilityContext.ts';
+import { EaCNodeCapabilityAsCode } from '../../../types/nodes/EaCNodeCapabilityAsCode.ts';
+import { EaCNodeCapabilityPatch } from '../../../types/nodes/EaCNodeCapabilityPatch.ts';
 
 import { EaCNodeCapabilityManager } from './EaCNodeCapabilityManager.ts';
 import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
+import { context } from 'npm:esbuild@0.24.2';
+import SchemaNodeRenderer from '../../../../../apps/components/organisms/renderers/SchemaNodeRenderer.tsx';
 
 // ✅ Compound node detail type
 type SurfaceSchemaNodeDetails = EaCSchemaDetails & SurfaceSchemaSettings;
@@ -120,18 +124,18 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
     context: EaCNodeCapabilityContext
   ): Partial<OpenIndustrialEaC> | null {
     const eac = context.GetEaC() as EverythingAsCodeOIWorkspace;
-  
+
     // Case: schema → composite-schema
     if (source.Type?.includes('schema') && target.Type === 'composite-schema') {
       const comp = eac.Schemas?.[target.ID];
       if (!comp) return null;
-  
+
       const compDetails = comp.Details as EaCCompositeSchemaDetails;
       if (!compDetails.SchemaJoins?.[source.ID]) return null;
-  
+
       const updated = { ...compDetails.SchemaJoins };
       delete updated[source.ID];
-  
+
       return {
         Schemas: {
           [target.ID]: {
@@ -144,24 +148,24 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
         },
       };
     }
-  
+
     // Case: agent → schema (remove Schema ref)
     if (source.Type === 'agent' && target.Type?.includes('schema')) {
       const agent = eac.Agents?.[source.ID];
       if (!agent || agent.Schema?.SchemaLookup !== target.ID) return null;
-  
+
       const { Schema, ...rest } = agent;
-  
+
       return {
         Agents: {
           [source.ID]: rest,
         },
       };
     }
-  
+
     return null;
   }
-  
+
   protected override buildEdgesForNode(
     node: FlowGraphNode,
     context: EaCNodeCapabilityContext
@@ -247,6 +251,42 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
     };
   }
 
+  protected override buildPresetPatch(
+    id: string,
+    position: Position,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> {
+    const metadata: EaCFlowNodeMetadata = {
+      Position: position,
+      Enabled: true,
+    };
+
+    const details = { Name: id };
+
+    return {
+      Schemas: {
+        [id]: {
+          Metadata: metadata,
+          Details: { ...details, Type: 'Root' } as EaCRootSchemaDetails,
+        } as EaCSchemaAsCode,
+      },
+      ...(context.SurfaceLookup
+        ? {
+            Surfaces: {
+              [context.SurfaceLookup]: {
+                Schemas: {
+                  [id]: {
+                    DisplayMode: 'table',
+                    Metadata: metadata,
+                  },
+                },
+              },
+            },
+          }
+        : {}),
+    };
+  }
+
   protected override buildUpdatePatch(
     node: FlowGraphNode,
     update: EaCNodeCapabilityPatch<SurfaceSchemaNodeDetails>,
@@ -286,5 +326,17 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
     }
 
     return patch;
+  }
+
+  // protected override getInspector() {
+  //   return SurfaceInspector;
+  // }
+
+  protected override getPreset() {
+    return { Type: this.Type, Label: 'Schema', IconKey: 'schema' };
+  }
+
+  protected override getRenderer() {
+    return SchemaNodeRenderer;
   }
 }

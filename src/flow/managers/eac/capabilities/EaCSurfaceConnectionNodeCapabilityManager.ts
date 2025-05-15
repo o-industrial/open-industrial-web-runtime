@@ -7,15 +7,15 @@ import {
 
 import { OpenIndustrialEaC } from '@o-industrial/common/types';
 
-import {
-  EaCNodeCapabilityAsCode,
-  EaCNodeCapabilityContext,
-  EaCNodeCapabilityManager,
-  EaCNodeCapabilityPatch,
-} from './EaCNodeCapabilityManager.ts';
+import { EaCNodeCapabilityManager } from './EaCNodeCapabilityManager.ts';
+import { EaCNodeCapabilityContext } from '../../../types/nodes/EaCNodeCapabilityContext.ts';
+import { EaCNodeCapabilityAsCode } from '../../../types/nodes/EaCNodeCapabilityAsCode.ts';
+import { EaCNodeCapabilityPatch } from '../../../types/nodes/EaCNodeCapabilityPatch.ts';
 
 import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
 import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
+import SurfaceConnectionNodeRenderer from '../../../../../apps/components/organisms/renderers/SurfaceConnectionNodeRenderer.tsx';
+import { SurfaceConnectionInspector } from '../../../../../apps/components/organisms/inspectors/SurfaceConnectionInspector.tsx';
 
 type SurfaceConnectionNodeDetails = SurfaceDataConnectionSettings & {
   Name?: string;
@@ -194,5 +194,13 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
         },
       },
     };
+  }
+
+  protected override getInspector() {
+    return SurfaceConnectionInspector;
+  }
+
+  protected override getRenderer() {
+    return SurfaceConnectionNodeRenderer;
   }
 }

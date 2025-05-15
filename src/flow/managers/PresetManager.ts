@@ -1,19 +1,14 @@
 // deno-lint-ignore-file no-explicit-any
 import { ComponentType, memo } from 'preact/compat';
 import {
-  EaCAzureIoTHubDataConnectionDetails,
-  EaCDataConnectionAsCode,
   EaCFlowNodeMetadata,
-  EaCRootSchemaDetails,
-  EaCSchemaAsCode,
   EaCSimulatorAsCode,
-  EaCSurfaceAsCode,
+  Position,
 } from '@o-industrial/common/eac';
 
 import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
 import { NodePreset } from '../types/react/NodePreset.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
-import { FlowPosition } from '../types/graph/FlowPosition.ts';
 
 import AgentNodeRenderer from '../../../apps/components/organisms/renderers/AgentNodeRenderer.tsx';
 import ConnectionNodeRenderer from '../../../apps/components/organisms/renderers/ConnectionNodeRenderer.tsx';
@@ -36,34 +31,34 @@ type ScopeMap = Record<string, NodeScopeTypes[]>;
 
 export class PresetManager {
   protected static inspectorMap: InspectorMap = {
-    agent: AgentInspector,
-    connection: ConnectionInspector,
-    surface: SurfaceInspector,
-    'surface->connection': SurfaceConnectionInspector,
-    simulator: SimulatorInspector,
+    // agent: AgentInspector,
+    // connection: ConnectionInspector,
+    // surface: SurfaceInspector,
+    // 'surface->connection': SurfaceConnectionInspector,
+    // simulator: SimulatorInspector,
   };
 
   protected static nodeTypes: RendererMap = {
-    agent: memo(AgentNodeRenderer),
-    connection: memo(ConnectionNodeRenderer),
+    // agent: memo(AgentNodeRenderer),
+    // connection: memo(ConnectionNodeRenderer),
     empty: memo(EmptyNodeRenderer),
-    schema: memo(SchemaNodeRenderer),
-    surface: memo(SurfaceNodeRenderer),
-    'surface->connection': memo(SurfaceConnectionNodeRenderer),
-    simulator: memo(SimulatorNodeRenderer),
+    // schema: memo(SchemaNodeRenderer),
+    // surface: memo(SurfaceNodeRenderer),
+    // 'surface->connection': memo(SurfaceConnectionNodeRenderer),
+    // simulator: memo(SimulatorNodeRenderer),
   };
 
   protected static presets: PresetMap = {
     empty: { Type: 'empty', Label: 'Empty Node', IconKey: 'empty' },
-    connection: {
-      Type: 'connection',
-      Label: 'Connection',
-      IconKey: 'connection',
-    },
-    schema: { Type: 'schema', Label: 'Schema', IconKey: 'schema' },
-    surface: { Type: 'surface', Label: 'Surface', IconKey: 'surface' },
-    agent: { Type: 'agent', Label: 'Agent', IconKey: 'agent' },
-    simulator: { Type: 'simulator', Label: 'Simulator', IconKey: 'simulator' },
+    // connection: {
+    //   Type: 'connection',
+    //   Label: 'Connection',
+    //   IconKey: 'connection',
+    // },
+    // schema: { Type: 'schema', Label: 'Schema', IconKey: 'schema' },
+    // surface: { Type: 'surface', Label: 'Surface', IconKey: 'surface' },
+    // agent: { Type: 'agent', Label: 'Agent', IconKey: 'agent' },
+    // simulator: { Type: 'simulator', Label: 'Simulator', IconKey: 'simulator' },
   };
 
   protected static scopeMap: ScopeMap = {
@@ -76,107 +71,6 @@ export class PresetManager {
     simulator: [],
     empty: [],
   };
-
-  public CreatePartialEaCFromPreset(
-    type: string,
-    id: string,
-    position: FlowPosition,
-    parentId?: string
-  ): Partial<OpenIndustrialEaC> {
-    const metadata: EaCFlowNodeMetadata = {
-      Position: position,
-      Enabled: true,
-    };
-
-    const details = { Name: id };
-
-    switch (type) {
-      case 'agent':
-        return {
-          Agents: {
-            [id]: {
-              Metadata: metadata,
-              Details: details,
-            },
-          },
-          ...(parentId
-            ? {
-                Surfaces: {
-                  [parentId]: {
-                    Agents: {
-                      [id]: {
-                        ShowHistory: false,
-                        Metadata: metadata,
-                      },
-                    },
-                  },
-                },
-              }
-            : {}),
-        };
-
-      case 'connection':
-        return {
-          DataConnections: {
-            [id]: {
-              Metadata: metadata,
-              Details: {
-                ...details,
-                Type: 'AzureIoTHub',
-              } as EaCAzureIoTHubDataConnectionDetails,
-            } as EaCDataConnectionAsCode,
-          },
-        };
-
-      case 'schema':
-        return {
-          Schemas: {
-            [id]: {
-              Metadata: metadata,
-              Details: { ...details, Type: 'Root' } as EaCRootSchemaDetails,
-            } as EaCSchemaAsCode,
-          },
-          ...(parentId
-            ? {
-                Surfaces: {
-                  [parentId]: {
-                    Schemas: {
-                      [id]: {
-                        DisplayMode: 'table',
-                        Metadata: metadata,
-                      },
-                    },
-                  },
-                },
-              }
-            : {}),
-        };
-
-      case 'simulator':
-        return {
-          Simulators: {
-            [id]: {
-              Metadata: metadata,
-              Details: details,
-            } as EaCSimulatorAsCode,
-          },
-        };
-
-      case 'surface':
-        return {
-          Surfaces: {
-            [id]: {
-              Metadata: metadata,
-              Details: details,
-              ...(parentId && { ParentSurfaceLookup: parentId }),
-            } as EaCSurfaceAsCode,
-          },
-        };
-
-      default:
-        throw new Error(`❌ Unsupported preset type: '${type}'`);
-    }
-  }
 
   public GetConfigForType(
     _nodeId: string,
@@ -205,27 +99,27 @@ export class PresetManager {
     }
   }
 
-  public GetInspectorForType(type: string): ComponentType<any> | null {
-    return PresetManager.inspectorMap[type] ?? null;
-  }
+  // public GetInspectorForType(type: string): ComponentType<any> | null {
+  //   return PresetManager.inspectorMap[type] ?? null;
+  // }
 
-  public GetPresetsForScope(scope: NodeScopeTypes): Record<string, NodePreset> {
-    return Object.fromEntries(
-      Object.entries(PresetManager.presets).filter(([type]) =>
-        PresetManager.scopeMap[type]?.includes(scope)
-      )
-    );
-  }
+  // public GetPresetsForScope(scope: NodeScopeTypes): Record<string, NodePreset> {
+  //   return Object.fromEntries(
+  //     Object.entries(PresetManager.presets).filter(([type]) =>
+  //       PresetManager.scopeMap[type]?.includes(scope)
+  //     )
+  //   );
+  // }
 
-  public GetRendererMap(): RendererMap {
-    return PresetManager.nodeTypes;
-  }
+  // public GetRendererMap(): RendererMap {
+  //   return PresetManager.nodeTypes;
+  // }
 
-  public GetPreset(type: string): NodePreset | null {
-    return PresetManager.presets[type] ?? null;
-  }
+  // public GetPreset(type: string): NodePreset | null {
+  //   return PresetManager.presets[type] ?? null;
+  // }
 
-  public IsTypeAllowedInScope(type: string, scope: NodeScopeTypes): boolean {
-    return PresetManager.scopeMap[type]?.includes(scope) ?? false;
-  }
+  // public IsTypeAllowedInScope(type: string, scope: NodeScopeTypes): boolean {
+  //   return PresetManager.scopeMap[type]?.includes(scope) ?? false;
+  // }
 }

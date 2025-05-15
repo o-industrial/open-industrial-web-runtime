@@ -15,17 +15,19 @@ export default function InspectorPanel({ workspaceMgr }: InspectorPanelProps) {
   const renderInspector = () => {
     if (!selected || !inspectorProps) {
       return (
-        <div class='text-neutral-500 text-xs italic'>
+        <div class="text-neutral-500 text-xs italic">
           No node selected. Double click a node to inspect.
         </div>
       );
     }
 
-    const Inspector = workspaceMgr.Presets.GetInspectorForType(selected.type!);
+    const capabilities = workspaceMgr.EaC.GetCapabilities();
+
+    const Inspector = capabilities.GetInspector(selected.id, selected.type!);
 
     if (!Inspector) {
       return (
-        <div class='text-neutral-500 text-xs italic'>
+        <div class="text-neutral-500 text-xs italic">
           No inspector available for <strong>{selected.type}</strong>.
         </div>
       );

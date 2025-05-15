@@ -2,29 +2,22 @@ import { EaCScopeManager } from './EaCScopeManager.ts';
 import { Edge, EdgeChange } from 'reactflow';
 import { GraphStateManager } from '../GraphStateManager.ts';
 
-import {
-  EaCCompositeSchemaDetails,
-  EverythingAsCodeOIWorkspace,
-} from '@o-industrial/common/eac';
-
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
 import { FlowGraph } from '../../types/graph/FlowGraph.ts';
 import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../../types/graph/FlowGraphEdge.ts';
-import { FlowPosition } from '../../types/graph/FlowPosition.ts';
 import { PresetManager } from '../PresetManager.ts';
-import { EaCNodeCapabilityContext } from './capabilities/EaCNodeCapabilityManager.ts';
+import { EaCNodeCapabilityContext } from '../../types/nodes/EaCNodeCapabilityContext.ts';
 import { EaCCapabilitiesManager } from './EaCCapabilitiesManager.ts';
 
 export class EaCSurfaceScopeManager extends EaCScopeManager {
   constructor(
     graph: GraphStateManager,
-    presets: PresetManager,
     capabilities: EaCCapabilitiesManager,
     getEaC: () => OpenIndustrialEaC,
     protected surfaceLookup: string
   ) {
-    super(graph, presets, capabilities, getEaC);
+    super(graph, capabilities, getEaC);
   }
 
   public BuildGraph(): FlowGraph {
@@ -95,19 +88,6 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
       src,
       tgt,
       this.getCapabilityContext()
-    );
-  }
-
-  public CreatePartialEaCFromPreset(
-    type: string,
-    id: string,
-    position: FlowPosition
-  ): Partial<OpenIndustrialEaC> {
-    return this.presets.CreatePartialEaCFromPreset(
-      type,
-      id,
-      position,
-      this.surfaceLookup
     );
   }
 

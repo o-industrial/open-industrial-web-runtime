@@ -13,7 +13,6 @@ import {
 
 import { Edge, EdgeChange } from 'reactflow';
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
-import { FlowPosition } from '../../types/graph/FlowPosition.ts';
 import { SimulatorDefinition } from '../SimulatorLibraryManager.ts';
 
 export class EaCWorkspaceScopeManager extends EaCScopeManager {
@@ -71,14 +70,6 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
       tgt,
       this.getCapabilityContext()
     );
-  }
-
-  public CreatePartialEaCFromPreset(
-    type: string,
-    id: string,
-    position: FlowPosition
-  ): Partial<OpenIndustrialEaC> {
-    return this.presets.CreatePartialEaCFromPreset(type, id, position);
   }
 
   public HasConnection(source: string, target: string): boolean {

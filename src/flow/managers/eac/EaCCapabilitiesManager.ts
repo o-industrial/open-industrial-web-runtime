@@ -1,3 +1,5 @@
+// deno-lint-ignore-file no-explicit-any
+import { ComponentType } from 'preact';
 import { NullableArrayOrObject } from '@fathym/common';
 
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
@@ -5,11 +7,9 @@ import { NodeScopeTypes } from '../../types/graph/NodeScopeTypes.ts';
 import { FlowGraphEdge } from '../../types/graph/FlowGraphEdge.ts';
 import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
 
-import {
-  EaCNodeCapabilityAsCode,
-  EaCNodeCapabilityContext,
-  EaCNodeCapabilityPatch,
-} from './capabilities/EaCNodeCapabilityManager.ts';
+import { EaCNodeCapabilityContext } from '../../types/nodes/EaCNodeCapabilityContext.ts';
+import { EaCNodeCapabilityAsCode } from '../../types/nodes/EaCNodeCapabilityAsCode.ts';
+import { EaCNodeCapabilityPatch } from '../../types/nodes/EaCNodeCapabilityPatch.ts';
 
 import { EaCNodeCapabilityManager } from './capabilities/EaCNodeCapabilityManager.ts';
 import { EaCConnectionNodeCapabilityManager } from './capabilities/EaCConnectionNodeCapabilityManager.ts';
@@ -18,6 +18,8 @@ import { EaCSurfaceAgentNodeCapabilityManager } from './capabilities/EaCSurfaceA
 import { EaCSurfaceConnectionNodeCapabilityManager } from './capabilities/EaCSurfaceConnectionNodeCapabilityManager.ts';
 import { EaCSurfaceNodeCapabilityManager } from './capabilities/EaCSurfaceNodeCapabilityManager.ts';
 import { EaCSurfaceSchemaNodeCapabilityManager } from './capabilities/EaCSurfaceSchemaNodeCapabilityManager.ts';
+import { Position } from '@o-industrial/common/eac';
+import { NodePreset } from '../../types/react/NodePreset.ts';
 
 /**
  * Dispatcher and registry for node capability managers, scoped to either workspace or surface.
@@ -35,15 +37,15 @@ export class EaCCapabilitiesManager {
     // Register capability implementations by scope
     if (scope === 'surface') {
       this.capabilities = [
+        new EaCSurfaceSchemaNodeCapabilityManager(),
         new EaCSurfaceAgentNodeCapabilityManager(),
         new EaCSurfaceConnectionNodeCapabilityManager(),
-        new EaCSurfaceSchemaNodeCapabilityManager(),
       ];
     } else if (scope === 'workspace') {
       this.capabilities = [
         new EaCConnectionNodeCapabilityManager(),
-        new EaCSimulatorNodeCapabilityManager(),
         new EaCSurfaceNodeCapabilityManager(),
+        new EaCSimulatorNodeCapabilityManager(),
       ];
     }
   }
@@ -119,6 +121,35 @@ export class EaCCapabilitiesManager {
   }
 
   /**
+   * Generates a scoped partial EaC structure from a preset drop action.
+   *
+   * This is typically called when a user drags a new node type (e.g. `agent`, `schema`)
+   * onto the canvas. It creates the minimal initial EaC structure, with surface bindings
+   * if applicable to the current scope.
+   *
+   * @param type - Node type (e.g., 'agent', 'connection', 'schema')
+   * @param id - Unique ID for the new node
+   * @param position - Flow position where the node was dropped
+   * @param context - Scope-aware node context (e.g., includes surface lookup)
+   */
+  public BuildPresetPatch(
+    type: string,
+    id: string,
+    position: Position,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> | null {
+    const capability = this.GetCapabilityFor({ ID: id, Type: type });
+
+    if (!capability?.BuildPresetPatch) {
+      throw new Error(
+        `❌ Capability for type '${type}' does not support preset patching.`
+      );
+    }
+
+    return capability.BuildPresetPatch(id, position, context);
+  }
+
+  /**
    * Builds a partial EaC update patch based on modifications to the node.
    */
   public BuildUpdatePatch(
@@ -149,5 +180,27 @@ export class EaCCapabilitiesManager {
     node: FlowGraphNode
   ): EaCNodeCapabilityManager | undefined {
     return this.capabilities.find((cap) => cap.Matches(node));
+  }
+
+  public GetPresets(): Record<string, NodePreset> {
+    return Object.fromEntries(
+      this.capabilities
+        .map((c) => [c.Type, c.GetPreset()])
+        .filter(([_, p]) => !!p)
+    );
+  }
+
+  public GetInspector(id: string, type: string): ComponentType<any> | null {
+    return (
+      this.GetCapabilityFor({ ID: id, Type: type })?.GetInspector() ?? null
+    );
+  }
+
+  public GetRendererMap(): Record<string, ComponentType<any>> {
+    return Object.fromEntries(
+      this.capabilities
+        .map((c) => [c.Type, c.GetRenderer()])
+        .filter(([_, r]) => !!r)
+    );
   }
 }

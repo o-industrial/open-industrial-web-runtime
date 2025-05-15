@@ -68,7 +68,7 @@ export class WorkspaceManager {
 
     this.NodeEvents = new NodeEventManager(this);
 
-    this.Interaction = new InteractionManager(this.Selection, this.Presets);
+    this.Interaction = new InteractionManager(this.Selection);
 
     this.Graph = new GraphStateManager(
       this.Interaction,
@@ -81,7 +81,6 @@ export class WorkspaceManager {
       this.oiSvc,
       this.currentScope.Scope,
       this.Graph,
-      this.Presets,
       this.History
     );
 
@@ -451,17 +450,17 @@ export class WorkspaceManager {
   }
 
   public UseUIContext() {
-    const presetsForScope = this.Presets.GetPresetsForScope(
-      this.currentScope.Scope
-    );
-    const rendererMap = this.Presets.GetRendererMap();
-
+    const capabilityMgr = this.EaC.GetCapabilities();
+  
+    const presets = capabilityMgr.GetPresets();
+    const nodeTypes = capabilityMgr.GetRendererMap();
+  
     return {
-      presets: presetsForScope,
-      nodeTypes: rendererMap,
+      presets,
+      nodeTypes,
     };
   }
-
+  
   public UseWorkspaceSettings() {
     const getCurrentWorkspace = (): WorkspaceSummary => {
       const eac = this.EaC.GetEaC();
