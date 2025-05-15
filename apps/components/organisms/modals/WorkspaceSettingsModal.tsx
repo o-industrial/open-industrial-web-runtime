@@ -30,7 +30,7 @@ export function WorkspaceSettingsModal({
     save,
     archive,
     hasChanges,
-    listWorkspaces,
+    workspaces,
     switchToWorkspace,
   } = workspaceMgr.UseWorkspaceSettings();
 
@@ -71,7 +71,7 @@ export function WorkspaceSettingsModal({
             content: (
               <SwitchWorkspaceTab
                 currentId={currentWorkspace.Lookup}
-                listWorkspaces={listWorkspaces}
+                workspaces={workspaces}
                 onSwitch={switchToWorkspace}
               />
             ),
@@ -199,17 +199,16 @@ function TeamMembersTab({
 
 function SwitchWorkspaceTab({
   currentId,
-  listWorkspaces,
+  workspaces,
   onSwitch,
 }: {
   currentId: string;
-  listWorkspaces: () => WorkspaceSummary[];
+  workspaces: WorkspaceSummary[];
   onSwitch: (id: string) => void;
 }) {
   const [filter, setFilter] = useState('');
 
-  const all = listWorkspaces();
-  const filtered = all.filter((ws) =>
+  const filtered = workspaces.filter((ws) =>
     ws.Details.Name!.toLowerCase().includes(filter.toLowerCase())
   );
 

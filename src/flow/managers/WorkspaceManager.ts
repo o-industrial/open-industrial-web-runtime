@@ -528,9 +528,14 @@ export class WorkspaceManager {
 
     const [workspaces, setWorkspaces] = useState<WorkspaceSummary[]>([]);
 
+    const listWorkspaces = (): void => {
+      this.EaC.List?.().then((results) => {
+        setWorkspaces(results ?? []);
+      });
+    };
+
     useEffect(() => {
-      const results = this.EaC.List?.() ?? [];
-      setWorkspaces(results);
+      listWorkspaces();
     }, []);
 
     const update = (next: Partial<EaCEnterpriseDetails>) => {
@@ -570,10 +575,6 @@ export class WorkspaceManager {
       setTeamMembers((prev) => prev.filter((m) => m.Email !== email));
     };
 
-    const listWorkspaces = (): WorkspaceSummary[] => {
-      return workspaces;
-    };
-
     const switchToWorkspace = (lookup: string) => {
       //  TODO(mcgear): Set the kv Current EaC value for the user
 
@@ -592,6 +593,7 @@ export class WorkspaceManager {
       archive,
       hasChanges,
       listWorkspaces,
+      workspaces,
       switchToWorkspace,
     };
   }

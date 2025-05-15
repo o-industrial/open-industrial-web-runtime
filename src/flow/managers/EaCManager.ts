@@ -161,14 +161,18 @@ export class EaCManager {
       this.MergePartial(partial);
     }
   }
-  public List(): WorkspaceSummary[] {
-    // TODO(AI): Hook up to API this.oiSvc.EaC.List()
-    return [
-      {
-        Lookup: this.eac.EnterpriseLookup!,
-        Details: this.eac.Details!,
-      },
-    ];
+
+  public async List(): Promise<WorkspaceSummary[]> {
+    const workspaces = await this.oiSvc.Workspaces.ListForUser();
+
+    return workspaces.map((wkspc) => {
+      return {
+        Lookup: wkspc.EnterpriseLookup,
+        Details: {
+          Name: wkspc.EnterpriseName,
+        },
+      };
+    });
   }
 
   public MergeDelete(partial: NullableArrayOrObject<OpenIndustrialEaC>): void {
