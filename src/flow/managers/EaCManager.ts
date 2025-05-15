@@ -39,7 +39,6 @@ export class EaCManager {
   protected changeListeners = new Set<() => void>();
 
   protected diff: EaCDiffManager;
-  protected capabilities: EaCCapabilitiesManager;
   protected proposals: EaCProposalManager;
   protected scopeMgr!: EaCScopeManager;
 
@@ -54,10 +53,6 @@ export class EaCManager {
     protected history: HistoryManager
   ) {
     this.diff = new EaCDiffManager(history, this.emitEaCChanged.bind(this));
-
-    this.capabilities = new EaCCapabilitiesManager(
-      new EaCNodeInspectorManager(graph, this.GetEaC)
-    );
 
     this.proposals = new EaCProposalManager(oiSvc, this);
 
@@ -234,13 +229,18 @@ export class EaCManager {
 
     this.scope = scope;
 
+    const capabilities = new EaCCapabilitiesManager(
+      scope,
+      new EaCNodeInspectorManager(this.graph, () => this.GetEaC())
+    );
+
     switch (scope) {
       case 'workspace': {
         this.scopeMgr = new EaCWorkspaceScopeManager(
           this.graph,
           this.presets,
-          this.capabilities,
-          this.GetEaC
+          capabilities,
+          () => this.GetEaC()
         );
         break;
       }
@@ -252,8 +252,8 @@ export class EaCManager {
         this.scopeMgr = new EaCSurfaceScopeManager(
           this.graph,
           this.presets,
-          this.capabilities,
-          this.GetEaC,
+          capabilities,
+          () => this.GetEaC(),
           lookup
         );
         break;

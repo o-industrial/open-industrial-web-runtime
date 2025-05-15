@@ -129,7 +129,7 @@ export class EaCNodeInspectorManager {
     Details: EaCVertexDetails;
   } | null {
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
-    
+
     return node ? this.FindAsCode(node)?.AsCode ?? null : null;
   }
 

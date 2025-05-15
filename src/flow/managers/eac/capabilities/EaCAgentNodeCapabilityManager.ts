@@ -8,6 +8,7 @@ import {
 } from './EaCNodeCapabilityManager.ts';
 import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
 
+// TODO(mcgear): This one may not be needed any more
 export class EaCAgentNodeCapabilityManager extends EaCNodeCapabilityManager {
   public Type = 'agent';
 

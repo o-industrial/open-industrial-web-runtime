@@ -1,7 +1,7 @@
 import { OpenIndustrialEaC } from '@o-industrial/common/types';
 import {
-  SurfaceSchemaSettings,
-  EaCSchemaDetails,
+  EaCAgentDetails,
+  SurfaceAgentSettings,
 } from '@o-industrial/common/eac';
 import { NullableArrayOrObject } from '@fathym/common';
 import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
@@ -15,70 +15,66 @@ import {
 import { EaCNodeCapabilityManager } from './EaCNodeCapabilityManager.ts';
 
 // ✅ Compound node detail type
-type SurfaceSchemaNodeDetails = EaCSchemaDetails & SurfaceSchemaSettings;
+type SurfaceAgentNodeDetails = EaCAgentDetails & SurfaceAgentSettings;
 
-export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityManager<SurfaceSchemaNodeDetails> {
-  public override Type = 'schema';
+export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManager<SurfaceAgentNodeDetails> {
+  public override Type = 'agent';
 
   protected override buildAsCode(
     node: FlowGraphNode,
     context: EaCNodeCapabilityContext
-  ): EaCNodeCapabilityAsCode<SurfaceSchemaNodeDetails> | null {
-    const schemaId = node.ID;
+  ): EaCNodeCapabilityAsCode<SurfaceAgentNodeDetails> | null {
+    const agentId = node.ID;
 
     const eac = context.GetEaC();
 
-    const schemaAsCode = eac.Schemas?.[schemaId];
+    const agentAsCode = eac.Agents?.[agentId];
     const surfaceSettings =
-      eac.Surfaces?.[context.SurfaceLookup!]?.Schemas?.[schemaId];
+      eac.Surfaces?.[context.SurfaceLookup!]?.Agents?.[agentId];
 
-    if (!schemaAsCode || !surfaceSettings) return null;
+    if (!agentAsCode || !surfaceSettings) return null;
 
     const { Metadata, ...surfaceOverrides } = surfaceSettings;
 
     return {
       Metadata,
       Details: {
-        ...schemaAsCode.Details,
+        ...agentAsCode.Details,
         ...surfaceOverrides,
-      } as SurfaceSchemaNodeDetails,
+      } as SurfaceAgentNodeDetails,
     };
   }
 
   protected override buildUpdatePatch(
     node: FlowGraphNode,
-    update: EaCNodeCapabilityPatch<SurfaceSchemaNodeDetails>,
+    update: EaCNodeCapabilityPatch<SurfaceAgentNodeDetails>,
     context: EaCNodeCapabilityContext
   ): Partial<OpenIndustrialEaC> {
-    const schemaId = node.ID;
+    const agentId = node.ID;
 
-    const settings: SurfaceSchemaSettings = {
+    const settings: SurfaceAgentSettings = {
       ...(update.Metadata ? { Metadata: update.Metadata } : {}),
     };
 
-    if (update.Details?.DisplayMode) {
-      settings.DisplayMode = update.Details.DisplayMode;
-    }
-
-    const { DisplayMode: _, ...rest } = update.Details ?? {};
-    const schemaDetails: Partial<EaCSchemaDetails> = rest;
+    const { ShowHistory: _, ...rest } = update.Details ?? {};
+    const agentDetails: Partial<EaCAgentDetails> = rest;
 
     const patch: Partial<OpenIndustrialEaC> = {};
 
     if (Object.keys(settings).length > 0) {
       patch.Surfaces = {
         [context.SurfaceLookup!]: {
-          Schemas: {
-            [schemaId]: settings,
+          Agents: {
+            [agentId]: settings,
           },
         },
       };
     }
 
-    if (Object.keys(schemaDetails).length > 0) {
-      patch.Schemas = {
-        [schemaId]: {
-          Details: schemaDetails as EaCSchemaDetails,
+    if (Object.keys(agentDetails).length > 0) {
+      patch.Agents = {
+        [agentId]: {
+          Details: agentDetails as EaCAgentDetails,
         },
       };
     }
@@ -89,13 +85,13 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
   protected override buildDeletePatch(
     node: FlowGraphNode
   ): NullableArrayOrObject<OpenIndustrialEaC> {
-    const [surfaceId, schemaId] = this.extractCompoundIDs(node);
+    const [surfaceId, agentId] = this.extractCompoundIDs(node);
 
     return {
       Surfaces: {
         [surfaceId]: {
-          Schemas: {
-            [schemaId]: null,
+          Agents: {
+            [agentId]: null,
           },
         },
       },

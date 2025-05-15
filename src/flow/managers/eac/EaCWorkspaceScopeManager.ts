@@ -93,8 +93,9 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
   ): Partial<OpenIndustrialEaC> | null {
     const wks = eac as EverythingAsCodeOIWorkspace;
 
-    const src = this.graph.GetGraph().Nodes.find((n) => n.ID === source);
-    const tgt = this.graph.GetGraph().Nodes.find((n) => n.ID === target);
+    const src = this.findNode(source);
+    const tgt = this.findNode(target);
+
     if (!src || !tgt) return null;
 
     let partial: Partial<EverythingAsCodeOIWorkspace> | null = null;
@@ -186,8 +187,9 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
 
     const [source, target] = edgeId.split('->');
 
-    const src = this.graph.GetGraph().Nodes.find((n) => n.ID === source);
-    const tgt = this.graph.GetGraph().Nodes.find((n) => n.ID === target);
+    const src = this.findNode(source);
+    const tgt = this.findNode(target);
+    
     if (!src || !tgt) return null;
 
     let partial: Partial<EverythingAsCodeOIWorkspace> | null = null;

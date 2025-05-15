@@ -120,23 +120,34 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
       }
     }
 
-    // --- Agents
-    for (const [agentKey, settings] of Object.entries(surf.Agents ?? {})) {
+    // --- Surface-Mapped Agents
+    for (const [agentKey, agentSettings] of Object.entries(surf.Agents ?? {})) {
+      const { Metadata, ...settings } = agentSettings;
+
       const agent = wks.Agents?.[agentKey];
-      if (!agent || settings?.Enabled === false) continue;
+
+      if (!agent || Metadata?.Enabled === false) {
+        continue;
+      }
 
       nodes.push({
         ID: agentKey,
         Type: 'agent',
         Label: agent.Details?.Name ?? agentKey,
-        Metadata: agent.Metadata,
-        Details: agent.Details,
+        Metadata: {
+          ...(agent.Metadata || {}),
+          ...Metadata,
+        },
+        Details: {
+          ...agent.Details,
+          ...settings,
+        },
       });
 
       const schemaTarget = agent.Schema?.SchemaLookup;
       if (schemaTarget) {
         edges.push({
-          ID: `${agentKey}->${schemaTarget}`,
+          ID: `${this.surfaceLookup}:${agentKey}->${schemaTarget}`,
           Source: agentKey,
           Target: schemaTarget,
           Label: 'targets',

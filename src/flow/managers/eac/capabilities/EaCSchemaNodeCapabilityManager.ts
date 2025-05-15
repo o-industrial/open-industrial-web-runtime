@@ -8,6 +8,7 @@ import {
   EaCNodeCapabilityManager,
 } from './EaCNodeCapabilityManager.ts';
 
+//  TODO(mcgear):  This should be implemented to show schemas on the main workspace... schemas created in a surface show up as SchemaDataConnections (A specific type of data connection)...
 export class EaCSchemaNodeCapabilityManager extends EaCNodeCapabilityManager {
   public Type = 'schema';
 
