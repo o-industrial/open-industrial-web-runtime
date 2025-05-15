@@ -43,8 +43,6 @@ export class EaCManager {
   protected proposals: EaCProposalManager;
   protected scopeMgr!: EaCScopeManager;
 
-  protected getEaC: () => OpenIndustrialEaC;
-
   protected overlayMode: ProposalOverlayMode = 'pending';
 
   constructor(
@@ -55,12 +53,10 @@ export class EaCManager {
     protected presets: PresetManager,
     protected history: HistoryManager
   ) {
-    this.getEaC = () => this.eac;
-    
     this.diff = new EaCDiffManager(history, this.emitEaCChanged.bind(this));
 
     this.capabilities = new EaCCapabilitiesManager(
-      new EaCNodeInspectorManager(graph, this.getEaC)
+      new EaCNodeInspectorManager(graph, this.GetEaC)
     );
 
     this.proposals = new EaCProposalManager(oiSvc, this);
@@ -244,7 +240,7 @@ export class EaCManager {
           this.graph,
           this.presets,
           this.capabilities,
-          this.getEaC
+          this.GetEaC
         );
         break;
       }
@@ -257,7 +253,7 @@ export class EaCManager {
           this.graph,
           this.presets,
           this.capabilities,
-          this.getEaC,
+          this.GetEaC,
           lookup
         );
         break;
