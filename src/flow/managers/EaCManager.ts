@@ -71,7 +71,9 @@ export class EaCManager {
       this.eac
     );
 
-    if (partial) this.MergePartial(partial);
+    if (partial) {
+      this.MergePartial(partial);
+    }
   }
 
   public ApplyReactFlowEdgeChanges(
@@ -84,7 +86,9 @@ export class EaCManager {
       this.eac
     );
 
-    if (partial) this.MergePartial(partial);
+    if (partial) {
+      this.MergePartial(partial);
+    }
   }
 
   public async Archive(): Promise<void> {
@@ -135,20 +139,18 @@ export class EaCManager {
   }
 
   public DeleteNode(id: string): void {
-    // TODO(mcgear): Need to move this to within the scope manager less inspector
-    const partial = this.inspector.BuildPartialForNodeDelete(id);
+    const partial = this.scopeMgr.BuildPartialForNodeDelete(id);
 
-    if (!partial) return;
-
-    this.MergeDelete(partial);
+    if (partial) {
+      this.MergeDelete(partial);
+    }
   }
 
   public GetNodeAsCode(id: string): {
     Metadata?: EaCFlowNodeMetadata;
     Details: EaCVertexDetails;
   } | null {
-    // TODO(mcgear): Need to move this to within the scope manager less inspector
-    return this.inspector.GetNodeAsCode(id);
+    return this.scopeMgr.GetNodeAsCode(id);
   }
 
   public GetEaC(): OpenIndustrialEaC {
@@ -160,22 +162,12 @@ export class EaCManager {
   }
 
   public InstallSimulators(simDefs: SimulatorDefinition[]): void {
-    const partial: OpenIndustrialEaC = { Simulators: {} };
-
-    // TODO(mcgear): Move to somewhere more realistic?  Like on the base EaCScopeManager
-    for (const sim of simDefs) {
-      partial.Simulators![sim.ID] = {
-        Details: {
-          Type: 'AzureDocker',
-          Name: sim.Label,
-          Description: sim.Description,
-        } as EaCAzureDockerSimulatorDetails,
-      };
+    const partial = this.scopeMgr.InstallSimulators(simDefs);
+  
+    if (partial) {
+      this.MergePartial(partial);
     }
-
-    this.MergePartial(partial);
   }
-
   public List(): WorkspaceSummary[] {
     // TODO(AI): Hook up to API this.oiSvc.EaC.List()
     return [
@@ -250,17 +242,15 @@ export class EaCManager {
       }
 
       case 'surface': {
-        if (lookup) {
-          this.scopeMgr = new EaCSurfaceScopeManager(
-            this.graph,
-            this.presets,
-            this.inspector,
-            lookup
-          );
-        } else {
+        if (!lookup)
           throw new Error(`Lookup must be defined for scope: ${scope}`);
-        }
-
+        
+        this.scopeMgr = new EaCSurfaceScopeManager(
+          this.graph,
+          this.presets,
+          this.inspector,
+          lookup
+        );
         break;
       }
 
@@ -272,20 +262,6 @@ export class EaCManager {
     this.graph.ResetGraph();
 
     this.reloadFromEaC();
-  }
-
-  public UpdateWorkspace(details: Partial<EaCEnterpriseDetails>): void {
-    const merged = merge<EaCEnterpriseDetails>(this.eac.Details || {}, details);
-
-    const changed = JSON.stringify(this.eac.Details) !== JSON.stringify(merged);
-
-    if (!changed) return;
-
-    const partial: OpenIndustrialEaC = {
-      Details: merged,
-    };
-
-    this.MergePartial(partial);
   }
 
   public UpdateNodePatch(
@@ -306,7 +282,6 @@ export class EaCManager {
 
     if (patch.Details) {
       const combined = { ...current.Details, ...patch.Details };
-
       if (JSON.stringify(current.Details) !== JSON.stringify(combined)) {
         merged.Details = combined;
       }
@@ -314,21 +289,30 @@ export class EaCManager {
 
     if (patch.Metadata) {
       const prevMeta = current.Metadata ?? {};
-
       const combined = merge<EaCFlowNodeMetadata>(prevMeta, patch.Metadata);
-
       if (JSON.stringify(prevMeta) !== JSON.stringify(combined)) {
         merged.Metadata = combined;
       }
     }
 
     if (Object.keys(merged).length > 0) {
-      const partial = this.inspector.BuildPartialForNodeUpdate(id, merged);
-
-      if (partial) {
-        this.MergePartial(partial);
-      }
+      const partial = this.scopeMgr.BuildPartialForNodeUpdate(id, merged);
+      if (partial) this.MergePartial(partial);
     }
+  }
+
+  public UpdateWorkspace(details: Partial<EaCEnterpriseDetails>): void {
+    const merged = merge<EaCEnterpriseDetails>(this.eac.Details || {}, details);
+
+    const changed = JSON.stringify(this.eac.Details) !== JSON.stringify(merged);
+
+    if (!changed) return;
+
+    const partial: OpenIndustrialEaC = {
+      Details: merged,
+    };
+
+    this.MergePartial(partial);
   }
 
   protected emitEaCChanged(): void {

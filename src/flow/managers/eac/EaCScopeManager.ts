@@ -11,8 +11,11 @@ import { GraphStateManager } from '../GraphStateManager.ts';
 import { FlowPosition } from '../../types/graph/FlowPosition.ts';
 import { PresetManager } from '../PresetManager.ts';
 import { EaCNodeInspectorManager } from './EaCNodeInspectorManager.ts';
-import { merge } from '@fathym/common';
+import { merge, NullableArrayOrObject } from '@fathym/common';
 import { FlowNodeData } from '../../types/react/FlowNodeData.ts';
+import { EaCFlowNodeMetadata } from '@o-industrial/common/eac';
+import { EaCVertexDetails } from '@fathym/eac';
+import { SimulatorDefinition } from '../SimulatorLibraryManager.ts';
 
 /**
  * Abstract base for scoped EaC logic (workspace, surface, etc.).
@@ -29,6 +32,22 @@ export abstract class EaCScopeManager {
    * Build the graph (nodes + edges) for this scope.
    */
   public abstract BuildGraph(eac: OpenIndustrialEaC): FlowGraph;
+
+  public BuildPartialForNodeUpdate(
+    id: string,
+    patch: Partial<{
+      Details: EaCVertexDetails;
+      Metadata: Partial<EaCFlowNodeMetadata>;
+    }>
+  ): Partial<OpenIndustrialEaC> | null {
+    return this.inspector.BuildPartialForNodeUpdate(id, patch);
+  }
+
+  public BuildPartialForNodeDelete(
+    id: string
+  ): NullableArrayOrObject<OpenIndustrialEaC> | null {
+    return this.inspector.BuildPartialForNodeDelete(id);
+  }
 
   /**
    * Construct a partial EaC update from a valid connection.
@@ -48,10 +67,25 @@ export abstract class EaCScopeManager {
     position: FlowPosition
   ): Partial<OpenIndustrialEaC>;
 
+  public GetNodeAsCode(id: string): {
+    Metadata?: EaCFlowNodeMetadata;
+    Details: EaCVertexDetails;
+  } | null {
+    return this.inspector.GetNodeAsCode(id);
+  }
+
   /**
    * Check if an edge already exists between two nodes in the current graph.
    */
   public abstract HasConnection(source: string, target: string): boolean;
+
+  public InstallSimulators(
+    _simDefs: SimulatorDefinition[]
+  ): Partial<OpenIndustrialEaC> {
+    throw new Deno.errors.NotSupported(
+      `InstallSimulators is not supported in scope ${this.constructor.name}`
+    );
+  }
 
   /**
    * Reverse an existing edge into a partial EaC delete/update payload.

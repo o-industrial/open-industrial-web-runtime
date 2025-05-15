@@ -3,6 +3,7 @@ import { FlowGraph } from '../../types/graph/FlowGraph.ts';
 import { FlowGraphEdge } from '../../types/graph/FlowGraphEdge.ts';
 import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
 import {
+  EaCAzureDockerSimulatorDetails,
   EaCDataConnectionAsCode,
   EaCSurfaceAsCode,
   EverythingAsCodeOIWorkspace,
@@ -11,6 +12,7 @@ import {
 import { Edge, EdgeChange } from 'reactflow';
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
 import { FlowPosition } from '../../types/graph/FlowPosition.ts';
+import { SimulatorDefinition } from '../SimulatorLibraryManager.ts';
 
 /**
  * Workspace-scoped logic handler for EaC state.
@@ -87,7 +89,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
   public CreateConnectionEdge(
     eac: OpenIndustrialEaC,
     source: string,
-    target: string,
+    target: string
   ): Partial<OpenIndustrialEaC> | null {
     const wks = eac as EverythingAsCodeOIWorkspace;
 
@@ -147,7 +149,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
   public CreatePartialEaCFromPreset(
     type: string,
     id: string,
-    position: FlowPosition,
+    position: FlowPosition
   ): Partial<OpenIndustrialEaC> {
     return this.presets.CreatePartialEaCFromPreset(type, id, position);
   }
@@ -158,9 +160,27 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
       .Edges.some((e) => e.Source === source && e.Target === target);
   }
 
+  public override InstallSimulators(
+    simDefs: SimulatorDefinition[]
+  ): Partial<OpenIndustrialEaC> {
+    const partial: Partial<OpenIndustrialEaC> = { Simulators: {} };
+
+    for (const sim of simDefs) {
+      partial.Simulators![sim.ID] = {
+        Details: {
+          Type: 'AzureDocker',
+          Name: sim.Label,
+          Description: sim.Description,
+        } as EaCAzureDockerSimulatorDetails,
+      };
+    }
+
+    return partial;
+  }
+
   public RemoveConnectionEdge(
     eac: OpenIndustrialEaC,
-    edgeId: string,
+    edgeId: string
   ): Partial<OpenIndustrialEaC> | null {
     const wks = eac as EverythingAsCodeOIWorkspace;
 
@@ -218,7 +238,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
   public UpdateConnections(
     _changes: EdgeChange[],
     _updated: Edge[],
-    _eac: OpenIndustrialEaC,
+    _eac: OpenIndustrialEaC
   ): OpenIndustrialEaC | null {
     // TODO: implement connection diffing logic if needed
     return null;
