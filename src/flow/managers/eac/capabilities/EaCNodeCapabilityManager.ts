@@ -25,6 +25,8 @@ import { NodePreset } from '../../../types/react/NodePreset.ts';
 export abstract class EaCNodeCapabilityManager<
   TDetails extends EaCVertexDetails = EaCVertexDetails
 > {
+  protected memoizedRenderer?: ComponentType<any>;
+
   /**
    * Canonical node type string, used for matching and capability resolution.
    */
@@ -137,9 +139,28 @@ export abstract class EaCNodeCapabilityManager<
    * The result is automatically wrapped in `memo()` for performance.
    */
   public GetRenderer(): ComponentType | undefined {
-    const Renderer = this.getRenderer?.();
-
-    return Renderer ? memo(Renderer as FunctionalComponent<any>) : undefined;
+    if (!this.memoizedRenderer && this.getRenderer) {
+      const raw = this.getRenderer();
+      
+      if (raw) {
+        this.memoizedRenderer = memo(raw as FunctionalComponent<any>);
+      }
+    }
+  
+    return this.memoizedRenderer;
+  }
+  
+  /**
+   * Returns stats for the given node ID, scoped to this capability.
+   * Default implementation provides a rolling impulseRates buffer.
+   * Subclasses should override `buildStats(...)` to customize output.
+   */
+  public async GetStats(
+    type: string,
+    id: string,
+    context: EaCNodeCapabilityContext
+  ): Promise<Record<string, unknown>> {
+    return this.getStats(type, id, context);
   }
 
   /**
@@ -229,6 +250,27 @@ export abstract class EaCNodeCapabilityManager<
    */
   protected getRenderer?(): ComponentType<any>;
 
+  /**
+   * Internal implementation of GetStats.
+   * Subclasses can override this to extend or replace default metrics.
+   */
+  protected getStats(
+    type: string,
+    id: string,
+    context: EaCNodeCapabilityContext
+  ): Promise<Record<string, unknown>> {
+    const buffer = this.getOrCreateImpulseBuffer(id);
+
+    const next = this.generateImpulseValue();
+    buffer.push(next);
+
+    if (buffer.length > 20) buffer.shift();
+
+    return Promise.resolve({
+      impulseRates: [...buffer],
+    });
+  }
+
   // ---------------------------------------------------------------------
   // Shared utility helpers
   // ---------------------------------------------------------------------
@@ -271,4 +313,34 @@ export abstract class EaCNodeCapabilityManager<
       },
     };
   }
+
+  //#region Temp Stats Share
+  protected readonly impulseBuffers: Record<string, number[]> = {};
+
+  /**
+   * Returns the rolling buffer for impulseRates. Creates it if missing.
+   */
+  protected getOrCreateImpulseBuffer(
+    id: string,
+    length = 20,
+    seed = 10,
+    range = 5
+  ): number[] {
+    if (!this.impulseBuffers[id]) {
+      this.impulseBuffers[id] = Array.from({ length }, () =>
+        this.generateImpulseValue(seed, range)
+      );
+    }
+
+    return this.impulseBuffers[id];
+  }
+
+  /**
+   * Generates a synthetic impulse rate value.
+   * Subclasses may override to simulate different statistical patterns.
+   */
+  protected generateImpulseValue(seed = 10, range = 5): number {
+    return Number((seed + Math.random() * range).toFixed(2));
+  }
+  //#endregion
 }

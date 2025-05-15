@@ -203,4 +203,53 @@ export class EaCCapabilitiesManager {
         .filter(([_, r]) => !!r)
     );
   }
+
+  /**
+   * Delegates to the capability responsible for the given node to retrieve stats.
+   * This supports both default and customized capability-level stat logic.
+   */
+  public async GetStats(
+    node: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): Promise<Record<string, unknown>>;
+
+  /**
+   * Delegates to the capability responsible for the given node to retrieve stats.
+   * This supports both default and customized capability-level stat logic.
+   */
+  public async GetStats(
+    type: string,
+    id: string,
+    context: EaCNodeCapabilityContext
+  ): Promise<Record<string, unknown>>;
+
+  /**
+   * Delegates to the capability responsible for the given node to retrieve stats.
+   * This supports both default and customized capability-level stat logic.
+   */
+  public async GetStats(
+    nodeOrType: FlowGraphNode | string,
+    contextOrId: EaCNodeCapabilityContext | string,
+    context?: EaCNodeCapabilityContext
+  ): Promise<Record<string, unknown>> {
+    let node: FlowGraphNode =
+      typeof nodeOrType === 'string'
+        ? ({
+            Type: nodeOrType,
+          } as FlowGraphNode)
+        : nodeOrType;
+
+    if (typeof contextOrId === 'string') {
+      node = {
+        ...node,
+        ID: contextOrId,
+      } as FlowGraphNode;
+    } else {
+      context = contextOrId;
+    }
+
+    const capability = this.GetCapabilityFor(node)!;
+
+    return await capability.GetStats(node.Type, node.ID, context!);
+  }
 }

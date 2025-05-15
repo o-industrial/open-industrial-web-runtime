@@ -4,7 +4,6 @@ import { FlowNodeData } from '../types/react/FlowNodeData.ts';
 import { FlowGraph } from '../types/graph/FlowGraph.ts';
 import { FlowGraphNode } from '../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../types/graph/FlowGraphEdge.ts';
-import { StatManager } from './StatManager.ts';
 import { InteractionManager } from './InteractionManager.ts';
 import { NodeEventManager } from './NodeEventManager.ts';
 
@@ -16,8 +15,8 @@ export class GraphStateManager {
 
   constructor(
     protected interaction: InteractionManager,
-    protected stats: StatManager,
-    protected nodeEvents: NodeEventManager,
+    protected useStats: (id: string) => Record<string, unknown> | undefined,
+    protected nodeEvents: NodeEventManager
   ) {
     this.ResetGraph();
   }
@@ -146,7 +145,7 @@ export class GraphStateManager {
         label,
         enabled,
         details,
-        useStats: () => this.stats.UseStats(n.Type, n.ID),
+        useStats: () => this.useStats(n.ID),
         onDoubleClick: () => {
           this.interaction.OnNodeDoubleClick(id);
         },

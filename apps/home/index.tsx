@@ -7,6 +7,7 @@ import PainSection from '../components/organisms/marketing/attempt2/PainSection.
 import SystemProofSection from '../components/organisms/marketing/attempt2/SystemProofSection.tsx';
 import JourneySection from '../components/organisms/marketing/attempt2/JourneySection.tsx';
 import CallToAction from '../components/organisms/marketing/attempt2/CallToAction.tsx';
+import UseCaseShowcaseSection from '../components/organisms/marketing/attempt2/UseCaseShowcaseSection.tsx';
 
 export const IsIsland = true;
 
@@ -24,11 +25,17 @@ export const handler: EaCRuntimeHandlerSet<
 
 export default function HomepageAttempt2({}: PageProps<HomepageData>) {
   return (
-    <div class='flex flex-col'>
+    <div class="flex flex-col">
       <HeroSection />
+      
       <PainSection />
+      
       <SystemProofSection />
+      
       <JourneySection />
+      
+      <UseCaseShowcaseSection />
+
       <CallToAction />
     </div>
   );

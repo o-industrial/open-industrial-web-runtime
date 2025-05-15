@@ -21,7 +21,6 @@ import { AziManager } from './AziManager.ts';
 import { SimulatorLibraryManager } from './SimulatorLibraryManager.ts';
 import { EaCManager } from './EaCManager.ts';
 import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
-import { StatManager } from './StatManager.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
 import { HistoryManager } from './HistoryManager.ts';
 import { WorkspaceSummary } from '../../types/WorkspaceSummary.ts';
@@ -48,7 +47,6 @@ export class WorkspaceManager {
   public Presets: PresetManager;
   public Selection: SelectionManager;
   public Simulators: SimulatorLibraryManager;
-  public Stats: StatManager;
   public Team: TeamManager;
 
   constructor(
@@ -63,7 +61,6 @@ export class WorkspaceManager {
     this.Presets = new PresetManager();
     this.Selection = new SelectionManager();
     this.Simulators = new SimulatorLibraryManager();
-    this.Stats = new StatManager();
     this.Team = new TeamManager();
 
     this.NodeEvents = new NodeEventManager(this);
@@ -72,7 +69,7 @@ export class WorkspaceManager {
 
     this.Graph = new GraphStateManager(
       this.Interaction,
-      this.Stats,
+      (id: string) => this.UseStats(id),
       this.NodeEvents
     );
 
@@ -449,18 +446,48 @@ export class WorkspaceManager {
     return { selected, setSelected };
   }
 
+  public UseStats<TStats extends Record<string, unknown>>(
+    id: string,
+    intervalMs = 1000
+  ): TStats | undefined {
+    const [stats, setStats] = useState<TStats>({} as TStats);
+
+    useEffect(() => {
+      let mounted = true;
+
+      const fetch = async () => {
+        try {
+          const res = await this.EaC.GetStats(id);
+          if (mounted) setStats(res as TStats);
+        } catch (err) {
+          console.warn(`[StatManager.UseStats] Failed for ${id}`, err);
+        }
+      };
+
+      fetch(); // Prime
+      const interval = setInterval(fetch, intervalMs);
+
+      return () => {
+        mounted = false;
+        clearInterval(interval);
+      };
+    }, [id]);
+
+    return stats;
+  }
+
   public UseUIContext() {
     const capabilityMgr = this.EaC.GetCapabilities();
-  
+
     const presets = capabilityMgr.GetPresets();
     const nodeTypes = capabilityMgr.GetRendererMap();
-  
+
     return {
       presets,
       nodeTypes,
     };
   }
-  
+
   public UseWorkspaceSettings() {
     const getCurrentWorkspace = (): WorkspaceSummary => {
       const eac = this.EaC.GetEaC();

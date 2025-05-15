@@ -17,6 +17,7 @@ import { EaCNodeCapabilityManager } from './EaCNodeCapabilityManager.ts';
 import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
 import { AgentInspector } from '../../../../../apps/components/organisms/inspectors/AgentInspector.tsx';
 import AgentNodeRenderer from '../../../../../apps/components/organisms/renderers/AgentNodeRenderer.tsx';
+import { AgentStats } from '../../../types/nodes/agents/AgentStats.tsx';
 
 // ✅ Compound node detail type
 type SurfaceAgentNodeDetails = EaCAgentDetails & SurfaceAgentSettings;
@@ -252,5 +253,20 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
 
   protected override getRenderer() {
     return AgentNodeRenderer;
+  }
+
+  protected override async getStats(
+    type: string,
+    id: string,
+    context: EaCNodeCapabilityContext
+  ): Promise<AgentStats> {
+    const stats = await super.getStats(type, id, context);
+
+    return {
+      ...stats,
+      matchesHandled: Math.floor(Math.random() * 200),
+      avgLatencyMs: Number((Math.random() * 40 + 10).toFixed(1)),
+      lastRunAgo: `${Math.floor(Math.random() * 90)}s ago`,
+    };
   }
 }

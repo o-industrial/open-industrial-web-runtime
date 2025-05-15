@@ -142,6 +142,14 @@ export class EaCManager {
     return this.getEaCWithProposals();
   }
 
+  /**
+   * Retrieves live or mock stats for a given node ID by delegating to its capability manager.
+   * Used by inspector panels and UI components to show node-specific metrics.
+   */
+  public async GetStats(id: string): Promise<Record<string, unknown>> {
+    return await this.scopeMgr.GetStats(id);
+  }
+
   public HasConnection(source: string, target: string): boolean {
     return this.scopeMgr.HasConnection(source, target);
   }

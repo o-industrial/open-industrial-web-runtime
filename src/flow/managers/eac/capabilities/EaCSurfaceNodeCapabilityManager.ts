@@ -17,6 +17,7 @@ import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
 import { SurfaceInspector } from '../../../../../apps/components/organisms/inspectors/SurfaceInspector.tsx';
 import SurfaceNodeRenderer from '../../../../../apps/components/organisms/renderers/SurfaceNodeRenderer.tsx';
+import { SurfaceStats } from '../../../types/nodes/surfaces/SurfaceStats.ts';
 
 /**
  * Capability manager for root-level surfaces (in workspace scope).
@@ -200,5 +201,20 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
 
   protected override getRenderer() {
     return SurfaceNodeRenderer;
+  }
+
+  protected override async getStats(
+    type: string,
+    id: string,
+    context: EaCNodeCapabilityContext
+  ): Promise<SurfaceStats> {
+    const stats = await super.getStats(type, id, context);
+
+    return {
+      ...stats,
+      inputCount: Math.floor(Math.random() * 4) + 1,
+      agentCount: Math.floor(Math.random() * 3) + 1,
+      lastSignalAt: `${Math.floor(Math.random() * 60)}s ago`,
+    };
   }
 }

@@ -18,6 +18,7 @@ import {
 } from '@o-industrial/common/eac';
 import { SimulatorInspector } from '../../../../../apps/components/organisms/inspectors/SimulatorInspector.tsx';
 import SimulatorNodeRenderer from '../../../../../apps/components/organisms/renderers/SimulatorNodeRenderer.tsx';
+import { SimulatorStats } from '../../../types/nodes/simulators/SimulatorStats.tsx';
 
 /**
  * Capability manager for workspace-scoped Simulators.
@@ -172,5 +173,20 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
 
   protected override getRenderer() {
     return SimulatorNodeRenderer;
+  }
+
+  protected override async getStats(
+    type: string,
+    id: string,
+    context: EaCNodeCapabilityContext
+  ): Promise<SimulatorStats> {
+    const stats = await super.getStats(type, id, context);
+
+    return {
+      ...stats,
+      instanceCount: Math.floor(Math.random() * 10) + 1,
+      avgStartupMs: Number((Math.random() * 2 + 1).toFixed(2)),
+      lastDeploymentAt: new Date(Date.now()).toISOString(),
+    };
   }
 }

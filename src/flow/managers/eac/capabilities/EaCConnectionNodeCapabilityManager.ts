@@ -23,6 +23,7 @@ import {
 } from '@o-industrial/common/eac';
 import { ConnectionInspector } from '../../../../../apps/components/organisms/inspectors/ConnectionInspector.tsx';
 import ConnectionNodeRenderer from '../../../../../apps/components/organisms/renderers/ConnectionNodeRenderer.tsx';
+import { DataConnectionStats } from '../../../types/nodes/connections/DataConnectionStats.ts';
 
 /**
  * Capability manager for workspace-scoped Data Connections.
@@ -229,5 +230,23 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
 
   protected override getRenderer() {
     return ConnectionNodeRenderer;
+  }
+
+  protected override async getStats(
+    type: string,
+    id: string,
+    context: EaCNodeCapabilityContext
+  ): Promise<DataConnectionStats> {
+    const stats = await super.getStats(type, id, context);
+
+    return {
+      ...stats,
+      connectionInfo: {
+        BaseURL: 'https://api.mock.local',
+        Method: 'POST',
+        AuthType: 'SAS Token',
+        Status: 'Healthy',
+      },
+    };
   }
 }

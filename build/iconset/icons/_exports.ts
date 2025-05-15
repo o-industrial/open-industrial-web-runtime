@@ -1,5 +1,6 @@
 export * from "./icon.deps.ts"
 export * from "./AgentIcon.tsx"
+export * from "./AppIcon.tsx"
 export * from "./CompositeSchemaIcon.tsx"
 export * from "./ConnectionIcon.tsx"
 export * from "./DeviceIcon.tsx"
