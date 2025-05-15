@@ -21,7 +21,6 @@ import {
 } from '@o-industrial/common/types';
 import { EaCEnterpriseDetails, EaCVertexDetails } from '@fathym/eac';
 
-import { EaCNodeInspectorManager } from './eac/EaCNodeInspectorManager.ts';
 import { EaCDiffManager } from './eac/EaCDiffManager.ts';
 import { WorkspaceSummary } from '../../types/WorkspaceSummary.ts';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
@@ -217,10 +216,7 @@ export class EaCManager {
 
     this.scope = scope;
 
-    const capabilities = new EaCCapabilitiesManager(
-      scope,
-      new EaCNodeInspectorManager(this.graph, () => this.GetEaC())
-    );
+    const capabilities = new EaCCapabilitiesManager(scope);
 
     switch (scope) {
       case 'workspace': {

@@ -5,8 +5,6 @@ import { NodeScopeTypes } from '../../types/graph/NodeScopeTypes.ts';
 import { FlowGraphEdge } from '../../types/graph/FlowGraphEdge.ts';
 import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
 
-import { EaCNodeInspectorManager } from './EaCNodeInspectorManager.ts';
-
 import {
   EaCNodeCapabilityAsCode,
   EaCNodeCapabilityContext,
@@ -34,8 +32,7 @@ export class EaCCapabilitiesManager {
   protected capabilities: EaCNodeCapabilityManager[] = [];
 
   constructor(
-    protected scope: NodeScopeTypes,
-    protected inspector: EaCNodeInspectorManager
+    protected scope: NodeScopeTypes
   ) {
     // Register capability implementations by scope
     if (scope === 'surface') {
