@@ -20,6 +20,8 @@ import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
 import { SurfaceInspector } from '../../../../../apps/components/organisms/inspectors/SurfaceInspector.tsx';
 import SurfaceNodeRenderer from '../../../../../apps/components/organisms/renderers/SurfaceNodeRenderer.tsx';
 import { SurfaceStats } from '../../../types/nodes/surfaces/SurfaceStats.ts';
+import { WorkspaceManager } from '../../WorkspaceManager.ts';
+import { SurfaceEventRouter } from '../../node-events/SurfaceEventRouter.ts';
 
 /**
  * Capability manager for root-level surfaces (in workspace scope).
@@ -197,6 +199,10 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
     };
   }
 
+  protected override getEventRouter(workspace: WorkspaceManager) {
+    return new SurfaceEventRouter(workspace);
+  }
+
   protected override getInspector() {
     return SurfaceInspector;
   }
@@ -208,7 +214,7 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
   protected override getRenderer() {
     return EaCSurfaceNodeCapabilityManager.renderer;
   }
-  
+
   protected override async getStats(
     type: string,
     id: string,

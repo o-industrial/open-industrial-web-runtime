@@ -20,6 +20,8 @@ import { EaCSurfaceNodeCapabilityManager } from './capabilities/EaCSurfaceNodeCa
 import { EaCSurfaceSchemaNodeCapabilityManager } from './capabilities/EaCSurfaceSchemaNodeCapabilityManager.ts';
 import { Position } from '@o-industrial/common/eac';
 import { NodePreset } from '../../types/react/NodePreset.ts';
+import { WorkspaceManager } from '../WorkspaceManager.ts';
+import { NodeEventRouter } from '../node-events/NodeEventRouter.ts';
 
 /**
  * Dispatcher and registry for node capability managers, scoped to either workspace or surface.
@@ -188,6 +190,18 @@ export class EaCCapabilitiesManager {
     node: FlowGraphNode
   ): EaCNodeCapabilityManager | undefined {
     return this.capabilities.find((cap) => cap.Matches(node));
+  }
+
+  /**
+   * Returns the NodeEventRouter for a given node type (if any).
+   */
+  public GetEventRouterForType(
+    type: string,
+    workspace: WorkspaceManager
+  ): NodeEventRouter | undefined {
+    return this.GetCapabilityFor({ ID: '', Type: type })?.GetEventRouter(
+      workspace
+    );
   }
 
   public GetPresets(): Record<string, NodePreset> {

@@ -12,6 +12,11 @@ import { EaCNodeCapabilityPatch } from '../../../types/nodes/EaCNodeCapabilityPa
 import { EaCNodeCapabilityAsCode } from '../../../types/nodes/EaCNodeCapabilityAsCode.ts';
 import { EaCNodeCapabilityContext } from '../../../types/nodes/EaCNodeCapabilityContext.ts';
 import { NodePreset } from '../../../types/react/NodePreset.ts';
+import {
+  NodeEvent,
+  NodeEventRouter,
+} from '../../node-events/NodeEventRouter.ts';
+import { WorkspaceManager } from '../../WorkspaceManager.ts';
 
 /**
  * Abstract base class for managing scoped node capabilities in the EaC model.
@@ -139,7 +144,17 @@ export abstract class EaCNodeCapabilityManager<
   public GetRenderer(): ComponentType | undefined {
     return this.getRenderer?.();
   }
-  
+
+  /**
+   * Returns the event router for this capability’s node type, if any.
+   * Subclasses should override `getEventRouter` to provide scoped behavior.
+   */
+  public GetEventRouter(
+    workspace: WorkspaceManager
+  ): NodeEventRouter | undefined {
+    return this.getEventRouter?.(workspace);
+  }
+
   /**
    * Returns stats for the given node ID, scoped to this capability.
    * Default implementation provides a rolling impulseRates buffer.
@@ -260,6 +275,11 @@ export abstract class EaCNodeCapabilityManager<
       impulseRates: [...buffer],
     });
   }
+
+  /**
+   * Optional override to return the NodeEventRouter for this node type.
+   */
+  protected getEventRouter?(workspace: WorkspaceManager): NodeEventRouter;
 
   // ---------------------------------------------------------------------
   // Shared utility helpers
