@@ -7,6 +7,8 @@ import {
   NodeChange,
   XYPosition,
 } from 'reactflow';
+import { merge } from '@fathym/common';
+import { EaCEnterpriseDetails, EaCVertexDetails } from '@fathym/eac';
 import { EaCStatusProcessingTypes } from '@fathym/eac/steward/status';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 
@@ -23,13 +25,11 @@ import { StatManager } from './StatManager.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
 import { HistoryManager } from './HistoryManager.ts';
 import { WorkspaceSummary } from '../../types/WorkspaceSummary.ts';
-import { EaCEnterpriseDetails, EaCVertexDetails } from '@fathym/eac';
 import { TeamMember } from '../../types/TeamMember.ts';
 import { TeamManager } from './TeamManager.ts';
 import { NodeEventManager } from './NodeEventManager.ts';
 import { IntentTypes } from '@o-industrial/common/types';
 import { BreadcrumbPart } from '../../../apps/components/molecules/BreadcrumbBar.tsx';
-import { merge } from '@fathym/common';
 import { InspectorCommonProps } from '../types/nodes/InspectorCommonProps.ts';
 
 export class WorkspaceManager {
@@ -244,68 +244,71 @@ export class WorkspaceManager {
   public UseInspector() {
     const { selected } = this.UseSelection();
     const selectedId = selected?.id;
-  
+
     const [details, setDetails] = useState<EaCVertexDetails>({});
     const [enabled, setEnabled] = useState<boolean>(false);
-  
-    const [inspectorProps, setInspectorProps] =
-      useState<InspectorCommonProps | undefined>();
-  
+
+    const [inspectorProps, setInspectorProps] = useState<
+      InspectorCommonProps | undefined
+    >();
+
     const handleDetailsChanged = useCallback(
       (next: Partial<EaCVertexDetails>) => {
         setDetails((prev): EaCVertexDetails => {
           const merged = merge<EaCVertexDetails>(prev, next);
-  
+
           if (selectedId) {
             this.EaC.UpdateNodePatch(selectedId, { Details: merged });
             console.log(`🟢 Live-synced EaC details for node ${selectedId}`);
           }
-  
+
           return merged;
         });
       },
       [selectedId]
     );
-  
+
     const handleToggleEnabled = useCallback(
       (val: boolean) => {
         if (selectedId) {
           this.EaC.UpdateNodePatch(selectedId, {
             Metadata: { Enabled: val },
           });
-  
-          console.log(`🟡 Toggled enabled state for node ${selectedId} → ${val}`);
+
+          console.log(
+            `🟡 Toggled enabled state for node ${selectedId} → ${val}`
+          );
           setEnabled(val);
         }
       },
       [selectedId]
     );
-  
+
     const handleDeleteNode = useCallback(() => {
       if (!selectedId) return;
-  
+
       console.log(`🗑️ Deleting node ${selectedId}`);
       this.EaC.DeleteNode(selectedId);
       this.Selection.ClearSelection();
     }, [selectedId]);
-  
+
     useEffect(() => {
       if (!selectedId) return;
-  
+
       const code = this.EaC.GetNodeAsCode(selectedId);
       setDetails({ ...(code?.Details ?? {}) });
       setEnabled(code?.Metadata?.Enabled ?? false);
     }, [selectedId]);
-  
+
     useEffect(() => {
       if (!selected) {
         setInspectorProps(undefined);
         return;
       }
-  
+
       const presetConfig =
         this.Presets?.GetConfigForType?.(selected.id, selected.type!) ?? {};
-  
+
       setInspectorProps({
         config: presetConfig,
         details,
@@ -315,15 +318,23 @@ export class WorkspaceManager {
         onDetailsChanged: handleDetailsChanged,
         onToggleEnabled: handleToggleEnabled,
       });
-    }, [selected, selectedId, details, enabled, handleDeleteNode, handleDetailsChanged, handleToggleEnabled]);
-  
+    }, [
+      selected,
+      selectedId,
+      details,
+      enabled,
+      handleDeleteNode,
+      handleDetailsChanged,
+      handleToggleEnabled,
+    ]);
+
     return {
       selected,
       selectedId,
       inspectorProps,
     };
   }
-  
+
   public UseInspectorSettings() {
     const { selected } = this.UseSelection();
     const [settings, setSettings] = useState<Partial<FlowNodeData>>({});
