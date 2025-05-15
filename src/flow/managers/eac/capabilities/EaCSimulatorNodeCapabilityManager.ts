@@ -42,9 +42,7 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
     target: FlowGraphNode,
     ctx: EaCNodeCapabilityContext
   ): Partial<OpenIndustrialEaC> | null {
-    debugger;
-    if (source.Type !== 'simulator' || target.Type !== 'connection')
-      return null;
+    if (source.Type !== 'simulator' || target.Type !== 'connection') return null;
 
     const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
     const existing = eac.DataConnections?.[target.ID]?.SimulatorLookup;
@@ -56,6 +54,34 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
         [target.ID]: {
           ...eac.DataConnections?.[target.ID],
           SimulatorLookup: source.ID,
+        },
+      },
+    };
+  }
+
+  protected override buildDeletePatch(
+    node: FlowGraphNode
+  ): NullableArrayOrObject<OpenIndustrialEaC> {
+    return this.wrapDeletePatch('Simulators', node.ID);
+  }
+
+  protected override buildDisconnectionPatch(
+    source: FlowGraphNode,
+    target: FlowGraphNode,
+    ctx: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> | null {
+    if (source.Type !== 'simulator' || target.Type !== 'connection') return null;
+
+    const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
+    const conn = eac.DataConnections?.[target.ID];
+
+    if (!conn || conn.SimulatorLookup !== source.ID) return null;
+
+    return {
+      DataConnections: {
+        [target.ID]: {
+          ...conn,
+          SimulatorLookup: undefined,
         },
       },
     };
@@ -111,11 +137,5 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
         ),
       },
     };
-  }
-
-  protected override buildDeletePatch(
-    node: FlowGraphNode
-  ): NullableArrayOrObject<OpenIndustrialEaC> {
-    return this.wrapDeletePatch('Simulators', node.ID);
   }
 }

@@ -31,9 +31,7 @@ export class EaCCapabilitiesManager {
    */
   protected capabilities: EaCNodeCapabilityManager[] = [];
 
-  constructor(
-    protected scope: NodeScopeTypes
-  ) {
+  constructor(protected scope: NodeScopeTypes) {
     // Register capability implementations by scope
     if (scope === 'surface') {
       this.capabilities = [
@@ -101,6 +99,23 @@ export class EaCCapabilitiesManager {
     context: EaCNodeCapabilityContext
   ): NullableArrayOrObject<OpenIndustrialEaC> | null {
     return this.GetCapabilityFor(node)?.BuildDeletePatch(node, context) ?? null;
+  }
+
+  /**
+   * Generates a patch for deleting a connection (edge) between two nodes.
+   */
+  public BuildDisconnectionPatch(
+    source: FlowGraphNode,
+    target: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> | null {
+    return (
+      this.GetCapabilityFor(source)?.BuildDisconnectionPatch?.(
+        source,
+        target,
+        context
+      ) ?? null
+    );
   }
 
   /**

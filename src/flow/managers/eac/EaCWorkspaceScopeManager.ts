@@ -105,61 +105,6 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
     return partial;
   }
 
-  public RemoveConnectionEdge(
-    edgeId: string
-  ): Partial<OpenIndustrialEaC> | null {
-    const wks = this.getEaC();
-    const [source, target] = edgeId.split('->');
-
-    const src = this.findNode(source);
-    const tgt = this.findNode(target);
-    if (!src || !tgt) return null;
-
-    let partial: Partial<OpenIndustrialEaC> | null = null;
-
-    if (src.Type === 'simulator' && tgt.Type === 'connection') {
-      if (wks.DataConnections?.[tgt.ID]?.SimulatorLookup === src.ID) {
-        partial = {
-          DataConnections: {
-            [tgt.ID]: {
-              ...wks.DataConnections?.[tgt.ID],
-              SimulatorLookup: undefined,
-            },
-          },
-        };
-      }
-    } else if (src.Type === 'connection' && tgt.Type === 'surface') {
-      const surface = wks.Surfaces?.[tgt.ID];
-      if (surface?.DataConnections?.[src.ID]) {
-        const updatedConnections = { ...surface.DataConnections };
-        delete updatedConnections[src.ID];
-
-        partial = {
-          Surfaces: {
-            [tgt.ID]: {
-              ...surface,
-              DataConnections: updatedConnections,
-            },
-          },
-        };
-      }
-    } else if (src.Type === 'surface' && tgt.Type === 'surface') {
-      const surface = wks.Surfaces?.[tgt.ID];
-      if (surface?.ParentSurfaceLookup === src.ID) {
-        partial = {
-          Surfaces: {
-            [tgt.ID]: {
-              ...surface,
-              ParentSurfaceLookup: undefined,
-            },
-          },
-        };
-      }
-    }
-
-    return partial;
-  }
-
   public UpdateConnections(
     _changes: EdgeChange[],
     _updated: Edge[]

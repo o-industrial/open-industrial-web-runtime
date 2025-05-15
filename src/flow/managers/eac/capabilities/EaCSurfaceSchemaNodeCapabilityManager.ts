@@ -98,6 +98,70 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
     return null;
   }
 
+  protected override buildDeletePatch(
+    node: FlowGraphNode
+  ): NullableArrayOrObject<OpenIndustrialEaC> {
+    const [surfaceId, schemaId] = this.extractCompoundIDs(node);
+
+    return {
+      Surfaces: {
+        [surfaceId]: {
+          Schemas: {
+            [schemaId]: null,
+          },
+        },
+      },
+    } as unknown as NullableArrayOrObject<OpenIndustrialEaC>;
+  }
+
+  protected override buildDisconnectionPatch(
+    source: FlowGraphNode,
+    target: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> | null {
+    const eac = context.GetEaC() as EverythingAsCodeOIWorkspace;
+  
+    // Case: schema → composite-schema
+    if (source.Type?.includes('schema') && target.Type === 'composite-schema') {
+      const comp = eac.Schemas?.[target.ID];
+      if (!comp) return null;
+  
+      const compDetails = comp.Details as EaCCompositeSchemaDetails;
+      if (!compDetails.SchemaJoins?.[source.ID]) return null;
+  
+      const updated = { ...compDetails.SchemaJoins };
+      delete updated[source.ID];
+  
+      return {
+        Schemas: {
+          [target.ID]: {
+            ...comp,
+            Details: {
+              ...compDetails,
+              SchemaJoins: updated,
+            },
+          },
+        },
+      };
+    }
+  
+    // Case: agent → schema (remove Schema ref)
+    if (source.Type === 'agent' && target.Type?.includes('schema')) {
+      const agent = eac.Agents?.[source.ID];
+      if (!agent || agent.Schema?.SchemaLookup !== target.ID) return null;
+  
+      const { Schema, ...rest } = agent;
+  
+      return {
+        Agents: {
+          [source.ID]: rest,
+        },
+      };
+    }
+  
+    return null;
+  }
+  
   protected override buildEdgesForNode(
     node: FlowGraphNode,
     context: EaCNodeCapabilityContext
@@ -222,21 +286,5 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
     }
 
     return patch;
-  }
-
-  protected override buildDeletePatch(
-    node: FlowGraphNode
-  ): NullableArrayOrObject<OpenIndustrialEaC> {
-    const [surfaceId, schemaId] = this.extractCompoundIDs(node);
-
-    return {
-      Surfaces: {
-        [surfaceId]: {
-          Schemas: {
-            [schemaId]: null,
-          },
-        },
-      },
-    } as unknown as NullableArrayOrObject<OpenIndustrialEaC>;
   }
 }

@@ -83,6 +83,56 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
     return null;
   }
 
+  protected override buildDeletePatch(
+    node: FlowGraphNode
+  ): NullableArrayOrObject<OpenIndustrialEaC> {
+    return this.wrapDeletePatch('DataConnections', node.ID);
+  }
+
+  protected override buildDisconnectionPatch(
+    source: FlowGraphNode,
+    target: FlowGraphNode,
+    ctx: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> | null {
+    const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
+
+    // simulator → connection
+    if (source.Type === 'simulator' && target.Type === 'connection') {
+      const existing = eac.DataConnections?.[target.ID]?.SimulatorLookup;
+
+      if (existing === source.ID) {
+        return {
+          DataConnections: {
+            [target.ID]: {
+              ...eac.DataConnections?.[target.ID],
+              SimulatorLookup: undefined,
+            },
+          },
+        };
+      }
+    }
+
+    // connection → surface
+    if (source.Type === 'connection' && target.Type === 'surface') {
+      const surface = eac.Surfaces?.[target.ID];
+      if (surface?.DataConnections?.[source.ID]) {
+        const updatedConnections = { ...surface.DataConnections };
+        delete updatedConnections[source.ID];
+
+        return {
+          Surfaces: {
+            [target.ID]: {
+              ...surface,
+              DataConnections: updatedConnections,
+            },
+          },
+        };
+      }
+    }
+
+    return null;
+  }
+
   protected override buildEdgesForNode(
     node: FlowGraphNode,
     ctx: EaCNodeCapabilityContext
@@ -132,11 +182,5 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
         ),
       },
     };
-  }
-
-  protected override buildDeletePatch(
-    node: FlowGraphNode
-  ): NullableArrayOrObject<OpenIndustrialEaC> {
-    return this.wrapDeletePatch('DataConnections', node.ID);
   }
 }

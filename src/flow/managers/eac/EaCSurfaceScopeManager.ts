@@ -117,57 +117,6 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
       .Edges.some((e) => e.Source === source && e.Target === target);
   }
 
-  public RemoveConnectionEdge(
-    edgeId: string
-  ): Partial<OpenIndustrialEaC> | null {
-    const wks = this.getEaC();
-    const [source, target] = edgeId.split('->');
-    const src = this.findNode(source);
-    const tgt = this.findNode(target);
-    if (!src || !tgt) return null;
-
-    // -- Remove schema from composite join
-    if (src.Type?.includes('schema') && tgt.Type === 'composite-schema') {
-      const comp = wks.Schemas?.[tgt.ID];
-      if (!comp) return null;
-
-      const compDetails = comp.Details as EaCCompositeSchemaDetails;
-      if (!compDetails.SchemaJoins?.[src.ID]) return null;
-
-      const updated = { ...compDetails.SchemaJoins };
-      delete updated[src.ID];
-
-      return {
-        Schemas: {
-          [tgt.ID]: {
-            ...comp,
-            Details: {
-              ...compDetails,
-              SchemaJoins: updated,
-            },
-          },
-        },
-      };
-    }
-
-    // -- Remove agent schema connection
-    if (src.Type === 'agent' && tgt.Type?.includes('schema')) {
-      const agent = wks.Agents?.[src.ID];
-      if (!agent || agent.Schema?.SchemaLookup !== tgt.ID) return null;
-
-      // Remove Schema block entirely (since it’s required, this is a partial update)
-      const { Schema, ...rest } = agent;
-
-      return {
-        Agents: {
-          [src.ID]: rest,
-        },
-      };
-    }
-
-    return null;
-  }
-
   public UpdateConnections(
     changes: EdgeChange[],
     edges: Edge[]

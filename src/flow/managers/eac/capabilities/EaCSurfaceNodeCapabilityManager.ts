@@ -61,6 +61,38 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
     return null;
   }
 
+  protected override buildDeletePatch(
+    node: FlowGraphNode
+  ): NullableArrayOrObject<OpenIndustrialEaC> {
+    return this.wrapDeletePatch('Surfaces', node.ID);
+  }
+
+  protected override buildDisconnectionPatch(
+    source: FlowGraphNode,
+    target: FlowGraphNode,
+    ctx: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> | null {
+    const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
+
+    // Remove parent-child surface relationship
+    if (source.Type === 'surface' && target.Type === 'surface') {
+      const targetSurface = eac.Surfaces?.[target.ID];
+
+      if (targetSurface?.ParentSurfaceLookup === source.ID) {
+        return {
+          Surfaces: {
+            [target.ID]: {
+              ...targetSurface,
+              ParentSurfaceLookup: undefined,
+            },
+          },
+        };
+      }
+    }
+
+    return null;
+  }
+
   protected override buildEdgesForNode(
     node: FlowGraphNode,
     ctx: EaCNodeCapabilityContext
@@ -127,11 +159,5 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
         ),
       },
     };
-  }
-
-  protected override buildDeletePatch(
-    node: FlowGraphNode
-  ): NullableArrayOrObject<OpenIndustrialEaC> {
-    return this.wrapDeletePatch('Surfaces', node.ID);
   }
 }

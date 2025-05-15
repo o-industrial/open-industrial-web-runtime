@@ -1,6 +1,7 @@
 import { OpenIndustrialEaC } from '@o-industrial/common/types';
 import {
   EaCAgentDetails,
+  EaCCompositeSchemaDetails,
   SurfaceAgentSettings,
 } from '@o-industrial/common/eac';
 import { NullableArrayOrObject } from '@fathym/common';
@@ -69,6 +70,44 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
     }
 
     return null;
+  }
+
+  protected override buildDisconnectionPatch(
+    source: FlowGraphNode,
+    target: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> | null {
+    if (source.Type !== 'agent' || !target.Type?.includes('schema'))
+      return null;
+
+    const eac = context.GetEaC();
+    const agent = eac.Agents?.[source.ID];
+
+    if (!agent || agent.Schema?.SchemaLookup !== target.ID) return null;
+
+    const { Schema, ...rest } = agent;
+
+    return {
+      Agents: {
+        [source.ID]: rest,
+      },
+    };
+  }
+
+  protected override buildDeletePatch(
+    node: FlowGraphNode
+  ): NullableArrayOrObject<OpenIndustrialEaC> {
+    const [surfaceId, agentId] = this.extractCompoundIDs(node);
+
+    return {
+      Surfaces: {
+        [surfaceId]: {
+          Agents: {
+            [agentId]: null,
+          },
+        },
+      },
+    } as unknown as NullableArrayOrObject<OpenIndustrialEaC>;
   }
 
   protected override buildEdgesForNode(
@@ -163,21 +202,5 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
     }
 
     return patch;
-  }
-
-  protected override buildDeletePatch(
-    node: FlowGraphNode
-  ): NullableArrayOrObject<OpenIndustrialEaC> {
-    const [surfaceId, agentId] = this.extractCompoundIDs(node);
-
-    return {
-      Surfaces: {
-        [surfaceId]: {
-          Agents: {
-            [agentId]: null,
-          },
-        },
-      },
-    } as unknown as NullableArrayOrObject<OpenIndustrialEaC>;
   }
 }

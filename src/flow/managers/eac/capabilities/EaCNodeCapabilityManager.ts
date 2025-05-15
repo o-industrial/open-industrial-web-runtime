@@ -1,6 +1,7 @@
 import { NullableArrayOrObject } from '@fathym/common';
 import { EaCVertexDetails } from '@fathym/eac';
 import { EaCFlowNodeMetadata } from '@o-industrial/common/eac';
+
 import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
 import { OpenIndustrialEaC } from '../../../../types/OpenIndustrialEaC.ts';
@@ -11,7 +12,7 @@ import { OpenIndustrialEaC } from '../../../../types/OpenIndustrialEaC.ts';
  * Implementations of this class define how a specific node type:
  * - Projects into the graph (`BuildNode`)
  * - Generates edges (`BuildEdgesForNode`)
- * - Computes patch mutations (`BuildUpdatePatch`, `BuildDeletePatch`, `BuildConnectionPatch`)
+ * - Computes patch mutations (`BuildUpdatePatch`, `BuildDeletePatch`, `BuildConnectionPatch`, `BuildDisconnectionPatch`)
  * - Extracts structured metadata and details (`GetAsCode`)
  */
 export abstract class EaCNodeCapabilityManager<
@@ -51,6 +52,17 @@ export abstract class EaCNodeCapabilityManager<
     context: EaCNodeCapabilityContext
   ): Partial<OpenIndustrialEaC> | null {
     return this.buildConnectionPatch?.(source, target, context) ?? null;
+  }
+
+  /**
+   * Generate a partial EaC patch representing a disconnection from source → target.
+   */
+  public BuildDisconnectionPatch(
+    source: FlowGraphNode,
+    target: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> | null {
+    return this.buildDisconnectionPatch?.(source, target, context) ?? null;
   }
 
   /**
@@ -128,9 +140,18 @@ export abstract class EaCNodeCapabilityManager<
   ): FlowGraphEdge[];
 
   /**
-   * Optional override for connection patch generation.
+   * Optional override for generating a patch that connects source → target.
    */
   protected abstract buildConnectionPatch?(
+    source: FlowGraphNode,
+    target: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> | null;
+
+  /**
+   * Optional override for generating a patch that disconnects source → target.
+   */
+  protected abstract buildDisconnectionPatch?(
     source: FlowGraphNode,
     target: FlowGraphNode,
     context: EaCNodeCapabilityContext

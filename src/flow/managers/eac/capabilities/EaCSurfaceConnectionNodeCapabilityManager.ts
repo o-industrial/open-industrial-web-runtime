@@ -78,6 +78,44 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
     };
   }
 
+  protected override buildDeletePatch(
+    node: FlowGraphNode
+  ): NullableArrayOrObject<OpenIndustrialEaC> {
+    const [surfaceId, connId] = this.extractCompoundIDs(node);
+
+    return {
+      Surfaces: {
+        [surfaceId]: {
+          DataConnections: {
+            [connId]: null,
+          },
+        },
+      },
+    } as unknown as NullableArrayOrObject<OpenIndustrialEaC>;
+  }
+
+  protected override buildDisconnectionPatch(
+    source: FlowGraphNode,
+    target: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> | null {
+    const eac = context.GetEaC() as EverythingAsCodeOIWorkspace;
+    const [_, connId] = this.extractCompoundIDs(source);
+
+    if (!target.Type?.includes('schema')) return null;
+
+    const schema = eac.Schemas?.[target.ID];
+    if (!schema || schema.DataConnection?.Lookup !== connId) return null;
+
+    const { DataConnection, ...rest } = schema;
+
+    return {
+      Schemas: {
+        [target.ID]: rest,
+      },
+    };
+  }
+
   protected override buildEdgesForNode(
     node: FlowGraphNode,
     context: EaCNodeCapabilityContext
@@ -156,21 +194,5 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
         },
       },
     };
-  }
-
-  protected override buildDeletePatch(
-    node: FlowGraphNode
-  ): NullableArrayOrObject<OpenIndustrialEaC> {
-    const [surfaceId, connId] = this.extractCompoundIDs(node);
-
-    return {
-      Surfaces: {
-        [surfaceId]: {
-          DataConnections: {
-            [connId]: null,
-          },
-        },
-      },
-    } as unknown as NullableArrayOrObject<OpenIndustrialEaC>;
   }
 }

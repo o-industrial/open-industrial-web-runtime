@@ -93,10 +93,23 @@ export abstract class EaCScopeManager {
     );
   }
 
-  public abstract RemoveConnectionEdge(
+  public RemoveConnectionEdge(
     edgeId: string
-  ): Partial<OpenIndustrialEaC> | null;
+  ): Partial<OpenIndustrialEaC> | null {
+    const [sourceId, targetId] = edgeId.split('->');
 
+    const src = this.findNode(sourceId);
+    const tgt = this.findNode(targetId);
+    
+    if (!src || !tgt) return null;
+  
+    return this.capabilities.BuildDisconnectionPatch(
+      src,
+      tgt,
+      this.getCapabilityContext()
+    );
+  }
+  
   public abstract UpdateConnections(
     changes: EdgeChange[],
     edges: Edge[]
