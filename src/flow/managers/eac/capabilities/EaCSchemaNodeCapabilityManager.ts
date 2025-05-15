@@ -21,7 +21,7 @@ export class EaCSchemaNodeCapabilityManager extends EaCNodeCapabilityManager {
     node: FlowGraphNode,
     ctx: EaCNodeCapabilityContext
   ): EaCNodeCapabilityAsCode | null {
-    const schema = ctx.getEaC().Schemas?.[node.ID];
+    const schema = ctx.GetEaC().Schemas?.[node.ID];
     if (!schema) return null;
     return {
       Metadata: schema.Metadata ?? {},

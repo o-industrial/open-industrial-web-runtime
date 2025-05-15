@@ -7,7 +7,7 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager 
   public Type = 'simulator';
 
   protected buildAsCode(node: FlowGraphNode, ctx: EaCNodeCapabilityContext): EaCNodeCapabilityAsCode | null {
-    const sim = ctx.getEaC().Simulators?.[node.ID];
+    const sim = ctx.GetEaC().Simulators?.[node.ID];
     if (!sim) return null;
     return {
       Metadata: sim.Metadata,

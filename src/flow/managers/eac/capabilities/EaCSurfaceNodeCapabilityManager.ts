@@ -7,7 +7,7 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
   public Type = 'surface';
 
   protected buildAsCode(node: FlowGraphNode, ctx: EaCNodeCapabilityContext): EaCNodeCapabilityAsCode | null {
-    const surf = ctx.getEaC().Surfaces?.[node.ID];
+    const surf = ctx.GetEaC().Surfaces?.[node.ID];
     if (!surf) return null;
     return {
       Metadata: surf.Metadata,

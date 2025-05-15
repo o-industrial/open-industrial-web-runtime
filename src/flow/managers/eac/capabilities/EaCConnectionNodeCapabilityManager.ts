@@ -15,7 +15,7 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
     node: FlowGraphNode,
     ctx: EaCNodeCapabilityContext
   ): EaCNodeCapabilityAsCode | null {
-    const conn = ctx.getEaC().DataConnections?.[node.ID];
+    const conn = ctx.GetEaC().DataConnections?.[node.ID];
     if (!conn) return null;
     return {
       Metadata: conn.Metadata,

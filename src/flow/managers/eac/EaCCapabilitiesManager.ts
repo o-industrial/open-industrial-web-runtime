@@ -17,19 +17,20 @@ import { EaCSchemaNodeCapabilityManager } from './capabilities/EaCSchemaNodeCapa
 import { EaCSimulatorNodeCapabilityManager } from './capabilities/EaCSimulatorNodeCapabilityManager.ts';
 import { EaCConnectionNodeCapabilityManager } from './capabilities/EaCConnectionNodeCapabilityManager.ts';
 import { NullableArrayOrObject } from '@fathym/common';
+import { EaCNodeInspectorManager } from './EaCNodeInspectorManager.ts';
 
 export class EaCCapabilitiesManager {
   protected capabilities: EaCNodeCapabilityManager[] = [];
 
-  constructor() {
+  constructor(protected inspector: EaCNodeInspectorManager) {
     this.capabilities = [
-      new EaCSurfaceConnectionNodeCapabilityManager(),
-      new EaCSurfaceSchemaNodeCapabilityManager(),
-      new EaCSurfaceNodeCapabilityManager(),
-      new EaCAgentNodeCapabilityManager(),
-      new EaCSchemaNodeCapabilityManager(),
-      new EaCSimulatorNodeCapabilityManager(),
-      new EaCConnectionNodeCapabilityManager(),
+      // new EaCSurfaceConnectionNodeCapabilityManager(),
+      // new EaCSurfaceSchemaNodeCapabilityManager(),
+      // new EaCSurfaceNodeCapabilityManager(),
+      // new EaCAgentNodeCapabilityManager(),
+      // new EaCSchemaNodeCapabilityManager(),
+      // new EaCSimulatorNodeCapabilityManager(),
+      // new EaCConnectionNodeCapabilityManager(),
     ];
   }
 
@@ -41,7 +42,11 @@ export class EaCCapabilitiesManager {
     node: FlowGraphNode,
     context: EaCNodeCapabilityContext
   ): EaCNodeCapabilityAsCode | null {
-    return this.GetCapabilityFor(node)?.GetAsCode(node, context) ?? null;
+    const capability = this.GetCapabilityFor(node);
+    if (capability) return capability.GetAsCode(node, context);
+
+    // Fallback to inspector
+    return this.inspector.GetNodeAsCode(node.ID);
   }
 
   public BuildUpdatePatch(
@@ -49,13 +54,19 @@ export class EaCCapabilitiesManager {
     patch: EaCNodeCapabilityPatch,
     context: EaCNodeCapabilityContext
   ): Partial<OpenIndustrialEaC> | null {
-    return this.GetCapabilityFor(node)?.BuildUpdatePatch(node, patch, context) ?? null;
+    const capability = this.GetCapabilityFor(node);
+    if (capability) return capability.BuildUpdatePatch(node, patch, context);
+
+    return this.inspector.BuildPartialForNodeUpdate(node.ID, patch);
   }
 
   public BuildDeletePatch(
     node: FlowGraphNode,
     context: EaCNodeCapabilityContext
   ): NullableArrayOrObject<OpenIndustrialEaC> | null {
-    return this.GetCapabilityFor(node)?.BuildDeletePatch(node, context) ?? null;
+    const capability = this.GetCapabilityFor(node);
+    if (capability) return capability.BuildDeletePatch(node, context);
+
+    return this.inspector.BuildPartialForNodeDelete(node.ID);
   }
 }

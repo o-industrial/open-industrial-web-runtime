@@ -15,7 +15,7 @@ export class EaCAgentNodeCapabilityManager extends EaCNodeCapabilityManager {
     node: FlowGraphNode,
     context: EaCNodeCapabilityContext
   ): EaCNodeCapabilityAsCode | null {
-    const agent = context.getEaC().Agents?.[node.ID];
+    const agent = context.GetEaC().Agents?.[node.ID];
     if (!agent) return null;
     return {
       Metadata: agent.Metadata,

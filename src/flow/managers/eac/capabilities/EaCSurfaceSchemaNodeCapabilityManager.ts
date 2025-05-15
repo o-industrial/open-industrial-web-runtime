@@ -25,7 +25,7 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
     context: EaCNodeCapabilityContext
   ): EaCNodeCapabilityAsCode<SurfaceSchemaNodeDetails> | null {
     const [surfaceId, schemaId] = this.extractCompoundIDs(node);
-    const eac = context.getEaC();
+    const eac = context.GetEaC();
 
     const global = eac.Schemas?.[schemaId];
     const local = eac.Surfaces?.[surfaceId]?.Schemas?.[schemaId];

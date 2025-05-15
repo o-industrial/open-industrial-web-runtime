@@ -1,5 +1,5 @@
 import { EaCScopeManager } from './EaCScopeManager.ts';
-import { Edge, EdgeChange, Node } from 'reactflow';
+import { Edge, EdgeChange } from 'reactflow';
 import { GraphStateManager } from '../GraphStateManager.ts';
 
 import {
@@ -13,17 +13,18 @@ import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../../types/graph/FlowGraphEdge.ts';
 import { FlowPosition } from '../../types/graph/FlowPosition.ts';
 import { PresetManager } from '../PresetManager.ts';
-import { EaCNodeInspectorManager } from './EaCNodeInspectorManager.ts';
-import { FlowNodeData } from '../../types/react/FlowNodeData.ts';
+import { EaCNodeCapabilityContext } from './capabilities/EaCNodeCapabilityManager.ts';
+import { EaCCapabilitiesManager } from './EaCCapabilitiesManager.ts';
 
 export class EaCSurfaceScopeManager extends EaCScopeManager {
   constructor(
     graph: GraphStateManager,
     presets: PresetManager,
-    inspector: EaCNodeInspectorManager,
+    capabilities: EaCCapabilitiesManager,
+    getEaC: () => OpenIndustrialEaC,
     protected surfaceLookup: string
   ) {
-    super(graph, presets, inspector);
+    super(graph, presets, capabilities, getEaC);
   }
 
   public BuildGraph(eac: OpenIndustrialEaC): FlowGraph {
@@ -165,8 +166,8 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
     target: string
   ): Partial<OpenIndustrialEaC> | null {
     const wks = eac as EverythingAsCodeOIWorkspace;
-    const src = this.graph.GetGraph().Nodes.find((n) => n.ID === source);
-    const tgt = this.graph.GetGraph().Nodes.find((n) => n.ID === target);
+    const src = this.findNode(source);
+    const tgt = this.findNode(target);
     if (!src || !tgt) return null;
 
     if (src.Type?.includes('schema') && tgt.Type === 'composite-schema') {
@@ -206,7 +207,6 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
       };
     }
 
-    debugger;
     if (src.Type === 'surface->connection' && tgt.Type?.includes('schema')) {
       const schema = wks.Schemas?.[tgt.ID];
       if (!schema) return null;
@@ -268,8 +268,8 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
   ): Partial<OpenIndustrialEaC> | null {
     const wks = eac as EverythingAsCodeOIWorkspace;
     const [source, target] = edgeId.split('->');
-    const src = this.graph.GetGraph().Nodes.find((n) => n.ID === source);
-    const tgt = this.graph.GetGraph().Nodes.find((n) => n.ID === target);
+    const src = this.findNode(source);
+    const tgt = this.findNode(target);
     if (!src || !tgt) return null;
 
     // -- Remove schema from composite join
@@ -348,11 +348,12 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
     return null;
   }
 
-  protected override findAsCode(node: Node<FlowNodeData>) {
-    return this.inspector.FindAsCode({
-      ID: node.id,
-      Type: node.type!,
+  protected override getCapabilityContext(): EaCNodeCapabilityContext {
+    const ctx = super.getCapabilityContext();
+
+    return {
+      ...ctx,
       SurfaceLookup: this.surfaceLookup,
-    });
+    };
   }
 }

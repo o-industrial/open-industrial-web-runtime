@@ -32,15 +32,18 @@ import { EaCScopeManager } from './eac/EaCScopeManager.ts';
 import { EaCSurfaceScopeManager } from './eac/EaCSurfaceScopeManager.ts';
 import { EaCProposalManager } from './eac/EaCProposalManager.ts';
 import { ProposalOverlayMode } from '../types/graph/ProposalOverlayMode.ts';
+import { EaCCapabilitiesManager } from './eac/EaCCapabilitiesManager.ts';
 
 export class EaCManager {
   protected deleteEaC: NullableArrayOrObject<OpenIndustrialEaC> = {};
   protected changeListeners = new Set<() => void>();
 
   protected diff: EaCDiffManager;
-  protected inspector: EaCNodeInspectorManager;
+  protected capabilities: EaCCapabilitiesManager;
   protected proposals: EaCProposalManager;
   protected scopeMgr!: EaCScopeManager;
+
+  protected getEaC: () => OpenIndustrialEaC;
 
   protected overlayMode: ProposalOverlayMode = 'pending';
 
@@ -52,9 +55,13 @@ export class EaCManager {
     protected presets: PresetManager,
     protected history: HistoryManager
   ) {
+    this.getEaC = () => this.eac;
+    
     this.diff = new EaCDiffManager(history, this.emitEaCChanged.bind(this));
 
-    this.inspector = new EaCNodeInspectorManager(graph, () => this.eac);
+    this.capabilities = new EaCCapabilitiesManager(
+      new EaCNodeInspectorManager(graph, this.getEaC)
+    );
 
     this.proposals = new EaCProposalManager(oiSvc, this);
 
@@ -163,7 +170,7 @@ export class EaCManager {
 
   public InstallSimulators(simDefs: SimulatorDefinition[]): void {
     const partial = this.scopeMgr.InstallSimulators(simDefs);
-  
+
     if (partial) {
       this.MergePartial(partial);
     }
@@ -236,7 +243,8 @@ export class EaCManager {
         this.scopeMgr = new EaCWorkspaceScopeManager(
           this.graph,
           this.presets,
-          this.inspector
+          this.capabilities,
+          this.getEaC
         );
         break;
       }
@@ -244,11 +252,12 @@ export class EaCManager {
       case 'surface': {
         if (!lookup)
           throw new Error(`Lookup must be defined for scope: ${scope}`);
-        
+
         this.scopeMgr = new EaCSurfaceScopeManager(
           this.graph,
           this.presets,
-          this.inspector,
+          this.capabilities,
+          this.getEaC,
           lookup
         );
         break;

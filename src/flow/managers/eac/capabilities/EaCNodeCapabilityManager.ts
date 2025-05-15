@@ -82,20 +82,23 @@ export abstract class EaCNodeCapabilityManager<
 }
 
 export type EaCNodeCapabilityContext = {
-  surfaceLookup?: string;
-  getEaC: () => OpenIndustrialEaC;
+  GetEaC: () => OpenIndustrialEaC;
+
+  SurfaceLookup?: string;
 };
 
 export type EaCNodeCapabilityAsCode<
 TDetails extends EaCVertexDetails = EaCVertexDetails
 > = {
-  Metadata?: EaCFlowNodeMetadata;
   Details: TDetails;
+
+  Metadata?: EaCFlowNodeMetadata;
 };
 
 export type EaCNodeCapabilityPatch<
   TDetails extends EaCVertexDetails = EaCVertexDetails
 > = {
-  Metadata?: EaCFlowNodeMetadata;
   Details?: TDetails;
+  
+  Metadata?: EaCFlowNodeMetadata;
 };

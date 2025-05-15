@@ -10,57 +10,57 @@ import { FlowGraph } from '../../types/graph/FlowGraph.ts';
 import { GraphStateManager } from '../GraphStateManager.ts';
 import { FlowPosition } from '../../types/graph/FlowPosition.ts';
 import { PresetManager } from '../PresetManager.ts';
-import { EaCNodeInspectorManager } from './EaCNodeInspectorManager.ts';
 import { merge, NullableArrayOrObject } from '@fathym/common';
 import { FlowNodeData } from '../../types/react/FlowNodeData.ts';
 import { EaCFlowNodeMetadata } from '@o-industrial/common/eac';
 import { EaCVertexDetails } from '@fathym/eac';
 import { SimulatorDefinition } from '../SimulatorLibraryManager.ts';
 
+import {
+  EaCNodeCapabilityContext,
+  EaCNodeCapabilityPatch,
+} from './capabilities/EaCNodeCapabilityManager.ts';
+import { EaCCapabilitiesManager } from './EaCCapabilitiesManager.ts';
+import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
+
 /**
  * Abstract base for scoped EaC logic (workspace, surface, etc.).
- * Handles flow derivation and relationship management.
  */
 export abstract class EaCScopeManager {
   constructor(
     protected graph: GraphStateManager,
     protected presets: PresetManager,
-    protected inspector: EaCNodeInspectorManager
-  ) {}
+    protected capabilities: EaCCapabilitiesManager,
+    protected getEaC: () => OpenIndustrialEaC
+  ) { }
 
-  /**
-   * Build the graph (nodes + edges) for this scope.
-   */
   public abstract BuildGraph(eac: OpenIndustrialEaC): FlowGraph;
 
   public BuildPartialForNodeUpdate(
     id: string,
-    patch: Partial<{
-      Details: EaCVertexDetails;
-      Metadata: Partial<EaCFlowNodeMetadata>;
-    }>
+    patch: EaCNodeCapabilityPatch
   ): Partial<OpenIndustrialEaC> | null {
-    return this.inspector.BuildPartialForNodeUpdate(id, patch);
+    const node = this.findNode(id);
+    if (!node) return null;
+
+    return this.capabilities.BuildUpdatePatch(node, patch, this.getCapabilityContext());
   }
 
   public BuildPartialForNodeDelete(
     id: string
   ): NullableArrayOrObject<OpenIndustrialEaC> | null {
-    return this.inspector.BuildPartialForNodeDelete(id);
+    const node = this.findNode(id);
+    if (!node) return null;
+
+    return this.capabilities.BuildDeletePatch(node, this.getCapabilityContext());
   }
 
-  /**
-   * Construct a partial EaC update from a valid connection.
-   */
   public abstract CreateConnectionEdge(
     eac: OpenIndustrialEaC,
     source: string,
     target: string
   ): Partial<OpenIndustrialEaC> | null;
 
-  /**
-   * Construct a partial EaC update from a preset.
-   */
   public abstract CreatePartialEaCFromPreset(
     type: string,
     id: string,
@@ -71,12 +71,12 @@ export abstract class EaCScopeManager {
     Metadata?: EaCFlowNodeMetadata;
     Details: EaCVertexDetails;
   } | null {
-    return this.inspector.GetNodeAsCode(id);
+    const node = this.findNode(id);
+    if (!node) return null;
+
+    return this.capabilities.GetAsCode(node, this.getCapabilityContext());
   }
 
-  /**
-   * Check if an edge already exists between two nodes in the current graph.
-   */
   public abstract HasConnection(source: string, target: string): boolean;
 
   public InstallSimulators(
@@ -87,17 +87,11 @@ export abstract class EaCScopeManager {
     );
   }
 
-  /**
-   * Reverse an existing edge into a partial EaC delete/update payload.
-   */
   public abstract RemoveConnectionEdge(
     eac: OpenIndustrialEaC,
     edgeId: string
   ): Partial<OpenIndustrialEaC> | null;
 
-  /**
-   * Optionally implement edge diffing logic.
-   */
   public abstract UpdateConnections(
     changes: EdgeChange[],
     edges: Edge[],
@@ -117,21 +111,20 @@ export abstract class EaCScopeManager {
     for (const node of updated) {
       const pos = { X: node.position.x, Y: node.position.y };
       const asCode = this.findAsCode(node);
-
       if (!asCode) continue;
 
-      const prev = asCode.AsCode.Metadata?.Position;
+      const prev = asCode.Metadata?.Position;
       const changed = !prev || prev.X !== pos.X || prev.Y !== pos.Y;
       if (!changed) continue;
 
-      debugger;
-      const update = this.inspector.BuildPartialForNodeUpdate(node.id, {
-        Metadata: {
-          ...asCode.AsCode.Metadata,
-          Position: pos,
-        },
-      });
+      const patch: EaCNodeCapabilityPatch = {
+        Metadata: { ...asCode.Metadata, Position: pos },
+      };
 
+      const graphNode = this.findNode(node.id);
+      if (!graphNode) return null;
+
+      const update = this.capabilities.BuildUpdatePatch(graphNode, patch, this.getCapabilityContext());
       if (!update) continue;
 
       partial = merge(partial, update);
@@ -142,9 +135,19 @@ export abstract class EaCScopeManager {
   }
 
   protected findAsCode(node: Node<FlowNodeData>) {
-    return this.inspector.FindAsCode({
-      ID: node.id,
-      Type: node.type!,
-    });
+    const graphNode = this.findNode(node.id)!;
+    if (!node) return null;
+
+    return this.capabilities.GetAsCode(graphNode, this.getCapabilityContext());
+  }
+
+  protected findNode(id: string): FlowGraphNode | undefined {
+    return this.graph.GetGraph().Nodes.find((n) => n.ID === id);
+  }
+
+  protected getCapabilityContext(): EaCNodeCapabilityContext {
+    return {
+      GetEaC: this.getEaC,
+    };
   }
 }

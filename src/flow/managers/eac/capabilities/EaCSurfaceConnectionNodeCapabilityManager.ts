@@ -23,7 +23,7 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
     context: EaCNodeCapabilityContext
   ): EaCNodeCapabilityAsCode<SurfaceConnectionNodeDetails> | null {
     const [surfaceId, connId] = this.extractCompoundIDs(node);
-    const eac = context.getEaC();
+    const eac = context.GetEaC();
 
     const surface = eac.Surfaces?.[surfaceId];
     const conn = eac.DataConnections?.[connId];
