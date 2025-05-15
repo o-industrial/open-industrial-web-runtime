@@ -114,7 +114,7 @@ export abstract class EaCNodeCapabilityManager<
   /**
    * Optional override for building a node from ID.
    */
-  protected buildNode?(
+  protected abstract buildNode?(
     id: string,
     context: EaCNodeCapabilityContext
   ): FlowGraphNode | null;
@@ -122,7 +122,7 @@ export abstract class EaCNodeCapabilityManager<
   /**
    * Optional override for computing outbound edges.
    */
-  protected buildEdgesForNode?(
+  protected abstract buildEdgesForNode?(
     node: FlowGraphNode,
     context: EaCNodeCapabilityContext
   ): FlowGraphEdge[];
@@ -130,7 +130,7 @@ export abstract class EaCNodeCapabilityManager<
   /**
    * Optional override for connection patch generation.
    */
-  protected buildConnectionPatch?(
+  protected abstract buildConnectionPatch?(
     source: FlowGraphNode,
     target: FlowGraphNode,
     context: EaCNodeCapabilityContext

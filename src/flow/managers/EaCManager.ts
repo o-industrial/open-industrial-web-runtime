@@ -63,11 +63,7 @@ export class EaCManager {
     changes: NodeChange[],
     currentNodes: Node<FlowNodeData>[]
   ): void {
-    const partial = this.scopeMgr.UpdateNodesFromChanges(
-      changes,
-      currentNodes,
-      this.eac
-    );
+    const partial = this.scopeMgr.UpdateNodesFromChanges(changes, currentNodes);
 
     if (partial) {
       this.MergePartial(partial);
@@ -78,11 +74,7 @@ export class EaCManager {
     changes: EdgeChange[],
     currentEdges: Edge[]
   ): void {
-    const partial = this.scopeMgr.UpdateConnections(
-      changes,
-      currentEdges,
-      this.eac
-    );
+    const partial = this.scopeMgr.UpdateConnections(changes, currentEdges);
 
     if (partial) {
       this.MergePartial(partial);
@@ -102,11 +94,7 @@ export class EaCManager {
   }
 
   public CreateConnectionEdge(source: string, target: string): void {
-    const partial = this.scopeMgr.CreateConnectionEdge(
-      this.eac,
-      source,
-      target
-    );
+    const partial = this.scopeMgr.CreateConnectionEdge(source, target);
 
     if (partial) {
       this.MergePartial(partial);
@@ -152,7 +140,7 @@ export class EaCManager {
   }
 
   public GetEaC(): OpenIndustrialEaC {
-    return jsonMapSetClone(this.eac);
+    return this.getEaCWithProposals();
   }
 
   public HasConnection(source: string, target: string): boolean {
@@ -203,7 +191,7 @@ export class EaCManager {
   }
 
   public RemoveConnectionEdge(edgeId: string): void {
-    const partial = this.scopeMgr.RemoveConnectionEdge(this.eac, edgeId);
+    const partial = this.scopeMgr.RemoveConnectionEdge(edgeId);
 
     if (partial) {
       this.MergePartial(partial);
@@ -352,7 +340,7 @@ export class EaCManager {
   }
 
   protected reloadFromEaC(): void {
-    const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
+    const rebuilt = this.scopeMgr.BuildGraph();
 
     this.graph.LoadFromGraph(rebuilt);
 

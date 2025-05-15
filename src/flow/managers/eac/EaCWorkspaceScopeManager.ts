@@ -2,6 +2,7 @@ import { EaCScopeManager } from './EaCScopeManager.ts';
 import { FlowGraph } from '../../types/graph/FlowGraph.ts';
 import { FlowGraphEdge } from '../../types/graph/FlowGraphEdge.ts';
 import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
+
 import {
   EaCAzureDockerSimulatorDetails,
   EaCDataConnectionAsCode,
@@ -9,142 +10,67 @@ import {
   EverythingAsCodeOIWorkspace,
   SurfaceDataConnectionSettings,
 } from '@o-industrial/common/eac';
+
 import { Edge, EdgeChange } from 'reactflow';
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
 import { FlowPosition } from '../../types/graph/FlowPosition.ts';
 import { SimulatorDefinition } from '../SimulatorLibraryManager.ts';
 
-/**
- * Workspace-scoped logic handler for EaC state.
- * Converts the workspace EaC into a flow graph and defines connection logic.
- */
 export class EaCWorkspaceScopeManager extends EaCScopeManager {
-  public BuildGraph(eac: OpenIndustrialEaC): FlowGraph {
-    const wks = eac as EverythingAsCodeOIWorkspace;
+  public BuildGraph(): FlowGraph {
+    const ctx = this.getCapabilityContext();
 
+    const wks = this.getEaC();
     const nodes: FlowGraphNode[] = [];
     const edges: FlowGraphEdge[] = [];
 
-    // --- Data Connections
-    for (const [key, conn] of Object.entries(wks.DataConnections ?? {})) {
-      nodes.push({
-        ID: key,
-        Type: 'connection',
-        Label: conn.Details?.Name ?? key,
-        Metadata: conn.Metadata,
-        Details: conn.Details,
-      });
+    // --- DataConnections
+    for (const key of Object.keys(wks.DataConnections ?? {})) {
+      const node = this.capabilities.BuildNode(key, 'connection', ctx);
+      if (node) {
+        nodes.push(node);
+        edges.push(...this.capabilities.BuildEdgesForNode(node, ctx));
+      }
     }
 
     // --- Simulators
-    for (const [key, sim] of Object.entries(wks.Simulators ?? {})) {
-      nodes.push({
-        ID: key,
-        Type: 'simulator',
-        Label: sim.Details?.Name ?? key,
-        Metadata: sim.Metadata,
-        Details: sim.Details,
-      });
-
-      for (const [connKey, conn] of Object.entries(wks.DataConnections ?? {})) {
-        if (conn.SimulatorLookup === key) {
-          edges.push({
-            ID: `${key}->${connKey}`,
-            Source: key,
-            Target: connKey,
-            Label: 'simulates',
-          });
-        }
+    for (const key of Object.keys(wks.Simulators ?? {})) {
+      const node = this.capabilities.BuildNode(key, 'simulator', ctx);
+      if (node) {
+        nodes.push(node);
+        edges.push(...this.capabilities.BuildEdgesForNode(node, ctx));
       }
     }
 
-    // --- Root Surfaces Only
+    // --- Root-level Surfaces
     for (const [key, surf] of Object.entries(wks.Surfaces ?? {})) {
-      if (surf.ParentSurfaceLookup) continue; // ❌ Skip nested surfaces
+      if (surf.ParentSurfaceLookup) continue;
 
-      nodes.push({
-        ID: key,
-        Type: 'surface',
-        Label: surf.Details?.Name ?? key,
-        Metadata: surf.Metadata,
-        Details: surf.Details,
-      });
-
-      for (const connKey of Object.keys(surf.DataConnections ?? {})) {
-        edges.push({
-          ID: `${connKey}->${key}`,
-          Source: connKey,
-          Target: key,
-          Label: 'feeds',
-        });
+      const node = this.capabilities.BuildNode(key, 'surface', ctx);
+      if (node) {
+        nodes.push(node);
+        edges.push(...this.capabilities.BuildEdgesForNode(node, ctx));
       }
-
-      // ⚠️ Optional: could include edge to known children if needed
-      // but rendering of those will occur in surface scope
     }
 
     return { Nodes: nodes, Edges: edges };
   }
 
   public CreateConnectionEdge(
-    eac: OpenIndustrialEaC,
     source: string,
     target: string
   ): Partial<OpenIndustrialEaC> | null {
-    const wks = eac as EverythingAsCodeOIWorkspace;
-
+    debugger;
     const src = this.findNode(source);
     const tgt = this.findNode(target);
 
     if (!src || !tgt) return null;
 
-    let partial: Partial<EverythingAsCodeOIWorkspace> | null = null;
-
-    if (src.Type === 'simulator' && tgt.Type === 'connection') {
-      const existing = wks.DataConnections?.[tgt.ID]?.SimulatorLookup;
-      if (existing === src.ID) return null;
-
-      partial = {
-        DataConnections: {
-          [tgt.ID]: {
-            ...wks.DataConnections?.[tgt.ID],
-            SimulatorLookup: src.ID,
-          } as EaCDataConnectionAsCode,
-        },
-      };
-    } else if (src.Type === 'connection' && tgt.Type === 'surface') {
-      const connSet: Record<string, SurfaceDataConnectionSettings> = {
-        ...(wks.Surfaces?.[tgt.ID]?.DataConnections ?? {}),
-        [src.ID]: {
-          Metadata: {
-            Enabled: true,
-          },
-        },
-      };
-
-      partial = {
-        Surfaces: {
-          [tgt.ID]: {
-            ...wks.Surfaces?.[tgt.ID],
-            DataConnections: connSet,
-          } as EaCSurfaceAsCode,
-        },
-      };
-    } else if (src.Type === 'surface' && tgt.Type === 'surface') {
-      const existing = wks.Surfaces?.[tgt.ID]?.ParentSurfaceLookup;
-      if (existing === src.ID) return null;
-
-      partial = {
-        Surfaces: {
-          [tgt.ID]: {
-            ...wks.Surfaces?.[tgt.ID],
-            ParentSurfaceLookup: src.ID,
-          } as EaCSurfaceAsCode,
-        },
-      };
-    }
-
-    return partial;
+    return this.capabilities.BuildConnectionPatch(
+      src,
+      tgt,
+      this.getCapabilityContext()
+    );
   }
 
   public CreatePartialEaCFromPreset(
@@ -180,19 +106,16 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
   }
 
   public RemoveConnectionEdge(
-    eac: OpenIndustrialEaC,
     edgeId: string
   ): Partial<OpenIndustrialEaC> | null {
-    const wks = eac as EverythingAsCodeOIWorkspace;
-
+    const wks = this.getEaC();
     const [source, target] = edgeId.split('->');
 
     const src = this.findNode(source);
     const tgt = this.findNode(target);
-    
     if (!src || !tgt) return null;
 
-    let partial: Partial<EverythingAsCodeOIWorkspace> | null = null;
+    let partial: Partial<OpenIndustrialEaC> | null = null;
 
     if (src.Type === 'simulator' && tgt.Type === 'connection') {
       if (wks.DataConnections?.[tgt.ID]?.SimulatorLookup === src.ID) {
@@ -239,10 +162,8 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
 
   public UpdateConnections(
     _changes: EdgeChange[],
-    _updated: Edge[],
-    _eac: OpenIndustrialEaC
+    _updated: Edge[]
   ): OpenIndustrialEaC | null {
-    // TODO: implement connection diffing logic if needed
     return null;
   }
 }

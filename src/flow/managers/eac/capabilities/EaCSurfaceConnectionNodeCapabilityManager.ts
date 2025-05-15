@@ -1,20 +1,32 @@
 import { NullableArrayOrObject } from '@fathym/common';
-import { OpenIndustrialEaC } from '@o-industrial/common/types';
+
 import {
-  EaCNodeCapabilityContext,
+  SurfaceDataConnectionSettings,
+  EverythingAsCodeOIWorkspace,
+} from '@o-industrial/common/eac';
+
+import { OpenIndustrialEaC } from '@o-industrial/common/types';
+
+import {
   EaCNodeCapabilityAsCode,
+  EaCNodeCapabilityContext,
+  EaCNodeCapabilityManager,
   EaCNodeCapabilityPatch,
 } from './EaCNodeCapabilityManager.ts';
-import { EaCNodeCapabilityManager } from './EaCNodeCapabilityManager.ts';
-import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
-import { SurfaceDataConnectionSettings } from '@o-industrial/common/eac';
 
-// ✅ Compound node detail type
+import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
+import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
+
 type SurfaceConnectionNodeDetails = SurfaceDataConnectionSettings & {
   Name?: string;
   Description?: string;
 };
 
+/**
+ * Capability for `surface->connection` nodes within scoped surfaces.
+ *
+ * Supports rendering, edge inference to downstream schemas, and patch generation.
+ */
 export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapabilityManager<SurfaceConnectionNodeDetails> {
   public override Type = 'surface->connection';
 
@@ -39,6 +51,87 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
       Details: {
         Name: conn.Details?.Name ?? connId,
         Description: conn.Details?.Description,
+        ...settings,
+      },
+    };
+  }
+
+  protected override buildConnectionPatch(
+    source: FlowGraphNode,
+    target: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> | null {
+    const [surfaceId, connId] = this.extractCompoundIDs(source);
+
+    if (!target.Type?.includes('schema')) return null;
+
+    const schema = context.GetEaC().Schemas?.[target.ID];
+    if (!schema) return null;
+
+    return {
+      Schemas: {
+        [target.ID]: {
+          ...schema,
+          DataConnection: { Lookup: connId },
+        },
+      },
+    };
+  }
+
+  protected override buildEdgesForNode(
+    node: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): FlowGraphEdge[] {
+    const eac = context.GetEaC() as EverythingAsCodeOIWorkspace;
+    const [_, connId] = this.extractCompoundIDs(node);
+    const surfaceId = context.SurfaceLookup;
+
+    const edges: FlowGraphEdge[] = [];
+
+    for (const [schemaKey, schema] of Object.entries(eac.Schemas ?? {})) {
+      if (schema.DataConnection?.Lookup === connId) {
+        edges.push({
+          ID: `${connId}->${schemaKey}`,
+          Source: `${surfaceId}->${connId}`,
+          Target: schemaKey,
+          Label: 'feeds',
+        });
+      }
+    }
+
+    return edges;
+  }
+
+  protected override buildNode(
+    id: string,
+    context: EaCNodeCapabilityContext
+  ): FlowGraphNode | null {
+    const [surfaceId, connId] = this.extractCompoundIDs({
+      ID: id,
+      Type: this.Type,
+    });
+
+    const eac = context.GetEaC() as EverythingAsCodeOIWorkspace;
+
+    const surface = eac.Surfaces?.[surfaceId];
+    const dcSettings = surface?.DataConnections?.[connId];
+    const conn = eac.DataConnections?.[connId];
+
+    if (!conn || !dcSettings || dcSettings.Metadata?.Enabled === false)
+      return null;
+
+    const { Metadata, ...settings } = dcSettings;
+
+    return {
+      ID: id,
+      Type: this.Type,
+      Label: conn.Details?.Name ?? connId,
+      Metadata: {
+        ...(conn.Metadata || {}),
+        ...Metadata,
+      },
+      Details: {
+        Name: conn.Details?.Name,
         ...settings,
       },
     };

@@ -2,6 +2,8 @@ import { OpenIndustrialEaC } from '@o-industrial/common/types';
 import {
   SurfaceSchemaSettings,
   EaCSchemaDetails,
+  EverythingAsCodeOIWorkspace,
+  EaCCompositeSchemaDetails,
 } from '@o-industrial/common/eac';
 import { NullableArrayOrObject } from '@fathym/common';
 import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
@@ -13,6 +15,7 @@ import {
 } from './EaCNodeCapabilityManager.ts';
 
 import { EaCNodeCapabilityManager } from './EaCNodeCapabilityManager.ts';
+import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
 
 // ✅ Compound node detail type
 type SurfaceSchemaNodeDetails = EaCSchemaDetails & SurfaceSchemaSettings;
@@ -42,6 +45,141 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
         ...schemaAsCode.Details,
         ...surfaceOverrides,
       } as SurfaceSchemaNodeDetails,
+    };
+  }
+
+  protected override buildConnectionPatch(
+    source: FlowGraphNode,
+    target: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> | null {
+    const eac = context.GetEaC() as EverythingAsCodeOIWorkspace;
+
+    // Case: schema → composite-schema
+    if (source.Type?.includes('schema') && target.Type === 'composite-schema') {
+      const comp = eac.Schemas?.[target.ID];
+      if (!comp) return null;
+
+      const compDetails = comp.Details as EaCCompositeSchemaDetails;
+
+      return {
+        Schemas: {
+          [target.ID]: {
+            ...comp,
+            Details: {
+              ...compDetails,
+              SchemaJoins: {
+                ...(compDetails.SchemaJoins ?? {}),
+                [source.ID]: source.ID,
+              },
+            },
+          },
+        },
+      };
+    }
+
+    // Case: schema → agent
+    if (source.Type?.includes('schema') && target.Type === 'agent') {
+      const agent = eac.Agents?.[target.ID];
+      if (!agent) return null;
+
+      return {
+        Agents: {
+          [target.ID]: {
+            ...agent,
+            Schema: {
+              SchemaLookup: source.ID,
+            },
+          },
+        },
+      };
+    }
+
+    return null;
+  }
+
+  protected override buildEdgesForNode(
+    node: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): FlowGraphEdge[] {
+    const eac = context.GetEaC() as EverythingAsCodeOIWorkspace;
+    const schemaId = node.ID;
+    const surfaceId = context.SurfaceLookup!;
+
+    const edges: FlowGraphEdge[] = [];
+
+    // Edge: DataConnection feeds schema
+    const dc = eac.Schemas?.[schemaId]?.DataConnection?.Lookup;
+    if (dc) {
+      edges.push({
+        ID: `${dc}->${schemaId}`,
+        Source: `${surfaceId}->${dc}`,
+        Target: schemaId,
+        Label: 'feeds',
+      });
+    }
+
+    // Edge: Schema joined into Composite(s)
+    for (const [compKey, compSchema] of Object.entries(eac.Schemas ?? {})) {
+      if (
+        compSchema?.Details?.Type !== 'Composite' &&
+        compSchema?.Details?.Type !== 'Reference'
+      ) {
+        continue;
+      }
+
+      const compJoins =
+        (compSchema.Details as EaCCompositeSchemaDetails).SchemaJoins ?? {};
+
+      if (Object.values(compJoins).includes(schemaId)) {
+        edges.push({
+          ID: `${schemaId}->${compKey}`,
+          Source: schemaId,
+          Target: compKey,
+          Label: 'joins',
+        });
+      }
+    }
+
+    return edges;
+  }
+
+  protected override buildNode(
+    id: string,
+    context: EaCNodeCapabilityContext
+  ): FlowGraphNode | null {
+    const eac = context.GetEaC();
+    const surfaceId = context.SurfaceLookup!;
+    const schemaId = id;
+
+    const surface = eac.Surfaces?.[surfaceId];
+    const surfaceSettings = surface?.Schemas?.[schemaId];
+    const schema = eac.Schemas?.[schemaId];
+
+    if (
+      !schema ||
+      !surfaceSettings ||
+      surfaceSettings.Metadata?.Enabled === false
+    ) {
+      return null;
+    }
+
+    const { Metadata, ...settings } = surfaceSettings;
+    const type = schema.Details?.Type;
+
+    let nodeType: FlowGraphNode['Type'] = 'schema';
+    if (type === 'Composite') nodeType = 'composite-schema';
+    else if (type === 'Reference') nodeType = 'reference-schema';
+
+    return {
+      ID: schemaId,
+      Type: nodeType,
+      Label: schema.Details?.Name ?? schemaId,
+      Metadata: Metadata,
+      Details: {
+        ...schema.Details,
+        ...settings,
+      },
     };
   }
 

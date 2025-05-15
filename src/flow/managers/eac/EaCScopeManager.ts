@@ -32,9 +32,9 @@ export abstract class EaCScopeManager {
     protected presets: PresetManager,
     protected capabilities: EaCCapabilitiesManager,
     protected getEaC: () => OpenIndustrialEaC
-  ) { }
+  ) {}
 
-  public abstract BuildGraph(eac: OpenIndustrialEaC): FlowGraph;
+  public abstract BuildGraph(): FlowGraph;
 
   public BuildPartialForNodeUpdate(
     id: string,
@@ -43,7 +43,11 @@ export abstract class EaCScopeManager {
     const node = this.findNode(id);
     if (!node) return null;
 
-    return this.capabilities.BuildUpdatePatch(node, patch, this.getCapabilityContext());
+    return this.capabilities.BuildUpdatePatch(
+      node,
+      patch,
+      this.getCapabilityContext()
+    );
   }
 
   public BuildPartialForNodeDelete(
@@ -52,11 +56,13 @@ export abstract class EaCScopeManager {
     const node = this.findNode(id);
     if (!node) return null;
 
-    return this.capabilities.BuildDeletePatch(node, this.getCapabilityContext());
+    return this.capabilities.BuildDeletePatch(
+      node,
+      this.getCapabilityContext()
+    );
   }
 
   public abstract CreateConnectionEdge(
-    eac: OpenIndustrialEaC,
     source: string,
     target: string
   ): Partial<OpenIndustrialEaC> | null;
@@ -88,20 +94,17 @@ export abstract class EaCScopeManager {
   }
 
   public abstract RemoveConnectionEdge(
-    eac: OpenIndustrialEaC,
     edgeId: string
   ): Partial<OpenIndustrialEaC> | null;
 
   public abstract UpdateConnections(
     changes: EdgeChange[],
-    edges: Edge[],
-    eac: OpenIndustrialEaC
+    edges: Edge[]
   ): OpenIndustrialEaC | null;
 
   public UpdateNodesFromChanges(
     changes: NodeChange[],
-    currentNodes: Node<FlowNodeData>[],
-    _eac: OpenIndustrialEaC
+    currentNodes: Node<FlowNodeData>[]
   ): Partial<OpenIndustrialEaC> | null {
     const updated = applyNodeChanges(changes, currentNodes);
 
@@ -124,7 +127,11 @@ export abstract class EaCScopeManager {
       const graphNode = this.findNode(node.id);
       if (!graphNode) return null;
 
-      const update = this.capabilities.BuildUpdatePatch(graphNode, patch, this.getCapabilityContext());
+      const update = this.capabilities.BuildUpdatePatch(
+        graphNode,
+        patch,
+        this.getCapabilityContext()
+      );
       if (!update) continue;
 
       partial = merge(partial, update);

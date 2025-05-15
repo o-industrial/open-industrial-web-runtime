@@ -13,6 +13,7 @@ import {
 } from './EaCNodeCapabilityManager.ts';
 
 import { EaCNodeCapabilityManager } from './EaCNodeCapabilityManager.ts';
+import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
 
 // ✅ Compound node detail type
 type SurfaceAgentNodeDetails = EaCAgentDetails & SurfaceAgentSettings;
@@ -42,6 +43,88 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
         ...agentAsCode.Details,
         ...surfaceOverrides,
       } as SurfaceAgentNodeDetails,
+    };
+  }
+
+  protected override buildConnectionPatch(
+    source: FlowGraphNode,
+    target: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): Partial<OpenIndustrialEaC> | null {
+    if (source.Type === 'agent' && target.Type?.includes('schema')) {
+      const eac = context.GetEaC();
+      const agent = eac.Agents?.[source.ID];
+      if (!agent) return null;
+
+      return {
+        Agents: {
+          [source.ID]: {
+            ...agent,
+            Schema: {
+              SchemaLookup: target.ID,
+            },
+          },
+        },
+      };
+    }
+
+    return null;
+  }
+
+  protected override buildEdgesForNode(
+    node: FlowGraphNode,
+    context: EaCNodeCapabilityContext
+  ): FlowGraphEdge[] {
+    const eac = context.GetEaC();
+    const agentId = node.ID;
+    const agent = eac.Agents?.[agentId];
+
+    const edges: FlowGraphEdge[] = [];
+
+    const targetSchema = agent?.Schema?.SchemaLookup;
+
+    if (targetSchema) {
+      edges.push({
+        ID: `${targetSchema}->${agentId}`,
+        Source: targetSchema,
+        Target: agentId,
+        Label: 'targets',
+      });
+    }
+
+    return edges;
+  }
+
+  protected override buildNode(
+    id: string,
+    context: EaCNodeCapabilityContext
+  ): FlowGraphNode | null {
+    const surfaceId = context.SurfaceLookup!;
+    const agentId = id;
+
+    const eac = context.GetEaC();
+    const surface = eac.Surfaces?.[surfaceId];
+    const settings = surface?.Agents?.[agentId];
+    const agent = eac.Agents?.[agentId];
+
+    if (!agent || !settings || settings.Metadata?.Enabled === false) {
+      return null;
+    }
+
+    const { Metadata, ...rest } = settings;
+
+    return {
+      ID: agentId,
+      Type: this.Type,
+      Label: agent.Details?.Name ?? agentId,
+      Metadata: {
+        ...(agent.Metadata ?? {}),
+        ...Metadata,
+      },
+      Details: {
+        ...agent.Details,
+        ...rest,
+      },
     };
   }
 
