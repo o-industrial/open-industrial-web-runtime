@@ -2,12 +2,12 @@ import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 
-import HeroSection from '../components/organisms/marketing/attempt2/HeroSection.tsx';
-import PainSection from '../components/organisms/marketing/attempt2/PainSection.tsx';
-import SystemProofSection from '../components/organisms/marketing/attempt2/SystemProofSection.tsx';
-import JourneySection from '../components/organisms/marketing/attempt2/JourneySection.tsx';
-import CallToAction from '../components/organisms/marketing/attempt2/CallToAction.tsx';
-import UseCaseShowcaseSection from '../components/organisms/marketing/attempt2/UseCaseShowcaseSection.tsx';
+import HeroSection from '../components/organisms/marketing/automate/HeroSection.tsx';
+import PainSection from '../components/organisms/marketing/automate/PainSection.tsx';
+import SystemProofSection from '../components/organisms/marketing/automate/SystemProofSection.tsx';
+import JourneySection from '../components/organisms/marketing/automate/JourneySection.tsx';
+import CallToAction from '../components/organisms/marketing/automate/CallToAction.tsx';
+import UseCaseShowcaseSection from '../components/organisms/marketing/automate/UseCaseShowcaseSection.tsx';
 
 export const IsIsland = true;
 

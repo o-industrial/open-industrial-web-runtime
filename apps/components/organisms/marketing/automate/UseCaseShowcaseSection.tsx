@@ -50,10 +50,12 @@ const UseCaseShowcaseSection: FunctionalComponent = () => {
       <div class="max-w-7xl mx-auto space-y-16 text-center">
         <div class="space-y-6">
           <h2 class="text-4xl font-bold text-neutral-900 dark:text-white">
-            From Rigid Systems to Adaptive Control.
+            Industrial Automation You Can See, Shape, and Trust
           </h2>
           <p class="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
-            Industrial control logic today is scattered, opaque, and vendor-trapped. Open Industrial fixes that — not by replacing your PLCs or MES, but by adding adaptive structure, observable memory, governance, and future-proof evolution pathways.
+            From vendor black boxes to composable runtime logic — Open
+            Industrial turns scattered data and opaque workflows into
+            structured, observable systems you can evolve and govern.
           </p>
         </div>
 
