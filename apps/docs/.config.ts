@@ -17,9 +17,9 @@ function loadDocsConfig(): Promise<DocsConfig> {
             Title: 'Make Structure Real',
             Path: '/meet-azi/make-structure-real',
           },
-          { Title: 'Cold, Warm, and Hot  Data', Path: '/meet-azi/cold-warm-and-hot' },
+          // { Title: 'Cold, Warm, and Hot  Data', Path: '/meet-azi/cold-warm-and-hot' },
           { Title: 'Deploy Your First Agent', Path: '/meet-azi/deploy-agent' },
-          { Title: 'UX For All', Path: '/meet-azi/ux-for-all' },
+          // { Title: 'UX For All', Path: '/meet-azi/ux-for-all' },
         ],
       },
       {
