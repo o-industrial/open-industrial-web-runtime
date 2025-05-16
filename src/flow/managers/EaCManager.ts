@@ -1,11 +1,5 @@
 import { jsonMapSetClone, merge, NullableArrayOrObject } from '@fathym/common';
-import {
-  applyNodeChanges,
-  Edge,
-  EdgeChange,
-  Node,
-  NodeChange,
-} from 'reactflow';
+import { Edge, EdgeChange, Node, NodeChange } from 'reactflow';
 
 import { HistoryManager } from './HistoryManager.ts';
 import { PresetManager } from './PresetManager.ts';
@@ -14,11 +8,11 @@ import { FlowNodeData } from '../types/react/FlowNodeData.ts';
 import { SimulatorDefinition } from './SimulatorLibraryManager.ts';
 import { FlowGraphNode } from '../types/graph/FlowGraphNode.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
-import { FlowPosition } from '../types/graph/FlowPosition.ts';
 import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
 import {
   EaCAzureDockerSimulatorDetails,
   EaCFlowNodeMetadata,
+  Position,
 } from '@o-industrial/common/eac';
 import {
   EaCHistorySnapshot,
@@ -27,7 +21,6 @@ import {
 } from '@o-industrial/common/types';
 import { EaCEnterpriseDetails, EaCVertexDetails } from '@fathym/eac';
 
-import { EaCNodeInspectorManager } from './eac/EaCNodeInspectorManager.ts';
 import { EaCDiffManager } from './eac/EaCDiffManager.ts';
 import { WorkspaceSummary } from '../../types/WorkspaceSummary.ts';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
@@ -38,13 +31,13 @@ import { EaCScopeManager } from './eac/EaCScopeManager.ts';
 import { EaCSurfaceScopeManager } from './eac/EaCSurfaceScopeManager.ts';
 import { EaCProposalManager } from './eac/EaCProposalManager.ts';
 import { ProposalOverlayMode } from '../types/graph/ProposalOverlayMode.ts';
+import { EaCCapabilitiesManager } from './eac/EaCCapabilitiesManager.ts';
 
 export class EaCManager {
   protected deleteEaC: NullableArrayOrObject<OpenIndustrialEaC> = {};
   protected changeListeners = new Set<() => void>();
 
   protected diff: EaCDiffManager;
-  protected inspector: EaCNodeInspectorManager;
   protected proposals: EaCProposalManager;
   protected scopeMgr!: EaCScopeManager;
 
@@ -55,14 +48,12 @@ export class EaCManager {
     protected oiSvc: OpenIndustrialAPIClient,
     protected scope: NodeScopeTypes,
     protected graph: GraphStateManager,
-    protected presets: PresetManager,
     protected history: HistoryManager
   ) {
     this.diff = new EaCDiffManager(history, this.emitEaCChanged.bind(this));
-    this.inspector = new EaCNodeInspectorManager(graph, () => this.eac);
+
     this.proposals = new EaCProposalManager(oiSvc, this);
 
-    // 🔁 Currently hardcoded to workspace scope
     this.SwitchTo(scope, undefined);
   }
 
@@ -70,26 +61,22 @@ export class EaCManager {
     changes: NodeChange[],
     currentNodes: Node<FlowNodeData>[]
   ): void {
-    const partial = this.scopeMgr.UpdateNodesFromChanges(
-      changes,
-      currentNodes,
-      this.eac
-    );
+    const partial = this.scopeMgr.UpdateNodesFromChanges(changes, currentNodes);
 
-    if (partial) this.MergePartial(partial);
+    if (partial) {
+      this.MergePartial(partial);
+    }
   }
 
   public ApplyReactFlowEdgeChanges(
     changes: EdgeChange[],
     currentEdges: Edge[]
   ): void {
-    const partial = this.scopeMgr.UpdateConnections(
-      changes,
-      currentEdges,
-      this.eac
-    );
+    const partial = this.scopeMgr.UpdateConnections(changes, currentEdges);
 
-    if (partial) this.MergePartial(partial);
+    if (partial) {
+      this.MergePartial(partial);
+    }
   }
 
   public async Archive(): Promise<void> {
@@ -98,65 +85,69 @@ export class EaCManager {
 
   public async Commit(history: EaCHistorySnapshot): Promise<EaCStatus> {
     const status = await this.oiSvc.Workspaces.Commit(history);
+
     console.log(`✅ Runtime committed: CommitID ${status.ID}`);
+
     return status;
   }
 
   public CreateConnectionEdge(source: string, target: string): void {
-    const partial = this.scopeMgr.CreateConnectionEdge(
-      this.eac,
-      source,
-      target
-    );
+    const partial = this.scopeMgr.CreateConnectionEdge(source, target);
 
     if (partial) {
       this.MergePartial(partial);
     }
   }
 
-  public CreateNodeFromPreset(
-    type: string,
-    position: FlowPosition
-  ): FlowGraphNode {
+  public CreateNodeFromPreset(type: string, position: Position): FlowGraphNode {
     const id = `${type}-${Date.now()}`;
+
     const partial = this.scopeMgr.CreatePartialEaCFromPreset(
       type,
       id,
       position
     );
+
     this.MergePartial(partial);
 
     const node = this.graph.GetGraph().Nodes.find((n) => n.ID === id);
-    if (!node) throw new Error(`Failed to locate node after create: ${id}`);
+
+    if (!node) {
+      throw new Error(`Failed to locate node after create: ${id}`);
+    }
+
     return node;
   }
 
   public DeleteNode(id: string): void {
-    const partial = this.inspector.BuildPartialForNodeDelete(id);
-    if (!partial) return;
+    const partial = this.scopeMgr.BuildPartialForNodeDelete(id);
 
-    this.MergeDelete(partial);
-
-    // const edges = this.graph
-    //   .GetGraph()
-    //   .Edges.filter((e) => e.Source === id || e.Target === id);
-
-    // if (edges.length) {
-    //   const changes = edges.map((e) => ({ id: e.ID, type: 'remove' as const }));
-    //   this.ApplyReactFlowEdgeChanges(changes, []);
-    // }
+    if (partial) {
+      this.MergeDelete(partial);
+    }
   }
 
-  public GetDetailsForNode(id: string): EaCVertexDetails | null {
-    return this.inspector.GetDetails(id);
+  public GetCapabilities(): EaCCapabilitiesManager {
+    return this.scopeMgr.GetCapabilities();
+  }
+
+  public GetNodeAsCode(id: string): {
+    Metadata?: EaCFlowNodeMetadata;
+    Details: EaCVertexDetails;
+  } | null {
+    return this.scopeMgr.GetNodeAsCode(id);
   }
 
   public GetEaC(): OpenIndustrialEaC {
-    return jsonMapSetClone(this.eac);
+    return this.getEaCWithProposals();
   }
 
-  public GetMetadataForNode(id: string): EaCFlowNodeMetadata | null {
-    return this.inspector.GetMetadata(id);
+  /**
+   * Retrieves live or mock stats for a given node ID by delegating to its capability manager.
+   * Used by inspector panels and UI components to show node-specific metrics.
+   */
+  public async GetStats(id: string): Promise<Record<string, unknown>> {
+    return await this.scopeMgr.GetStats(id);
   }
 
   public HasConnection(source: string, target: string): boolean {
@@ -164,73 +155,72 @@ export class EaCManager {
   }
 
   public InstallSimulators(simDefs: SimulatorDefinition[]): void {
-    const partial: OpenIndustrialEaC = { Simulators: {} };
+    const partial = this.scopeMgr.InstallSimulators(simDefs);
 
-    for (const sim of simDefs) {
-      partial.Simulators![sim.ID] = {
-        Details: {
-          Type: 'AzureDocker',
-          Name: sim.Label,
-          Description: sim.Description,
-        } as EaCAzureDockerSimulatorDetails,
-      };
+    if (partial) {
+      this.MergePartial(partial);
     }
-
-    this.MergePartial(partial);
   }
 
-  public List(): WorkspaceSummary[] {
-    return [
-      {
-        Lookup: this.eac.EnterpriseLookup!,
-        Details: this.eac.Details!,
-      },
-    ];
+  public async List(): Promise<WorkspaceSummary[]> {
+    const workspaces = await this.oiSvc.Workspaces.ListForUser();
+
+    return workspaces.map((wkspc) => {
+      return {
+        Lookup: wkspc.EnterpriseLookup,
+        Details: {
+          Name: wkspc.EnterpriseName,
+        },
+      };
+    });
   }
 
   public MergeDelete(partial: NullableArrayOrObject<OpenIndustrialEaC>): void {
     const result = this.diff.MergeDelete(this.eac, this.deleteEaC, partial);
+
     if (result.changed) {
       this.eac = result.updated;
-      const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
-      this.graph.LoadFromGraph(rebuilt);
+
+      this.reloadFromEaC();
     }
   }
 
   public MergePartial(partial: OpenIndustrialEaC): void {
     const result = this.diff.MergePartial(this.eac, this.deleteEaC, partial);
+
     if (result.changed) {
       this.eac = result.updated;
-      const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
-      this.graph.LoadFromGraph(rebuilt);
+
+      this.reloadFromEaC();
     }
   }
 
   public OnEaCChanged(cb: () => void): () => void {
     this.changeListeners.add(cb);
+
     return () => this.changeListeners.delete(cb);
   }
 
   public RemoveConnectionEdge(edgeId: string): void {
-    const partial = this.scopeMgr.RemoveConnectionEdge(this.eac, edgeId);
-    if (partial) this.MergePartial(partial);
+    const partial = this.scopeMgr.RemoveConnectionEdge(edgeId);
+
+    if (partial) {
+      this.MergePartial(partial);
+    }
   }
 
   public ResetFromSnapshot(snapshot: EaCHistorySnapshot): void {
     this.eac = jsonMapSetClone(snapshot.eac);
+
     this.deleteEaC = jsonMapSetClone(snapshot.deletes);
 
-    const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
-    this.graph.LoadFromGraph(rebuilt);
-
-    this.emitEaCChanged();
+    this.reloadFromEaC();
   }
 
   public SetProposalOverlayMode(mode: ProposalOverlayMode): void {
     this.overlayMode = mode;
 
-    const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
-    this.graph.LoadFromGraph(rebuilt);
+    this.reloadFromEaC();
   }
 
   public SwitchTo(scope: NodeScopeTypes, lookup?: string): void {
@@ -238,28 +228,28 @@ export class EaCManager {
 
     this.scope = scope;
 
+    const capabilities = new EaCCapabilitiesManager(scope);
+
     switch (scope) {
       case 'workspace': {
         this.scopeMgr = new EaCWorkspaceScopeManager(
           this.graph,
-          this.presets,
-          this.inspector
+          capabilities,
+          () => this.GetEaC()
         );
         break;
       }
 
       case 'surface': {
-        if (lookup) {
-          this.scopeMgr = new EaCSurfaceScopeManager(
-            this.graph,
-            this.presets,
-            this.inspector,
-            lookup
-          );
-        } else {
+        if (!lookup)
           throw new Error(`Lookup must be defined for scope: ${scope}`);
-        }
 
+        this.scopeMgr = new EaCSurfaceScopeManager(
+          this.graph,
+          capabilities,
+          () => this.GetEaC(),
+          lookup
+        );
         break;
       }
 
@@ -268,18 +258,53 @@ export class EaCManager {
       }
     }
 
-    const rebuilt = this.scopeMgr.BuildGraph(this.getEaCWithProposals());
-
     this.graph.ResetGraph();
 
-    this.graph.LoadFromGraph(rebuilt);
+    this.reloadFromEaC();
+  }
 
-    this.emitEaCChanged();
+  public UpdateNodePatch(
+    id: string,
+    patch: Partial<{
+      Details: EaCVertexDetails;
+      Metadata: Partial<EaCFlowNodeMetadata>;
+    }>
+  ): void {
+    const current = this.GetNodeAsCode(id);
+
+    if (!current) return;
+
+    const merged: Partial<{
+      Details: EaCVertexDetails;
+      Metadata: EaCFlowNodeMetadata;
+    }> = {};
+
+    if (patch.Details) {
+      const combined = { ...current.Details, ...patch.Details };
+      if (JSON.stringify(current.Details) !== JSON.stringify(combined)) {
+        merged.Details = combined;
+      }
+    }
+
+    if (patch.Metadata) {
+      const prevMeta = current.Metadata ?? {};
+      const combined = merge<EaCFlowNodeMetadata>(prevMeta, patch.Metadata);
+      if (JSON.stringify(prevMeta) !== JSON.stringify(combined)) {
+        merged.Metadata = combined;
+      }
+    }
+
+    if (Object.keys(merged).length > 0) {
+      const partial = this.scopeMgr.BuildPartialForNodeUpdate(id, merged);
+      if (partial) this.MergePartial(partial);
+    }
   }
 
   public UpdateWorkspace(details: Partial<EaCEnterpriseDetails>): void {
     const merged = merge<EaCEnterpriseDetails>(this.eac.Details || {}, details);
+
     const changed = JSON.stringify(this.eac.Details) !== JSON.stringify(merged);
+
     if (!changed) return;
 
     const partial: OpenIndustrialEaC = {
@@ -287,37 +312,6 @@ export class EaCManager {
     };
 
     this.MergePartial(partial);
-  }
-
-  public UpdateDetailsForNode(id: string, next: EaCVertexDetails): void {
-    const prev = this.GetDetailsForNode(id);
-    if (!prev) return;
-
-    const merged = { ...prev, ...next };
-    if (JSON.stringify(prev) === JSON.stringify(merged)) return;
-
-    const partial = this.inspector.BuildPartialForNodeUpdate(id, {
-      Details: merged,
-    });
-    if (partial) this.MergePartial(partial);
-  }
-
-  public UpdateMetadataForNode(
-    id: string,
-    metadata: Partial<EaCFlowNodeMetadata>
-  ): void {
-    const prev = this.GetMetadataForNode(id);
-    if (!prev) return;
-
-    const merged = merge<EaCFlowNodeMetadata>(prev, metadata);
-
-    if (JSON.stringify(prev) === JSON.stringify(merged)) return;
-
-    const partial = this.inspector.BuildPartialForNodeUpdate(id, {
-      Metadata: merged,
-    });
-
-    if (partial) this.MergePartial(partial);
   }
 
   protected emitEaCChanged(): void {
@@ -349,5 +343,13 @@ export class EaCManager {
     }
 
     return base;
+  }
+
+  protected reloadFromEaC(): void {
+    const rebuilt = this.scopeMgr.BuildGraph();
+
+    this.graph.LoadFromGraph(rebuilt);
+
+    this.emitEaCChanged();
   }
 }

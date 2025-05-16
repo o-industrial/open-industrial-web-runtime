@@ -1,4 +1,5 @@
 import { NodeProps, Position } from 'reactflow';
+import { memo } from 'preact/compat';
 import WorkspaceNodeRendererBase from './WorkspaceNodeRendererBase.tsx';
 import NodeHandle from '../../atoms/NodeHandle.tsx';
 import { Action, ActionStyleTypes } from '../../atoms/Action.tsx';
@@ -7,6 +8,8 @@ import { TriggerMatchIcon } from '../../../../build/iconset/icons/TriggerMatchIc
 import { DeleteIcon } from '../../../../build/iconset/icons/DeleteIcon.tsx';
 import { LinePreviewWithValue } from '../../molecules/LinePreviewWithValue.tsx';
 import { DataConnectionNodeData } from '../../../../src/flow/types/nodes/connections/DataConnectionNodeData.tsx';
+
+export const MemoizedConnectionRenderer = memo(ConnectionNodeRenderer);
 
 export default function ConnectionNodeRenderer({
   data,

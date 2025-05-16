@@ -8,10 +8,7 @@ import { EaCManager } from './EaCManager.ts';
 export class InteractionManager {
   protected eacMgr!: EaCManager;
 
-  constructor(
-    private selection: SelectionManager,
-    private presets: PresetManager,
-  ) {}
+  constructor(private selection: SelectionManager) {}
 
   public BindEaCManager(eacMgr: EaCManager): void {
     this.eacMgr = eacMgr;
@@ -24,12 +21,15 @@ export class InteractionManager {
   public HandleDrop(
     event: DragEvent,
     nodes: Node<FlowNodeData>[],
-    screenToFlowPosition: (p: XYPosition) => XYPosition,
+    screenToFlowPosition: (p: XYPosition) => XYPosition
   ): { selectedId: string } | null {
     event.preventDefault();
 
     const type = event.dataTransfer?.getData('application/node-type');
-    if (!type || !this.presets.GetPreset(type)) {
+
+    const capabilities = this.eacMgr.GetCapabilities();
+
+    if (!type || !capabilities.GetPresets()[type]) {
       console.warn(`[Drop] Aborted — unknown or missing node type: ${type}`);
       return null;
     }
@@ -54,9 +54,9 @@ export class InteractionManager {
 
     const relativePosition = surfaceParent
       ? {
-        x: position.x - surfaceParent.position.x,
-        y: position.y - surfaceParent.position.y,
-      }
+          x: position.x - surfaceParent.position.x,
+          y: position.y - surfaceParent.position.y,
+        }
       : position;
 
     console.log(`[Drop] Creating node of type: ${type} at`, {
@@ -68,7 +68,7 @@ export class InteractionManager {
 
     const newGraphNode = this.eacMgr.CreateNodeFromPreset(
       type,
-      { X: relativePosition.x, Y: relativePosition.y },
+      { X: relativePosition.x, Y: relativePosition.y }
       // surfaceParent?.id
     );
 
@@ -100,7 +100,7 @@ export class InteractionManager {
    */
   public OnNodesChange(
     changes: NodeChange[],
-    currentNodes: Node<FlowNodeData>[],
+    currentNodes: Node<FlowNodeData>[]
   ): void {
     this.eacMgr.ApplyReactFlowNodeChanges(changes, currentNodes);
   }

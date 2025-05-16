@@ -1,7 +1,7 @@
 import { InspectorBase } from './InspectorBase.tsx';
 import { TabbedPanel } from '../../molecules/TabbedPanel.tsx';
 import { ConnectionManagementForm } from '../../molecules/ConnectionManagementForm.tsx';
-import { InspectorCommonProps } from '../InspectorPanel.tsx';
+import { InspectorCommonProps } from '../../../../src/flow/types/nodes/InspectorCommonProps.ts';
 import { EaCDataConnectionDetails } from '@o-industrial/common/eac';
 import { ConnectionInfoPanel } from '../../atoms/ConnectionInfoPanel.tsx';
 import { DataConnectionConfig } from '../../../../src/flow/types/nodes/connections/DataConnectionConfig.ts';

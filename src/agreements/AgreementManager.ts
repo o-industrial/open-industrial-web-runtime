@@ -63,8 +63,9 @@ export class AgreementManager {
             documentLink: `${AgreementManager.RootUrl}/${def.file}`,
             version,
           } as AgreementData;
-        } catch {
+        } catch (err) {
           console.warn(`AgreementManager: Missing or unreadable file: ${def.file}`);
+          console.error(err);
           return null;
         }
       }),

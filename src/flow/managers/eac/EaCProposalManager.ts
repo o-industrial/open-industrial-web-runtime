@@ -18,7 +18,7 @@ export class EaCProposalManager {
   protected listeners = new Set<() => void>();
 
   constructor(
-    protected api: OpenIndustrialAPIClient,
+    protected oiSvc: OpenIndustrialAPIClient,
     protected eacManager: EaCManager,
   ) {}
 
@@ -26,7 +26,7 @@ export class EaCProposalManager {
    * Load all proposals from the API and update local state.
    */
   public async Load(): Promise<void> {
-    this.proposals = await this.api.Proposals.List();
+    this.proposals = await this.oiSvc.Proposals.List();
     this.emit();
   }
 
@@ -118,7 +118,7 @@ export class EaCProposalManager {
       Status: 'pending',
     };
 
-    const { id: newId } = await this.api.Proposals.Create(forked);
+    const { id: newId } = await this.oiSvc.Proposals.Create(forked);
     await this.Load();
 
     return newId;

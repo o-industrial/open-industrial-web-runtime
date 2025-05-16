@@ -2,6 +2,7 @@
   "IconSet": {
     "IconMap": {
       "agent": "https://api.iconify.design/mdi:robot-outline.svg",
+      "app": "https://api.iconify.design/lucide:layers-3.svg",
       "compositeSchema": "https://api.iconify.design/lucide:layers.svg",
       "connection": "https://api.iconify.design/mdi:link-variant.svg",
       "device": "https://api.iconify.design/mdi:chip.svg",

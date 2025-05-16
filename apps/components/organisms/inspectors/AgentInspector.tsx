@@ -1,6 +1,6 @@
 import { NodeStatTile } from '../../atoms/NodeStatTile.tsx';
 import { InspectorBase } from './InspectorBase.tsx';
-import { InspectorCommonProps } from '../InspectorPanel.tsx';
+import { InspectorCommonProps } from '../../../../src/flow/types/nodes/InspectorCommonProps.ts';
 import { AgentStats } from '../../../../src/flow/types/nodes/agents/AgentStats.tsx';
 import { EaCAgentDetails } from '@o-industrial/common/eac';
 
@@ -18,15 +18,15 @@ export function AgentInspector({
 
   return (
     <InspectorBase
-      iconKey='agent'
+      iconKey="agent"
       label={details.Name ?? 'Agent Node'}
       enabled={enabled}
       impulseRates={stats?.impulseRates ?? []}
       onToggleEnabled={onToggleEnabled}
       onDelete={onDelete}
     >
-      <NodeStatTile label='Matches' value={stats?.matchesHandled || 0} />
-      <NodeStatTile label='Avg Latency' value={`${stats?.avgLatencyMs}ms`} />
+      <NodeStatTile label="Matches" value={stats?.matchesHandled || 0} />
+      <NodeStatTile label="Avg Latency" value={`${stats?.avgLatencyMs}ms`} />
     </InspectorBase>
   );
 }

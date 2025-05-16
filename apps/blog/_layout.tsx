@@ -14,7 +14,7 @@ export function Header({
     <header class='relative z-40 border-b border-neutral-800 px-6 py-4 bg-neutral-900 text-white'>
       <div class='flex items-center justify-between'>
         <div class='text-xl font-semibold tracking-wide'>
-          Fathym AAIDEN Documentation
+          Open Industrial Documentation
         </div>
 
         <details class='sm:hidden relative'>
