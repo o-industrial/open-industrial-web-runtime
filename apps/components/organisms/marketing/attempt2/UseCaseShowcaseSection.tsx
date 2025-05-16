@@ -19,28 +19,28 @@ const useCases: UseCase[] = [
     intent: IntentTypes.Primary,
     title: 'Connect Everything. Standardize Instantly.',
     description:
-      'Industrial data lives in silos—on machines, in PLCs, behind legacy protocols. Open Industrial ingests, aligns, and reshapes that raw stream into portable, structured signal. Once connected, your data becomes reflex-ready: AI-native, schema-confirmed, and ready for whatever you plug in next.',
+      'Industrial data lives in silos—on machines, in PLCs, behind legacy protocols. Open Industrial ingests, aligns, and reshapes that raw stream into portable, structured signal. Once connected, your data becomes AI-ready, schema-confirmed, and safely usable across any system you want to plug in.',
   },
   {
     icon: AppIcon,
     intent: IntentTypes.Secondary,
     title: 'Build the App Your Workflow Actually Needs.',
     description:
-      'Most teams bend their workflow around someone else’s software. We flip that. You compose apps from reflexive primitives — live data, versioned schemas, identity, logic — all deployable inside your own runtime. Think audit overlays, config UIs, or full control panels. Delivered in days, not quarters.',
+      'Most teams bend their workflow around someone else’s software. We flip that. You compose apps from modular, reflexive primitives — live data, versioned schemas, identity, and logic — all deployable inside your own runtime. Think audit overlays, config UIs, control panels. Delivered without vendor friction.',
   },
   {
     icon: AgentIcon,
     intent: IntentTypes.Tertiary,
     title: 'Design Agents That Think With You.',
     description:
-      'These aren’t wrappers. They’re co-workers. Open Industrial agents observe live data, shape logic, and evolve proposals — at runtime. Need an agent to spot anomalies or adjust thresholds based on operator patterns? Fork it. Sim it. Promote it. These agents don’t report back. They build forward.',
+      'Open Industrial agents aren’t wrappers — they’re collaborators. They observe your telemetry, shape logic, and evolve proposals over time. Need an anomaly detector or a threshold tuner? Fork it. Simulate it. Promote it. They’re part of the system, building alongside you.',
   },
   {
     icon: SignalIcon,
     intent: IntentTypes.Info,
     title: 'Automation That Evolves With You.',
     description:
-      'Automation isn’t a static config. It’s a living system. Azi helps co-design your logic and reflex memory tracks every decision. Every schema, every agent, every signal is versioned — and forkable. Iterate without fear. Push runtime changes. Reverse if needed. You’re always in control.',
+      'Automation shouldn’t be brittle. With Open Industrial, reflex logic adapts, schemas version safely, and agents grow alongside your operations. Azi co-designs with you. Reflex Memory tracks system history. Everything you build can be forked, simulated, and refined — right at runtime.',
   },
 ];
 
@@ -50,12 +50,10 @@ const UseCaseShowcaseSection: FunctionalComponent = () => {
       <div class="max-w-7xl mx-auto space-y-16 text-center">
         <div class="space-y-6">
           <h2 class="text-4xl font-bold text-neutral-900 dark:text-white">
-            From rigid stacks to reflex-ready runtime.
+            From Rigid Systems to Adaptive Control.
           </h2>
           <p class="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
-            Whether you’re stuck in brittle systems or dreaming up your own
-            agent co-pilot — Open Industrial gets you there, safely, with
-            composable runtime logic and live signal control.
+            Industrial control logic today is scattered, opaque, and vendor-trapped. Open Industrial fixes that — not by replacing your PLCs or MES, but by adding adaptive structure, observable memory, governance, and future-proof evolution pathways.
           </p>
         </div>
 
