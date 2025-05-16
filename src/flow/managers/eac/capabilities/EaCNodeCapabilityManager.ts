@@ -253,7 +253,7 @@ export abstract class EaCNodeCapabilityManager<
    * Optional override to provide the node renderer component.
    * This will be wrapped in `memo()` by the public accessor.
    */
-  protected getRenderer?(): ComponentType<any>;
+  protected abstract getRenderer?(): ComponentType<any>;
 
   /**
    * Internal implementation of GetStats.

@@ -62,7 +62,7 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
     target: FlowGraphNode,
     context: EaCNodeCapabilityContext
   ): Partial<OpenIndustrialEaC> | null {
-    const eac = context.GetEaC() as EverythingAsCodeOIWorkspace;
+    const eac = context.GetEaC();
 
     // Case: schema → composite-schema
     if (source.Type?.includes('schema') && target.Type === 'composite-schema') {
