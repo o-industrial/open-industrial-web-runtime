@@ -33,7 +33,9 @@ export class AgreementManager {
    * @returns A Promise resolving to an array of AgreementData.
    */
   async LoadAgreements(): Promise<AgreementData[]> {
-    const agreementsDir = import.meta.resolve('../../apps/assets/agreements').replace(
+    const localFilesRoot = Deno.env.get('LOCAL_FILES_ROOT') ?? '';
+
+    const agreementsDir = import.meta.resolve(`${localFilesRoot}../../apps/assets/agreements`).replace(
       'file:///',
       '',
     );
