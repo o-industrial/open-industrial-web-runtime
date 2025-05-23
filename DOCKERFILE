@@ -10,4 +10,4 @@ RUN deno cache main.ts
 
 EXPOSE 5411
 
-CMD ["run", "-A", "main.ts"]
+CMD ["run", "--config", "./deno.jsonc", "-A", "main.ts"]
