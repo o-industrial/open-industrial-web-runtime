@@ -13,4 +13,6 @@ export type EaCNodeCapabilityContext = {
    * Optional SurfaceLookup when scoped to a specific surface.
    */
   SurfaceLookup?: string;
+
+  WarmQueryLookup?: string;
 };

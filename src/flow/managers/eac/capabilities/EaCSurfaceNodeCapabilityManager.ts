@@ -125,6 +125,16 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
       });
     }
 
+    // --- warm queries feeding this surface
+    for (const wqKey of Object.keys(surf.WarmQueries ?? {})) {
+      edges.push({
+        ID: `${wqKey}->${node.ID}`,
+        Source: wqKey,
+        Target: node.ID,
+        Label: 'informs',
+      });
+    }
+
     // --- children that this surface is parent of
     for (const [childKey, childSurf] of Object.entries(eac.Surfaces ?? {})) {
       if (childSurf.ParentSurfaceLookup === node.ID) {

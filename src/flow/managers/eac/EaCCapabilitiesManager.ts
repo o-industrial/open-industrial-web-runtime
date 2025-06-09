@@ -22,6 +22,8 @@ import { Position } from '@o-industrial/common/eac';
 import { NodePreset } from '../../types/react/NodePreset.ts';
 import { WorkspaceManager } from '../WorkspaceManager.ts';
 import { NodeEventRouter } from '../node-events/NodeEventRouter.ts';
+import { EaCSurfaceWarmQueryNodeCapabilityManager } from './capabilities/EaCSurfaceWarmQueryNodeCapabilityManager.ts';
+import { EaCWarmQueryNodeCapabilityManager } from './capabilities/EaCWarmQueryNodeCapabilityManager.ts';
 
 /**
  * Dispatcher and registry for node capability managers, scoped to either workspace or surface.
@@ -44,12 +46,14 @@ export class EaCCapabilitiesManager {
         new EaCSurfaceSchemaNodeCapabilityManager(),
         new EaCSurfaceAgentNodeCapabilityManager(),
         new EaCSurfaceConnectionNodeCapabilityManager(),
+        new EaCSurfaceWarmQueryNodeCapabilityManager(),
       ];
     } else if (scope === 'workspace') {
       this.capabilities = [
         new EaCConnectionNodeCapabilityManager(),
         new EaCSurfaceNodeCapabilityManager(),
         new EaCSimulatorNodeCapabilityManager(),
+        new EaCWarmQueryNodeCapabilityManager(),
       ];
     }
 
@@ -97,8 +101,16 @@ export class EaCCapabilitiesManager {
     type: string,
     context: EaCNodeCapabilityContext
   ): FlowGraphNode | null {
+    const c = this.GetCapabilityFor({ ID: id, Type: type });
+    //alert(c);
+    console.log(c);
+    const d = c?.BuildNode(id, context);
+    //alert(d);
+    console.log(d);
+    if (d) {
+      return d;
+    }
     return (
-      this.GetCapabilityFor({ ID: id, Type: type })?.BuildNode?.(id, context) ??
       null
     );
   }

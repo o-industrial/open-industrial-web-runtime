@@ -17,9 +17,11 @@ import {
   EaCDataConnectionAsCode,
   EaCFlowNodeMetadata,
   EaCSurfaceAsCode,
+  EaCWarmQueryAsCode,
   EverythingAsCodeOIWorkspace,
   Position,
   SurfaceDataConnectionSettings,
+  WarmQueryDataConnectionSettings,
 } from '@o-industrial/common/eac';
 import { ConnectionInspector } from '../../../../../apps/components/organisms/inspectors/ConnectionInspector.tsx';
 import ConnectionNodeRenderer from '../../../../../apps/components/organisms/renderers/ConnectionNodeRenderer.tsx';
@@ -85,6 +87,26 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
             ...surface,
             DataConnections: connSet,
           } as EaCSurfaceAsCode,
+        },
+      };
+    }
+
+    // connection → warmquery
+    if (source.Type === this.Type && target.Type === 'warmquery') {
+      const wq = eac.WarmQueries?.[target.ID];
+      const connSet: Record<string, WarmQueryDataConnectionSettings> = {
+        ...(wq?.DataConnections ?? {}),
+        [source.ID]: {
+          Metadata: { Enabled: true },
+        },
+      };
+
+      return {
+        WarmQueries: {
+          [target.ID]: {
+            ...wq,
+            DataConnections: connSet,
+          } as EaCWarmQueryAsCode,
         },
       };
     }

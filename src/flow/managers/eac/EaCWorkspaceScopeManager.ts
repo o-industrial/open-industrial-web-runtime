@@ -52,6 +52,14 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
       }
     }
 
+    for (const key of Object.keys(wks.WarmQueries ?? {})) {
+      const node = this.capabilities.BuildNode(key, 'warmquery', ctx);
+      if (node) {
+        nodes.push(node);
+        edges.push(...this.capabilities.BuildEdgesForNode(node, ctx));
+      }
+    }
+
     return { Nodes: nodes, Edges: edges };
   }
 
@@ -59,7 +67,6 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
     source: string,
     target: string
   ): Partial<OpenIndustrialEaC> | null {
-    debugger;
     const src = this.findNode(source);
     const tgt = this.findNode(target);
 

@@ -154,7 +154,8 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
       ID: id,
       Type: this.Type,
     });
-
+    console.log("Test ID:" + surfaceId);
+    console.log("Test Type:" + connId);
     const eac = context.GetEaC() as EverythingAsCodeOIWorkspace;
 
     const surface = eac.Surfaces?.[surfaceId];

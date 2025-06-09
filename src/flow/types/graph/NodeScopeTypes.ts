@@ -1,1 +1,1 @@
-export type NodeScopeTypes = 'workspace' | 'surface';
+export type NodeScopeTypes = 'workspace' | 'surface' | 'warmquery';
