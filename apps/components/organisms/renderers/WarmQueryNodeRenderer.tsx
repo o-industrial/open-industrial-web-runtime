@@ -29,7 +29,7 @@ export default function WarmQueryNodeRenderer({
 
   return (
     <WorkspaceNodeRendererBase
-      iconKey='warmquery'
+      iconKey='warmQuery'
       label={data.label}
       enabled={data.enabled}
       onDoubleClick={data.onDoubleClick}

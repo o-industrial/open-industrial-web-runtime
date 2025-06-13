@@ -1,6 +1,6 @@
 export type WarmQueryStats = {
   impulseRates?: number[];
-  inputCount?: number;
-  agentCount?: number;
-  lastSignalAt?: string;
+  matchesHandled?: number;
+  avgLatencyMs?: number;
+  lastRunAgo?: string;
 };

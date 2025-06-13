@@ -58,7 +58,7 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
     }
 
     for (const key of Object.keys(surface.WarmQueries ?? {})) {
-      const node = this.capabilities.BuildNode(`${this.surfaceLookup}->${key}`, 'surface->warmquery', ctx);
+      const node = this.capabilities.BuildNode(key, 'warmquery', ctx);
       if (node) {
         nodes.push(node);
         edges.push(...this.capabilities.BuildEdgesForNode(node, ctx));

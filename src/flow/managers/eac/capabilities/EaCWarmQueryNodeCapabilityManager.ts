@@ -229,7 +229,7 @@ export class EaCWarmQueryNodeCapabilityManager extends EaCNodeCapabilityManager 
   }
 
   protected override getPreset() {
-    return { Type: this.Type, Label: 'WarmQuery', IconKey: 'warmquery' };
+    return { Type: this.Type, Label: 'Warm Query', IconKey: 'warmQuery' };
   }
 
   protected override getRenderer() {

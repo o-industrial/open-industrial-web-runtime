@@ -53,7 +53,7 @@ export class EaCCapabilitiesManager {
         new EaCConnectionNodeCapabilityManager(),
         new EaCSurfaceNodeCapabilityManager(),
         new EaCSimulatorNodeCapabilityManager(),
-        new EaCWarmQueryNodeCapabilityManager(),
+        //new EaCWarmQueryNodeCapabilityManager(),
       ];
     }
 
