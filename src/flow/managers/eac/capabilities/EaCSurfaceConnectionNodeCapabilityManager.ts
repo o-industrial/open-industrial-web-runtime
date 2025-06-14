@@ -3,8 +3,8 @@ import { memo } from 'preact/compat';
 import { NullableArrayOrObject } from '@fathym/common';
 
 import {
-  SurfaceDataConnectionSettings,
   EverythingAsCodeOIWorkspace,
+  SurfaceDataConnectionSettings,
 } from '@o-industrial/common/eac';
 
 import { OpenIndustrialEaC } from '@o-industrial/common/types';
@@ -29,16 +29,17 @@ type SurfaceConnectionNodeDetails = SurfaceDataConnectionSettings & {
  *
  * Supports rendering, edge inference to downstream schemas, and patch generation.
  */
-export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapabilityManager<SurfaceConnectionNodeDetails> {
+export class EaCSurfaceConnectionNodeCapabilityManager
+  extends EaCNodeCapabilityManager<SurfaceConnectionNodeDetails> {
   protected static renderer: ComponentType = memo(
-    SurfaceConnectionNodeRenderer as FunctionComponent
+    SurfaceConnectionNodeRenderer as FunctionComponent,
   );
 
   public override Type = 'surface->connection';
 
   protected override buildAsCode(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): EaCNodeCapabilityAsCode<SurfaceConnectionNodeDetails> | null {
     const [surfaceId, connId] = this.extractCompoundIDs(node);
     const eac = context.GetEaC();
@@ -65,9 +66,9 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
   protected override buildConnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
-    const [surfaceId, connId] = this.extractCompoundIDs(source);
+    const [_surfaceId, connId] = this.extractCompoundIDs(source);
 
     if (!target.Type?.includes('schema')) return null;
 
@@ -85,7 +86,7 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
   }
 
   protected override buildDeletePatch(
-    node: FlowGraphNode
+    node: FlowGraphNode,
   ): NullableArrayOrObject<OpenIndustrialEaC> {
     const [surfaceId, connId] = this.extractCompoundIDs(node);
 
@@ -103,7 +104,7 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
   protected override buildDisconnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     const eac = context.GetEaC() as EverythingAsCodeOIWorkspace;
     const [_, connId] = this.extractCompoundIDs(source);
@@ -113,7 +114,7 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
     const schema = eac.Schemas?.[target.ID];
     if (!schema || schema.DataConnection?.Lookup !== connId) return null;
 
-    const { DataConnection, ...rest } = schema;
+    const { _DataConnection, ...rest } = schema;
 
     return {
       Schemas: {
@@ -124,7 +125,7 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
 
   protected override buildEdgesForNode(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): FlowGraphEdge[] {
     const eac = context.GetEaC() as EverythingAsCodeOIWorkspace;
     const [_, connId] = this.extractCompoundIDs(node);
@@ -148,7 +149,7 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
 
   protected override buildNode(
     id: string,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): FlowGraphNode | null {
     const [surfaceId, connId] = this.extractCompoundIDs({
       ID: id,
@@ -161,8 +162,9 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
     const dcSettings = surface?.DataConnections?.[connId];
     const conn = eac.DataConnections?.[connId];
 
-    if (!conn || !dcSettings || dcSettings.Metadata?.Enabled === false)
+    if (!conn || !dcSettings || dcSettings.Metadata?.Enabled === false) {
       return null;
+    }
 
     const { Metadata, ...settings } = dcSettings;
 
@@ -184,7 +186,7 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
   protected override buildUpdatePatch(
     node: FlowGraphNode,
     patch: EaCNodeCapabilityPatch<SurfaceConnectionNodeDetails>,
-    context: EaCNodeCapabilityContext
+    _context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> {
     const [surfaceId, connId] = this.extractCompoundIDs(node);
 
@@ -209,5 +211,4 @@ export class EaCSurfaceConnectionNodeCapabilityManager extends EaCNodeCapability
   protected override getRenderer() {
     return EaCSurfaceConnectionNodeCapabilityManager.renderer;
   }
-    
 }

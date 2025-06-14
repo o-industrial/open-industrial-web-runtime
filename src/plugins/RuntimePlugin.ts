@@ -8,7 +8,6 @@ import { EverythingAsCode } from '@fathym/eac';
 import { EverythingAsCodeApplications } from '@fathym/eac-applications';
 import {
   EaCDFSProcessor,
-  EaCMDXProcessor,
   EaCOAuthProcessor,
   EaCPreactAppProcessor,
   EaCRedirectProcessor,

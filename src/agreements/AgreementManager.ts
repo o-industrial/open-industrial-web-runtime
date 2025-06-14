@@ -35,10 +35,11 @@ export class AgreementManager {
   async LoadAgreements(): Promise<AgreementData[]> {
     const localFilesRoot = Deno.env.get('LOCAL_FILES_ROOT') ?? '';
 
-    const agreementsDir = import.meta.resolve(`${localFilesRoot}../../apps/assets/agreements`).replace(
-      'file:///',
-      '',
-    );
+    const agreementsDir = import.meta.resolve(`${localFilesRoot}../../apps/assets/agreements`)
+      .replace(
+        'file:///',
+        '',
+      );
 
     console.log(
       '----------------------------------agreementsDir-------------------------------------------------------------',

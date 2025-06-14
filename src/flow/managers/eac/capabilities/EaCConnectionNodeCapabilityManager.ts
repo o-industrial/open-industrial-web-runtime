@@ -1,4 +1,3 @@
-// deno-lint-ignore-file no-explicit-any
 import { ComponentType, FunctionComponent } from 'preact';
 import { memo } from 'preact/compat';
 import { NullableArrayOrObject } from '@fathym/common';
@@ -36,7 +35,7 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
 
   protected override buildAsCode(
     node: FlowGraphNode,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): EaCNodeCapabilityAsCode | null {
     const conn = ctx.GetEaC().DataConnections?.[node.ID];
     if (!conn) return null;
@@ -50,7 +49,7 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
   protected override buildConnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
 
@@ -93,7 +92,7 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
   }
 
   protected override buildDeletePatch(
-    node: FlowGraphNode
+    node: FlowGraphNode,
   ): NullableArrayOrObject<OpenIndustrialEaC> {
     return this.wrapDeletePatch('DataConnections', node.ID);
   }
@@ -101,7 +100,7 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
   protected override buildDisconnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
 
@@ -144,7 +143,7 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
 
   protected override buildEdgesForNode(
     node: FlowGraphNode,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): FlowGraphEdge[] {
     const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
     const edges: FlowGraphEdge[] = [];
@@ -165,7 +164,7 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
 
   protected override buildNode(
     id: string,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): FlowGraphNode | null {
     const conn = ctx.GetEaC().DataConnections?.[id];
     if (!conn) return null;
@@ -182,7 +181,7 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
   protected override buildPresetPatch(
     id: string,
     position: Position,
-    _context: EaCNodeCapabilityContext
+    _context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> {
     const metadata: EaCFlowNodeMetadata = {
       Position: position,
@@ -206,13 +205,13 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
 
   protected override buildUpdatePatch(
     node: FlowGraphNode,
-    update: EaCNodeCapabilityPatch
+    update: EaCNodeCapabilityPatch,
   ): Partial<OpenIndustrialEaC> {
     return {
       DataConnections: {
         [node.ID]: this.mergeDetailsAndMetadata(
           update.Details,
-          update.Metadata
+          update.Metadata,
         ),
       },
     };
@@ -237,7 +236,7 @@ export class EaCConnectionNodeCapabilityManager extends EaCNodeCapabilityManager
   protected override async getStats(
     type: string,
     id: string,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Promise<DataConnectionStats> {
     const stats = await super.getStats(type, id, context);
 

@@ -13,6 +13,7 @@ import ExecutionJourneyCards from '../components/organisms/marketing/home-page/E
 import GitRuntimeLayout from '../components/organisms/marketing/home-page/GitRuntimeLayout.tsx';
 import FinalCTASection from '../components/organisms/marketing/home-page/FinalCTASection.tsx';
 
+// deno-lint-ignore ban-types
 export type HomepageData = {};
 
 export const handler: EaCRuntimeHandlerSet<

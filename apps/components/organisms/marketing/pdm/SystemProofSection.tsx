@@ -41,18 +41,18 @@ const systemSteps = [
 
 const SystemProofSection: FunctionalComponent = () => {
   return (
-    <section class="bg-gradient-to-b from-neutral-50 dark:from-neutral-950 via-neon-blue-500/10 dark:via-neon-blue-500/10 to-neutral-50 dark:to-neutral-950 py-32 px-6 lg:px-8">
-      <div class="max-w-7xl mx-auto text-center space-y-12">
-        <h2 class="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white">
+    <section class='bg-gradient-to-b from-neutral-50 dark:from-neutral-950 via-neon-blue-500/10 dark:via-neon-blue-500/10 to-neutral-50 dark:to-neutral-950 py-32 px-6 lg:px-8'>
+      <div class='max-w-7xl mx-auto text-center space-y-12'>
+        <h2 class='text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white'>
           The Reflex Runtime Execution Loop
         </h2>
-        <p class="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
-          Your system isn’t just observable — it’s explainable. Reflex Memory
-          powers a complete loop: impulses stream in, schemas shape structure,
-          reflexes decide, and signals execute — all versioned.
+        <p class='text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto'>
+          Your system isn’t just observable — it’s explainable. Reflex Memory powers a complete
+          loop: impulses stream in, schemas shape structure, reflexes decide, and signals execute —
+          all versioned.
         </p>
 
-        <div class="mt-20 flex flex-col space-y-24">
+        <div class='mt-20 flex flex-col space-y-24'>
           {systemSteps.map(
             ({
               id,
@@ -68,41 +68,41 @@ const SystemProofSection: FunctionalComponent = () => {
               return (
                 <div
                   key={id}
-                  class="flex flex-col lg:flex-row items-center gap-12 text-left"
+                  class='flex flex-col lg:flex-row items-center gap-12 text-left'
                 >
                   {/* Icon + Text */}
-                  <div class="flex-1 space-y-6 max-w-xl">
-                    <div class="flex items-center gap-4">
+                  <div class='flex-1 space-y-6 max-w-xl'>
+                    <div class='flex items-center gap-4'>
                       <div
                         class={`w-12 h-12 flex items-center justify-center rounded-full ${background} ${text}`}
                       >
-                        <Icon class="w-6 h-6" />
+                        <Icon class='w-6 h-6' />
                       </div>
-                      <h3 class="text-xl font-semibold text-neutral-900 dark:text-white">
+                      <h3 class='text-xl font-semibold text-neutral-900 dark:text-white'>
                         {title}
                       </h3>
                     </div>
-                    <p class="text-sm text-neutral-700 dark:text-neutral-400 leading-relaxed">
+                    <p class='text-sm text-neutral-700 dark:text-neutral-400 leading-relaxed'>
                       {description}
                     </p>
                   </div>
 
                   {/* Visual */}
-                  <div class="flex-1">
+                  <div class='flex-1'>
                     <FigureImage
                       src={image}
                       alt={caption}
                       caption={caption}
                       intentType={intent}
                       center
-                      size="xl"
-                      shadow="2xl"
+                      size='xl'
+                      shadow='2xl'
                       glow
                     />
                   </div>
                 </div>
               );
-            }
+            },
           )}
         </div>
       </div>

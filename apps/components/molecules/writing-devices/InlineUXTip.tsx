@@ -1,4 +1,4 @@
-import { ComponentChildren, JSX } from 'preact';
+import { ComponentChildren } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
 import { getIntentStyles } from '../../../../src/utils/getIntentStyles.ts';
 import { classSet } from '@fathym/atomic';

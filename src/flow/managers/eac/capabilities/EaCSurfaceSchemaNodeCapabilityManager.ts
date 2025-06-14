@@ -1,13 +1,13 @@
 import { OpenIndustrialEaC } from '@o-industrial/common/types';
 import {
-  SurfaceSchemaSettings,
-  EaCSchemaDetails,
-  EverythingAsCodeOIWorkspace,
   EaCCompositeSchemaDetails,
   EaCFlowNodeMetadata,
   EaCRootSchemaDetails,
   EaCSchemaAsCode,
+  EaCSchemaDetails,
+  EverythingAsCodeOIWorkspace,
   Position,
+  SurfaceSchemaSettings,
 } from '@o-industrial/common/eac';
 import { NullableArrayOrObject } from '@fathym/common';
 import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
@@ -21,28 +21,29 @@ import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
 import SchemaNodeRenderer from '../../../../../apps/components/organisms/renderers/SchemaNodeRenderer.tsx';
 import { ComponentType, FunctionComponent } from 'preact';
 import { memo } from 'react';
+import { RootSchemaInspector } from '../../../../../apps/components/organisms/inspectors/RootSchemaInspector.tsx';
 
 // ✅ Compound node detail type
 type SurfaceSchemaNodeDetails = EaCSchemaDetails & SurfaceSchemaSettings;
 
-export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityManager<SurfaceSchemaNodeDetails> {
+export class EaCSurfaceSchemaNodeCapabilityManager
+  extends EaCNodeCapabilityManager<SurfaceSchemaNodeDetails> {
   protected static renderer: ComponentType = memo(
-    SchemaNodeRenderer as FunctionComponent
+    SchemaNodeRenderer as FunctionComponent,
   );
 
   public override Type = 'schema';
 
   protected override buildAsCode(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): EaCNodeCapabilityAsCode<SurfaceSchemaNodeDetails> | null {
     const schemaId = node.ID;
 
     const eac = context.GetEaC();
 
     const schemaAsCode = eac.Schemas?.[schemaId];
-    const surfaceSettings =
-      eac.Surfaces?.[context.SurfaceLookup!]?.Schemas?.[schemaId];
+    const surfaceSettings = eac.Surfaces?.[context.SurfaceLookup!]?.Schemas?.[schemaId];
 
     if (!schemaAsCode || !surfaceSettings) return null;
 
@@ -60,7 +61,7 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
   protected override buildConnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     const eac = context.GetEaC();
 
@@ -108,7 +109,7 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
   }
 
   protected override buildDeletePatch(
-    node: FlowGraphNode
+    node: FlowGraphNode,
   ): NullableArrayOrObject<OpenIndustrialEaC> {
     const [surfaceId, schemaId] = this.extractCompoundIDs(node);
 
@@ -126,7 +127,7 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
   protected override buildDisconnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     const eac = context.GetEaC() as EverythingAsCodeOIWorkspace;
 
@@ -159,7 +160,7 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
       const agent = eac.Agents?.[source.ID];
       if (!agent || agent.Schema?.SchemaLookup !== target.ID) return null;
 
-      const { Schema, ...rest } = agent;
+      const { Schema: _, ...rest } = agent;
 
       return {
         Agents: {
@@ -173,7 +174,7 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
 
   protected override buildEdgesForNode(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): FlowGraphEdge[] {
     const eac = context.GetEaC() as EverythingAsCodeOIWorkspace;
     const schemaId = node.ID;
@@ -201,8 +202,7 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
         continue;
       }
 
-      const compJoins =
-        (compSchema.Details as EaCCompositeSchemaDetails).SchemaJoins ?? {};
+      const compJoins = (compSchema.Details as EaCCompositeSchemaDetails).SchemaJoins ?? {};
 
       if (Object.values(compJoins).includes(schemaId)) {
         edges.push({
@@ -219,7 +219,7 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
 
   protected override buildNode(
     id: string,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): FlowGraphNode | null {
     const eac = context.GetEaC();
     const surfaceId = context.SurfaceLookup!;
@@ -259,7 +259,7 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
   protected override buildPresetPatch(
     id: string,
     position: Position,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> {
     const metadata: EaCFlowNodeMetadata = {
       Position: position,
@@ -277,17 +277,17 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
       },
       ...(context.SurfaceLookup
         ? {
-            Surfaces: {
-              [context.SurfaceLookup]: {
-                Schemas: {
-                  [id]: {
-                    DisplayMode: 'table',
-                    Metadata: metadata,
-                  },
+          Surfaces: {
+            [context.SurfaceLookup]: {
+              Schemas: {
+                [id]: {
+                  DisplayMode: 'table',
+                  Metadata: metadata,
                 },
               },
             },
-          }
+          },
+        }
         : {}),
     };
   }
@@ -295,7 +295,7 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
   protected override buildUpdatePatch(
     node: FlowGraphNode,
     update: EaCNodeCapabilityPatch<SurfaceSchemaNodeDetails>,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> {
     const schemaId = node.ID;
 
@@ -333,9 +333,9 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
     return patch;
   }
 
-  // protected override getInspector() {
-  //   return SurfaceInspector;
-  // }
+  protected override getInspector() {
+    return RootSchemaInspector;
+  }
 
   protected override getPreset() {
     return { Type: this.Type, Label: 'Schema', IconKey: 'schema' };
@@ -344,5 +344,4 @@ export class EaCSurfaceSchemaNodeCapabilityManager extends EaCNodeCapabilityMana
   protected override getRenderer() {
     return EaCSurfaceSchemaNodeCapabilityManager.renderer;
   }
-  
 }

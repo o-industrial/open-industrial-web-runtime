@@ -3,13 +3,7 @@ import { FlowGraph } from '../../types/graph/FlowGraph.ts';
 import { FlowGraphEdge } from '../../types/graph/FlowGraphEdge.ts';
 import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
 
-import {
-  EaCAzureDockerSimulatorDetails,
-  EaCDataConnectionAsCode,
-  EaCSurfaceAsCode,
-  EverythingAsCodeOIWorkspace,
-  SurfaceDataConnectionSettings,
-} from '@o-industrial/common/eac';
+import { EaCAzureDockerSimulatorDetails } from '@o-industrial/common/eac';
 
 import { Edge, EdgeChange } from 'reactflow';
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
@@ -57,9 +51,8 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
 
   public CreateConnectionEdge(
     source: string,
-    target: string
+    target: string,
   ): Partial<OpenIndustrialEaC> | null {
-    debugger;
     const src = this.findNode(source);
     const tgt = this.findNode(target);
 
@@ -68,7 +61,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
     return this.capabilities.BuildConnectionPatch(
       src,
       tgt,
-      this.getCapabilityContext()
+      this.getCapabilityContext(),
     );
   }
 
@@ -79,7 +72,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
   }
 
   public override InstallSimulators(
-    simDefs: SimulatorDefinition[]
+    simDefs: SimulatorDefinition[],
   ): Partial<OpenIndustrialEaC> {
     const partial: Partial<OpenIndustrialEaC> = { Simulators: {} };
 
@@ -98,7 +91,7 @@ export class EaCWorkspaceScopeManager extends EaCScopeManager {
 
   public UpdateConnections(
     _changes: EdgeChange[],
-    _updated: Edge[]
+    _updated: Edge[],
   ): OpenIndustrialEaC | null {
     return null;
   }

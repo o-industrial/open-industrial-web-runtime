@@ -46,20 +46,19 @@ const useCases: UseCase[] = [
 
 const UseCaseShowcaseSection: FunctionalComponent = () => {
   return (
-    <section class="bg-gradient-to-b from-neutral-50 dark:from-neutral-950 via-neon-violet-500/5 to-neutral-50 dark:to-neutral-950 py-32 px-6 lg:px-8">
-      <div class="max-w-7xl mx-auto space-y-16 text-center">
-        <div class="space-y-6">
-          <h2 class="text-4xl font-bold text-neutral-900 dark:text-white">
+    <section class='bg-gradient-to-b from-neutral-50 dark:from-neutral-950 via-neon-violet-500/5 to-neutral-50 dark:to-neutral-950 py-32 px-6 lg:px-8'>
+      <div class='max-w-7xl mx-auto space-y-16 text-center'>
+        <div class='space-y-6'>
+          <h2 class='text-4xl font-bold text-neutral-900 dark:text-white'>
             Industrial Automation You Can See, Shape, and Trust
           </h2>
-          <p class="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
-            From vendor black boxes to composable runtime logic — Open
-            Industrial turns scattered data and opaque workflows into
-            structured, observable systems you can evolve and govern.
+          <p class='text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto'>
+            From vendor black boxes to composable runtime logic — Open Industrial turns scattered
+            data and opaque workflows into structured, observable systems you can evolve and govern.
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 text-left">
+        <div class='grid grid-cols-1 md:grid-cols-2 gap-10 text-left'>
           {useCases.map(({ icon: Icon, title, description, intent }) => {
             const card = getIntentStyles(IntentTypes.Tertiary);
             const iconStyle = getIntentStyles(intent);
@@ -72,12 +71,12 @@ const UseCaseShowcaseSection: FunctionalComponent = () => {
                 <div
                   class={`flex items-center justify-center w-12 h-12 rounded-full mb-4 ${iconStyle.background} ${iconStyle.text}`}
                 >
-                  <Icon class="w-6 h-6" />
+                  <Icon class='w-6 h-6' />
                 </div>
-                <h3 class="text-lg font-semibold text-neutral-800 dark:text-white mb-2">
+                <h3 class='text-lg font-semibold text-neutral-800 dark:text-white mb-2'>
                   {title}
                 </h3>
-                <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                <p class='text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed'>
                   {description}
                 </p>
               </div>

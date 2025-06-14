@@ -1,7 +1,7 @@
 export class PresetManager {
   public GetConfigForType(
     _nodeId: string,
-    type: string
+    type: string,
   ): Record<string, unknown> {
     switch (type) {
       case 'connection':

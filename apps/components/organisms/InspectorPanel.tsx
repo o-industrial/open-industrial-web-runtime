@@ -15,7 +15,7 @@ export default function InspectorPanel({ workspaceMgr }: InspectorPanelProps) {
   const renderInspector = () => {
     if (!selected || !inspectorProps) {
       return (
-        <div class="text-neutral-500 text-xs italic">
+        <div class='text-neutral-500 text-xs italic'>
           No node selected. Double click a node to inspect.
         </div>
       );
@@ -27,7 +27,7 @@ export default function InspectorPanel({ workspaceMgr }: InspectorPanelProps) {
 
     if (!Inspector) {
       return (
-        <div class="text-neutral-500 text-xs italic">
+        <div class='text-neutral-500 text-xs italic'>
           No inspector available for <strong>{selected.type}</strong>.
         </div>
       );

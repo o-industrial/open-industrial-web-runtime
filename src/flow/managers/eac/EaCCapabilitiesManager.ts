@@ -56,7 +56,7 @@ export class EaCCapabilitiesManager {
     this.rendererMap = Object.fromEntries(
       this.capabilities
         .map((c) => [c.Type, c.GetRenderer()])
-        .filter(([, r]) => !!r)
+        .filter(([, r]) => !!r),
     );
   }
 
@@ -66,13 +66,13 @@ export class EaCCapabilitiesManager {
   public BuildConnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     return (
       this.GetCapabilityFor(source)?.BuildConnectionPatch?.(
         source,
         target,
-        context
+        context,
       ) ?? null
     );
   }
@@ -82,7 +82,7 @@ export class EaCCapabilitiesManager {
    */
   public BuildEdgesForNode(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): FlowGraphEdge[] {
     return (
       this.GetCapabilityFor(node)?.BuildEdgesForNode?.(node, context) ?? []
@@ -95,11 +95,11 @@ export class EaCCapabilitiesManager {
   public BuildNode(
     id: string,
     type: string,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): FlowGraphNode | null {
     return (
       this.GetCapabilityFor({ ID: id, Type: type })?.BuildNode?.(id, context) ??
-      null
+        null
     );
   }
 
@@ -108,7 +108,7 @@ export class EaCCapabilitiesManager {
    */
   public BuildDeletePatch(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): NullableArrayOrObject<OpenIndustrialEaC> | null {
     return this.GetCapabilityFor(node)?.BuildDeletePatch(node, context) ?? null;
   }
@@ -119,13 +119,13 @@ export class EaCCapabilitiesManager {
   public BuildDisconnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     return (
       this.GetCapabilityFor(source)?.BuildDisconnectionPatch?.(
         source,
         target,
-        context
+        context,
       ) ?? null
     );
   }
@@ -146,13 +146,13 @@ export class EaCCapabilitiesManager {
     type: string,
     id: string,
     position: Position,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     const capability = this.GetCapabilityFor({ ID: id, Type: type });
 
     if (!capability?.BuildPresetPatch) {
       throw new Error(
-        `❌ Capability for type '${type}' does not support preset patching.`
+        `❌ Capability for type '${type}' does not support preset patching.`,
       );
     }
 
@@ -165,11 +165,11 @@ export class EaCCapabilitiesManager {
   public BuildUpdatePatch(
     node: FlowGraphNode,
     patch: EaCNodeCapabilityPatch,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     return (
       this.GetCapabilityFor(node)?.BuildUpdatePatch(node, patch, context) ??
-      null
+        null
     );
   }
 
@@ -178,7 +178,7 @@ export class EaCCapabilitiesManager {
    */
   public GetAsCode(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): EaCNodeCapabilityAsCode | null {
     return this.GetCapabilityFor(node)?.GetAsCode(node, context) ?? null;
   }
@@ -187,7 +187,7 @@ export class EaCCapabilitiesManager {
    * Returns the registered capability that supports the given node, if any.
    */
   public GetCapabilityFor(
-    node: FlowGraphNode
+    node: FlowGraphNode,
   ): EaCNodeCapabilityManager | undefined {
     return this.capabilities.find((cap) => cap.Matches(node));
   }
@@ -197,10 +197,10 @@ export class EaCCapabilitiesManager {
    */
   public GetEventRouterForType(
     type: string,
-    workspace: WorkspaceManager
+    workspace: WorkspaceManager,
   ): NodeEventRouter | undefined {
     return this.GetCapabilityFor({ ID: '', Type: type })?.GetEventRouter(
-      workspace
+      workspace,
     );
   }
 
@@ -208,7 +208,7 @@ export class EaCCapabilitiesManager {
     return Object.fromEntries(
       this.capabilities
         .map((c) => [c.Type, c.GetPreset()])
-        .filter(([_, p]) => !!p)
+        .filter(([_, p]) => !!p),
     );
   }
 
@@ -228,7 +228,7 @@ export class EaCCapabilitiesManager {
    */
   public async GetStats(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Promise<Record<string, unknown>>;
 
   /**
@@ -238,7 +238,7 @@ export class EaCCapabilitiesManager {
   public async GetStats(
     type: string,
     id: string,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Promise<Record<string, unknown>>;
 
   /**
@@ -248,14 +248,13 @@ export class EaCCapabilitiesManager {
   public async GetStats(
     nodeOrType: FlowGraphNode | string,
     contextOrId: EaCNodeCapabilityContext | string,
-    context?: EaCNodeCapabilityContext
+    context?: EaCNodeCapabilityContext,
   ): Promise<Record<string, unknown>> {
-    let node: FlowGraphNode =
-      typeof nodeOrType === 'string'
-        ? ({
-            Type: nodeOrType,
-          } as FlowGraphNode)
-        : nodeOrType;
+    let node: FlowGraphNode = typeof nodeOrType === 'string'
+      ? ({
+        Type: nodeOrType,
+      } as FlowGraphNode)
+      : nodeOrType;
 
     if (typeof contextOrId === 'string') {
       node = {

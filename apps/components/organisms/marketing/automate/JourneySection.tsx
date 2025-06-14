@@ -1,5 +1,4 @@
 import { FunctionalComponent } from 'preact';
-import { FigureImage } from '../../../molecules/writing-devices/FigureImage.tsx';
 import { IntentTypes } from '@o-industrial/common/types';
 import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
 

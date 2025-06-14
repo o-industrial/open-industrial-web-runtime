@@ -3,7 +3,6 @@ import { memo } from 'preact/compat';
 import { OpenIndustrialEaC } from '@o-industrial/common/types';
 import {
   EaCAgentDetails,
-  EaCCompositeSchemaDetails,
   EaCFlowNodeMetadata,
   Position,
   SurfaceAgentSettings,
@@ -24,24 +23,24 @@ import { AgentStats } from '../../../types/nodes/agents/AgentStats.tsx';
 // ✅ Compound node detail type
 type SurfaceAgentNodeDetails = EaCAgentDetails & SurfaceAgentSettings;
 
-export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManager<SurfaceAgentNodeDetails> {
+export class EaCSurfaceAgentNodeCapabilityManager
+  extends EaCNodeCapabilityManager<SurfaceAgentNodeDetails> {
   protected static renderer: ComponentType = memo(
-    AgentNodeRenderer as FunctionComponent
+    AgentNodeRenderer as FunctionComponent,
   );
-  
+
   public override Type = 'agent';
 
   protected override buildAsCode(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): EaCNodeCapabilityAsCode<SurfaceAgentNodeDetails> | null {
     const agentId = node.ID;
 
     const eac = context.GetEaC();
 
     const agentAsCode = eac.Agents?.[agentId];
-    const surfaceSettings =
-      eac.Surfaces?.[context.SurfaceLookup!]?.Agents?.[agentId];
+    const surfaceSettings = eac.Surfaces?.[context.SurfaceLookup!]?.Agents?.[agentId];
 
     if (!agentAsCode || !surfaceSettings) return null;
 
@@ -59,7 +58,7 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
   protected override buildConnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     if (source.Type === 'agent' && target.Type?.includes('schema')) {
       const eac = context.GetEaC();
@@ -84,17 +83,18 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
   protected override buildDisconnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
-    if (source.Type !== 'agent' || !target.Type?.includes('schema'))
+    if (source.Type !== 'agent' || !target.Type?.includes('schema')) {
       return null;
+    }
 
     const eac = context.GetEaC();
     const agent = eac.Agents?.[source.ID];
 
     if (!agent || agent.Schema?.SchemaLookup !== target.ID) return null;
 
-    const { Schema, ...rest } = agent;
+    const { Schema: _, ...rest } = agent;
 
     return {
       Agents: {
@@ -104,7 +104,7 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
   }
 
   protected override buildDeletePatch(
-    node: FlowGraphNode
+    node: FlowGraphNode,
   ): NullableArrayOrObject<OpenIndustrialEaC> {
     const [surfaceId, agentId] = this.extractCompoundIDs(node);
 
@@ -121,7 +121,7 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
 
   protected override buildEdgesForNode(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): FlowGraphEdge[] {
     const eac = context.GetEaC();
     const agentId = node.ID;
@@ -145,7 +145,7 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
 
   protected override buildNode(
     id: string,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): FlowGraphNode | null {
     const surfaceId = context.SurfaceLookup!;
     const agentId = id;
@@ -179,7 +179,7 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
   protected override buildPresetPatch(
     id: string,
     position: Position,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> {
     const metadata: EaCFlowNodeMetadata = {
       Position: position,
@@ -197,17 +197,17 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
       },
       ...(context.SurfaceLookup
         ? {
-            Surfaces: {
-              [context.SurfaceLookup]: {
-                Agents: {
-                  [id]: {
-                    ShowHistory: false,
-                    Metadata: metadata,
-                  },
+          Surfaces: {
+            [context.SurfaceLookup]: {
+              Agents: {
+                [id]: {
+                  ShowHistory: false,
+                  Metadata: metadata,
                 },
               },
             },
-          }
+          },
+        }
         : {}),
     };
   }
@@ -215,7 +215,7 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
   protected override buildUpdatePatch(
     node: FlowGraphNode,
     update: EaCNodeCapabilityPatch<SurfaceAgentNodeDetails>,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> {
     const agentId = node.ID;
 
@@ -259,12 +259,12 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
 
   protected override getRenderer() {
     return EaCSurfaceAgentNodeCapabilityManager.renderer;
-  }  
+  }
 
   protected override async getStats(
     type: string,
     id: string,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Promise<AgentStats> {
     const stats = await super.getStats(type, id, context);
 

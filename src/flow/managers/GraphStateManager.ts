@@ -16,7 +16,7 @@ export class GraphStateManager {
   constructor(
     protected interaction: InteractionManager,
     protected useStats: (id: string) => Record<string, unknown> | undefined,
-    protected nodeEvents: NodeEventManager
+    protected nodeEvents: NodeEventManager,
   ) {
     this.ResetGraph();
   }

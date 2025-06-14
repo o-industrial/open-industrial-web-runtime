@@ -1,6 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { ComponentType, FunctionalComponent } from 'preact';
-import { memo } from 'preact/compat';
+import { ComponentType } from 'preact';
 import { NullableArrayOrObject } from '@fathym/common';
 import { EaCVertexDetails } from '@fathym/eac';
 import { EaCFlowNodeMetadata, Position } from '@o-industrial/common/eac';
@@ -12,10 +11,7 @@ import { EaCNodeCapabilityPatch } from '../../../types/nodes/EaCNodeCapabilityPa
 import { EaCNodeCapabilityAsCode } from '../../../types/nodes/EaCNodeCapabilityAsCode.ts';
 import { EaCNodeCapabilityContext } from '../../../types/nodes/EaCNodeCapabilityContext.ts';
 import { NodePreset } from '../../../types/react/NodePreset.ts';
-import {
-  NodeEvent,
-  NodeEventRouter,
-} from '../../node-events/NodeEventRouter.ts';
+import { NodeEventRouter } from '../../node-events/NodeEventRouter.ts';
 import { WorkspaceManager } from '../../WorkspaceManager.ts';
 
 /**
@@ -28,7 +24,7 @@ import { WorkspaceManager } from '../../WorkspaceManager.ts';
  * - Extracts structured metadata and details (`GetAsCode`)
  */
 export abstract class EaCNodeCapabilityManager<
-  TDetails extends EaCVertexDetails = EaCVertexDetails
+  TDetails extends EaCVertexDetails = EaCVertexDetails,
 > {
   /**
    * Canonical node type string, used for matching and capability resolution.
@@ -41,7 +37,7 @@ export abstract class EaCNodeCapabilityManager<
   public BuildConnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     return this.buildConnectionPatch?.(source, target, context) ?? null;
   }
@@ -51,7 +47,7 @@ export abstract class EaCNodeCapabilityManager<
    */
   public BuildDeletePatch(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): NullableArrayOrObject<OpenIndustrialEaC> | null {
     return this.buildDeletePatch(node, context);
   }
@@ -62,7 +58,7 @@ export abstract class EaCNodeCapabilityManager<
   public BuildDisconnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     return this.buildDisconnectionPatch?.(source, target, context) ?? null;
   }
@@ -72,7 +68,7 @@ export abstract class EaCNodeCapabilityManager<
    */
   public BuildEdgesForNode(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): FlowGraphEdge[] {
     return this.buildEdgesForNode?.(node, context) ?? [];
   }
@@ -82,7 +78,7 @@ export abstract class EaCNodeCapabilityManager<
    */
   public BuildNode(
     id: string,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): FlowGraphNode | null {
     return this.buildNode?.(id, context) ?? null;
   }
@@ -94,7 +90,7 @@ export abstract class EaCNodeCapabilityManager<
   public BuildPresetPatch(
     id: string,
     position: Position,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> {
     return this.buildPresetPatch?.(id, position, context) ?? {};
   }
@@ -105,7 +101,7 @@ export abstract class EaCNodeCapabilityManager<
   public BuildUpdatePatch(
     node: FlowGraphNode,
     update: EaCNodeCapabilityPatch<TDetails>,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     return this.buildUpdatePatch(node, update, context);
   }
@@ -115,7 +111,7 @@ export abstract class EaCNodeCapabilityManager<
    */
   public GetAsCode(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): EaCNodeCapabilityAsCode<TDetails> | null {
     return this.buildAsCode(node, context);
   }
@@ -150,7 +146,7 @@ export abstract class EaCNodeCapabilityManager<
    * Subclasses should override `getEventRouter` to provide scoped behavior.
    */
   public GetEventRouter(
-    workspace: WorkspaceManager
+    workspace: WorkspaceManager,
   ): NodeEventRouter | undefined {
     return this.getEventRouter?.(workspace);
   }
@@ -160,10 +156,10 @@ export abstract class EaCNodeCapabilityManager<
    * Default implementation provides a rolling impulseRates buffer.
    * Subclasses should override `buildStats(...)` to customize output.
    */
-  public async GetStats(
+  public GetStats(
     type: string,
     id: string,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Promise<Record<string, unknown>> {
     return this.getStats(type, id, context);
   }
@@ -181,18 +177,18 @@ export abstract class EaCNodeCapabilityManager<
 
   protected abstract buildAsCode(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): EaCNodeCapabilityAsCode<TDetails> | null;
 
   protected abstract buildUpdatePatch(
     node: FlowGraphNode,
     update: EaCNodeCapabilityPatch<TDetails>,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null;
 
   protected abstract buildDeletePatch(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): NullableArrayOrObject<OpenIndustrialEaC> | null;
 
   /**
@@ -200,7 +196,7 @@ export abstract class EaCNodeCapabilityManager<
    */
   protected abstract buildNode?(
     id: string,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): FlowGraphNode | null;
 
   /**
@@ -208,7 +204,7 @@ export abstract class EaCNodeCapabilityManager<
    */
   protected abstract buildEdgesForNode?(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): FlowGraphEdge[];
 
   /**
@@ -217,7 +213,7 @@ export abstract class EaCNodeCapabilityManager<
   protected abstract buildConnectionPatch?(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null;
 
   /**
@@ -226,7 +222,7 @@ export abstract class EaCNodeCapabilityManager<
   protected abstract buildDisconnectionPatch?(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null;
 
   /**
@@ -236,7 +232,7 @@ export abstract class EaCNodeCapabilityManager<
   protected buildPresetPatch?(
     id: string,
     position: Position,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC>;
 
   /**
@@ -260,9 +256,9 @@ export abstract class EaCNodeCapabilityManager<
    * Subclasses can override this to extend or replace default metrics.
    */
   protected getStats(
-    type: string,
+    _type: string,
     id: string,
-    context: EaCNodeCapabilityContext
+    _1context: EaCNodeCapabilityContext,
   ): Promise<Record<string, unknown>> {
     const buffer = this.getOrCreateImpulseBuffer(id);
 
@@ -290,7 +286,7 @@ export abstract class EaCNodeCapabilityManager<
    */
   protected mergeDetailsAndMetadata<T extends object>(
     details?: T,
-    metadata?: EaCFlowNodeMetadata
+    metadata?: EaCFlowNodeMetadata,
   ): T & { Metadata?: EaCFlowNodeMetadata } {
     return {
       ...(details ?? {}),
@@ -315,7 +311,7 @@ export abstract class EaCNodeCapabilityManager<
    */
   protected wrapDeletePatch(
     outer: keyof OpenIndustrialEaC,
-    inner: string
+    inner: string,
   ): NullableArrayOrObject<OpenIndustrialEaC> {
     return {
       [outer]: {
@@ -334,11 +330,12 @@ export abstract class EaCNodeCapabilityManager<
     id: string,
     length = 20,
     seed = 10,
-    range = 5
+    range = 5,
   ): number[] {
     if (!this.impulseBuffers[id]) {
-      this.impulseBuffers[id] = Array.from({ length }, () =>
-        this.generateImpulseValue(seed, range)
+      this.impulseBuffers[id] = Array.from(
+        { length },
+        () => this.generateImpulseValue(seed, range),
       );
     }
 

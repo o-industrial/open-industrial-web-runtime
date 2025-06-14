@@ -18,11 +18,13 @@ export function ConnectionManagementForm({
   onChange,
   ingestOptions,
 }: Props) {
-  const handleStringChange = (key: keyof EaCAzureIoTHubDataConnectionDetails) =>
+  const handleStringChange =
+    (key: keyof EaCAzureIoTHubDataConnectionDetails) =>
     (e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
       onChange({ ...details, [key]: e.currentTarget.value });
 
-  const handleBooleanChange = (key: keyof EaCAzureIoTHubDataConnectionDetails) =>
+  const handleBooleanChange =
+    (key: keyof EaCAzureIoTHubDataConnectionDetails) =>
     (e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
       onChange({ ...details, [key]: e.currentTarget.checked });
 
@@ -35,7 +37,6 @@ export function ConnectionManagementForm({
 
   return (
     <div class='space-y-4 pt-2'>
-
       {/* Label */}
       <Input
         label='Connection Label'
@@ -61,25 +62,31 @@ export function ConnectionManagementForm({
       </label>
 
       {/* Subscription ID */}
-      {/* <Input
+      {
+        /* <Input
         label='Subscription ID'
         value={details.SubscriptionID ?? ''}
         onInput={handleStringChange('SubscriptionID')}
-      /> */}
+      /> */
+      }
 
       {/* Resource Group */}
-      {/* <Input
+      {
+        /* <Input
         label='Resource Group Name'
         value={details.ResourceGroupName ?? ''}
         onInput={handleStringChange('ResourceGroupName')}
-      /> */}
+      /> */
+      }
 
       {/* IoT Hub Name */}
-      {/* <Input
+      {
+        /* <Input
         label='IoT Hub Name'
         value={details.IoTHubName ?? ''}
         onInput={handleStringChange('IoTHubName')}
-      /> */}
+      /> */
+      }
 
       {/* Ingest Protocols */}
       <MultiSelectCheckboxGroup

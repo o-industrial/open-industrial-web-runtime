@@ -12,10 +12,10 @@ import { FlowGraphEdge } from '../../../types/graph/FlowGraphEdge.ts';
 import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
 
 import {
-  EverythingAsCodeOIWorkspace,
   EaCAzureDockerSimulatorDetails,
-  EaCSimulatorAsCode,
   EaCFlowNodeMetadata,
+  EaCSimulatorAsCode,
+  EverythingAsCodeOIWorkspace,
   Position,
 } from '@o-industrial/common/eac';
 import { SimulatorInspector } from '../../../../../apps/components/organisms/inspectors/SimulatorInspector.tsx';
@@ -27,16 +27,17 @@ import { SimulatorStats } from '../../../types/nodes/simulators/SimulatorStats.t
  * Responsible for projecting simulator nodes, simulates edges,
  * and binding connections via SimulatorLookup.
  */
-export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<EaCAzureDockerSimulatorDetails> {
+export class EaCSimulatorNodeCapabilityManager
+  extends EaCNodeCapabilityManager<EaCAzureDockerSimulatorDetails> {
   protected static renderer: ComponentType = memo(
-    SimulatorNodeRenderer as FunctionComponent
+    SimulatorNodeRenderer as FunctionComponent,
   );
 
   public override Type = 'simulator';
 
   protected override buildAsCode(
     node: FlowGraphNode,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): EaCNodeCapabilityAsCode<EaCAzureDockerSimulatorDetails> | null {
     const sim = ctx.GetEaC().Simulators?.[node.ID];
     if (!sim) return null;
@@ -50,10 +51,11 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
   protected override buildConnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
-    if (source.Type !== 'simulator' || target.Type !== 'connection')
+    if (source.Type !== 'simulator' || target.Type !== 'connection') {
       return null;
+    }
 
     const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
     const existing = eac.DataConnections?.[target.ID]?.SimulatorLookup;
@@ -71,7 +73,7 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
   }
 
   protected override buildDeletePatch(
-    node: FlowGraphNode
+    node: FlowGraphNode,
   ): NullableArrayOrObject<OpenIndustrialEaC> {
     return this.wrapDeletePatch('Simulators', node.ID);
   }
@@ -79,10 +81,11 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
   protected override buildDisconnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
-    if (source.Type !== 'simulator' || target.Type !== 'connection')
+    if (source.Type !== 'simulator' || target.Type !== 'connection') {
       return null;
+    }
 
     const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
     const conn = eac.DataConnections?.[target.ID];
@@ -101,7 +104,7 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
 
   protected override buildEdgesForNode(
     node: FlowGraphNode,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): FlowGraphEdge[] {
     const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
 
@@ -123,7 +126,7 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
 
   protected override buildNode(
     id: string,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): FlowGraphNode | null {
     const sim = ctx.GetEaC().Simulators?.[id];
     if (!sim) return null;
@@ -140,7 +143,7 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
   protected override buildPresetPatch(
     id: string,
     position: Position,
-    context: EaCNodeCapabilityContext
+    _context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> {
     const metadata: EaCFlowNodeMetadata = {
       Position: position,
@@ -161,13 +164,13 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
 
   protected override buildUpdatePatch(
     node: FlowGraphNode,
-    update: EaCNodeCapabilityPatch<EaCAzureDockerSimulatorDetails>
+    update: EaCNodeCapabilityPatch<EaCAzureDockerSimulatorDetails>,
   ): Partial<OpenIndustrialEaC> {
     return {
       Simulators: {
         [node.ID]: this.mergeDetailsAndMetadata(
           update.Details,
-          update.Metadata
+          update.Metadata,
         ),
       },
     };
@@ -184,7 +187,7 @@ export class EaCSimulatorNodeCapabilityManager extends EaCNodeCapabilityManager<
   protected override async getStats(
     type: string,
     id: string,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Promise<SimulatorStats> {
     const stats = await super.getStats(type, id, context);
 

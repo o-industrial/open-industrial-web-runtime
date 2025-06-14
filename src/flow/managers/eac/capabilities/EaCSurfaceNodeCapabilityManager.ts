@@ -8,9 +8,9 @@ import { EaCNodeCapabilityAsCode } from '../../../types/nodes/EaCNodeCapabilityA
 import { EaCNodeCapabilityPatch } from '../../../types/nodes/EaCNodeCapabilityPatch.ts';
 
 import {
-  EverythingAsCodeOIWorkspace,
-  EaCSurfaceAsCode,
   EaCFlowNodeMetadata,
+  EaCSurfaceAsCode,
+  EverythingAsCodeOIWorkspace,
   Position,
 } from '@o-industrial/common/eac';
 
@@ -29,14 +29,14 @@ import { SurfaceEventRouter } from '../../node-events/SurfaceEventRouter.ts';
  */
 export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
   protected static renderer: ComponentType = memo(
-    SurfaceNodeRenderer as FunctionComponent
+    SurfaceNodeRenderer as FunctionComponent,
   );
 
   public override Type = 'surface';
 
   protected override buildAsCode(
     node: FlowGraphNode,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): EaCNodeCapabilityAsCode | null {
     const surf = ctx.GetEaC().Surfaces?.[node.ID];
     if (!surf) return null;
@@ -50,7 +50,7 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
   protected override buildConnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
 
@@ -73,7 +73,7 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
   }
 
   protected override buildDeletePatch(
-    node: FlowGraphNode
+    node: FlowGraphNode,
   ): NullableArrayOrObject<OpenIndustrialEaC> {
     return this.wrapDeletePatch('Surfaces', node.ID);
   }
@@ -81,7 +81,7 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
   protected override buildDisconnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
 
@@ -106,7 +106,7 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
 
   protected override buildEdgesForNode(
     node: FlowGraphNode,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): FlowGraphEdge[] {
     const eac = ctx.GetEaC() as EverythingAsCodeOIWorkspace;
 
@@ -142,7 +142,7 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
 
   protected override buildNode(
     id: string,
-    ctx: EaCNodeCapabilityContext
+    ctx: EaCNodeCapabilityContext,
   ): FlowGraphNode | null {
     const surf = ctx.GetEaC().Surfaces?.[id];
 
@@ -161,7 +161,7 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
   protected override buildPresetPatch(
     id: string,
     position: Position,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> {
     const metadata: EaCFlowNodeMetadata = {
       Position: position,
@@ -177,8 +177,8 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
           Details: details,
           ...(context.SurfaceLookup
             ? {
-                ParentSurfaceLookup: context.SurfaceLookup,
-              }
+              ParentSurfaceLookup: context.SurfaceLookup,
+            }
             : {}),
         } as EaCSurfaceAsCode,
       },
@@ -187,13 +187,13 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
 
   protected override buildUpdatePatch(
     node: FlowGraphNode,
-    update: EaCNodeCapabilityPatch
+    update: EaCNodeCapabilityPatch,
   ): Partial<OpenIndustrialEaC> {
     return {
       Surfaces: {
         [node.ID]: this.mergeDetailsAndMetadata(
           update.Details,
-          update.Metadata
+          update.Metadata,
         ),
       },
     };
@@ -218,7 +218,7 @@ export class EaCSurfaceNodeCapabilityManager extends EaCNodeCapabilityManager {
   protected override async getStats(
     type: string,
     id: string,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Promise<SurfaceStats> {
     const stats = await super.getStats(type, id, context);
 

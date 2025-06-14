@@ -1,14 +1,7 @@
-import {
-  applyNodeChanges,
-  Edge,
-  EdgeChange,
-  Node,
-  NodeChange,
-} from 'reactflow';
+import { applyNodeChanges, Edge, EdgeChange, Node, NodeChange } from 'reactflow';
 import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
 import { FlowGraph } from '../../types/graph/FlowGraph.ts';
 import { GraphStateManager } from '../GraphStateManager.ts';
-import { PresetManager } from '../PresetManager.ts';
 import { merge, NullableArrayOrObject } from '@fathym/common';
 import { FlowNodeData } from '../../types/react/FlowNodeData.ts';
 import { EaCFlowNodeMetadata, Position } from '@o-industrial/common/eac';
@@ -27,14 +20,14 @@ export abstract class EaCScopeManager {
   constructor(
     protected graph: GraphStateManager,
     protected capabilities: EaCCapabilitiesManager,
-    protected getEaC: () => OpenIndustrialEaC
+    protected getEaC: () => OpenIndustrialEaC,
   ) {}
 
   public abstract BuildGraph(): FlowGraph;
 
   public BuildPartialForNodeUpdate(
     id: string,
-    patch: EaCNodeCapabilityPatch
+    patch: EaCNodeCapabilityPatch,
   ): Partial<OpenIndustrialEaC> | null {
     const node = this.findNode(id);
     if (!node) return null;
@@ -42,38 +35,38 @@ export abstract class EaCScopeManager {
     return this.capabilities.BuildUpdatePatch(
       node,
       patch,
-      this.getCapabilityContext()
+      this.getCapabilityContext(),
     );
   }
 
   public BuildPartialForNodeDelete(
-    id: string
+    id: string,
   ): NullableArrayOrObject<OpenIndustrialEaC> | null {
     const node = this.findNode(id);
     if (!node) return null;
 
     return this.capabilities.BuildDeletePatch(
       node,
-      this.getCapabilityContext()
+      this.getCapabilityContext(),
     );
   }
 
   public abstract CreateConnectionEdge(
     source: string,
-    target: string
+    target: string,
   ): Partial<OpenIndustrialEaC> | null;
 
   public CreatePartialEaCFromPreset(
     type: string,
     id: string,
-    position: Position
+    position: Position,
   ): Partial<OpenIndustrialEaC> {
     return (
       this.capabilities.BuildPresetPatch(
         type,
         id,
         position,
-        this.getCapabilityContext()
+        this.getCapabilityContext(),
       ) ?? {}
     );
   }
@@ -106,15 +99,15 @@ export abstract class EaCScopeManager {
   public abstract HasConnection(source: string, target: string): boolean;
 
   public InstallSimulators(
-    _simDefs: SimulatorDefinition[]
+    _simDefs: SimulatorDefinition[],
   ): Partial<OpenIndustrialEaC> {
     throw new Deno.errors.NotSupported(
-      `InstallSimulators is not supported in scope ${this.constructor.name}`
+      `InstallSimulators is not supported in scope ${this.constructor.name}`,
     );
   }
 
   public RemoveConnectionEdge(
-    edgeId: string
+    edgeId: string,
   ): Partial<OpenIndustrialEaC> | null {
     const [sourceId, targetId] = edgeId.split('->');
 
@@ -126,18 +119,18 @@ export abstract class EaCScopeManager {
     return this.capabilities.BuildDisconnectionPatch(
       src,
       tgt,
-      this.getCapabilityContext()
+      this.getCapabilityContext(),
     );
   }
 
   public abstract UpdateConnections(
     changes: EdgeChange[],
-    edges: Edge[]
+    edges: Edge[],
   ): OpenIndustrialEaC | null;
 
   public UpdateNodesFromChanges(
     changes: NodeChange[],
-    currentNodes: Node<FlowNodeData>[]
+    currentNodes: Node<FlowNodeData>[],
   ): Partial<OpenIndustrialEaC> | null {
     const updated = applyNodeChanges(changes, currentNodes);
 
@@ -163,7 +156,7 @@ export abstract class EaCScopeManager {
       const update = this.capabilities.BuildUpdatePatch(
         graphNode,
         patch,
-        this.getCapabilityContext()
+        this.getCapabilityContext(),
       );
       if (!update) continue;
 

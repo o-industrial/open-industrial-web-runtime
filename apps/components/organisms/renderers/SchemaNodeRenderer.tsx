@@ -21,7 +21,7 @@ export default function SchemaNodeRenderer({
 
   return (
     <WorkspaceNodeRendererBase
-      iconKey="schema"
+      iconKey='schema'
       label={data.label}
       enabled={data.enabled}
       onDoubleClick={data.onDoubleClick}
@@ -29,43 +29,43 @@ export default function SchemaNodeRenderer({
       class={classes}
       preMain={
         <NodeHandle
-          type="target"
+          type='target'
           position={Position.Left}
           intentType={IntentTypes.Secondary}
         />
       }
       postMain={
         <NodeHandle
-          type="source"
+          type='source'
           position={Position.Right}
           intentType={IntentTypes.Secondary}
         />
       }
     >
-      <div class="w-full flex flex-col items-center justify-center py-2 px-2 gap-2">
+      <div class='w-full flex flex-col items-center justify-center py-2 px-2 gap-2'>
         {/* Live Impulse Chart */}
-        {impulseRates.length > 1 ? (
-          <LinePreviewWithValue
-            label="Rate"
-            values={impulseRates}
-            currentValue={latest}
-            intent={IntentTypes.Info}
-            yMin={0}
-            yMax={25}
-          />
-        ) : (
-          <div class="text-sm text-gray-400 italic mb-2">No live rate data</div>
-        )}
+        {impulseRates.length > 1
+          ? (
+            <LinePreviewWithValue
+              label='Rate'
+              values={impulseRates}
+              currentValue={latest}
+              intent={IntentTypes.Info}
+              yMin={0}
+              yMax={25}
+            />
+          )
+          : <div class='text-sm text-gray-400 italic mb-2'>No live rate data</div>}
 
         {/* Footer Actions */}
-        <div class="flex justify-end gap-2 w-full mt-1 px-2">
+        <div class='flex justify-end gap-2 w-full mt-1 px-2'>
           <Action
-            title="Delete Schema"
+            title='Delete Schema'
             styleType={ActionStyleTypes.Icon}
             intentType={IntentTypes.Error}
             onClick={() => console.log('Delete schema:', data.label)}
           >
-            <DeleteIcon class="w-6 h-6" />
+            <DeleteIcon class='w-6 h-6' />
           </Action>
         </div>
       </div>

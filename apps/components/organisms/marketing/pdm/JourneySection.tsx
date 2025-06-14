@@ -1,5 +1,4 @@
 import { FunctionalComponent } from 'preact';
-import { FigureImage } from '../../../molecules/writing-devices/FigureImage.tsx';
 import { IntentTypes } from '@o-industrial/common/types';
 import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
 
@@ -8,27 +7,27 @@ const JourneySection: FunctionalComponent = () => {
   const after = getIntentStyles(IntentTypes.Primary);
 
   return (
-    <section class="bg-gradient-to-b from-neutral-50 dark:from-neutral-950 via-neon-violet-500/10 dark:via-neon-violet-500/10 to-neutral-50 dark:to-neutral-950 py-32 px-6 lg:px-8">
-      <div class="max-w-7xl mx-auto space-y-16 text-center">
+    <section class='bg-gradient-to-b from-neutral-50 dark:from-neutral-950 via-neon-violet-500/10 dark:via-neon-violet-500/10 to-neutral-50 dark:to-neutral-950 py-32 px-6 lg:px-8'>
+      <div class='max-w-7xl mx-auto space-y-16 text-center'>
         {/* Section Heading */}
-        <div class="space-y-6">
-          <h2 class="text-4xl font-bold text-neutral-900 dark:text-white">
+        <div class='space-y-6'>
+          <h2 class='text-4xl font-bold text-neutral-900 dark:text-white'>
             From vendor-owned runtime — to sovereign execution.
           </h2>
-          <p class="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
+          <p class='text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto'>
             Just like PDM made product design versioned and traceable — Reflex Runtime Memory gives
             you governance over how your systems behave.
           </p>
         </div>
 
         {/* Before / After Comparison */}
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 text-left">
+        <div class='grid grid-cols-1 lg:grid-cols-2 gap-12 text-left'>
           {/* Before */}
-          <div class="bg-white dark:bg-neutral-900 border border-white/20 dark:border-white/10 rounded-xl p-8 space-y-6 shadow-sm dark:shadow-inner">
+          <div class='bg-white dark:bg-neutral-900 border border-white/20 dark:border-white/10 rounded-xl p-8 space-y-6 shadow-sm dark:shadow-inner'>
             <h3 class={`text-xl font-semibold ${before.text}`}>
               Before Reflex Runtime Memory
             </h3>
-            <div class="space-y-4 text-sm">
+            <div class='space-y-4 text-sm'>
               {[
                 'Logic buried inside vendor controllers — no visibility, no version control',
                 'Rule changes required SOWs, MSAs, or firmware rewrites',
@@ -36,7 +35,9 @@ const JourneySection: FunctionalComponent = () => {
                 'Any change felt risky — outages, side effects, no rollback',
                 'Automation logic couldn’t be forked, tested, or promoted',
               ].map((point) => (
-                <p class={`border-l-4 pl-4 ${before.border} text-neutral-700 dark:text-neutral-400`}>
+                <p
+                  class={`border-l-4 pl-4 ${before.border} text-neutral-700 dark:text-neutral-400`}
+                >
                   {point}
                 </p>
               ))}
@@ -44,11 +45,11 @@ const JourneySection: FunctionalComponent = () => {
           </div>
 
           {/* After */}
-          <div class="bg-white dark:bg-neutral-900 border border-white/20 dark:border-white/10 rounded-xl p-8 space-y-6 shadow-sm dark:shadow-inner">
+          <div class='bg-white dark:bg-neutral-900 border border-white/20 dark:border-white/10 rounded-xl p-8 space-y-6 shadow-sm dark:shadow-inner'>
             <h3 class={`text-xl font-semibold ${after.text}`}>
               After Open Industrial
             </h3>
-            <div class="space-y-4 text-sm">
+            <div class='space-y-4 text-sm'>
               {[
                 'Every schema and agent is versioned — tracked like source code',
                 'Forked RoomState agent to control real surfaces in 30 seconds',

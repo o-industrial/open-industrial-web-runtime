@@ -6,7 +6,6 @@ import { OpenIndustrialEaC } from '../../../types/OpenIndustrialEaC.ts';
 import { FlowGraph } from '../../types/graph/FlowGraph.ts';
 import { FlowGraphNode } from '../../types/graph/FlowGraphNode.ts';
 import { FlowGraphEdge } from '../../types/graph/FlowGraphEdge.ts';
-import { PresetManager } from '../PresetManager.ts';
 import { EaCNodeCapabilityContext } from '../../types/nodes/EaCNodeCapabilityContext.ts';
 import { EaCCapabilitiesManager } from './EaCCapabilitiesManager.ts';
 
@@ -15,7 +14,7 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
     graph: GraphStateManager,
     capabilities: EaCCapabilitiesManager,
     getEaC: () => OpenIndustrialEaC,
-    protected surfaceLookup: string
+    protected surfaceLookup: string,
   ) {
     super(graph, capabilities, getEaC);
   }
@@ -49,7 +48,7 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
       const node = this.capabilities.BuildNode(
         `${this.surfaceLookup}->${connKey}`,
         'surface->connection',
-        ctx
+        ctx,
       );
       if (node) {
         nodes.push(node);
@@ -77,7 +76,7 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
 
   public CreateConnectionEdge(
     source: string,
-    target: string
+    target: string,
   ): Partial<OpenIndustrialEaC> | null {
     const src = this.findNode(source);
     const tgt = this.findNode(target);
@@ -87,7 +86,7 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
     return this.capabilities.BuildConnectionPatch(
       src,
       tgt,
-      this.getCapabilityContext()
+      this.getCapabilityContext(),
     );
   }
 
@@ -98,8 +97,8 @@ export class EaCSurfaceScopeManager extends EaCScopeManager {
   }
 
   public UpdateConnections(
-    changes: EdgeChange[],
-    edges: Edge[]
+    _changes: EdgeChange[],
+    _edges: Edge[],
   ): OpenIndustrialEaC | null {
     // let changed = false;
     // const partial: OpenIndustrialEaC = {};

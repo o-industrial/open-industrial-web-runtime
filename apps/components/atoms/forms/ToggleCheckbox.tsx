@@ -1,5 +1,5 @@
-import { JSX } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
+import { ComponentChildren } from '@fathym/eac-applications/preact';
 
 export type ToggleCheckboxProps = {
   checked: boolean;

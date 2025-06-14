@@ -2,23 +2,14 @@ import { jsonMapSetClone, merge, NullableArrayOrObject } from '@fathym/common';
 import { Edge, EdgeChange, Node, NodeChange } from 'reactflow';
 
 import { HistoryManager } from './HistoryManager.ts';
-import { PresetManager } from './PresetManager.ts';
 import { GraphStateManager } from './GraphStateManager.ts';
 import { FlowNodeData } from '../types/react/FlowNodeData.ts';
 import { SimulatorDefinition } from './SimulatorLibraryManager.ts';
 import { FlowGraphNode } from '../types/graph/FlowGraphNode.ts';
 import { OpenIndustrialEaC } from '../../types/OpenIndustrialEaC.ts';
 import { NodeScopeTypes } from '../types/graph/NodeScopeTypes.ts';
-import {
-  EaCAzureDockerSimulatorDetails,
-  EaCFlowNodeMetadata,
-  Position,
-} from '@o-industrial/common/eac';
-import {
-  EaCHistorySnapshot,
-  Proposal,
-  RecordKind,
-} from '@o-industrial/common/types';
+import { EaCFlowNodeMetadata, Position } from '@o-industrial/common/eac';
+import { EaCHistorySnapshot, Proposal, RecordKind } from '@o-industrial/common/types';
 import { EaCEnterpriseDetails, EaCVertexDetails } from '@fathym/eac';
 
 import { EaCDiffManager } from './eac/EaCDiffManager.ts';
@@ -48,7 +39,7 @@ export class EaCManager {
     protected oiSvc: OpenIndustrialAPIClient,
     protected scope: NodeScopeTypes,
     protected graph: GraphStateManager,
-    protected history: HistoryManager
+    protected history: HistoryManager,
   ) {
     this.diff = new EaCDiffManager(history, this.emitEaCChanged.bind(this));
 
@@ -59,7 +50,7 @@ export class EaCManager {
 
   public ApplyReactFlowNodeChanges(
     changes: NodeChange[],
-    currentNodes: Node<FlowNodeData>[]
+    currentNodes: Node<FlowNodeData>[],
   ): void {
     const partial = this.scopeMgr.UpdateNodesFromChanges(changes, currentNodes);
 
@@ -70,7 +61,7 @@ export class EaCManager {
 
   public ApplyReactFlowEdgeChanges(
     changes: EdgeChange[],
-    currentEdges: Edge[]
+    currentEdges: Edge[],
   ): void {
     const partial = this.scopeMgr.UpdateConnections(changes, currentEdges);
 
@@ -105,7 +96,7 @@ export class EaCManager {
     const partial = this.scopeMgr.CreatePartialEaCFromPreset(
       type,
       id,
-      position
+      position,
     );
 
     this.MergePartial(partial);
@@ -235,20 +226,21 @@ export class EaCManager {
         this.scopeMgr = new EaCWorkspaceScopeManager(
           this.graph,
           capabilities,
-          () => this.GetEaC()
+          () => this.GetEaC(),
         );
         break;
       }
 
       case 'surface': {
-        if (!lookup)
+        if (!lookup) {
           throw new Error(`Lookup must be defined for scope: ${scope}`);
+        }
 
         this.scopeMgr = new EaCSurfaceScopeManager(
           this.graph,
           capabilities,
           () => this.GetEaC(),
-          lookup
+          lookup,
         );
         break;
       }
@@ -268,7 +260,7 @@ export class EaCManager {
     patch: Partial<{
       Details: EaCVertexDetails;
       Metadata: Partial<EaCFlowNodeMetadata>;
-    }>
+    }>,
   ): void {
     const current = this.GetNodeAsCode(id);
 
@@ -323,14 +315,13 @@ export class EaCManager {
 
     if (!this.proposals || this.overlayMode === 'none') return base;
 
-    const overlays =
-      this.overlayMode === 'pending'
-        ? this.proposals.GetPending()
-        : 'ids' in this.overlayMode
-        ? this.overlayMode.ids
-            .map((id) => this.proposals.GetByID(id))
-            .filter((p): p is Proposal<RecordKind> => !!p)
-        : [];
+    const overlays = this.overlayMode === 'pending'
+      ? this.proposals.GetPending()
+      : 'ids' in this.overlayMode
+      ? this.overlayMode.ids
+        .map((id) => this.proposals.GetByID(id))
+        .filter((p): p is Proposal<RecordKind> => !!p)
+      : [];
 
     for (const proposal of overlays) {
       const patch = {

@@ -67,7 +67,7 @@ export class EaCProposalManager {
    * Accept a proposal and merge it into the live EaC system.
    * This does not persist status remotely (optional).
    */
-  public async Accept(id: string): Promise<void> {
+  public Accept(id: string): Promise<void> {
     const proposal = this.GetByID(id);
     if (!proposal) throw new Error(`Proposal not found: ${id}`);
 
@@ -84,21 +84,27 @@ export class EaCProposalManager {
 
     // Optionally:
     // await this.api.Proposals.UpdateStatus(id, 'accepted');
+
+    return Promise.resolve();
   }
 
   /**
    * Mark a proposal as rejected locally and emit change.
    * Does not persist status remotely (optional).
    */
-  public async Reject(id: string): Promise<void> {
+  public Reject(id: string): Promise<void> {
     const proposal = this.GetByID(id);
-    if (!proposal) return;
+    if (!proposal) {
+      return Promise.resolve();
+    }
 
     proposal.Status = 'rejected';
     this.emit();
 
     // Optionally:
     // await this.api.Proposals.UpdateStatus(id, 'rejected');
+
+    return Promise.resolve();
   }
 
   /**

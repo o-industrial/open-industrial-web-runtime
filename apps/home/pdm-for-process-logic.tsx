@@ -11,6 +11,7 @@ import UseCaseShowcaseSection from '../components/organisms/marketing/pdm/UseCas
 
 export const IsIsland = true;
 
+// deno-lint-ignore ban-types
 export type PDMForProcessLogicData = {};
 
 export const handler: EaCRuntimeHandlerSet<
@@ -25,15 +26,15 @@ export const handler: EaCRuntimeHandlerSet<
 
 export default function PDMForProcessLogic({}: PageProps<PDMForProcessLogicData>) {
   return (
-    <div class="flex flex-col">
+    <div class='flex flex-col'>
       <HeroSection />
-      
+
       <PainSection />
-      
+
       <SystemProofSection />
-      
+
       <JourneySection />
-      
+
       <UseCaseShowcaseSection />
 
       <CallToAction />

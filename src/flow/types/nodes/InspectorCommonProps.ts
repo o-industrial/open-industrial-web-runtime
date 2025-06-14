@@ -3,7 +3,7 @@ import { EaCVertexDetails } from '@fathym/eac';
 export type InspectorCommonProps<
   TDetails extends EaCVertexDetails = EaCVertexDetails,
   TStats extends Record<string, unknown> = Record<string, unknown>,
-  TConfig extends Record<string, unknown> = Record<string, unknown>
+  TConfig extends Record<string, unknown> = Record<string, unknown>,
 > = {
   config?: TConfig;
   details: Partial<TDetails>;
