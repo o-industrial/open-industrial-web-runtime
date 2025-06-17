@@ -43,7 +43,7 @@
     "json-schema": "npm:json-schema@0.4.0",
     // "@o-industrial/common": "jsr:@o-industrial/common@0.0.18",
     "@o-industrial/common/atomic/atoms": "../open-industrial-reference-architecture/atomic/atoms/.exports.ts",
-    "@o-industrial/common/atomic/icons": "../open-industrial-reference-architecture/atomic/icons/.exports.ts",
+    "@o-industrial/common/atomic/icons": "../open-industrial-reference-architecture/build/iconset/icons/.exports.ts",
     "@o-industrial/common/atomic/molecules": "../open-industrial-reference-architecture/atomic/molecules/.exports.ts",
     "@o-industrial/common/atomic/organisms": "../open-industrial-reference-architecture/atomic/organisms/.exports.ts",
     "@o-industrial/common/atomic/templates": "../open-industrial-reference-architecture/atomic/templates/.exports.ts",
@@ -90,7 +90,7 @@
     "tailwindcss/unimportant": "npm:tailwindcss-unimportant@2.1.1",
     "zod": "npm:zod@3.23.8",
 
-    // "$mdx/writing-devices": "jsr:@o-industrial/common/atomic/molecules/writing-devices"
+    "$mdx/writing-devices": "./scripts/writing-devices.ts"
   },
   "exclude": [
     "**/_eac-runtime/*",

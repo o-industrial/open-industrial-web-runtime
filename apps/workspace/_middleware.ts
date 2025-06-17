@@ -99,6 +99,18 @@ export function buildOpenIndustrialRuntimeMiddleware(
           Description: 'Getting started with Open Industrial and Azi.',
         },
         Actuators: loadEaCActuators(),
+        Packs: {
+          AzureIoT: {
+            Details: {
+              Path: './pack-loader?pack=@o-industrial/common/packs/azure-iot'
+            }
+          },
+          OICore: {
+            Details: {
+              Path: './pack-loader?pack=@o-industrial/common/packs/oi-core'
+            }
+          }
+        }
       };
 
       const createResp = await ctx.State.OIClient.Workspaces.Create(

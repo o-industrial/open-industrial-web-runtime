@@ -2,6 +2,7 @@ import { type Config } from 'tailwindcss';
 import scrollbar from 'tailwind-scrollbar';
 import typography from '@tailwindcss/typography';
 import unimportant from 'tailwindcss/unimportant';
+import { neonColors } from '@o-industrial/common/atomic/utils';
 
 const keyframes = {
   driftShake: {

@@ -61,6 +61,6 @@
       "timeline": "https://api.iconify.design/lucide:list-tree.svg"
     }
   },
-  "Generate": true,
+  "Generate": false,
   "SpriteSheet": "/iconset"
 }

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
@@ -14,6 +14,8 @@ import {
   WorkspaceSettingsModal,
 } from '@o-industrial/common/atomic/organisms';
 import { RuntimeWorkspaceDashboardTemplate } from '@o-industrial/common/atomic/templates';
+import AzureIoT from '@o-industrial/common/packs/azure-iot';
+import OICore from '@o-industrial/common/packs/oi-core';
 
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import { OpenIndustrialEaC } from '../../src/types/OpenIndustrialEaC.ts';
@@ -48,8 +50,16 @@ export default function WorkspacePage({
   const root = `${origin}${oiApiRoot}`;
   const oiSvc = new OpenIndustrialAPIClient(new URL(root), oiApiToken);
 
+  const packs = useMemo(
+    () => ({
+      OICore: OICore.Build(),
+      // AzureIoT: AzureIoT.Build(),
+    }),
+    []
+  );
+
   const workspaceMgr = useMemo(() => {
-    const mgr = new WorkspaceManager(initialEaC, oiSvc, 'workspace');
+    const mgr = new WorkspaceManager(initialEaC, oiSvc, packs, 'workspace');
     console.log('🧩 New WorkspaceManager created');
     return mgr;
   }, []);

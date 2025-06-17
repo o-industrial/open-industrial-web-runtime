@@ -1,1 +1,0 @@
-export { Icon, type IconProps, type JSX } from "@fathym/atomic-icons/browser";
