@@ -1,7 +1,9 @@
 import { IntentTypes } from '@o-industrial/common/types';
-import { ThematicPrincipleBlock } from '../../../molecules/writing-devices/ThematicPrincipleBlock.tsx';
-import { SystemMindset } from '../../../molecules/writing-devices/SystemMindset.tsx';
-import { AziInnerVoice } from '../../../molecules/writing-devices/AziInnerVoice.tsx';
+import {
+  AziInnerVoice,
+  SystemMindset,
+  ThematicPrincipleBlock,
+} from '@o-industrial/common/atomic/molecules';
 
 export default function YourSystemNotOursSection() {
   return (

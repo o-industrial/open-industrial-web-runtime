@@ -1,6 +1,6 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
-import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
+import { getIntentStyles } from '@o-industrial/common/atomic/utils';
 
 const JourneySection: FunctionalComponent = () => {
   const before = getIntentStyles(IntentTypes.Error);
@@ -57,7 +57,9 @@ const JourneySection: FunctionalComponent = () => {
                 'Signals are explainable — with runtime memory and execution trace',
                 'No black boxes. No guesswork. Just reflexive, composable logic.',
               ].map((point) => (
-                <p class={`border-l-4 pl-4 ${after.border} text-neutral-800 dark:text-neutral-200`}>
+                <p
+                  class={`border-l-4 pl-4 ${after.border} text-neutral-800 dark:text-neutral-200`}
+                >
                   {point}
                 </p>
               ))}

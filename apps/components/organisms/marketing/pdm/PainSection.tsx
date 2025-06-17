@@ -1,12 +1,12 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
-import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
 import { BlockedIcon } from '../../../../../build/iconset/icons/BlockedIcon.tsx';
 import { BrokenIcon } from '../../../../../build/iconset/icons/BrokenIcon.tsx';
 import { ExpensiveIcon } from '../../../../../build/iconset/icons/ExpensiveIcon.tsx';
 import { FrustratedIcon } from '../../../../../build/iconset/icons/FrustratedIcon.tsx';
 import { NoAccessIcon } from '../../../../../build/iconset/icons/NoAccessIcon.tsx';
 import { OutdatedIcon } from '../../../../../build/iconset/icons/OutdatedIcon.tsx';
+import { getIntentStyles } from '@o-industrial/common/atomic/utils';
 
 const painPoints = [
   {

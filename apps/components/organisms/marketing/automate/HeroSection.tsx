@@ -1,9 +1,9 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
-import { FigureImage } from '../../../molecules/writing-devices/FigureImage.tsx';
-import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
 import { HubspotForm } from '../HubspotForm.tsx';
-import { Action, ActionStyleTypes } from '../../../atoms/Action.tsx';
+import { getIntentStyles } from '@o-industrial/common/atomic/utils';
+import { FigureImage } from '@o-industrial/common/atomic/molecules';
+import { Action, ActionStyleTypes } from '@o-industrial/common/atomic/atoms';
 
 const HeroSection: FunctionalComponent = () => {
   const primary = getIntentStyles(IntentTypes.Primary);

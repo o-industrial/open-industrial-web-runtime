@@ -1,10 +1,10 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
-import { FigureImage } from '../../../molecules/writing-devices/FigureImage.tsx';
-import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
 import { ImpulseIcon } from '../../../../../build/iconset/icons/ImpulseIcon.tsx';
 import { SchemaIcon } from '../../../../../build/iconset/icons/SchemaIcon.tsx';
 import { SignalIcon } from '../../../../../build/iconset/icons/SignalIcon.tsx';
+import { getIntentStyles } from '@o-industrial/common/atomic/utils';
+import { FigureImage } from '@o-industrial/common/atomic/molecules';
 
 const systemSteps = [
   {

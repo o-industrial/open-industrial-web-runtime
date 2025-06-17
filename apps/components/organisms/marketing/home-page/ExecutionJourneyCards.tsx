@@ -1,5 +1,5 @@
 import { IntentTypes } from '@o-industrial/common/types';
-import { SystemMindset } from '../../../molecules/writing-devices/SystemMindset.tsx';
+import { SystemMindset } from '@o-industrial/common/atomic/molecules';
 
 const journeys = [
   {

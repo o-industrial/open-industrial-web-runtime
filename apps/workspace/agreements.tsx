@@ -2,7 +2,7 @@ import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import { AgreementManager } from '../../src/agreements/AgreementManager.ts';
-import { AgreementData, AgreementList } from '../components/organisms/AgreementList.tsx';
+import { AgreementData, AgreementList } from '@o-industrial/common/atomic/organisms';
 
 export const IsIsland = true;
 

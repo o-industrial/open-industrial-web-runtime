@@ -1,5 +1,5 @@
-import { Icon, IconProps } from "./icon.deps.ts"
+import { Icon, IconProps, JSX } from "./icon.deps.ts"
 
-export function AppIcon(props: IconProps) {
+export function AppIcon(props: IconProps): JSX.Element {
   return <Icon {...props} src="/icons/iconset" icon="app" />;
 }

@@ -1,6 +1,6 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
-import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
+import { getIntentStyles } from '@o-industrial/common/atomic/utils';
 
 const JourneySection: FunctionalComponent = () => {
   const before = getIntentStyles(IntentTypes.Error);

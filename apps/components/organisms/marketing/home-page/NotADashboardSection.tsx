@@ -1,6 +1,6 @@
-import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
 import { IntentTypes } from '@o-industrial/common/types';
-import { SystemMindset } from '../../../molecules/writing-devices/SystemMindset.tsx';
+import { getIntentStyles } from '@o-industrial/common/atomic/utils';
+import { SystemMindset } from '@o-industrial/common/atomic/molecules';
 
 export default function NotADashboardSection() {
   const legacyText = getIntentStyles(IntentTypes.Warning).text;
@@ -19,9 +19,7 @@ export default function NotADashboardSection() {
 
       <div class='grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto text-sm md:text-base text-left'>
         <div class='bg-neutral-800/40 p-6 rounded-xl border border-white/10 space-y-4'>
-          <h3 class={`font-semibold text-lg ${legacyText}`}>
-            What Breaks
-          </h3>
+          <h3 class={`font-semibold text-lg ${legacyText}`}>What Breaks</h3>
           <ul class='space-y-2 list-disc list-inside text-neutral-300'>
             <li>ETL pipelines collapse on schema drift</li>
             <li>Alert fatigue from shallow thresholds</li>
@@ -30,9 +28,7 @@ export default function NotADashboardSection() {
         </div>
 
         <div class='bg-neutral-900/40 p-6 rounded-xl border space-y-4 text-white'>
-          <h3 class={`font-semibold text-lg ${structureText}`}>
-            What Holds
-          </h3>
+          <h3 class={`font-semibold text-lg ${structureText}`}>What Holds</h3>
           <ul class='space-y-2 list-disc list-inside'>
             <li>Versioned schemas govern behavior</li>
             <li>Agents act only on structure match</li>

@@ -1,5 +1,5 @@
-import { Icon, IconProps } from "./icon.deps.ts"
+import { Icon, IconProps, JSX } from "./icon.deps.ts"
 
-export function BrokenIcon(props: IconProps) {
+export function BrokenIcon(props: IconProps): JSX.Element {
   return <Icon {...props} src="/icons/iconset" icon="broken" />;
 }

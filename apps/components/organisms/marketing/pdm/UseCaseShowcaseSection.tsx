@@ -1,10 +1,10 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
-import { getIntentStyles } from '../../../../../src/utils/getIntentStyles.ts';
 import { AppIcon } from '../../../../../build/iconset/icons/AppIcon.tsx';
 import { AgentIcon } from '../../../../../build/iconset/icons/AgentIcon.tsx';
 import { SignalIcon } from '../../../../../build/iconset/icons/SignalIcon.tsx';
 import { CompositeSchemaIcon } from '../../../../../build/iconset/icons/CompositeSchemaIcon.tsx';
+import { getIntentStyles } from '@o-industrial/common/atomic/utils';
 
 type UseCase = {
   icon: FunctionalComponent<{ class?: string }>;

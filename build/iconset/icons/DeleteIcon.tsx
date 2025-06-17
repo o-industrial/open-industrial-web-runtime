@@ -1,5 +1,5 @@
-import { Icon, IconProps } from "./icon.deps.ts"
+import { Icon, IconProps, JSX } from "./icon.deps.ts"
 
-export function DeleteIcon(props: IconProps) {
+export function DeleteIcon(props: IconProps): JSX.Element {
   return <Icon {...props} src="/icons/iconset" icon="delete" />;
 }

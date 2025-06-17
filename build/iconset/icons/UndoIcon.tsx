@@ -1,5 +1,5 @@
-import { Icon, IconProps } from "./icon.deps.ts"
+import { Icon, IconProps, JSX } from "./icon.deps.ts"
 
-export function UndoIcon(props: IconProps) {
+export function UndoIcon(props: IconProps): JSX.Element {
   return <Icon {...props} src="/icons/iconset" icon="undo" />;
 }

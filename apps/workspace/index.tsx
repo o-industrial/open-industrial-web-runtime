@@ -1,20 +1,22 @@
 import { useMemo, useState } from 'preact/hooks';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
+import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
+import { WorkspaceManager } from '@o-industrial/common/flow';
+import { BreadcrumbBar } from '@o-industrial/common/atomic/molecules';
+import {
+  AziPanel,
+  FlowPanel,
+  InspectorPanel,
+  SimulatorLibraryModal,
+  StreamPanel,
+  TimelinePanel,
+  WorkspaceSettingsModal,
+} from '@o-industrial/common/atomic/organisms';
+import { RuntimeWorkspaceDashboardTemplate } from '@o-industrial/common/atomic/templates';
 
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
-import RuntimeWorkspaceDashboardTemplate from '../components/templates/RuntimeWorkspaceDashboardTemplate.tsx';
-import FlowPanel from '../components/organisms/FlowPanel.tsx';
-import InspectorPanel from '../components/organisms/InspectorPanel.tsx';
-import AziPanel from '../components/organisms/AziPanel.tsx';
-import StreamPanel from '../components/organisms/StreamPanel.tsx';
-import TimelinePanel from '../components/organisms/TimelinePanel.tsx';
-import { WorkspaceManager } from '../../src/flow/managers/WorkspaceManager.ts';
-import { SimulatorLibraryModal } from '../components/organisms/modals/SimulatorLibraryModal.tsx';
 import { OpenIndustrialEaC } from '../../src/types/OpenIndustrialEaC.ts';
-import BreadcrumbBar from '../components/molecules/BreadcrumbBar.tsx';
-import { WorkspaceSettingsModal } from '../components/organisms/modals/WorkspaceSettingsModal.tsx';
-import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 
 export const IsIsland = true;
 

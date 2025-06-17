@@ -1,5 +1,5 @@
 import { merge } from '@fathym/common';
-import { AgreementData } from '../../apps/components/organisms/AgreementList.tsx';
+import { AgreementData } from '@o-industrial/common/atomic/organisms';
 import { IoCContainer } from '@fathym/ioc';
 import { saveWithRetry } from '../utils/saveWithRetry.ts';
 
@@ -35,11 +35,9 @@ export class AgreementManager {
   async LoadAgreements(): Promise<AgreementData[]> {
     const localFilesRoot = Deno.env.get('LOCAL_FILES_ROOT') ?? '';
 
-    const agreementsDir = import.meta.resolve(`${localFilesRoot}../../apps/assets/agreements`)
-      .replace(
-        'file:///',
-        '',
-      );
+    const agreementsDir = import.meta
+      .resolve(`${localFilesRoot}../../apps/assets/agreements`)
+      .replace('file:///', '');
 
     console.log(
       '----------------------------------agreementsDir-------------------------------------------------------------',
@@ -67,7 +65,9 @@ export class AgreementManager {
             version,
           } as AgreementData;
         } catch (err) {
-          console.warn(`AgreementManager: Missing or unreadable file: ${def.file}`);
+          console.warn(
+            `AgreementManager: Missing or unreadable file: ${def.file}`,
+          );
           console.error(err);
           return null;
         }
@@ -105,7 +105,10 @@ export class AgreementManager {
    * @param agreedKeys Array of agreement keys the user is accepting.
    * @throws Error if username is missing or concurrency issues persist.
    */
-  async SaveUserAccepted(username: string, agreedKeys: string[]): Promise<void> {
+  async SaveUserAccepted(
+    username: string,
+    agreedKeys: string[],
+  ): Promise<void> {
     if (!username) {
       throw new Error('SaveUserAccepted: Username is required.');
     }
@@ -130,13 +133,16 @@ export class AgreementManager {
 
       const merged = merge(currentAccepted, incomingAccepted);
 
-      const res = await kv.atomic()
+      const res = await kv
+        .atomic()
         .check(currentEntry)
         .set(key, merged)
         .commit();
 
       if (!res.ok) {
-        throw new Error('SaveUserAccepted: Concurrent update detected, please retry.');
+        throw new Error(
+          'SaveUserAccepted: Concurrent update detected, please retry.',
+        );
       }
     });
   }

@@ -1,7 +1,5 @@
 import { IntentTypes } from '@o-industrial/common/types';
-import { FigureImage } from '../../../molecules/writing-devices/FigureImage.tsx';
-import { SystemMindset } from '../../../molecules/writing-devices/SystemMindset.tsx';
-import { AziInnerVoice } from '../../../molecules/writing-devices/AziInnerVoice.tsx';
+import { AziInnerVoice, FigureImage, SystemMindset } from '@o-industrial/common/atomic/molecules';
 
 export default function MemoryPackShowcase() {
   return (
