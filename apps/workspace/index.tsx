@@ -14,7 +14,7 @@ import {
   WorkspaceSettingsModal,
 } from '@o-industrial/common/atomic/organisms';
 import { RuntimeWorkspaceDashboardTemplate } from '@o-industrial/common/atomic/templates';
-import AzureIoT from '@o-industrial/common/packs/azure-iot';
+// import AzureIoT from '@o-industrial/common/packs/azure-iot';
 import OICore from '@o-industrial/common/packs/oi-core';
 
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
