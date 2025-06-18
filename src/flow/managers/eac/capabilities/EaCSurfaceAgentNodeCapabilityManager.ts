@@ -61,6 +61,7 @@ export class EaCSurfaceAgentNodeCapabilityManager extends EaCNodeCapabilityManag
     target: FlowGraphNode,
     context: EaCNodeCapabilityContext
   ): Partial<OpenIndustrialEaC> | null {
+    debugger;
     if (source.Type === 'agent' && target.Type?.includes('schema')) {
       const eac = context.GetEaC();
       const agent = eac.Agents?.[source.ID];

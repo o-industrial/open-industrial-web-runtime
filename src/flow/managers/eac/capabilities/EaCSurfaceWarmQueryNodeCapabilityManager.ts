@@ -2,11 +2,7 @@ import { ComponentType, FunctionComponent } from 'preact';
 import { memo } from 'preact/compat';
 import { OpenIndustrialEaC } from '@o-industrial/common/types';
 import { EaCWarmQueryDetails } from '@fathym/eac-azure';
-import {
-  EaCFlowNodeMetadata,
-  Position,
-  SurfaceWarmQuerySettings,
-} from '@o-industrial/common/eac';
+import { EaCFlowNodeMetadata, Position, SurfaceWarmQuerySettings } from '@o-industrial/common/eac';
 import { NullableArrayOrObject } from '@fathym/common';
 import { FlowGraphNode } from '../../../types/graph/FlowGraphNode.ts';
 
@@ -23,24 +19,24 @@ import { WarmQueryStats } from '../../../types/nodes/warm-queries/WarmQueryStats
 // ✅ Compound node detail type
 type SurfaceWarmQueryNodeDetails = EaCWarmQueryDetails & SurfaceWarmQuerySettings;
 
-export class EaCSurfaceWarmQueryNodeCapabilityManager extends EaCNodeCapabilityManager<SurfaceWarmQueryNodeDetails> {
+export class EaCSurfaceWarmQueryNodeCapabilityManager
+  extends EaCNodeCapabilityManager<SurfaceWarmQueryNodeDetails> {
   protected static renderer: ComponentType = memo(
-    SurfaceWarmQueryNodeRenderer as FunctionComponent
+    SurfaceWarmQueryNodeRenderer as FunctionComponent,
   );
-  
+
   public override Type = 'warmquery';
 
   protected override buildAsCode(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): EaCNodeCapabilityAsCode<SurfaceWarmQueryNodeDetails> | null {
     const wqId = node.ID;
 
     const eac = context.GetEaC();
 
     const wqAsCode = eac.WarmQueries?.[wqId];
-    const surfaceSettings =
-      eac.Surfaces?.[context.SurfaceLookup!]?.WarmQueries?.[wqId];
+    const surfaceSettings = eac.Surfaces?.[context.SurfaceLookup!]?.WarmQueries?.[wqId];
 
     if (!wqAsCode || !surfaceSettings) return null;
 
@@ -58,20 +54,45 @@ export class EaCSurfaceWarmQueryNodeCapabilityManager extends EaCNodeCapabilityM
   protected override buildConnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
     debugger;
-    if (source.Type === 'warmquery' && target.Type?.includes('schema')) {
-      const eac = context.GetEaC();
-      const wq = eac.WarmQueries?.[source.ID];
-      if (!wq) return null;
+    const [surfaceId, wqId] = this.extractCompoundIDs(source);
+    const eac = context.GetEaC();
+    const wq = eac.WarmQueries?.[wqId];
+    if (!wq) return null;
+    const surface = eac.Surfaces?.[surfaceId];
 
+    if (source.Type === 'warmquery' && target.Type?.includes('schema')) {
       return {
-        WarmQueries: {
-          [source.ID]: {
-            ...wq,
-            Schema: {
-              SchemaLookup: target.ID,
+        Surfaces: {
+          [surfaceId]: {
+            ...surface,
+            WarmQueries: {
+              [wqId]: {
+                ...surface?.WarmQueries?.[wqId],
+                SchemaLookups: [
+                  ...(surface?.WarmQueries?.[wqId]?.SchemaLookups ?? []),
+                  target.ID,
+                ],
+              },
+            },
+          },
+        },
+      };
+    } else if (source.Type === 'warmquery' && target.Type?.includes('connection')) {
+      return {
+        Surfaces: {
+          [surfaceId]: {
+            ...surface,
+            WarmQueries: {
+              [wqId]: {
+                ...surface?.WarmQueries?.[wqId],
+                DataConnectionLookups: [
+                  ...(surface?.WarmQueries?.[wqId]?.DataConnectionLookups ?? []),
+                  target.ID,
+                ],
+              },
             },
           },
         },
@@ -84,59 +105,117 @@ export class EaCSurfaceWarmQueryNodeCapabilityManager extends EaCNodeCapabilityM
   protected override buildDisconnectionPatch(
     source: FlowGraphNode,
     target: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> | null {
-    if (source.Type !== 'warmquery' || !target.Type?.includes('schema'))
+    if (
+      source.Type !== 'warmquery' ||
+      !(target.Type?.includes('schema') || target.Type?.includes('connection'))
+    ) {
       return null;
+    }
 
+    const [surfaceId, wqId] = this.extractCompoundIDs(source);
     const eac = context.GetEaC();
-    const wq = eac.WarmQueries?.[source.ID];
+    const wq = eac.WarmQueries?.[wqId];
+    if (!wq) return null;
+    const surface = eac.Surfaces?.[surfaceId];
+    const wqSettings = surface?.WarmQueries?.[wqId];
 
-    if (!wq || wq.Schema?.SchemaLookup !== target.ID) return null;
+    if (target.Type?.includes('schema')) {
+      if (!wqSettings || !wqSettings.SchemaLookups || wqSettings.SchemaLookups.length === 0 || !wqSettings.SchemaLookups.includes(target.ID)) return null;
 
-    const { Schema, ...rest } = wq;
+      const filtered = wqSettings.SchemaLookups.filter(item => item !== target.ID);
 
-    return {
-      WarmQueries: {
-        [source.ID]: rest,
-      },
-    };
+      return {
+        Surfaces: {
+          [surfaceId]: {
+            ...surface,
+            WarmQueries: {
+              [wqId]: {
+                ...surface?.WarmQueries?.[wqId],
+                SchemaLookups: filtered,
+              },
+            },
+          },
+        },
+      };
+    } else if (target.Type?.includes('connection')) {
+      if (!wqSettings || !wqSettings.DataConnectionLookups || wqSettings.DataConnectionLookups.length === 0 || !wqSettings.DataConnectionLookups.includes(target.ID)) return null;
+
+      const filtered = (wqSettings.DataConnectionLookups as string[]).filter(item => item !== target.ID);
+
+      return {
+        Surfaces: {
+          [surfaceId]: {
+            ...surface,
+            WarmQueries: {
+              [wqId]: {
+                ...surface?.WarmQueries?.[wqId],
+                DataConnectionLookups: filtered,
+              },
+            },
+          },
+        },
+      };
+    }
   }
 
   protected override buildDeletePatch(
-    node: FlowGraphNode
+    node: FlowGraphNode,
+    context: EaCNodeCapabilityContext,
   ): NullableArrayOrObject<OpenIndustrialEaC> {
     const [surfaceId, wqId] = this.extractCompoundIDs(node);
+    const eac = context.GetEaC();
+    const surface = eac.Surfaces?.[surfaceId];
 
     return {
       Surfaces: {
         [surfaceId]: {
+          ...surface,
           WarmQueries: {
             [wqId]: null,
           },
         },
       },
+      WarmQueries: {
+        [wqId]: null,
+      }
     } as unknown as NullableArrayOrObject<OpenIndustrialEaC>;
   }
 
   protected override buildEdgesForNode(
     node: FlowGraphNode,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): FlowGraphEdge[] {
     const eac = context.GetEaC();
     const wqId = node.ID;
-    const wq = eac.WarmQueries?.[wqId];
+    const surface = eac.Surfaces?.[context.SurfaceLookup];
 
     const edges: FlowGraphEdge[] = [];
 
-    const targetSchema = wq?.Schema?.SchemaLookup;
+    const targetSchemas = surface?.WarmQueries[wqId]?.SchemaLookups;
 
-    if (targetSchema) {
-      edges.push({
-        ID: `${targetSchema}->${wqId}`,
-        Source: targetSchema,
-        Target: wqId,
-        Label: 'targets',
+    if (targetSchemas) {
+      targetSchemas.forEach((targetSchema: string) => {
+        edges.push({
+          ID: `${targetSchema}->${wqId}`,
+          Source: targetSchema,
+          Target: wqId,
+          Label: 'targets',
+        });
+      });
+    }
+
+    const targetConnections = surface?.WarmQueries[wqId]?.DataConnectionLookups;
+
+    if (targetConnections) {
+      targetConnections.forEach((targetConnection: string) => {
+        edges.push({
+          ID: `${targetConnection}->${wqId}`,
+          Source: targetConnection,
+          Target: wqId,
+          Label: 'queries',
+        });
       });
     }
 
@@ -145,7 +224,7 @@ export class EaCSurfaceWarmQueryNodeCapabilityManager extends EaCNodeCapabilityM
 
   protected override buildNode(
     id: string,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): FlowGraphNode | null {
     const surfaceId = context.SurfaceLookup!;
     const wqId = id;
@@ -179,7 +258,7 @@ export class EaCSurfaceWarmQueryNodeCapabilityManager extends EaCNodeCapabilityM
   protected override buildPresetPatch(
     id: string,
     position: Position,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> {
     const metadata: EaCFlowNodeMetadata = {
       Position: position,
@@ -197,17 +276,17 @@ export class EaCSurfaceWarmQueryNodeCapabilityManager extends EaCNodeCapabilityM
       },
       ...(context.SurfaceLookup
         ? {
-            Surfaces: {
-              [context.SurfaceLookup]: {
-                WarmQueries: {
-                  [id]: {
-                    ShowHistory: false,
-                    Metadata: metadata,
-                  },
+          Surfaces: {
+            [context.SurfaceLookup]: {
+              WarmQueries: {
+                [id]: {
+                  SchemaLookups:[] as string[],
+                  DataConnectionLookups:[] as string[],
                 },
               },
             },
-          }
+          },
+        }
         : {}),
     };
   }
@@ -215,7 +294,7 @@ export class EaCSurfaceWarmQueryNodeCapabilityManager extends EaCNodeCapabilityM
   protected override buildUpdatePatch(
     node: FlowGraphNode,
     update: EaCNodeCapabilityPatch<SurfaceWarmQueryNodeDetails>,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Partial<OpenIndustrialEaC> {
     const wqId = node.ID;
 
@@ -223,7 +302,7 @@ export class EaCSurfaceWarmQueryNodeCapabilityManager extends EaCNodeCapabilityM
       ...(update.Metadata ? { Metadata: update.Metadata } : {}),
     };
 
-    const { ShowHistory: _, ...rest } = update.Details ?? {};
+    const { SchemaLookups: _, DataConnectionLookups: __,  ...rest } = update.Details ?? {};
     const wqDetails: Partial<EaCWarmQueryDetails> = rest;
 
     const patch: Partial<OpenIndustrialEaC> = {};
@@ -259,12 +338,12 @@ export class EaCSurfaceWarmQueryNodeCapabilityManager extends EaCNodeCapabilityM
 
   protected override getRenderer() {
     return EaCSurfaceWarmQueryNodeCapabilityManager.renderer;
-  }  
+  }
 
   protected override async getStats(
     type: string,
     id: string,
-    context: EaCNodeCapabilityContext
+    context: EaCNodeCapabilityContext,
   ): Promise<WarmQueryStats> {
     const stats = await super.getStats(type, id, context);
 
