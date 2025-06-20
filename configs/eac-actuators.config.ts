@@ -1,10 +1,14 @@
 import { EaCModuleActuators } from '@fathym/eac';
 
 export const loadEaCActuators: () => EaCModuleActuators = () => {
-  const _base = Deno.env.get('EaCStewardAPIs_URL');
+  const base = Deno.env.get('OPEN_INDUSTRIAL_API_ROOT');
 
   return {
     $Force: true,
+    DataConnections: {
+      APIPath: new URL('./actuators/data-connections', base),
+      Order: 300,
+    },
     // GitHubApps: {
     //   APIPath: new URL('./github-apps', base),
     //   Order: 100,

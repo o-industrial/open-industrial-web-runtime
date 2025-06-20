@@ -14,11 +14,11 @@ import {
   WorkspaceSettingsModal,
 } from '@o-industrial/common/atomic/organisms';
 import { RuntimeWorkspaceDashboardTemplate } from '@o-industrial/common/atomic/templates';
-// import AzureIoT from '@o-industrial/common/packs/azure-iot';
 import OICore from '@o-industrial/common/packs/oi-core';
 
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import { OpenIndustrialEaC } from '../../src/types/OpenIndustrialEaC.ts';
+import { IoCContainer } from '@fathym/ioc';
 
 export const IsIsland = true;
 
@@ -44,30 +44,54 @@ export const handler: EaCRuntimeHandlerSet<
 export default function WorkspacePage({
   Data: { Workspace: initialEaC, OIAPIRoot: oiApiRoot, OIAPIToken: oiApiToken },
 }: PageProps<WorkspacePageData>) {
-  console.log('🌀 WorkspacePage mounted');
-
   const origin = location?.origin ?? 'https://server.com';
   const root = `${origin}${oiApiRoot}`;
-  const oiSvc = new OpenIndustrialAPIClient(new URL(root), oiApiToken);
-
-  const packs = useMemo(
-    () => ({
-      OICore: OICore.Build(),
-      // AzureIoT: AzureIoT.Build(),
-    }),
+  const oiSvc = useMemo(
+    () => new OpenIndustrialAPIClient(new URL(root), oiApiToken),
     []
   );
 
-  const workspaceMgr = useMemo(() => {
-    const mgr = new WorkspaceManager(initialEaC, oiSvc, packs, 'workspace');
-    console.log('🧩 New WorkspaceManager created');
-    return mgr;
-  }, []);
-
+  const [workspaceMgr, setWorkspaceMgr] = useState<WorkspaceManager | null>(
+    null
+  );
   const [showMarketplace, setShowMarketplace] = useState(false);
   const [showWorkspaceSettings, setShowWorkspaceSettings] = useState(false);
 
-  // 🔁 Get reactive EaC and use it to update pathParts
+  // ⏬ Load capabilities pack from dynamic endpoint
+  useEffect(() => {
+    (async () => {
+      try {
+        // const capsResp = await oiSvc.Workspaces.LoadCapabilities();
+
+        // const mod = await import(await capsResp.text());
+
+        // const pack = mod.default?.Build?.() ?? mod.Build?.();
+        // const capabilities = pack?.Capabilities;
+
+        // if (!capabilities) throw new Error('No capabilities found in loaded pack');
+
+        const ioc = new IoCContainer();
+
+        ioc.Register(OpenIndustrialAPIClient, () => oiSvc);
+
+        const capabilities = (await OICore.Build(ioc)).Capabilities!;
+
+        const mgr = new WorkspaceManager(
+          initialEaC,
+          oiSvc,
+          capabilities,
+          'workspace'
+        );
+        setWorkspaceMgr(mgr);
+        console.log('🔌 Capabilities loaded and WorkspaceManager initialized');
+      } catch (err) {
+        console.error('❌ Failed to load capabilities pack', err);
+      }
+    })();
+  }, []);
+
+  if (!workspaceMgr) return <div>Loading workspace...</div>;
+
   const pathParts = workspaceMgr.UseBreadcrumb();
 
   const modals = (

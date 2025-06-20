@@ -102,12 +102,12 @@ export function buildOpenIndustrialRuntimeMiddleware(
         Packs: {
           AzureIoT: {
             Details: {
-              Path: './pack-loader?pack=@o-industrial/common/packs/azure-iot'
+              Path: '@o-industrial/common/packs/azure-iot'
             }
           },
           OICore: {
             Details: {
-              Path: './pack-loader?pack=@o-industrial/common/packs/oi-core'
+              Path: '@o-industrial/common/packs/oi-core'
             }
           }
         }
