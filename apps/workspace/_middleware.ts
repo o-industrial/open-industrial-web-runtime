@@ -4,7 +4,7 @@ import { loadJwtConfig, redirectRequest } from '@fathym/common';
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import { AgreementManager } from '../../src/agreements/AgreementManager.ts';
 import { agreementsBlockerMiddleware } from '../../src/agreements/agreementsBlockerMiddleware.ts';
-import { OpenIndustrialEaC } from '../../src/types/OpenIndustrialEaC.ts';
+import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 import { loadEaCActuators } from '../../configs/eac-actuators.config.ts';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 import { OpenIndustrialJWTPayload } from '@o-industrial/common/types';
@@ -93,7 +93,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
     // 🚫 Still no workspace? Create one
     if (!lookup) {
-      const newWorkspace: OpenIndustrialEaC = {
+      const newWorkspace: EverythingAsCodeOIWorkspace = {
         Details: {
           Name: 'hello-azi',
           Description: 'Getting started with Open Industrial and Azi.',

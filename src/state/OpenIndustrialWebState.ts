@@ -1,5 +1,5 @@
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
-import { OpenIndustrialEaC } from '../types/OpenIndustrialEaC.ts';
+import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 import { EaCUserRecord } from '@fathym/eac';
 
 export type OpenIndustrialWebState = {
@@ -13,7 +13,7 @@ export type OpenIndustrialWebState = {
 
   UserWorkspaces: EaCUserRecord[];
 
-  Workspace: OpenIndustrialEaC;
+  Workspace: EverythingAsCodeOIWorkspace;
 
   WorkspaceLookup: string;
 };

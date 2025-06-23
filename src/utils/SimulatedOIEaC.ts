@@ -1,7 +1,7 @@
-import { OpenIndustrialEaC } from '../types/OpenIndustrialEaC.ts';
+import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 import { EaCAzureIoTHubDataConnectionDetails } from '@o-industrial/common/eac';
 
-export const SimulatedOIEaC: OpenIndustrialEaC = {
+export const SimulatedOIEaC: EverythingAsCodeOIWorkspace = {
   DataConnections: {
     iotHubIngest: {
       Enabled: true,

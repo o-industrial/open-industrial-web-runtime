@@ -17,7 +17,7 @@ import { RuntimeWorkspaceDashboardTemplate } from '@o-industrial/common/atomic/t
 import OICore from '@o-industrial/common/packs/oi-core';
 
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
-import { OpenIndustrialEaC } from '../../src/types/OpenIndustrialEaC.ts';
+import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 import { IoCContainer } from '@fathym/ioc';
 
 export const IsIsland = true;
@@ -25,7 +25,7 @@ export const IsIsland = true;
 type WorkspacePageData = {
   OIAPIRoot: string;
   OIAPIToken: string;
-  Workspace: OpenIndustrialEaC;
+  Workspace: EverythingAsCodeOIWorkspace;
 };
 
 export const handler: EaCRuntimeHandlerSet<

@@ -1,7 +1,7 @@
 import { EaCModuleActuators } from '@fathym/eac';
 
 export const loadEaCActuators: () => EaCModuleActuators = () => {
-  const base = Deno.env.get('OPEN_INDUSTRIAL_API_ROOT');
+  const base = Deno.env.get('OPEN_INDUSTRIAL_ACTUATORS_ROOT');
 
   return {
     $Force: true,
