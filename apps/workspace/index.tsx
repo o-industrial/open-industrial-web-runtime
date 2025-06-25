@@ -15,10 +15,10 @@ import {
 } from '@o-industrial/common/atomic/organisms';
 import { RuntimeWorkspaceDashboardTemplate } from '@o-industrial/common/atomic/templates';
 import OICore from '@o-industrial/common/packs/oi-core';
-
-import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
+import { marked } from 'npm:marked@15.0.1';
 import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 import { IoCContainer } from '@fathym/ioc';
+import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 
 export const IsIsland = true;
 
@@ -48,11 +48,11 @@ export default function WorkspacePage({
   const root = `${origin}${oiApiRoot}`;
   const oiSvc = useMemo(
     () => new OpenIndustrialAPIClient(new URL(root), oiApiToken),
-    []
+    [],
   );
 
   const [workspaceMgr, setWorkspaceMgr] = useState<WorkspaceManager | null>(
-    null
+    null,
   );
   const [showMarketplace, setShowMarketplace] = useState(false);
   const [showWorkspaceSettings, setShowWorkspaceSettings] = useState(false);
@@ -76,12 +76,17 @@ export default function WorkspacePage({
 
         const capabilities = (await OICore.Build(ioc)).Capabilities!;
 
+        const aziCircuit = '/api/synaptic/circuits/azi';
+
         const mgr = new WorkspaceManager(
           initialEaC,
           oiSvc,
           capabilities,
-          'workspace'
+          'workspace',
+          aziCircuit,
+          oiApiToken,
         );
+
         setWorkspaceMgr(mgr);
         console.log('🔌 Capabilities loaded and WorkspaceManager initialized');
       } catch (err) {
@@ -114,7 +119,12 @@ export default function WorkspacePage({
 
   return (
     <RuntimeWorkspaceDashboardTemplate
-      azi={<AziPanel workspaceMgr={workspaceMgr} />}
+      azi={
+        <AziPanel
+          workspaceMgr={workspaceMgr}
+          renderMessage={(msg) => marked.parse(msg) as string}
+        />
+      }
       breadcrumb={
         <BreadcrumbBar
           pathParts={pathParts}

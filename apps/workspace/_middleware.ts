@@ -102,15 +102,15 @@ export function buildOpenIndustrialRuntimeMiddleware(
         Packs: {
           AzureIoT: {
             Details: {
-              Path: '@o-industrial/common/packs/azure-iot'
-            }
+              Path: '@o-industrial/common/packs/azure-iot',
+            },
           },
           OICore: {
             Details: {
-              Path: '@o-industrial/common/packs/oi-core'
-            }
-          }
-        }
+              Path: '@o-industrial/common/packs/oi-core',
+            },
+          },
+        },
       };
 
       const createResp = await ctx.State.OIClient.Workspaces.Create(
