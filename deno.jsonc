@@ -37,7 +37,7 @@
     "@fathym/ioc": "jsr:@fathym/ioc@0.0.14",
     "immer": "npm:immer@10.1.1",
     "json-schema": "npm:json-schema@0.4.0",
-    "@o-industrial/common": "jsr:@o-industrial/common@0.0.35",
+    "@o-industrial/common": "jsr:@o-industrial/common@0.0.74",
     // "@o-industrial/common/atomic/atoms": "../open-industrial-reference-architecture/atomic/atoms/.exports.ts",
     // "@o-industrial/common/atomic/icons": "../open-industrial-reference-architecture/build/iconset/icons/.exports.ts",
     // "@o-industrial/common/atomic/molecules": "../open-industrial-reference-architecture/atomic/molecules/.exports.ts",
