@@ -48,11 +48,11 @@ export default function WorkspacePage({
   const root = `${origin}${oiApiRoot}`;
   const oiSvc = useMemo(
     () => new OpenIndustrialAPIClient(new URL(root), oiApiToken),
-    [],
+    []
   );
 
   const [workspaceMgr, setWorkspaceMgr] = useState<WorkspaceManager | null>(
-    null,
+    null
   );
   const [showMarketplace, setShowMarketplace] = useState(false);
   const [showWorkspaceSettings, setShowWorkspaceSettings] = useState(false);
@@ -84,7 +84,7 @@ export default function WorkspacePage({
           capabilities,
           'workspace',
           aziCircuit,
-          oiApiToken,
+          oiApiToken
         );
 
         setWorkspaceMgr(mgr);
@@ -132,7 +132,7 @@ export default function WorkspacePage({
         />
       }
       inspector={<InspectorPanel workspaceMgr={workspaceMgr} />}
-      stream={<StreamPanel />}
+      stream={<StreamPanel workspaceMgr={workspaceMgr} />}
       timeline={<TimelinePanel />}
       modals={modals}
     >
