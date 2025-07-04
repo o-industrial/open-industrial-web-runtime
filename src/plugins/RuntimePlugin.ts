@@ -25,6 +25,7 @@ import {
   EaCLocalDistributedFileSystemDetails,
 } from '@fathym/eac/dfs';
 import { EaCAzureADB2CProviderDetails } from '@fathym/eac-identity';
+import { fromFileUrl } from 'jsr:@std/path@1.0.8';
 
 export default class RuntimePlugin implements EaCRuntimePlugin {
   constructor() {}
@@ -404,22 +405,22 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             } as EaCJSRDistributedFileSystemDetails,
           },
           'jsr:@o-industrial/common': {
-            // Details: {
-            //   Type: 'Local',
-            //   FileRoot: fromFileUrl(
-            //     import.meta.resolve(
-            //       '../../../open-industrial-reference-architecture/',
-            //     ),
-            //   ),
-            //   Extensions: ['tsx'],
-            // } as EaCLocalDistributedFileSystemDetails,
             Details: {
-              Type: 'JSR',
-              Package: '@o-industrial/common',
-              Version: '',
-              // FileRoot: './atomic',
+              Type: 'Local',
+              FileRoot: fromFileUrl(
+                import.meta.resolve(
+                  '../../../open-industrial-reference-architecture/',
+                ),
+              ),
               Extensions: ['tsx'],
-            } as EaCJSRDistributedFileSystemDetails,
+            } as EaCLocalDistributedFileSystemDetails,
+            // Details: {
+            //   Type: 'JSR',
+            //   Package: '@o-industrial/common',
+            //   Version: '',
+            //   // FileRoot: './atomic',
+            //   Extensions: ['tsx'],
+            // } as EaCJSRDistributedFileSystemDetails,
           },
         },
         Modifiers: {
