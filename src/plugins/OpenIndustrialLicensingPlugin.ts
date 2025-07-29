@@ -21,18 +21,24 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
         Applications: {
           licensingApi: {
             Details: {
-              Name: 'Open Biotech Licensing API',
-              Description: 'The licensing API for Open Biotech.',
+              Name: 'Open Industrial Licensing API',
+              Description: 'The licensing API for Open Industrial.',
             },
             ModifierResolvers: {},
             Processor: {
               Type: 'Stripe',
-              DatabaseLookup: 'o-biotech',
-              LicenseLookup: 'o-biotech',
-              HandleSubscription: async (entLookup, username, licLookup, planLookup, priceLookup) => {
-                const parentEaCSvc = await loadEaCLicensingSvc();
+              DatabaseLookup: 'oi',
+              LicenseLookup: 'o-industrial',
+              HandleSubscription: async (
+                entLookup,
+                username,
+                licLookup,
+                planLookup,
+                priceLookup
+              ) => {
+                const licSvc = await loadEaCLicensingSvc();
 
-                const licSubRes = await parentEaCSvc.License.Subscription(
+                const licSubRes = await licSvc.License.Subscription(
                   entLookup,
                   username,
                   licLookup,
@@ -46,11 +52,11 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
           },
         },
         Licenses: {
-          'o-biotech': {
-            DatabaseLookup: 'o-biotech',
+          'o-industrial': {
+            DatabaseLookup: 'oi',
             Details: {
-              Name: 'OpenBiotech',
-              Description: 'The main access license for OpenBiotech',
+              Name: 'OpenIndustrial',
+              Description: 'The main access license for OpenIndustrial',
               Enabled: true,
               PublishableKey: Deno.env.get('STRIPE_PUBLISHABLE_KEY')!,
               SecretKey: Deno.env.get('STRIPE_SECRET_KEY')!,
@@ -60,13 +66,14 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
               standard: {
                 Details: {
                   Name: 'Standard',
-                  Description: 'Get Started with 1 enterprise workspace',
+                  Description: 'Get started in our shared cloud',
                   Featured: 'Popular',
                   Features: [
-                    'Fully Provisioned Azure Cloud',
+                    'Shared Azure Cloud Hosting',
                     '1 Enterprise Workspace',
+                    'Unlimited Schemas & Agents',
                   ],
-                  Priority: 200,
+                  Priority: 300,
                 },
                 Prices: {
                   monthly: {
@@ -82,24 +89,26 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
                     Details: {
                       Name: 'Yearly',
                       Currency: 'USD',
-                      Discount: 0,
+                      Discount: 15,
                       Interval: 'year',
                       Value: 999.99,
                     },
                   },
                 },
               },
+
               pro: {
                 Details: {
                   Name: 'Pro',
-                  Description: 'Scale with unlimited workspaces',
+                  Description: 'Scale with a managed private runtime',
                   Featured: '',
                   Features: [
-                    'Fully Provisioned Azure Cloud',
-                    'Unlimited Enterprise Workspaces',
+                    'Managed Azure Cloud Runtime',
+                    'Unlimited Workspaces',
+                    'Dedicated Surface Isolation',
+                    'Priority Support',
                   ],
-                  Popular: '',
-                  Priority: 100,
+                  Priority: 200,
                 },
                 Prices: {
                   monthly: {
@@ -115,9 +124,46 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
                     Details: {
                       Name: 'Yearly',
                       Currency: 'USD',
-                      Discount: 0,
+                      Discount: 20,
                       Interval: 'year',
                       Value: 2499.99,
+                    },
+                  },
+                },
+              },
+
+              sovereign: {
+                Details: {
+                  Name: 'Sovereign',
+                  Description: 'Bring your own cloud and retain full control',
+                  Featured: 'Enterprise',
+                  Features: [
+                    'Self-Hosted Azure Deployment',
+                    'Unlimited Workspaces',
+                    'Runtime Access & System CLI',
+                    'Federated Memory & Governance Support',
+                    'Priority Engineering Access',
+                    '* + Annual Enterprise License',
+                  ],
+                  Priority: 100,
+                },
+                Prices: {
+                  monthly: {
+                    Details: {
+                      Name: 'Monthly',
+                      Currency: 'USD',
+                      Discount: 0,
+                      Interval: 'month',
+                      Value: 499.99,
+                    },
+                  },
+                  yearly: {
+                    Details: {
+                      Name: 'Annual License',
+                      Currency: 'USD',
+                      Discount: 0,
+                      Interval: 'year',
+                      Value: 4999.99,
                     },
                   },
                 },

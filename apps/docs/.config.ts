@@ -9,8 +9,20 @@ function loadDocsConfig(): Promise<DocsConfig> {
     Title: 'Open Industrial - Documentation',
     Nav: [
       {
-        Title: 'Meet Azi',
+        Title: 'Getting Started',
         Path: '/',
+        Children: [
+          { Title: 'Connect', Path: '/getting-started/connect' },
+          { Title: 'Observe', Path: '/getting-started/observe' },
+          { Title: 'Ask Azi', Path: '/getting-started/ask-azi' },
+          { Title: 'Use APIs', Path: '/getting-started/use-apis' },
+          { Title: 'Collaborate', Path: '/getting-started/collaborate' },
+          { Title: `What's Next`, Path: '/getting-started/whats-next' },
+        ],
+      },
+      {
+        Title: 'Meet Azi',
+        Path: '/meet-azi',
         Children: [
           { Title: 'Spin Up the Sim', Path: '/meet-azi/spin-up-sim' },
           {
@@ -28,7 +40,10 @@ function loadDocsConfig(): Promise<DocsConfig> {
         Children: [
           { Title: 'Key Concepts', Path: '/execution-model/key-concepts' },
           { Title: 'Execution Loop', Path: '/execution-model/execution-loop' },
-          { Title: 'Schema Promotion', Path: '/execution-model/schema-promotion' },
+          {
+            Title: 'Schema Promotion',
+            Path: '/execution-model/schema-promotion',
+          },
           { Title: 'Surfaces', Path: '/execution-model/surfaces' },
           { Title: 'Forking', Path: '/execution-model/forking' },
           { Title: 'Workforce', Path: '/execution-model/workforce' },

@@ -1,0 +1,135 @@
+import {
+  ThematicPrincipleBlock,
+  AziInnerVoice,
+  InlineUXTip,
+  SystemMindset,
+  FigureImage,
+  IntentTypes,
+} from '$mdx/writing-devices';
+
+# Use the APIs
+
+<SystemMindset intentType={IntentTypes.Primary}>
+  Your data isn’t trapped in the UI. Everything is API-accessible — from the first impulse to the final insight.
+</SystemMindset>
+
+Whether you're building dashboards, feeding ML models, or triggering alerts — Open Industrial gives you robust, cloud-native APIs to stream, filter, and export your telemetry.
+
+---
+
+## REST API
+
+Use REST to access any connection's data:
+
+```http
+GET /api/data?connection=boiler-temp-001&field=temperature&last=100
+```
+
+This returns the latest 100 temperature values from the `boiler-temp-001` connection.
+
+You can also filter by:
+- Timestamp ranges
+- Field thresholds
+- Device IDs
+
+<InlineUXTip intentType={IntentTypes.Info}>
+All REST calls require an API token scoped to your Workspace.
+</InlineUXTip>
+
+---
+
+## GraphQL API
+
+For finer-grained queries, use GraphQL:
+
+```graphql
+query {
+  impulses(connection: "line-3") {
+    timestamp
+    flowRate
+    pressure
+  }
+}
+```
+
+GraphQL is perfect for:
+- Custom dashboards
+- Conditional value logic
+- Lightweight data apps
+
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+Ask for just what you need — no more, no less.
+</AziInnerVoice>
+
+---
+
+## AI-Native API
+
+You can talk to Azi directly via API — ask questions, get structured answers.
+
+```http
+POST /api/ask-azi
+{
+  "question": "Which devices had temperature over 90 in the last day?"
+}
+```
+
+The response includes:
+- Parsed KQL
+- Data results
+- Summary statement
+
+<ThematicPrincipleBlock intentType={IntentTypes.Secondary}>
+  Think of Azi as a query assistant — always ready, via endpoint.
+</ThematicPrincipleBlock>
+
+---
+
+## Streaming and Export
+
+Telemetry can also be streamed or downloaded:
+
+- Stream data in real time with server-sent events
+- Export any query as CSV or JSON
+- Schedule regular extracts for external systems
+
+<FigureImage
+  src="/assets/screenshots/api-export-panel.png"
+  alt="Data export options for API or file download"
+  caption="Every result can be exported, piped, or stored."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="2xl"
+/>
+
+---
+
+## Secure + Scoped
+
+All APIs are:
+- Token-authenticated (JWT or Azure AD)
+- Workspace-scoped
+- Loggable + auditable
+
+You can create:
+- Viewer tokens (read-only)
+- Editor tokens (query + annotate)
+- System tokens (for scheduled jobs or ingestion)
+
+<InlineUXTip intentType={IntentTypes.Info}>
+Rotate API keys regularly and assign access by role.
+</InlineUXTip>
+
+---
+
+## Developer-First by Design
+
+Every visual you see — every node, every stream — is backed by an API.
+
+<ThematicPrincipleBlock intentType={IntentTypes.Primary}>
+  If you can click it, you can script it.
+</ThematicPrincipleBlock>
+
+Build full integrations, test new hypotheses, or extend your system — all from the same interface.
+
+👉 <strong>Next: Share, Export, Collaborate</strong>

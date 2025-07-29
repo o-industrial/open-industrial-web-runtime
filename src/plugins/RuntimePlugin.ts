@@ -29,6 +29,7 @@ import {
 } from '@fathym/eac/dfs';
 import { EaCAzureADB2CProviderDetails } from '@fathym/eac-identity';
 import { fromFileUrl } from 'jsr:@std/path@1.0.8';
+import OpenIndustrialLicensingPlugin from './OpenIndustrialLicensingPlugin.ts';
 
 export default class RuntimePlugin implements EaCRuntimePlugin {
   constructor() {}
@@ -38,7 +39,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
       EverythingAsCode & EverythingAsCodeApplications & EverythingAsCodeDenoKV
     > = {
       Name: RuntimePlugin.name,
-      Plugins: [new FathymAtomicIconsPlugin()],
+      Plugins: [
+        new FathymAtomicIconsPlugin(),
+        new OpenIndustrialLicensingPlugin(),
+      ],
       IoC: new IoCContainer(),
       EaC: {
         Projects: {
@@ -109,6 +113,11 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               home2: {
                 PathPattern: '/landing*',
                 Priority: 300,
+              },
+              licensingApi: {
+                PathPattern: '/workspace/api/o-industrial/licensing/*',
+                Priority: 700,
+                IsPrivate: true,
               },
               oauth: {
                 PathPattern: '/oauth/*',
