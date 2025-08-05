@@ -3,7 +3,13 @@ import { JSX } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { EaCLicenseAsCode, EaCUserLicense } from '@fathym/eac-licensing';
 import { loadStripe } from 'npm:@stripe/stripe-js';
-import { Action, ActionGroup, ActionStyleTypes, classSet, SlideToggle } from '@fathym/atomic';
+import {
+  Action,
+  ActionGroup,
+  ActionStyleTypes,
+  classSet,
+  SlideToggle,
+} from '@fathym/atomic';
 
 export const IsIsland = true;
 
@@ -25,7 +31,7 @@ export default function Licenses(props: LicensesProps) {
   const [activePlan, setActivePlan] = useState(undefined as string | undefined);
 
   const [clientSecret, setClientSecret] = useState(
-    undefined as string | undefined,
+    undefined as string | undefined
   );
 
   const [isMonthly, setIsMonthly] = useState(true);
@@ -66,7 +72,7 @@ export default function Licenses(props: LicensesProps) {
     .flatMap((p) => p);
 
   const intervalPlans = plans.filter(
-    (p) => p.Interval === (isMonthly ? 'month' : 'year'),
+    (p) => p.Interval === (isMonthly ? 'month' : 'year')
   );
 
   const activateMonthly = async () => {
@@ -80,22 +86,24 @@ export default function Licenses(props: LicensesProps) {
   const activatePlan = async (planLookup: string, isMonthly: boolean) => {
     const interval = isMonthly ? 'month' : 'year';
 
-    console.log(interval);
+    const planKey = `${planLookup}-${interval}`;
 
-    const _planKey = `${planLookup}-${interval}`;
-
-    const plan = plans.find((p) => p.Lookup === _planKey)!;
+    const plan = plans.find((p) => p.Lookup === planKey)!;
 
     setLoading(true);
 
-    const resp = await fetch('/workspace/api/o-industrial/licensing/subscribe', {
-      method: 'POST',
-      body: JSON.stringify({
-        LicenseLookup: props.licLookup,
-        PlanLookup: planLookup,
-        PriceLookup: plan.PriceLookup,
-      } as EaCUserLicense),
-    });
+    const resp = await fetch(
+      '/workspace/api/o-industrial/licensing/subscribe',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          LicenseLookup: props.licLookup,
+          PlanLookup: planLookup,
+          PriceLookup: plan.PriceLookup,
+          SubscriptionID: '',
+        } as EaCUserLicense),
+      }
+    );
 
     const licData = await resp.json();
 
@@ -103,7 +111,7 @@ export default function Licenses(props: LicensesProps) {
       setTimeout(() => setLoading(false), 0);
 
       setClientSecret(
-        licData.Subscription.latest_invoice.payment_intent.client_secret,
+        licData.Subscription.latest_invoice.payment_intent.client_secret
       );
 
       setActivePlan(planLookup);
@@ -157,16 +165,16 @@ export default function Licenses(props: LicensesProps) {
 
   return (
     <>
-      <div class='flex flex-row max-w-sm mx-auto justify-center'>
-        <span class='mx-4'>Monthly</span>
+      <div class="flex flex-row max-w-sm mx-auto justify-center">
+        <span class="mx-4">Monthly</span>
 
         <SlideToggle checked={!isMonthly} onChange={() => activateMonthly()}>
-          <span class='mx-4'>Yearly</span>
+          <span class="mx-4">Yearly</span>
         </SlideToggle>
       </div>
 
       {activePlan && (
-        <div class='flex flex-row max-w-sm mx-auto justify-center'>
+        <div class="flex flex-row max-w-sm mx-auto justify-center">
           <Action
             actionStyle={ActionStyleTypes.Link | ActionStyleTypes.Rounded}
             onClick={() => setActivePlan(undefined)}
@@ -183,7 +191,7 @@ export default function Licenses(props: LicensesProps) {
             '-:grid -:px-8 -:gap-10 -:text-zinc-800 -:mt-10',
             activePlan ? '-:lg:grid-cols-2' : '-:lg:grid-cols-2',
           ],
-          props,
+          props
         )}
       >
         {intervalPlans.map((plan) => (
@@ -200,61 +208,60 @@ export default function Licenses(props: LicensesProps) {
                 {plan.Featured && (
                   <>
                     <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      viewBox='0 0 24 24'
-                      fill='currentColor'
-                      aria-hidden='true'
-                      class='w-20 h-20 absolute -top-11 -left-11 fill-red-400'
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      aria-hidden="true"
+                      class="w-20 h-20 absolute -top-11 -left-11 fill-red-400"
                     >
                       <path
-                        fill-rule='evenodd'
-                        d='M12.963 2.286a.75.75 0 00-1.071-.136 9.742 9.742 0 00-3.539 6.177A7.547 7.547 0 016.648 6.61a.75.75 0 00-1.152-.082A9 9 0 1015.68 4.534a7.46 7.46 0 01-2.717-2.248zM15.75 14.25a3.75 3.75 0 11-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 011.925-3.545 3.75 3.75 0 013.255 3.717z'
-                        clip-rule='evenodd'
-                      >
-                      </path>
+                        fill-rule="evenodd"
+                        d="M12.963 2.286a.75.75 0 00-1.071-.136 9.742 9.742 0 00-3.539 6.177A7.547 7.547 0 016.648 6.61a.75.75 0 00-1.152-.082A9 9 0 1015.68 4.534a7.46 7.46 0 01-2.717-2.248zM15.75 14.25a3.75 3.75 0 11-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 011.925-3.545 3.75 3.75 0 013.255 3.717z"
+                        clip-rule="evenodd"
+                      ></path>
                     </svg>
 
-                    <p class='mono text-sm absolute -top-4 bg-red-400 text-zinc-100 py-0.5 px-2 font-bold tracking-wider rounded text-uppercase'>
+                    <p class="mono text-sm absolute -top-4 bg-red-400 text-zinc-100 py-0.5 px-2 font-bold tracking-wider rounded text-uppercase">
                       {plan.Featured}
                     </p>
                   </>
                 )}
 
                 <div>
-                  <h2 class='font-extrabold text-3xl text-center mb-2'>
+                  <h2 class="font-extrabold text-3xl text-center mb-2">
                     {plan.Name}
                   </h2>
 
-                  <p class='opacity-60 text-center'>{plan.Description}</p>
+                  <p class="opacity-60 text-center">{plan.Description}</p>
 
-                  <div class='flex flex-col items-center my-8'>
-                    <p class='font-extrabold text-4xl'>${plan.Amount}</p>
+                  <div class="flex flex-col items-center my-8">
+                    <p class="font-extrabold text-4xl">${plan.Amount}</p>
 
-                    <p class='text-sm opacity-60'>/{plan.Interval}</p>
+                    <p class="text-sm opacity-60">/{plan.Interval}</p>
                   </div>
                 </div>
 
-                <div class='flex flex-col gap-1'>
+                <div class="flex flex-col gap-1">
                   {plan.Features &&
                     plan.Features.map((feature) => (
-                      <p class='flex items-center text-sm'>
+                      <p class="flex items-center text-sm">
                         &#x1F5F8;
-                        <b class='ml-2'>{feature}</b>
+                        <b class="ml-2">{feature}</b>
                       </p>
                     ))}
 
                   {activePlan !== plan.PlanLookup && (
-                    <div class='flex justify-center mt-8'>
-                      <ActionGroup class='mt-8 flex-col'>
+                    <div class="flex justify-center mt-8">
+                      <ActionGroup class="mt-8 flex-col">
                         <>
                           <Action
-                            type='submit'
-                            class={classSet(
-                              [
-                                'w-full md:w-auto text-white font-bold m-1 py-2 px-4 rounded focus:outline-none shadow-lg',
-                              ],
-                            )}
-                            onClick={() => activatePlan(plan.PlanLookup, isMonthly)}
+                            type="submit"
+                            class={classSet([
+                              'w-full md:w-auto text-white font-bold m-1 py-2 px-4 rounded focus:outline-none shadow-lg',
+                            ])}
+                            onClick={() =>
+                              activatePlan(plan.PlanLookup, isMonthly)
+                            }
                           >
                             Get Started
                           </Action>
@@ -269,29 +276,27 @@ export default function Licenses(props: LicensesProps) {
         ))}
 
         {activePlan && clientSecret && (
-          <form id='payment-form' onSubmit={(e) => submit?.Submit(e)}>
+          <form id="payment-form" onSubmit={(e) => submit?.Submit(e)}>
             {/* <form id="payment-form" onSubmit={(e) => submitPayment?.(e)}> */}
-            <div id='payment-element'></div>
+            <div id="payment-element"></div>
 
-            {!loading
-              ? (
-                <ActionGroup class='mt-8 flex-col'>
-                  <>
-                    <Action
-                      id='submit'
-                      type='submit'
-                      class={classSet(
-                        [
-                          'w-full md:w-auto text-white font-bold m-1 py-2 px-4 rounded focus:outline-none shadow-lg',
-                        ],
-                      )}
-                    >
-                      Subscribe
-                    </Action>
-                  </>
-                </ActionGroup>
-              )
-              : <RenewIcon class='w-20 h-20 text-blue-500 animate-spin inline-block' />}
+            {!loading ? (
+              <ActionGroup class="mt-8 flex-col">
+                <>
+                  <Action
+                    id="submit"
+                    type="submit"
+                    class={classSet([
+                      'w-full md:w-auto text-white font-bold m-1 py-2 px-4 rounded focus:outline-none shadow-lg',
+                    ])}
+                  >
+                    Subscribe
+                  </Action>
+                </>
+              </ActionGroup>
+            ) : (
+              <RenewIcon class="w-20 h-20 text-blue-500 animate-spin inline-block" />
+            )}
 
             <div>{error}</div>
           </form>

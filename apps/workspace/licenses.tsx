@@ -2,7 +2,11 @@ import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import Licenses from '../components/organisms/licensing/Licenses.tsx';
-import { EaCLicenseStripeDetails, EaCLicenseAsCode, EverythingAsCodeLicensing } from '@fathym/eac-licensing';
+import {
+  EaCLicenseStripeDetails,
+  EaCLicenseAsCode,
+  EverythingAsCodeLicensing,
+} from '@fathym/eac-licensing';
 
 export const IsIsland = true;
 
@@ -10,8 +14,6 @@ type IndexPageData = {
   License: EaCLicenseAsCode;
 
   LicenseLookup: string;
-
-  StripePublishableKey: string;
 };
 
 export const handler: EaCRuntimeHandlerSet<
@@ -20,25 +22,27 @@ export const handler: EaCRuntimeHandlerSet<
 > = {
   GET: (_req, ctx) => {
     const eac = ctx.Runtime.EaC as EverythingAsCodeLicensing;
-    
-    const licDetails = eac.Licenses!['o-industrial']
-      .Details as EaCLicenseStripeDetails;
+
+    const licLookup = 'o-industrial';
+
+    const lic = eac.Licenses![licLookup];
 
     return ctx.Render({
-      License: eac.Licenses!['o-industrial'],
-      LicenseLookup: 'o-industrial',
-      StripePublishableKey: licDetails.PublishableKey,
+      License: lic,
+      LicenseLookup: licLookup,
     });
   },
 };
 
 export default function DashboardIndex({
-  Data: { License, LicenseLookup, StripePublishableKey },
+  Data: { License, LicenseLookup },
 }: PageProps<IndexPageData>) {
+  const licDetails = License.Details as EaCLicenseStripeDetails;
+
   return (
     <>
       <Licenses
-        stripePublishableKey={StripePublishableKey}
+        stripePublishableKey={licDetails.PublishableKey}
         licLookup={LicenseLookup}
         license={License}
       />
