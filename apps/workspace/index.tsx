@@ -92,49 +92,49 @@ const runtimeMenus: MenuRoot[] = [
   // },
 
   // ===== View (unchanged example) =====
-  {
-    id: 'view',
-    label: 'View',
-    items: [
-      {
-        type: 'submenu',
-        id: 'view.panels',
-        label: 'Panels',
-        items: [
-          {
-            type: 'item',
-            id: 'view.toggle.azi',
-            label: 'Azi',
-            iconSrc: I.eye,
-            checked: true,
-          },
-          {
-            type: 'item',
-            id: 'view.toggle.inspector',
-            label: 'Inspector',
-            iconSrc: I.eye,
-            checked: true,
-          },
-          {
-            type: 'item',
-            id: 'view.toggle.stream',
-            label: 'Stream',
-            iconSrc: I.eye,
-            checked: true,
-          },
-          {
-            type: 'item',
-            id: 'view.toggle.timeline',
-            label: 'Timeline',
-            iconSrc: I.eye,
-            checked: true,
-          },
-        ],
-      },
-      { type: 'item', id: 'view.fullscreen', label: 'Enter Fullscreen' },
-      { type: 'item', id: 'view.reset', label: 'Reset Layout' },
-    ],
-  },
+  // {
+  //   id: 'view',
+  //   label: 'View',
+  //   items: [
+  //     {
+  //       type: 'submenu',
+  //       id: 'view.panels',
+  //       label: 'Panels',
+  //       items: [
+  //         {
+  //           type: 'item',
+  //           id: 'view.toggle.azi',
+  //           label: 'Azi',
+  //           iconSrc: I.eye,
+  //           checked: true,
+  //         },
+  //         {
+  //           type: 'item',
+  //           id: 'view.toggle.inspector',
+  //           label: 'Inspector',
+  //           iconSrc: I.eye,
+  //           checked: true,
+  //         },
+  //         {
+  //           type: 'item',
+  //           id: 'view.toggle.stream',
+  //           label: 'Stream',
+  //           iconSrc: I.eye,
+  //           checked: true,
+  //         },
+  //         {
+  //           type: 'item',
+  //           id: 'view.toggle.timeline',
+  //           label: 'Timeline',
+  //           iconSrc: I.eye,
+  //           checked: true,
+  //         },
+  //       ],
+  //     },
+  //     { type: 'item', id: 'view.fullscreen', label: 'Enter Fullscreen' },
+  //     { type: 'item', id: 'view.reset', label: 'Reset Layout' },
+  //   ],
+  // },
 
   // ===== Workspace =====
   {
