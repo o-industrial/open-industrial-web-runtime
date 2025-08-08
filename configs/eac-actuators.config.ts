@@ -9,6 +9,10 @@ export const loadEaCActuators: () => EaCModuleActuators = () => {
       APIPath: new URL('./actuators/data-connections', base),
       Order: 300,
     },
+    Licenses: {
+      APIPath: new URL('./licenses', base),
+      Order: 200,
+    },
     Simulators: {
       APIPath: new URL('./actuators/simulators', base),
       Order: 300,

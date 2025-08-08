@@ -1,6 +1,7 @@
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 import { EaCUserRecord } from '@fathym/eac';
+import { OpenIndustrialJWTPayload } from '@o-industrial/common/types';
 
 export type OpenIndustrialWebState = {
   OIClient: OpenIndustrialAPIClient;
@@ -9,11 +10,7 @@ export type OpenIndustrialWebState = {
 
   OIJWT: string;
 
-  Username: string;
-
   UserWorkspaces: EaCUserRecord[];
 
   Workspace: EverythingAsCodeOIWorkspace;
-
-  WorkspaceLookup: string;
-};
+} & OpenIndustrialJWTPayload;
