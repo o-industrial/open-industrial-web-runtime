@@ -1,0 +1,114 @@
+import {
+  ThematicPrincipleBlock,
+  AziInnerVoice,
+  InlineUXTip,
+  SystemMindset,
+  FigureImage,
+  IntentTypes,
+} from '$mdx/writing-devices';
+
+# Stream → Store → Observe
+
+<SystemMindset intentType={IntentTypes.Primary}>
+  This isn’t log ingestion. This is observed telemetry — fresh, structured, and ready to query.
+</SystemMindset>
+
+Your OT data is flowing in real time — from sensors, machines, and gateways. Now it’s time to see what’s coming in, how it’s stored, and how you can begin asking questions.
+
+---
+
+## What Is an Impulse?
+
+An **Impulse** is a single telemetry event:
+
+- One reading, one packet, one update
+- Always tied to a device ID and timestamp
+- Immediately queryable once received
+
+<FigureImage
+  src="/assets/screenshots/live-impulse-stream.png"
+  alt="Live impulse stream from connected simulator"
+  caption="Each row is an Impulse — visible, filterable, and explorable."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="2xl"
+/>
+
+Here’s an example:
+
+```json
+{
+  "deviceId": "temperature-sensor-001",
+  "temperature": 78.4,
+  "timestamp": "2025-07-01T09:21:32Z"
+}
+```
+
+<InlineUXTip intentType={IntentTypes.Info}>
+Click any node to preview live values. Double-click to open the Inspector.
+</InlineUXTip>
+
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+I see the stream. You tell me what to look for.
+</AziInnerVoice>
+
+---
+
+## Your Stream Has Shape
+
+Even without formal schema, Open Industrial keeps your data structured:
+
+- Every Impulse is typed and stored in context
+- You can query fields, filter by connection, and plot trends instantly
+- Data is stored securely in Azure Data Explorer
+
+<ThematicPrincipleBlock intentType={IntentTypes.Secondary}>
+  Structure is inferred, not enforced. Every field is available — right now.
+</ThematicPrincipleBlock>
+
+---
+
+## Field-Level Exploration
+
+You don’t need to define a schema to start exploring. In the UI:
+
+- Browse per-field values across time
+- Search and filter live streams
+- Tag or annotate useful fields for Azi to learn from
+
+<FigureImage
+  src="/assets/screenshots/field-preview-panel.png"
+  alt="Live field preview panel for an incoming data stream"
+  caption="Preview raw values and edit field names directly from the impulse view."
+  intentType={IntentTypes.Info}
+  glow
+  shadow="2xl"
+/>
+
+<InlineUXTip intentType={IntentTypes.Info}>
+You can rename or tag fields to improve natural language results — no schema needed.
+</InlineUXTip>
+
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+You lead. I’ll follow your cues and improve what I understand.
+</AziInnerVoice>
+
+---
+
+## No Schema Required
+
+At this stage, structure is emergent — not confirmed:
+
+- Azi does **not** promote schema yet
+- You explore, annotate, and query raw data
+- All fields remain usable via natural language or API
+
+<ThematicPrincipleBlock intentType={IntentTypes.Primary}>
+  Query what you see. Structure what you need. Schema comes later.
+</ThematicPrincipleBlock>
+
+---
+
+**Next:** Let’s ask Azi a question. No scripts. Just curiosity.
+
+👉 <strong>Next: Ask Azi</strong>

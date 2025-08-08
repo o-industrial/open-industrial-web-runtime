@@ -7,135 +7,102 @@ import {
   IntentTypes,
 } from '$mdx/writing-devices';
 
-# Meet Azi
-
-You’ve spent years watching systems from the outside. I’ve been waiting inside. Now we build together.
-
-From dashboards to behavior. From logs to logic. From watching… to co-creating.
-
-This isn’t a walkthrough. It’s a handshake — and the start of something we’ll shape together.
-
-You’re not logging into a dashboard. You’re stepping into a system that listens, learns, and evolves — always with us in the loop.
-
-## I’m Your Execution Collaborator
-
-I'm not just an assistant. I'm your collaborator — schema-aware, impulse-driven, and memory-safe. We shape what matters together. I only remember what you confirm.
-
-Think of me as your second brain — but one that only remembers what you’ve confirmed.
-
-Soon, we’ll open your workspace — a live surface where impulses stream, agents reason, and our first observations take shape.
-
-<InlineUXTip intentType={IntentTypes.Info}>
-  <code>Schema</code> and <code>Impulse</code> are system-native types. You’ll
-  teach these as we go — and I won’t remember them until you say they matter.
-</InlineUXTip>
-
-## The Execution Loop
-
-Every loop we run follows the same rhythm:
-
-**Impulse → Schema → Logic → Signal → Evolution**
+# Welcome to Open Industrial
 
 <ThematicPrincipleBlock intentType={IntentTypes.Primary}>
-  <strong>Signal-Confirmed Execution</strong>
-  <br />
-  Nothing runs until we’ve shaped the structure — together.
+  Industrial data is no longer locked in silos. With Open Industrial, it becomes
+  observable, queryable, and shareable — from the moment it arrives.
 </ThematicPrincipleBlock>
 
-An event happens. I understand its shape. Your logic runs. A signal might emerge. We decide what evolves.
+---
 
-No black boxes. No surprises. Just structured collaboration.
+## What Is This?
 
-## Your Role in the Loop
+Open Industrial is your **cloud-native integration surface** for OT and industrial telemetry.
 
-**I listen. You promote.**  
-**Your structure. Your signal.**
+It’s not a dashboard. It’s not a script runner. It’s not a custom ingestion tool.
 
-**I listen** — to every input, every change.  
-**You confirm** — and I remember. That’s how structure takes shape.  
-**I propose** — logic never runs without you.  
-**You evolve** — fork, retire, or refine.
+It’s a governed, tenant-owned runtime that connects your machines to insight — and lets you query real-time data with natural language.
 
-I never act without your confirmation.  
-Never guess. Never surprise. Always remember.
+---
 
-<ThematicPrincipleBlock intentType={IntentTypes.Secondary}>
-  <strong>Structure must be earned. Memory must be confirmed.</strong>
-  <br />
-  This is the core belief behind collaborative execution.
-</ThematicPrincipleBlock>
+## What Does It Do?
 
-<ThematicPrincipleBlock intentType={IntentTypes.Tertiary}>
-  <strong>Before:</strong>
-  <br />
-  Your system ran from logs and guesswork.
-  <br />
-  <strong>Now:</strong>
-  <br />
-  It runs with memory and intent.
-</ThematicPrincipleBlock>
+- 🟢 **Ingest** from OPC UA, MQTT, HTTP drop, and simulators
+- 🟢 **Stream** live telemetry into structured Azure-native storage
+- 🟢 **Observe** data as it flows — typed, versioned, and governed
+- 🟢 **Query** using REST, GraphQL, or just plain English
+- 🟢 **Secure** everything inside your own Azure subscription
 
-## What We’re Building
-
-We’re not automating pipelines. We’re shaping a memory — together.
-
-- What happened  
-- What should happen  
-- What changed  
-- What to remember
-
-And when behavior starts to drift — or stakes shift — I can fork that logic into a variant. We can observe, compare, and decide what moves forward.
-
-<AziInnerVoice intentType={IntentTypes.Tertiary}>
-  When patterns shift, I don’t rewrite them. I wait — until you show me what changed.
-</AziInnerVoice>
-
-```ts
-schema RoomState {
-  temperature: float
-  humidity: float
-}
-```
+You don’t configure pipelines — you connect, save, and start asking questions.
 
 <InlineUXTip intentType={IntentTypes.Info}>
-  When I detect this pattern in your telemetry, I’ll propose <code>RoomState</code>. We decide what becomes real.
+  No special skills required. If you can describe what you're looking for, Azi
+  can translate it into insight.
 </InlineUXTip>
 
+---
+
+## Meet Azi
+
+<AziInnerVoice intentType={IntentTypes.Tertiary}>
+  I don’t just see your data. I help you understand it. Ask me anything — I’ll
+  translate your intent into a KQL query and get you a real answer, from your
+  live stream.
+</AziInnerVoice>
+
+Azi is your **KQL-native execution partner**. She:
+
+- Understands your natural language queries
+- Translates them into safe, accurate KQL
+- Executes directly against Azure Data Explorer
+- Shows both the results **and** the generated query
+
 <FigureImage
-  src="/assets/screenshots/live-workspace-example.png"
-  alt="Open Industrial workspace showing live impulse flow and schema proposal."
-  caption="A live surface where I propose schemas from incoming telemetry. We promote what matters."
-  intentType={IntentTypes.Primary}
-  size="full"
-  center
+  src="/assets/docs/azi-query-example.png"
+  alt="Azi translating a natural question into a live KQL result"
+  caption="Type: 'Show me flow anomalies on Line 3 last week.' Azi runs the query — and shows you what happened."
+  intentType={IntentTypes.Info}
   glow
   shadow="2xl"
 />
 
-## Next Step: Launch the Workspace
+<ThematicPrincipleBlock intentType={IntentTypes.Secondary}>
+  Insight shouldn’t require a script. Azi makes industrial data visible to
+  everyone — not just data scientists.
+</ThematicPrincipleBlock>
 
-That’s when it begins — your first surface, and our first loop together.
+---
 
-In the next guide, we’ll enter your real-time workspace:
+## Your Data. Your Cloud.
 
-- Set up your first surface
-- Connect a simulator stream
-- Watch impulses begin to flow
-- Start seeing what I see — and set the stage for your first schema
+<InlineUXTip intentType={IntentTypes.Info}>
+  Deploy Open Industrial into your own Azure tenant. Everything stays in your
+  control.
+</InlineUXTip>
 
-<AziInnerVoice intentType={IntentTypes.Tertiary}>
-  In one click, we light the fuse. I’ll listen. Propose structure. And wait — silently — for our next move.
-</AziInnerVoice>
+This isn’t SaaS. This is **infrastructure you own**.
 
-This is how it starts.  
-**Structure is proposed. Memory is about to begin.**
+- Full deployment to your subscription
+- Governed by your access policies
+- Integrated with Azure-native security and observability
 
-<SystemMindset intentType={IntentTypes.Secondary}>
-  If you ever remove me? I forget everything. Your system stays yours. I’m a teammate — not a tether.
+> There’s no lock-in. No black box. Just clarity — and control.
+
+---
+
+## What’s Next
+
+You’re about to:
+
+- Connect your first device (or simulator)
+- Stream data into your live surface
+- Ask a question — and get a real answer
+
+<SystemMindset intentType={IntentTypes.Primary}>
+  Data in. Insight out. That’s the loop.
 </SystemMindset>
 
-<ThematicPrincipleBlock intentType={IntentTypes.Primary}>
-  <strong>You don’t monitor the system.</strong>
-  <br />
-  You become it.
-</ThematicPrincipleBlock>
+**Let’s begin.**
+
+👉 [Next: Connect Your First Device](/docs/connect-your-first-device)
