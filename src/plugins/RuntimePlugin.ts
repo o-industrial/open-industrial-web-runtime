@@ -452,21 +452,21 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
           },
           'jsr:@o-industrial/common': {
             Details: {
-              Type: 'Local',
-              FileRoot: fromFileUrl(
-                import.meta.resolve(
-                  '../../../open-industrial-reference-architecture/'
-                )
-              ),
+              Type: 'JSR',
+              Package: '@o-industrial/common',
+              Version: '',
+              // FileRoot: './atomic',
               Extensions: ['tsx'],
-            } as EaCLocalDistributedFileSystemDetails,
+            } as EaCJSRDistributedFileSystemDetails,
             // Details: {
-            //   Type: 'JSR',
-            //   Package: '@o-industrial/common',
-            //   Version: '',
-            //   // FileRoot: './atomic',
+            //   Type: 'Local',
+            //   FileRoot: fromFileUrl(
+            //     import.meta.resolve(
+            //       '../../../open-industrial-reference-architecture/'
+            //     )
+            //   ),
             //   Extensions: ['tsx'],
-            // } as EaCJSRDistributedFileSystemDetails,
+            // } as EaCLocalDistributedFileSystemDetails,
           },
         },
         Modifiers: {
