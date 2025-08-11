@@ -20,59 +20,58 @@ export default function ADB2CLayout({ Data, Component, Revision }: PageProps) {
   return (
     <html>
       <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charset='utf-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
 
         <title>Pirata Games - Sign In and Sign Up</title>
 
         <link
-          rel="shortcut icon"
-          type="image/png"
+          rel='shortcut icon'
+          type='image/png'
           href={`${Data.BaseURL}/assets/PirataForsaken.png`}
           data-eac-bypass-base
         />
 
         <link
-          href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap"
-          rel="stylesheet"
+          href='https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap'
+          rel='stylesheet'
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap"
-          rel="stylesheet"
+          href='https://fonts.googleapis.com/css2?family=Pirata+One&display=swap'
+          rel='stylesheet'
         />
 
         <link
-          rel="stylesheet"
+          rel='stylesheet'
           href={`${Data.BaseURL}/tailwind/styles.css?Revision=${Revision}`}
         />
 
         <link
-          rel="stylesheet"
+          rel='stylesheet'
           href={`${Data.BaseURL}/assets/adb2c/page/layouts/styles.css?Revision=${Revision}`}
         />
       </head>
 
       <body>
-        <div class="font-merriweather bg-slate-50 dark:bg-slate-900 text-black dark:text-white h-full overflow-hidden">
+        <div class='font-merriweather bg-slate-50 dark:bg-slate-900 text-black dark:text-white h-full overflow-hidden'>
           <div
-            class="relative w-screen h-screen bg-cover bg-center bg-no-repeat"
+            class='relative w-screen h-screen bg-cover bg-center bg-no-repeat'
             style={{
               backgroundImage: `url('${Data.BaseURL}/assets/open-industrial-background.png')`,
             }}
           >
-            <div class="flex items-center justify-center h-full overflow-hidden">
-              <div class="bg-white dark:bg-slate-800 shadow-lg rounded-lg px-4 pb-2 md:px-8 md:pb-4 max-h-[95%] sm:max-h-[80%] md:max-h-[65%] landscape:max-h-[95%] max-w-[95%] sm:max-w-md md:max-w-lg w-full transform transition-transform duration-300 hover:scale-115 hover:shadow-2xl overflow-auto relative">
-                <div class="w-full sticky landscape:relative top-0 bg-white dark:bg-slate-800">
+            <div class='flex items-center justify-center h-full overflow-hidden'>
+              <div class='bg-white dark:bg-slate-800 shadow-lg rounded-lg px-4 pb-2 md:px-8 md:pb-4 max-h-[95%] sm:max-h-[80%] md:max-h-[65%] landscape:max-h-[95%] max-w-[95%] sm:max-w-md md:max-w-lg w-full transform transition-transform duration-300 hover:scale-115 hover:shadow-2xl overflow-auto relative'>
+                <div class='w-full sticky landscape:relative top-0 bg-white dark:bg-slate-800'>
                   <img
-                    class="companyLogo w-[80%] landscape:w-[60%] m-auto "
-                    data-tenant-branding-logo="true"
+                    class='companyLogo w-[80%] landscape:w-[60%] m-auto '
+                    data-tenant-branding-logo='true'
                     src={`${Data.BaseURL}/assets/logos/openIndustrialLogo.svg`}
-                    alt="Pirata Games"
+                    alt='Pirata Games'
                   />
                 </div>
 
-                <div
-                  class="
+                <div class='
                     m-1
                     [&>#api_.error]:text-red-500
 
@@ -152,8 +151,7 @@ export default function ADB2CLayout({ Data, Component, Revision }: PageProps) {
                       [&>#api_.create_#createAccount]:text-blue-600 
                       [&>#api_.create_#createAccount]:text-base 
                       dark:[&>#api_.create_#createAccount]:text-blue-400 
-                  "
-                >
+                  '>
                   <Component />
                 </div>
               </div>

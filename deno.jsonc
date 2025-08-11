@@ -35,7 +35,7 @@
     "@fathym/eac-deno-kv": "jsr:@fathym/eac-deno-kv@0.0.19",
     "@fathym/eac-identity": "jsr:@fathym/eac-identity@0.0.18",
     "@fathym/eac-licensing": "jsr:@fathym/eac-licensing@0.0.35",
-    "@fathym/eac-licensing/plugins": "../../fathym-deno/eac-licensing/plugins/.exports.ts",
+    // "@fathym/eac-licensing/plugins": "../../fathym-deno/eac-licensing/plugins/.exports.ts",
     "@fathym/ioc": "jsr:@fathym/ioc@0.0.14",
     "immer": "npm:immer@10.1.1",
     "json-schema": "npm:json-schema@0.4.0",

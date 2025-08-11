@@ -3,8 +3,8 @@ import { PageProps } from '@fathym/eac-applications/preact';
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import Licenses from '../components/organisms/licensing/Licenses.tsx';
 import {
-  EaCLicenseStripeDetails,
   EaCLicenseAsCode,
+  EaCLicenseStripeDetails,
   EverythingAsCodeLicensing,
 } from '@fathym/eac-licensing';
 

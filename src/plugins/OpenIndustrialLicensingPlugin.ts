@@ -1,8 +1,5 @@
 import { EverythingAsCode } from '@fathym/eac';
-import {
-  EaCRuntimeConfig,
-  EaCRuntimePluginConfig,
-} from '@fathym/eac/runtime/config';
+import { EaCRuntimeConfig, EaCRuntimePluginConfig } from '@fathym/eac/runtime/config';
 import { EaCRuntimePlugin } from '@fathym/eac/runtime/plugins';
 
 import * as djwt from 'jsr:@zaubrik/djwt@3.0.2';
@@ -34,7 +31,7 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
                 username,
                 licLookup,
                 planLookup,
-                priceLookup
+                priceLookup,
               ) => {
                 const licSvc = await loadEaCLicensingSvc();
 
@@ -43,7 +40,7 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
                   username,
                   licLookup,
                   planLookup,
-                  priceLookup
+                  priceLookup,
                 );
 
                 return licSubRes;
@@ -180,7 +177,7 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
   public async Build(
     _eac: EverythingAsCode,
     _ioc: IoCContainer,
-    pluginCfg?: EaCRuntimePluginConfig
+    pluginCfg?: EaCRuntimePluginConfig,
   ): Promise<void> {
     const eacApiKey = Deno.env.get('EAC_API_KEY');
 
@@ -197,11 +194,11 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
             EnterpriseLookup,
             ...pluginCfg.EaC!,
           },
-          600
+          600,
         );
       } catch (_err) {
         console.error(
-          'Unable to update EaC Licensing, falling back to local config.'
+          'Unable to update EaC Licensing, falling back to local config.',
         );
       }
     }
