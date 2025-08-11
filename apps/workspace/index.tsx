@@ -6,18 +6,14 @@ import { WorkspaceManager } from '@o-industrial/common/flow';
 import {
   AppFrameBar,
   BreadcrumbBar,
-  MenuActionItem,
   MenuRoot,
 } from '@o-industrial/common/atomic/molecules';
 import {
-  AccountProfileModal,
   AziPanel,
   FlowPanel,
   InspectorPanel,
-  SimulatorLibraryModal,
   StreamPanel,
   TimelinePanel,
-  WorkspaceSettingsModal,
 } from '@o-industrial/common/atomic/organisms';
 import { RuntimeWorkspaceDashboardTemplate } from '@o-industrial/common/atomic/templates';
 import OICore from '@o-industrial/common/packs/oi-core';
@@ -25,10 +21,13 @@ import { marked } from 'npm:marked@15.0.1';
 import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 import { IoCContainer } from '@fathym/ioc';
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
+import { EverythingAsCode } from '@fathym/eac';
+import { EverythingAsCodeLicensing } from '@fathym/eac-licensing';
 
 export const IsIsland = true;
 
 type WorkspacePageData = {
+  ParentEaC: EverythingAsCode & EverythingAsCodeLicensing;
   OIAPIRoot: string;
   OIAPIToken: string;
   Workspace: EverythingAsCodeOIWorkspace;
@@ -164,44 +163,44 @@ const runtimeMenus: MenuRoot[] = [
   },
 
   // ===== Environment =====
-  {
-    id: 'environment',
-    label: 'Environment',
-    items: [
-      {
-        type: 'item',
-        id: 'env.secrets',
-        label: 'Manage Secrets',
-        iconSrc: I.lock,
-      },
-      {
-        type: 'item',
-        id: 'env.connections',
-        label: 'External Connections',
-        iconSrc: I.link,
-      },
-      {
-        type: 'submenu',
-        id: 'env.cloud',
-        label: 'Cloud',
-        iconSrc: I.cloud,
-        items: [
-          {
-            type: 'item',
-            id: 'env.cloud.attachManaged',
-            label: 'Attach Managed Cloud',
-            iconSrc: I.cloudAttach,
-          },
-          {
-            type: 'item',
-            id: 'env.cloud.addPrivate',
-            label: 'Add Private Cloud',
-            iconSrc: I.privateCloud,
-          },
-        ],
-      },
-    ],
-  },
+  // {
+  //   id: 'environment',
+  //   label: 'Environment',
+  //   items: [
+  //     {
+  //       type: 'item',
+  //       id: 'env.secrets',
+  //       label: 'Manage Secrets',
+  //       iconSrc: I.lock,
+  //     },
+  //     {
+  //       type: 'item',
+  //       id: 'env.connections',
+  //       label: 'External Connections',
+  //       iconSrc: I.link,
+  //     },
+  //     {
+  //       type: 'submenu',
+  //       id: 'env.cloud',
+  //       label: 'Cloud',
+  //       iconSrc: I.cloud,
+  //       items: [
+  //         {
+  //           type: 'item',
+  //           id: 'env.cloud.attachManaged',
+  //           label: 'Attach Managed Cloud',
+  //           iconSrc: I.cloudAttach,
+  //         },
+  //         {
+  //           type: 'item',
+  //           id: 'env.cloud.addPrivate',
+  //           label: 'Add Private Cloud',
+  //           iconSrc: I.privateCloud,
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
 
   // ===== APIs =====
   {
@@ -251,6 +250,7 @@ export const handler: EaCRuntimeHandlerSet<
 > = {
   GET: (_req, ctx) => {
     return ctx.Render({
+      ParentEaC: ctx.Runtime.EaC,
       OIAPIRoot: '/api/',
       OIAPIToken: ctx.State.OIJWT,
       Workspace: ctx.State.Workspace!,
@@ -259,7 +259,12 @@ export const handler: EaCRuntimeHandlerSet<
 };
 
 export default function WorkspacePage({
-  Data: { Workspace: initialEaC, OIAPIRoot: oiApiRoot, OIAPIToken: oiApiToken },
+  Data: {
+    Workspace: initialEaC,
+    OIAPIRoot: oiApiRoot,
+    OIAPIToken: oiApiToken,
+    ParentEaC,
+  },
 }: PageProps<WorkspacePageData>) {
   const origin = location?.origin ?? 'https://server.com';
   const root = `${origin}${oiApiRoot}`;
@@ -314,45 +319,8 @@ export default function WorkspacePage({
 
   const pathParts = workspaceMgr.UseBreadcrumb();
 
-  const [showMarketplace, setShowMarketplace] = useState(false);
-  const [showAccountProfile, setShowAccountProfile] = useState(false);
-  const [showWorkspaceSettings, setShowWorkspaceSettings] = useState(false);
-
-  const modals = (
-    <>
-      {showMarketplace && (
-        <SimulatorLibraryModal
-          workspaceMgr={workspaceMgr}
-          onClose={() => setShowMarketplace(false)}
-        />
-      )}
-
-      {showAccountProfile && (
-        <AccountProfileModal
-          workspaceMgr={workspaceMgr}
-          onClose={() => setShowAccountProfile(false)}
-        />
-      )}
-
-      {showWorkspaceSettings && (
-        <WorkspaceSettingsModal
-          workspaceMgr={workspaceMgr}
-          onClose={() => setShowWorkspaceSettings(false)}
-        />
-      )}
-    </>
-  );
-
-  const handleMenu = (item: MenuActionItem) => {
-    console.log('menu', item);
-
-    switch (item.id) {
-      case 'workspace.settings': {
-        setShowWorkspaceSettings(true);
-        break;
-      }
-    }
-  };
+  const { handleMenu, modals, showSimLib, showAccProf, showLicense } =
+    workspaceMgr.UseAppMenu(ParentEaC);
 
   return (
     <RuntimeWorkspaceDashboardTemplate
@@ -360,8 +328,9 @@ export default function WorkspacePage({
         <AppFrameBar
           menus={runtimeMenus}
           onMenuOption={handleMenu}
-          onProfileClick={() => setShowAccountProfile(true)}
-          onSettingsClick={() => setShowWorkspaceSettings(true)}
+          onActivateClick={() => showLicense()}
+          onProfileClick={() => showAccProf()}
+          // onSettingsClick={() => showWkspSets()}
         />
       }
       azi={
@@ -383,7 +352,7 @@ export default function WorkspacePage({
     >
       <FlowPanel
         workspaceMgr={workspaceMgr}
-        onShowSimulatorLibrary={() => setShowMarketplace(true)}
+        onShowSimulatorLibrary={() => showSimLib()}
       />
     </RuntimeWorkspaceDashboardTemplate>
   );
