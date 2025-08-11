@@ -7,6 +7,7 @@ import { loadEaCStewardSvc } from '@fathym/eac/steward/clients';
 import { IoCContainer } from '@fathym/ioc';
 import { EaCStripeProcessor } from '@fathym/eac-applications/processors';
 import { loadEaCLicensingSvc } from '@fathym/eac-licensing/clients';
+import { loadJwtConfig } from '@fathym/common';
 
 export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
   constructor() {}
@@ -33,7 +34,13 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
                 planLookup,
                 priceLookup,
               ) => {
-                const licSvc = await loadEaCLicensingSvc();
+                const jwt = await loadJwtConfig().Create({
+                  EnterpriseLookup: entLookup,
+                  WorkspaceLookup: entLookup,
+                  Username: username,
+                });
+
+                const licSvc = await loadEaCLicensingSvc(jwt);
 
                 const licSubRes = await licSvc.License.Subscription(
                   entLookup,
