@@ -21,7 +21,7 @@ export default [
  * and commits runtime state into `OpenIndustrialWebState`.
  */
 export function buildOpenIndustrialRuntimeMiddleware(
-  kvLookup: string = 'eac'
+  kvLookup: string = 'eac',
 ): EaCRuntimeHandler<OpenIndustrialWebState> {
   return async (_req, ctx) => {
     const username = ctx.State.Username!;
@@ -49,7 +49,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
     ctx.State.OIClient = new OpenIndustrialAPIClient(
       apiBaseUrl,
-      ctx.State.OIJWT
+      ctx.State.OIJWT,
     );
 
     ctx.State.Workspace = await ctx.State.OIClient.Workspaces.Get();
@@ -65,7 +65,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
       ctx.State.OIClient = new OpenIndustrialAPIClient(
         apiBaseUrl,
-        ctx.State.OIJWT
+        ctx.State.OIJWT,
       );
     }
 
@@ -87,7 +87,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
         ctx.State.OIClient = new OpenIndustrialAPIClient(
           apiBaseUrl,
-          ctx.State.OIJWT
+          ctx.State.OIJWT,
         );
       }
     }
@@ -115,7 +115,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
       };
 
       const createResp = await ctx.State.OIClient.Workspaces.Create(
-        newWorkspace
+        newWorkspace,
       );
 
       lookup = createResp.EnterpriseLookup;
@@ -130,7 +130,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
       ctx.State.OIClient = new OpenIndustrialAPIClient(
         apiBaseUrl,
-        ctx.State.OIJWT
+        ctx.State.OIJWT,
       );
     }
 
@@ -151,7 +151,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
       const licRes = await licSvc.License.Get(
         ctx.Runtime.EaC.EnterpriseLookup!,
         ctx.State.Username,
-        'o-industrial'
+        'o-industrial',
       );
 
       if (licRes.Active) {
@@ -186,7 +186,7 @@ export function buildAgreementsRedirectMiddleware(): EaCRuntimeHandler<OpenIndus
           `/workspace/agreements?returnUrl=${returnUrl}`,
           false,
           false,
-          req
+          req,
         );
       }
     }
