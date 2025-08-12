@@ -3,15 +3,19 @@ import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 import { WorkspaceManager } from '@o-industrial/common/flow';
-import { AppFrameBar, BreadcrumbBar, MenuRoot } from '@o-industrial/common/atomic/molecules';
+import {
+  AppFrameBar,
+  BreadcrumbBar,
+  MenuRoot,
+} from '@o-industrial/common/atomic/molecules';
 import {
   AziPanel,
+  CommitStatusPanel,
   FlowPanel,
   InspectorPanel,
   StreamPanel,
   TimelinePanel,
 } from '@o-industrial/common/atomic/organisms';
-import { CommitStatusPanel } from '@o-industrial/common/atomic/organisms/CommitStatusPanel.tsx';
 import { RuntimeWorkspaceDashboardTemplate } from '@o-industrial/common/atomic/templates';
 import OICore from '@o-industrial/common/packs/oi-core';
 import { marked } from 'npm:marked@15.0.1';
@@ -236,7 +240,7 @@ const runtimeMenus: MenuRoot[] = [
         type: 'item',
         id: 'billing.details',
         label: 'Billing Details',
-        iconSrc: I.creditCard, /* or I.dollar */
+        iconSrc: I.creditCard /* or I.dollar */,
       },
     ],
   },
@@ -268,11 +272,11 @@ export default function WorkspacePage({
   const root = `${origin}${oiApiRoot}`;
   const oiSvc = useMemo(
     () => new OpenIndustrialAPIClient(new URL(root), oiApiToken),
-    [],
+    []
   );
 
   const [workspaceMgr, setWorkspaceMgr] = useState<WorkspaceManager | null>(
-    null,
+    null
   );
 
   // ⏬ Load capabilities pack from dynamic endpoint
@@ -302,7 +306,7 @@ export default function WorkspacePage({
           capabilities,
           'workspace',
           aziCircuit,
-          oiApiToken,
+          oiApiToken
         );
 
         setWorkspaceMgr(mgr);
@@ -321,13 +325,12 @@ export default function WorkspacePage({
     badgeState,
     showCommitPanel,
     toggleCommitPanel,
-    selectedCommit,
+    selectedCommitId,
     selectCommit,
   } = workspaceMgr.UseCommits();
 
-  const { handleMenu, modals, showSimLib, showAccProf, showLicense } = workspaceMgr.UseAppMenu(
-    ParentEaC,
-  );
+  const { handleMenu, modals, showSimLib, showAccProf, showLicense } =
+    workspaceMgr.UseAppMenu(ParentEaC);
 
   return (
     <RuntimeWorkspaceDashboardTemplate
@@ -354,16 +357,16 @@ export default function WorkspacePage({
           // onSettingsClick={() => setShowWorkspaceSettings(true)}
         />
       }
-      commitStatus={showCommitPanel
-        ? (
+      commitStatus={
+        showCommitPanel ? (
           <CommitStatusPanel
             commits={commits}
-            selectedCommitId={selectedCommit}
+            selectedCommitId={selectedCommitId ?? undefined}
             onSelectCommit={selectCommit}
             onClose={toggleCommitPanel}
           />
-        )
-        : undefined}
+        ) : undefined
+      }
       inspector={<InspectorPanel workspaceMgr={workspaceMgr} />}
       stream={<StreamPanel workspaceMgr={workspaceMgr} />}
       timeline={<TimelinePanel />}
