@@ -11,6 +11,7 @@ import {
   StreamPanel,
   TimelinePanel,
 } from '@o-industrial/common/atomic/organisms';
+import { CommitStatusPanel } from '@o-industrial/common/atomic/organisms/CommitStatusPanel.tsx';
 import { RuntimeWorkspaceDashboardTemplate } from '@o-industrial/common/atomic/templates';
 import OICore from '@o-industrial/common/packs/oi-core';
 import { marked } from 'npm:marked@15.0.1';
@@ -38,6 +39,7 @@ const I = {
   export: 'https://api.iconify.design/lucide:download.svg',
   eye: 'https://api.iconify.design/lucide:eye.svg',
   check: 'https://api.iconify.design/lucide:check.svg',
+  commit: 'https://api.iconify.design/lucide:git-commit.svg',
 
   // from your icon map
   settings: 'https://api.iconify.design/lucide:settings.svg',
@@ -314,6 +316,14 @@ export default function WorkspacePage({
   if (!workspaceMgr) return <div>Loading workspace...</div>;
 
   const pathParts = workspaceMgr.UseBreadcrumb();
+  const {
+    commits,
+    badgeState,
+    showCommitPanel,
+    toggleCommitPanel,
+    selectedCommit,
+    selectCommit,
+  } = workspaceMgr.UseCommits();
 
   const { handleMenu, modals, showSimLib, showAccProf, showLicense } = workspaceMgr.UseAppMenu(
     ParentEaC,
@@ -327,6 +337,8 @@ export default function WorkspacePage({
           onMenuOption={handleMenu}
           onActivateClick={() => showLicense()}
           onProfileClick={() => showAccProf()}
+          commitBadgeState={badgeState}
+          onCommitClick={() => toggleCommitPanel()}
           // onSettingsClick={() => showWkspSets()}
         />
       }
@@ -342,6 +354,16 @@ export default function WorkspacePage({
           // onSettingsClick={() => setShowWorkspaceSettings(true)}
         />
       }
+      commitStatus={showCommitPanel
+        ? (
+          <CommitStatusPanel
+            commits={commits}
+            selectedCommitId={selectedCommit}
+            onSelectCommit={selectCommit}
+            onClose={toggleCommitPanel}
+          />
+        )
+        : undefined}
       inspector={<InspectorPanel workspaceMgr={workspaceMgr} />}
       stream={<StreamPanel workspaceMgr={workspaceMgr} />}
       timeline={<TimelinePanel />}
