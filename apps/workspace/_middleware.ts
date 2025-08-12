@@ -8,6 +8,7 @@ import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 import { loadEaCActuators } from '../../configs/eac-actuators.config.ts';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 import { OpenIndustrialJWTPayload } from '@o-industrial/common/types';
+import { loadEaCLicensingSvc } from '@fathym/eac-licensing/clients';
 
 export default [
   agreementsBlockerMiddleware,
@@ -20,7 +21,7 @@ export default [
  * and commits runtime state into `OpenIndustrialWebState`.
  */
 export function buildOpenIndustrialRuntimeMiddleware(
-  kvLookup: string = 'eac',
+  kvLookup: string = 'eac'
 ): EaCRuntimeHandler<OpenIndustrialWebState> {
   return async (_req, ctx) => {
     const username = ctx.State.Username!;
@@ -48,7 +49,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
     ctx.State.OIClient = new OpenIndustrialAPIClient(
       apiBaseUrl,
-      ctx.State.OIJWT,
+      ctx.State.OIJWT
     );
 
     ctx.State.Workspace = await ctx.State.OIClient.Workspaces.Get();
@@ -64,7 +65,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
       ctx.State.OIClient = new OpenIndustrialAPIClient(
         apiBaseUrl,
-        ctx.State.OIJWT,
+        ctx.State.OIJWT
       );
     }
 
@@ -86,7 +87,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
         ctx.State.OIClient = new OpenIndustrialAPIClient(
           apiBaseUrl,
-          ctx.State.OIJWT,
+          ctx.State.OIJWT
         );
       }
     }
@@ -114,7 +115,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
       };
 
       const createResp = await ctx.State.OIClient.Workspaces.Create(
-        newWorkspace,
+        newWorkspace
       );
 
       lookup = createResp.EnterpriseLookup;
@@ -123,12 +124,13 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
       ctx.State.OIJWT = await loadJwtConfig().Create({
         Username: username,
+        EnterpriseLookup: lookup,
         WorkspaceLookup: lookup,
-      } as OpenIndustrialJWTPayload);
+      } as unknown as OpenIndustrialJWTPayload);
 
       ctx.State.OIClient = new OpenIndustrialAPIClient(
         apiBaseUrl,
-        ctx.State.OIJWT,
+        ctx.State.OIJWT
       );
     }
 
@@ -136,6 +138,28 @@ export function buildOpenIndustrialRuntimeMiddleware(
     ctx.State.Workspace = await ctx.State.OIClient.Workspaces.Get();
 
     ctx.State.WorkspaceLookup = lookup!;
+
+    if (ctx.State.Username) {
+      const parentJwt = await loadJwtConfig().Create({
+        EnterpriseLookup: ctx.Runtime.EaC.EnterpriseLookup!,
+        WorkspaceLookup: ctx.Runtime.EaC.EnterpriseLookup!,
+        Username: username,
+      });
+
+      const licSvc = await loadEaCLicensingSvc(parentJwt);
+
+      const licRes = await licSvc.License.Get(
+        ctx.Runtime.EaC.EnterpriseLookup!,
+        ctx.State.Username,
+        'o-industrial'
+      );
+
+      if (licRes.Active) {
+        ctx.State.UserLicenses = {
+          'o-industrial': licRes.License,
+        };
+      }
+    }
 
     return ctx.Next();
   };
@@ -162,7 +186,7 @@ export function buildAgreementsRedirectMiddleware(): EaCRuntimeHandler<OpenIndus
           `/workspace/agreements?returnUrl=${returnUrl}`,
           false,
           false,
-          req,
+          req
         );
       }
     }
