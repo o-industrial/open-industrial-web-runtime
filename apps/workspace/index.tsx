@@ -3,11 +3,7 @@ import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 import { WorkspaceManager } from '@o-industrial/common/flow';
-import {
-  AppFrameBar,
-  BreadcrumbBar,
-  MenuRoot,
-} from '@o-industrial/common/atomic/molecules';
+import { AppFrameBar, BreadcrumbBar, MenuRoot } from '@o-industrial/common/atomic/molecules';
 import {
   AziPanel,
   CommitStatusPanel,
@@ -240,7 +236,7 @@ const runtimeMenus: MenuRoot[] = [
         type: 'item',
         id: 'billing.details',
         label: 'Billing Details',
-        iconSrc: I.creditCard /* or I.dollar */,
+        iconSrc: I.creditCard, /* or I.dollar */
       },
     ],
   },
@@ -272,11 +268,11 @@ export default function WorkspacePage({
   const root = `${origin}${oiApiRoot}`;
   const oiSvc = useMemo(
     () => new OpenIndustrialAPIClient(new URL(root), oiApiToken),
-    []
+    [],
   );
 
   const [workspaceMgr, setWorkspaceMgr] = useState<WorkspaceManager | null>(
-    null
+    null,
   );
 
   // ⏬ Load capabilities pack from dynamic endpoint
@@ -306,7 +302,7 @@ export default function WorkspacePage({
           capabilities,
           'workspace',
           aziCircuit,
-          oiApiToken
+          oiApiToken,
         );
 
         setWorkspaceMgr(mgr);
@@ -322,15 +318,16 @@ export default function WorkspacePage({
   const pathParts = workspaceMgr.UseBreadcrumb();
   const {
     commits,
-    badgeState,
+    commitBadgeState,
     showCommitPanel,
     toggleCommitPanel,
     selectedCommitId,
     selectCommit,
   } = workspaceMgr.UseCommits();
 
-  const { handleMenu, modals, showSimLib, showAccProf, showLicense } =
-    workspaceMgr.UseAppMenu(ParentEaC);
+  const { handleMenu, modals, showSimLib, showAccProf, showLicense } = workspaceMgr.UseAppMenu(
+    ParentEaC,
+  );
 
   return (
     <RuntimeWorkspaceDashboardTemplate
@@ -340,8 +337,8 @@ export default function WorkspacePage({
           onMenuOption={handleMenu}
           onActivateClick={() => showLicense()}
           onProfileClick={() => showAccProf()}
-          commitBadgeState={badgeState}
-          onCommitClick={() => toggleCommitPanel()}
+          commitBadgeState={commitBadgeState}
+          onCommitClick={toggleCommitPanel}
           // onSettingsClick={() => showWkspSets()}
         />
       }
@@ -357,16 +354,16 @@ export default function WorkspacePage({
           // onSettingsClick={() => setShowWorkspaceSettings(true)}
         />
       }
-      commitStatus={
-        showCommitPanel ? (
+      commitStatus={showCommitPanel
+        ? (
           <CommitStatusPanel
             commits={commits}
             selectedCommitId={selectedCommitId ?? undefined}
             onSelectCommit={selectCommit}
             onClose={toggleCommitPanel}
           />
-        ) : undefined
-      }
+        )
+        : undefined}
       inspector={<InspectorPanel workspaceMgr={workspaceMgr} />}
       stream={<StreamPanel workspaceMgr={workspaceMgr} />}
       timeline={<TimelinePanel />}
