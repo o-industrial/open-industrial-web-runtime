@@ -40,7 +40,7 @@
     "immer": "npm:immer@10.1.1",
     "json-schema": "npm:json-schema@0.4.0",
 
-    "@o-industrial/common": "jsr:@o-industrial/common@0.0.185",
+    "@o-industrial/common": "jsr:@o-industrial/common@0.0.186",
     // "@o-industrial/common/atomic/atoms": "../open-industrial-reference-architecture/atomic/atoms/.exports.ts",
     // "@o-industrial/common/atomic/molecules": "../open-industrial-reference-architecture/atomic/molecules/.exports.ts",
     // "@o-industrial/common/atomic/organisms": "../open-industrial-reference-architecture/atomic/organisms/.exports.ts",
