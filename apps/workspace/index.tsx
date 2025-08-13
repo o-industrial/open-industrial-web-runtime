@@ -318,7 +318,7 @@ export default function WorkspacePage({
   const pathParts = workspaceMgr.UseBreadcrumb();
   const {
     commits,
-    commitBadgeState,
+    badgeState,
     showCommitPanel,
     toggleCommitPanel,
     selectedCommitId,
@@ -337,7 +337,7 @@ export default function WorkspacePage({
           onMenuOption={handleMenu}
           onActivateClick={() => showLicense()}
           onProfileClick={() => showAccProf()}
-          commitBadgeState={commitBadgeState}
+          commitBadgeState={badgeState}
           onCommitClick={toggleCommitPanel}
           // onSettingsClick={() => showWkspSets()}
         />
