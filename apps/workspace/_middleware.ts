@@ -1,14 +1,14 @@
-import { EaCRuntimeHandler } from '@fathym/eac/runtime/pipelines';
 import { loadJwtConfig, redirectRequest } from '@fathym/common';
+import { EaCRuntimeHandler } from '@fathym/eac/runtime/pipelines';
+import { loadEaCLicensingSvc } from '@fathym/eac-licensing/clients';
+import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
+import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
+import { OpenIndustrialJWTPayload } from '@o-industrial/common/types';
 
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 import { AgreementManager } from '../../src/agreements/AgreementManager.ts';
 import { agreementsBlockerMiddleware } from '../../src/agreements/agreementsBlockerMiddleware.ts';
-import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 import { loadEaCActuators } from '../../configs/eac-actuators.config.ts';
-import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
-import { OpenIndustrialJWTPayload } from '@o-industrial/common/types';
-import { loadEaCLicensingSvc } from '@fathym/eac-licensing/clients';
 
 export default [
   agreementsBlockerMiddleware,
@@ -112,6 +112,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
             },
           },
         },
+        Clouds: {},
       };
 
       const createResp = await ctx.State.OIClient.Workspaces.Create(
@@ -139,7 +140,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
     ctx.State.WorkspaceLookup = lookup!;
 
-    if (ctx.State.Username) {
+    if (username) {
       const parentJwt = await loadJwtConfig().Create({
         EnterpriseLookup: ctx.Runtime.EaC.EnterpriseLookup!,
         WorkspaceLookup: ctx.Runtime.EaC.EnterpriseLookup!,
@@ -150,7 +151,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
       const licRes = await licSvc.License.Get(
         ctx.Runtime.EaC.EnterpriseLookup!,
-        ctx.State.Username,
+        username,
         'o-industrial',
       );
 
