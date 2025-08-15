@@ -8,6 +8,7 @@ import { IoCContainer } from '@fathym/ioc';
 import { EaCStripeProcessor } from '@fathym/eac-applications/processors';
 import { loadEaCLicensingSvc } from '@fathym/eac-licensing/clients';
 import { loadJwtConfig } from '@fathym/common';
+import { waitForStatus } from '@fathym/eac/steward/status';
 
 export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
   constructor() {}
@@ -297,9 +298,33 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
         }`,
       );
 
-      await eacSvc.EaC.Commit(body, 600);
+      const commitResp = await eacSvc.EaC.Commit(body, 600);
 
-      console.info(`[eac-build][${label}] EaC commit successful`);
+      const status = await waitForStatus(
+        eacSvc,
+        EnterpriseLookup,
+        commitResp.CommitID,
+      );
+
+      const durationMs = status?.EndTime && status?.StartTime
+        ? new Date(status.EndTime).getTime() -
+          new Date(status.StartTime).getTime()
+        : undefined;
+
+      console.info(
+        `[eac-build][${label}] commit ${commitResp.CommitID} → ${status?.Processing} ` +
+          `(user=${status?.Username}, durationMs=${durationMs ?? 'n/a'})`,
+      );
+
+      // Optional: tiny messages peek (first 3 keys)
+      const msgKeys = Object.keys(status?.Messages ?? {});
+      if (msgKeys.length) {
+        console.info(
+          `[eac-build][${label}] messages: ${msgKeys.slice(0, 3).join(', ')}${
+            msgKeys.length > 3 ? ', …' : ''
+          }`,
+        );
+      }
     } catch (err) {
       const safe = err instanceof Error
         ? { name: err.name, message: err.message, stack: err.stack }
