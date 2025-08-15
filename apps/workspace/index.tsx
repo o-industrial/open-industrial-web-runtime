@@ -86,6 +86,7 @@ export default function WorkspacePage({
         const capabilities = (await OICore.Build(ioc)).Capabilities!;
 
         const aziCircuit = '/api/synaptic/circuits/azi';
+        const aziWarmQueryCircuit = '/api/synaptic/circuits/event-logs';
 
         const mgr = new WorkspaceManager(
           initialEaC,
@@ -94,6 +95,7 @@ export default function WorkspacePage({
           capabilities,
           'workspace',
           aziCircuit,
+          aziWarmQueryCircuit,
           oiApiToken,
         );
 
@@ -144,6 +146,7 @@ export default function WorkspacePage({
         <AziPanel
           workspaceMgr={workspaceMgr}
           renderMessage={(msg) => marked.parse(msg) as string}
+          aziMgr={workspaceMgr.Azi}
         />
       }
       breadcrumb={
