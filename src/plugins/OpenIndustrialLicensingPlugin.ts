@@ -325,6 +325,8 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
           }`,
         );
       }
+
+      console.info(status?.Messages);
     } catch (err) {
       const safe = err instanceof Error
         ? { name: err.name, message: err.message, stack: err.stack }
