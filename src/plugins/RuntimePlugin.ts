@@ -80,55 +80,55 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             },
             ApplicationResolvers: {
-              // automateConference: {
-              //   PathPattern: '/automateconference*',
-              //   Priority: 500,
-              // },
-              // assets: {
-              //   PathPattern: '/assets*',
-              //   Priority: 500,
-              // },
-              // atomicIcons: {
-              //   PathPattern: '/icons*',
-              //   Priority: 500,
-              // },
-              // blog: {
-              //   PathPattern: '/blog*',
-              //   Priority: 500,
-              // },
-              // docs: {
-              //   PathPattern: '/docs*',
-              //   Priority: 500,
-              //   IsPrivate: true,
-              //   IsTriggerSignIn: true,
-              // },
-              // home: {
-              //   PathPattern: '*',
-              //   Priority: 100,
-              // },
-              // home2: {
-              //   PathPattern: '/landing*',
-              //   Priority: 300,
-              // },
-              // licensingApi: {
-              //   PathPattern: '/workspace/api/o-industrial/licensing/*',
-              //   Priority: 700,
-              //   IsPrivate: true,
-              // },
-              // oauth: {
-              //   PathPattern: '/oauth/*',
-              //   Priority: 500,
-              // },
-              // tailwind: {
-              //   PathPattern: '/tailwind*',
-              //   Priority: 500,
-              // },
-              // workspace: {
-              //   PathPattern: '/workspace*',
-              //   Priority: 500,
-              //   IsPrivate: true,
-              //   IsTriggerSignIn: true,
-              // },
+              automateConference: {
+                PathPattern: '/automateconference*',
+                Priority: 500,
+              },
+              assets: {
+                PathPattern: '/assets*',
+                Priority: 500,
+              },
+              atomicIcons: {
+                PathPattern: '/icons*',
+                Priority: 500,
+              },
+              blog: {
+                PathPattern: '/blog*',
+                Priority: 500,
+              },
+              docs: {
+                PathPattern: '/docs*',
+                Priority: 500,
+                IsPrivate: true,
+                IsTriggerSignIn: true,
+              },
+              home: {
+                PathPattern: '*',
+                Priority: 100,
+              },
+              home2: {
+                PathPattern: '/landing*',
+                Priority: 300,
+              },
+              licensingApi: {
+                PathPattern: '/workspace/api/o-industrial/licensing/*',
+                Priority: 700,
+                IsPrivate: true,
+              },
+              oauth: {
+                PathPattern: '/oauth/*',
+                Priority: 500,
+              },
+              tailwind: {
+                PathPattern: '/tailwind*',
+                Priority: 500,
+              },
+              workspace: {
+                PathPattern: '/workspace*',
+                Priority: 500,
+                IsPrivate: true,
+                IsTriggerSignIn: true,
+              },
             },
           },
         },
