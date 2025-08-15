@@ -110,11 +110,11 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               //   PathPattern: '/landing*',
               //   Priority: 300,
               // },
-              licensingApi: {
-                PathPattern: '/workspace/api/o-industrial/licensing/*',
-                Priority: 700,
-                IsPrivate: true,
-              },
+              // licensingApi: {
+              //   PathPattern: '/workspace/api/o-industrial/licensing/*',
+              //   Priority: 700,
+              //   IsPrivate: true,
+              // },
               // oauth: {
               //   PathPattern: '/oauth/*',
               //   Priority: 500,
