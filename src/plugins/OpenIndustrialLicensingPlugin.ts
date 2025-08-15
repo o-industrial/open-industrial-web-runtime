@@ -8,11 +8,12 @@ import { IoCContainer } from '@fathym/ioc';
 import { EaCStripeProcessor } from '@fathym/eac-applications/processors';
 import { loadEaCLicensingSvc } from '@fathym/eac-licensing/clients';
 import { loadJwtConfig } from '@fathym/common';
+import { waitForStatus } from '@fathym/eac/steward/status';
 
 export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
   constructor() {}
 
-  public Setup(_config: EaCRuntimeConfig): Promise<EaCRuntimePluginConfig> {
+  public Setup(config: EaCRuntimeConfig): Promise<EaCRuntimePluginConfig> {
     const pluginConfig: EaCRuntimePluginConfig = {
       Name: OpenIndustrialLicensingPlugin.name,
       EaC: {
@@ -34,23 +35,84 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
                 planLookup,
                 priceLookup,
               ) => {
-                const jwt = await loadJwtConfig().Create({
-                  EnterpriseLookup: entLookup,
-                  WorkspaceLookup: entLookup,
-                  Username: username,
-                });
+                const log = config.LoggingProvider.Package;
 
-                const licSvc = await loadEaCLicensingSvc(jwt);
+                // small helpers (inline to keep the snippet self-contained)
+                const traceId = crypto?.randomUUID?.() ??
+                  Math.random().toString(36).slice(2, 10);
+                const t0 = Date.now();
+                const done = () => Date.now() - t0;
+                const safeError = (e: unknown) =>
+                  e instanceof Error ? { name: e.name, message: e.message, stack: e.stack } : {
+                    message: (() => {
+                      try {
+                        return JSON.stringify(e);
+                      } catch {
+                        return String(e);
+                      }
+                    })(),
+                  };
 
-                const licSubRes = await licSvc.License.Subscription(
-                  entLookup,
-                  username,
-                  licLookup,
-                  planLookup,
-                  priceLookup,
+                log.info(
+                  () =>
+                    `[lic-sub][${traceId}] start ent=${entLookup} user=${username} lic=${licLookup} plan=${planLookup} price=${priceLookup}`,
                 );
 
-                return licSubRes;
+                try {
+                  log.debug(
+                    () =>
+                      `[lic-sub][${traceId}] creating JWT for ent=${entLookup} user=${username}`,
+                  );
+                  const jwt = await loadJwtConfig().Create({
+                    EnterpriseLookup: entLookup,
+                    WorkspaceLookup: entLookup,
+                    Username: username,
+                  });
+                  log.debug(
+                    () => `[lic-sub][${traceId}] JWT created (token not logged)`,
+                  );
+
+                  log.debug(
+                    () => `[lic-sub][${traceId}] loading licensing service`,
+                  );
+                  const licSvc = await loadEaCLicensingSvc(jwt);
+
+                  log.debug(
+                    () =>
+                      `[lic-sub][${traceId}] calling licSvc.License.Subscription lic=${licLookup} plan=${planLookup} price=${priceLookup}`,
+                  );
+                  const licSubRes = await licSvc.License.Subscription(
+                    entLookup,
+                    username,
+                    licLookup,
+                    planLookup,
+                    priceLookup,
+                  );
+
+                  log.info(
+                    () => `[lic-sub][${traceId}] subscription handled ok in ${done()}ms`,
+                  );
+                  log.debug(
+                    () =>
+                      `[lic-sub][${traceId}] response keys=${
+                        Object.keys(
+                          licSubRes ?? {},
+                        ).join(',')
+                      }`,
+                  );
+
+                  return licSubRes;
+                } catch (err) {
+                  log.error(
+                    `[lic-sub][${traceId}] error during subscription`,
+                    safeError(err),
+                  );
+                  throw err; // preserve existing error behavior
+                } finally {
+                  log.debug(
+                    () => `[lic-sub][${traceId}] end durationMs=${done()}`,
+                  );
+                }
               },
             } as EaCStripeProcessor,
           },
@@ -186,28 +248,105 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
     _ioc: IoCContainer,
     pluginCfg?: EaCRuntimePluginConfig,
   ): Promise<void> {
+    const label = crypto?.randomUUID?.() ?? `eac-build-${Date.now().toString(36)}`;
+    const mask = (s?: string | null) => !s ? '' : `${s.slice(0, 6)}…${s.slice(-4)}`;
+
+    console.time(label);
+    console.info(`[eac-build][${label}] start`);
+
     const eacApiKey = Deno.env.get('EAC_API_KEY');
 
-    if (eacApiKey && pluginCfg) {
-      try {
-        const [_header, payload] = await djwt.decode(eacApiKey);
+    if (!eacApiKey) {
+      console.info(`[eac-build][${label}] skip: EAC_API_KEY not set`);
+      console.timeEnd(label);
+      return;
+    }
+    if (!pluginCfg) {
+      console.info(`[eac-build][${label}] skip: pluginCfg not provided`);
+      console.timeEnd(label);
+      return;
+    }
 
-        const { EnterpriseLookup } = payload as Record<string, string>;
+    try {
+      console.debug(`[eac-build][${label}] apiKey=${mask(eacApiKey)}`);
 
-        const eacSvc = await loadEaCStewardSvc(eacApiKey);
+      const [_header, payload] = await djwt.decode(eacApiKey);
+      const { EnterpriseLookup } = payload as Record<string, string>;
 
-        await eacSvc.EaC.Commit(
-          {
-            EnterpriseLookup,
-            ...pluginCfg.EaC!,
-          },
-          600,
+      if (!EnterpriseLookup) {
+        console.warn(
+          `[eac-build][${label}] JWT payload missing EnterpriseLookup; aborting remote commit`,
         );
-      } catch (_err) {
-        console.error(
-          'Unable to update EaC Licensing, falling back to local config.',
+        console.timeEnd(label);
+        return;
+      }
+
+      console.debug(
+        `[eac-build][${label}] EnterpriseLookup=${EnterpriseLookup}`,
+      );
+
+      const eacSvc = await loadEaCStewardSvc(eacApiKey);
+
+      const body = {
+        EnterpriseLookup,
+        ...(pluginCfg.EaC ?? {}),
+      };
+
+      console.info(
+        `[eac-build][${label}] committing EaC keys=${
+          Object.keys(pluginCfg.EaC ?? {}).join(',') || '∅'
+        }`,
+      );
+
+      const commitResp = await eacSvc.EaC.Commit(body, 600);
+
+      const status = await waitForStatus(
+        eacSvc,
+        EnterpriseLookup,
+        commitResp.CommitID,
+      );
+
+      const durationMs = status?.EndTime && status?.StartTime
+        ? new Date(status.EndTime).getTime() -
+          new Date(status.StartTime).getTime()
+        : undefined;
+
+      console.info(
+        `[eac-build][${label}] commit ${commitResp.CommitID} → ${status?.Processing} ` +
+          `(user=${status?.Username}, durationMs=${durationMs ?? 'n/a'})`,
+      );
+
+      // Optional: tiny messages peek (first 3 keys)
+      const msgKeys = Object.keys(status?.Messages ?? {});
+      if (msgKeys.length) {
+        console.info(
+          `[eac-build][${label}] messages: ${msgKeys.slice(0, 3).join(', ')}${
+            msgKeys.length > 3 ? ', …' : ''
+          }`,
         );
       }
+
+      console.info(status?.Messages);
+    } catch (err) {
+      const safe = err instanceof Error
+        ? { name: err.name, message: err.message, stack: err.stack }
+        : {
+          message: (() => {
+            try {
+              return JSON.stringify(err);
+            } catch {
+              return String(err);
+            }
+          })(),
+        };
+
+      console.error(
+        `[eac-build][${label}] Unable to update EaC Licensing, falling back to local config.`,
+        safe,
+      );
+    } finally {
+      console.debug(`[eac-build][${label}] end`);
+      console.timeEnd(label);
     }
   }
 }

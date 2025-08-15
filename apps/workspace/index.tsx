@@ -129,13 +129,16 @@ export default function WorkspacePage({
     runtimeMenus,
   } = workspaceMgr.UseAppMenu(ParentEaC);
 
+  const onActivateClick = oiLicense ? undefined : () => showLicense();
+
   return (
     <RuntimeWorkspaceDashboardTemplate
+      // commitFlyover
       appBar={
         <AppFrameBar
           menus={runtimeMenus}
           onMenuOption={handleMenu}
-          onActivateClick={() => showLicense()}
+          onActivateClick={onActivateClick}
           onProfileClick={() => showAccProf()}
           commitBadgeState={badgeState}
           onCommitClick={toggleCommitPanel}
