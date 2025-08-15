@@ -12,7 +12,7 @@ import { loadJwtConfig } from '@fathym/common';
 export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
   constructor() {}
 
-  public Setup(_config: EaCRuntimeConfig): Promise<EaCRuntimePluginConfig> {
+  public Setup(config: EaCRuntimeConfig): Promise<EaCRuntimePluginConfig> {
     const pluginConfig: EaCRuntimePluginConfig = {
       Name: OpenIndustrialLicensingPlugin.name,
       EaC: {
@@ -34,23 +34,84 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
                 planLookup,
                 priceLookup,
               ) => {
-                const jwt = await loadJwtConfig().Create({
-                  EnterpriseLookup: entLookup,
-                  WorkspaceLookup: entLookup,
-                  Username: username,
-                });
+                const log = config.LoggingProvider.Package;
 
-                const licSvc = await loadEaCLicensingSvc(jwt);
+                // small helpers (inline to keep the snippet self-contained)
+                const traceId = crypto?.randomUUID?.() ??
+                  Math.random().toString(36).slice(2, 10);
+                const t0 = Date.now();
+                const done = () => Date.now() - t0;
+                const safeError = (e: unknown) =>
+                  e instanceof Error ? { name: e.name, message: e.message, stack: e.stack } : {
+                    message: (() => {
+                      try {
+                        return JSON.stringify(e);
+                      } catch {
+                        return String(e);
+                      }
+                    })(),
+                  };
 
-                const licSubRes = await licSvc.License.Subscription(
-                  entLookup,
-                  username,
-                  licLookup,
-                  planLookup,
-                  priceLookup,
+                log.info(
+                  () =>
+                    `[lic-sub][${traceId}] start ent=${entLookup} user=${username} lic=${licLookup} plan=${planLookup} price=${priceLookup}`,
                 );
 
-                return licSubRes;
+                try {
+                  log.debug(
+                    () =>
+                      `[lic-sub][${traceId}] creating JWT for ent=${entLookup} user=${username}`,
+                  );
+                  const jwt = await loadJwtConfig().Create({
+                    EnterpriseLookup: entLookup,
+                    WorkspaceLookup: entLookup,
+                    Username: username,
+                  });
+                  log.debug(
+                    () => `[lic-sub][${traceId}] JWT created (token not logged)`,
+                  );
+
+                  log.debug(
+                    () => `[lic-sub][${traceId}] loading licensing service`,
+                  );
+                  const licSvc = await loadEaCLicensingSvc(jwt);
+
+                  log.debug(
+                    () =>
+                      `[lic-sub][${traceId}] calling licSvc.License.Subscription lic=${licLookup} plan=${planLookup} price=${priceLookup}`,
+                  );
+                  const licSubRes = await licSvc.License.Subscription(
+                    entLookup,
+                    username,
+                    licLookup,
+                    planLookup,
+                    priceLookup,
+                  );
+
+                  log.info(
+                    () => `[lic-sub][${traceId}] subscription handled ok in ${done()}ms`,
+                  );
+                  log.debug(
+                    () =>
+                      `[lic-sub][${traceId}] response keys=${
+                        Object.keys(
+                          licSubRes ?? {},
+                        ).join(',')
+                      }`,
+                  );
+
+                  return licSubRes;
+                } catch (err) {
+                  log.error(
+                    `[lic-sub][${traceId}] error during subscription`,
+                    safeError(err),
+                  );
+                  throw err; // preserve existing error behavior
+                } finally {
+                  log.debug(
+                    () => `[lic-sub][${traceId}] end durationMs=${done()}`,
+                  );
+                }
               },
             } as EaCStripeProcessor,
           },
