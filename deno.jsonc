@@ -26,7 +26,7 @@
     "version": "deno run -A jsr:@fathym/common@0/build/version"
   },
   "imports": {
-    "@fathym/atomic": "jsr:@fathym/atomic@0",
+    "@fathym/atomic": "jsr:@fathym/atomic@0.0.185",
     "@fathym/atomic-design-kit": "jsr:@fathym/atomic-design-kit@0",
     "@fathym/atomic-icons": "jsr:@fathym/atomic-icons@0.0.95",
     "@fathym/common": "jsr:@fathym/common@0.2.266",
@@ -41,7 +41,7 @@
     "immer": "npm:immer@10.1.1",
     "json-schema": "npm:json-schema@0.4.0",
 
-    "@o-industrial/common": "jsr:@o-industrial/common@0.0.200",
+    "@o-industrial/common": "jsr:@o-industrial/common@0.0.201",
     // "@o-industrial/common/atomic/atoms": "../open-industrial-reference-architecture/atomic/atoms/.exports.ts",
     // "@o-industrial/common/atomic/molecules": "../open-industrial-reference-architecture/atomic/molecules/.exports.ts",
     // "@o-industrial/common/atomic/organisms": "../open-industrial-reference-architecture/atomic/organisms/.exports.ts",
