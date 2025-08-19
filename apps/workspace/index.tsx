@@ -129,19 +129,29 @@ export default function WorkspacePage({
     runtimeMenus,
   } = workspaceMgr.UseAppMenu(ParentEaC);
 
+  const history = workspaceMgr.UseHistory();
+
   const onActivateClick = oiLicense ? undefined : () => showLicense();
+
+  const onDeployClick = oiLicense
+    ? async () => {
+      await history.deploy();
+    }
+    : undefined;
 
   return (
     <RuntimeWorkspaceDashboardTemplate
       // commitFlyover
       appBar={
         <AppFrameBar
+          hasWorkspaceChanges={history.hasChanges}
           menus={runtimeMenus}
+          commitBadgeState={badgeState}
           onMenuOption={handleMenu}
           onActivateClick={onActivateClick}
-          onProfileClick={() => showAccProf()}
-          commitBadgeState={badgeState}
           onCommitClick={toggleCommitPanel}
+          onDeployClick={onDeployClick}
+          onProfileClick={() => showAccProf()}
           // onSettingsClick={() => showWkspSets()}
         />
       }
