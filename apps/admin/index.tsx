@@ -56,7 +56,7 @@ export default function AdminPage({
     (async () => {
       if (!adminMgr) return;
       try {
-        const dashboard = await adminMgr.getDashboardSummary();
+        const dashboard = await adminMgr.GetDashboardSummary();
         setSummary(dashboard);
       } catch (err) {
         console.error('Failed to load admin dashboard', err);
