@@ -28,6 +28,7 @@ type WorkspacePageData = {
   OIAPIRoot: string;
   OIAPIToken: string;
   OILicense?: EaCUserLicense;
+  Username: string;
   Workspace: EverythingAsCodeOIWorkspace;
 };
 
@@ -41,6 +42,7 @@ export const handler: EaCRuntimeHandlerSet<
       OIAPIRoot: '/api/',
       OIAPIToken: ctx.State.OIJWT,
       OILicense: ctx.State.UserLicenses?.['o-industrial'],
+      Username: ctx.State.Username,
       Workspace: ctx.State.Workspace!,
     });
   },
@@ -53,6 +55,7 @@ export default function WorkspacePage({
     OIAPIToken: oiApiToken,
     OILicense: oiLicense,
     ParentEaC,
+    Username,
   },
 }: PageProps<WorkspacePageData>) {
   const origin = location?.origin ?? 'https://server.com';
@@ -90,6 +93,7 @@ export default function WorkspacePage({
 
         const mgr = new WorkspaceManager(
           initialEaC,
+          Username,
           oiLicense,
           oiSvc,
           capabilities,
@@ -129,19 +133,29 @@ export default function WorkspacePage({
     runtimeMenus,
   } = workspaceMgr.UseAppMenu(ParentEaC);
 
+  const history = workspaceMgr.UseHistory();
+
   const onActivateClick = oiLicense ? undefined : () => showLicense();
+
+  const onDeployClick = oiLicense
+    ? async () => {
+      await history.deploy();
+    }
+    : undefined;
 
   return (
     <RuntimeWorkspaceDashboardTemplate
       // commitFlyover
       appBar={
         <AppFrameBar
+          hasWorkspaceChanges={history.hasChanges}
           menus={runtimeMenus}
+          commitBadgeState={badgeState}
           onMenuOption={handleMenu}
           onActivateClick={onActivateClick}
-          onProfileClick={() => showAccProf()}
-          commitBadgeState={badgeState}
           onCommitClick={toggleCommitPanel}
+          onDeployClick={onDeployClick}
+          onProfileClick={() => showAccProf()}
           // onSettingsClick={() => showWkspSets()}
         />
       }

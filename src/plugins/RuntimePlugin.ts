@@ -80,6 +80,12 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             },
             ApplicationResolvers: {
+              admin: {
+                PathPattern: '/admin*',
+                Priority: 500,
+                IsPrivate: true,
+                IsTriggerSignIn: true,
+              },
               automateConference: {
                 PathPattern: '/automateconference*',
                 Priority: 500,
@@ -143,6 +149,27 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               AppDFSLookup: 'local:apps/adb2c',
               BypassEaCBase: true,
               ComponentDFSLookups: [['local:apps/adb2c', ['tsx']]],
+            } as EaCPreactAppProcessor,
+          },
+          admin: {
+            Details: {
+              Name: 'Admin Site',
+              Description: 'Admin site.',
+            },
+            ModifierResolvers: {
+              baseHref: {
+                Priority: 10000,
+              },
+            },
+            Processor: {
+              Type: 'PreactApp',
+              AppDFSLookup: 'local:apps/admin',
+              ComponentDFSLookups: [
+                ['local:apps/components', ['tsx']],
+                ['local:apps/admin', ['tsx']],
+                ['jsr:@fathym/atomic', ['tsx']],
+                ['jsr:@fathym/atomic-design-kit', ['tsx']],
+              ],
             } as EaCPreactAppProcessor,
           },
           assets: {
@@ -354,6 +381,14 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'Local',
               FileRoot: './apps/adb2c/',
+            } as EaCLocalDistributedFileSystemDetails,
+          },
+          'local:apps/admin': {
+            Details: {
+              Type: 'Local',
+              FileRoot: './apps/admin/',
+              DefaultFile: 'index.tsx',
+              Extensions: ['tsx'],
             } as EaCLocalDistributedFileSystemDetails,
           },
           'local:apps/assets': {
