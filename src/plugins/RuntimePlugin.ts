@@ -24,8 +24,10 @@ import {
   EaCJSRDistributedFileSystemDetails,
   EaCLocalDistributedFileSystemDetails,
 } from '@fathym/eac/dfs';
-import { EaCAzureADB2CProviderDetails } from '@fathym/eac-identity';
+import { EaCAzureADB2CProviderDetails, EaCAzureADProviderDetails } from '@fathym/eac-identity';
 import OpenIndustrialLicensingPlugin from './OpenIndustrialLicensingPlugin.ts';
+import OpenIndustrialMSALPlugin from './OpenIndustrialMSALPlugin.ts';
+import { EaCMSALProcessor } from '@fathym/msal';
 
 export default class RuntimePlugin implements EaCRuntimePlugin {
   constructor() {}
@@ -38,6 +40,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
       Plugins: [
         new FathymAtomicIconsPlugin(),
         new OpenIndustrialLicensingPlugin(),
+        new OpenIndustrialMSALPlugin(),
       ],
       IoC: new IoCContainer(),
       EaC: {
@@ -120,6 +123,12 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 PathPattern: '/workspace/api/o-industrial/licensing/*',
                 Priority: 700,
                 IsPrivate: true,
+              },
+              msal: {
+                PathPattern: '/azure/oauth/*',
+                Priority: 500,
+                IsPrivate: true,
+                IsTriggerSignIn: true,
               },
               oauth: {
                 PathPattern: '/oauth/*',
@@ -292,6 +301,29 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 ['local:apps/home', ['tsx']],
               ],
             } as EaCPreactAppProcessor,
+          },
+          msal: {
+            Details: {
+              Name: 'OAuth Site',
+              Description: 'The site for use in OAuth workflows for a user',
+            },
+            Processor: {
+              Type: 'MSAL',
+              Config: {
+                MSALSignInOptions: {
+                  Scopes: [
+                    'https://management.core.windows.net//user_impersonation',
+                  ],
+                  RedirectURI: '/azure/oauth/callback',
+                  SuccessRedirect: '/workspace',
+                },
+                MSALSignOutOptions: {
+                  ClearSession: false,
+                  PostLogoutRedirectUri: '/',
+                },
+              },
+              ProviderLookup: 'azure',
+            } as EaCMSALProcessor,
           },
           oauth: {
             Details: {
@@ -524,6 +556,17 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               TenantID: Deno.env.get('AZURE_ADB2C_TENANT_ID')!,
               IsPrimary: true,
             } as EaCAzureADB2CProviderDetails,
+          },
+          azure: {
+            DatabaseLookup: 'oauth',
+            Details: {
+              Name: 'Azure OAuth Provider',
+              Description: 'The provider used to connect with Azure',
+              ClientID: Deno.env.get('AZURE_AD_CLIENT_ID')!,
+              ClientSecret: Deno.env.get('AZURE_AD_CLIENT_SECRET')!,
+              Scopes: ['openid'],
+              TenantID: Deno.env.get('AZURE_AD_TENANT_ID')!,
+            } as EaCAzureADProviderDetails,
           },
         },
         $GlobalOptions: {

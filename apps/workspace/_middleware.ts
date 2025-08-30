@@ -9,6 +9,9 @@ import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.t
 import { AgreementManager } from '../../src/agreements/AgreementManager.ts';
 import { agreementsBlockerMiddleware } from '../../src/agreements/agreementsBlockerMiddleware.ts';
 import { loadEaCActuators } from '../../configs/eac-actuators.config.ts';
+import { EaCRuntimeContext } from '@fathym/eac/runtime';
+import { EaCAzureADProviderDetails } from '@fathym/eac-identity';
+import { createAzureADOAuthConfig, createOAuthHelpers } from '@fathym/common/oauth';
 
 export default [
   agreementsBlockerMiddleware,
@@ -23,7 +26,14 @@ export default [
 export function buildOpenIndustrialRuntimeMiddleware(
   kvLookup: string = 'eac',
 ): EaCRuntimeHandler<OpenIndustrialWebState> {
-  return async (_req, ctx) => {
+  return async (
+    req,
+    ctx: EaCRuntimeContext<
+      OpenIndustrialWebState,
+      Record<string, unknown>,
+      EverythingAsCodeOIWorkspace
+    >,
+  ) => {
     const username = ctx.State.Username!;
     const kv = await ctx.Runtime.IoC.Resolve(Deno.Kv, kvLookup);
     ctx.State.OIKV = kv;
@@ -139,6 +149,45 @@ export function buildOpenIndustrialRuntimeMiddleware(
     ctx.State.Workspace = await ctx.State.OIClient.Workspaces.Get();
 
     ctx.State.WorkspaceLookup = lookup!;
+
+    if (username) {
+      const providerLookup = 'azure';
+
+      const provider = ctx.Runtime.EaC!.Providers![providerLookup]!;
+
+      const providerDetails = provider.Details as EaCAzureADProviderDetails;
+
+      ctx.State.AzureAccessToken = async () => {
+        const oAuthConfig = createAzureADOAuthConfig(
+          providerDetails!.ClientID,
+          providerDetails!.ClientSecret,
+          providerDetails!.TenantID,
+          providerDetails!.Scopes,
+        );
+
+        const helpers = createOAuthHelpers(oAuthConfig);
+
+        const sessionId = await helpers.getSessionId(req);
+
+        const oauthKv = await ctx.Runtime.IoC.Resolve<Deno.Kv>(
+          Deno.Kv,
+          provider.DatabaseLookup,
+        );
+
+        const currentAccTok = await oauthKv.get<string>([
+          'MSAL',
+          'Session',
+          sessionId!,
+          'AccessToken',
+        ]);
+
+        if (currentAccTok.value) {
+          return currentAccTok.value;
+        }
+
+        return undefined;
+      };
+    }
 
     if (username) {
       const parentJwt = await loadJwtConfig().Create({
