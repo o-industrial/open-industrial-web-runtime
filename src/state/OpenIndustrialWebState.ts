@@ -5,6 +5,8 @@ import { EaCUserRecord } from '@fathym/eac';
 import { EaCUserLicense } from '@fathym/eac-licensing';
 
 export type OpenIndustrialWebState = {
+  AzureAccessToken?: () => Promise<string | undefined>;
+
   OIClient: OpenIndustrialAPIClient;
 
   OIKV: Deno.Kv;
