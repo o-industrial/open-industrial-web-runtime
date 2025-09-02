@@ -151,6 +151,7 @@ export default function WorkspacePage({
           hasWorkspaceChanges={history.hasChanges}
           menus={runtimeMenus}
           commitBadgeState={badgeState}
+          isDeploying={history.isDeploying}
           onMenuOption={handleMenu}
           onActivateClick={onActivateClick}
           onCommitClick={toggleCommitPanel}
