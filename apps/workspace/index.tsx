@@ -30,6 +30,8 @@ type WorkspacePageData = {
   OILicense?: EaCUserLicense;
   Username: string;
   Workspace: EverythingAsCodeOIWorkspace;
+  AziCircuitUrl: string;
+  AziWarmQueryCircuitUrl: string;
 };
 
 export const handler: EaCRuntimeHandlerSet<
@@ -44,6 +46,8 @@ export const handler: EaCRuntimeHandlerSet<
       OILicense: ctx.State.UserLicenses?.['o-industrial'],
       Username: ctx.State.Username,
       Workspace: ctx.State.Workspace!,
+      AziCircuitUrl: Deno.env.get('AZI_MAIN_CIRCUIT_URL')!,
+      AziWarmQueryCircuitUrl: Deno.env.get('AZI_WARM_QUERY_CIRCUIT_URL')!,
     });
   },
 };
@@ -56,6 +60,8 @@ export default function WorkspacePage({
     OILicense: oiLicense,
     ParentEaC,
     Username,
+    AziCircuitUrl: aziUrl,
+    AziWarmQueryCircuitUrl: aziWarmQueryUrl,
   },
 }: PageProps<WorkspacePageData>) {
   const origin = location?.origin ?? 'https://server.com';
@@ -88,9 +94,6 @@ export default function WorkspacePage({
 
         const capabilities = (await OICore.Build(ioc)).Capabilities!;
 
-        const aziCircuit = '/api/synaptic/circuits/azi';
-        const aziWarmQueryCircuit = '/api/synaptic/circuits/event-logs';
-
         const mgr = new WorkspaceManager(
           initialEaC,
           Username,
@@ -98,8 +101,8 @@ export default function WorkspacePage({
           oiSvc,
           capabilities,
           'workspace',
-          aziCircuit,
-          aziWarmQueryCircuit,
+          aziUrl,
+          aziWarmQueryUrl,
           oiApiToken,
         );
 
