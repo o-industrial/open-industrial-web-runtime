@@ -89,10 +89,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 IsPrivate: true,
                 IsTriggerSignIn: true,
               },
-              automateConference: {
-                PathPattern: '/automateconference*',
-                Priority: 500,
-              },
               assets: {
                 PathPattern: '/assets*',
                 Priority: 500,
@@ -101,26 +97,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 PathPattern: '/icons*',
                 Priority: 500,
               },
-              blog: {
-                PathPattern: '/blog*',
-                Priority: 500,
-              },
-              docs: {
-                PathPattern: '/docs*',
-                Priority: 500,
-                IsPrivate: true,
-                IsTriggerSignIn: true,
-              },
-              home: {
-                PathPattern: '*',
-                Priority: 100,
-              },
-              home2: {
-                PathPattern: '/landing*',
-                Priority: 300,
-              },
               licensingApi: {
-                PathPattern: '/workspace/api/o-industrial/licensing/*',
+                PathPattern: '/api/o-industrial/licensing/*',
                 Priority: 700,
                 IsPrivate: true,
               },
@@ -139,8 +117,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 Priority: 500,
               },
               workspace: {
-                PathPattern: '/workspace*',
-                Priority: 500,
+                PathPattern: '*',
+                Priority: 100,
                 IsPrivate: true,
                 IsTriggerSignIn: true,
               },
@@ -148,18 +126,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
           },
         },
         Applications: {
-          adb2c: {
-            Details: {
-              Name: 'ADB2C Page Layouts',
-              Description: 'ADB2C Page Layouts.',
-            },
-            Processor: {
-              Type: 'PreactApp',
-              AppDFSLookup: 'local:apps/adb2c',
-              BypassEaCBase: true,
-              ComponentDFSLookups: [['local:apps/adb2c', ['tsx']]],
-            } as EaCPreactAppProcessor,
-          },
           admin: {
             Details: {
               Name: 'Admin Site',
@@ -210,98 +176,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Config: './configs/atomic-icons.config.json',
             } as EaCAtomicIconsProcessor,
           },
-          automateConference: {
-            Details: {
-              Name: 'Automate Conference Redirect',
-            },
-            Processor: {
-              Type: 'Redirect',
-              Redirect: '/',
-              Permanent: true,
-              PreserveMethod: false,
-            } as EaCRedirectProcessor,
-          },
-          blog: {
-            Details: {
-              Name: 'Blog',
-              Description: 'Blog.',
-            },
-            ModifierResolvers: {
-              baseHref: {
-                Priority: 10000,
-              },
-            },
-            Processor: {
-              Type: 'PreactApp',
-              AppDFSLookup: 'local:apps/blog',
-              DocPageConfigPath: './.config.ts',
-              ComponentDFSLookups: [
-                ['local:apps/components', ['tsx']],
-                ['local:apps/blog', ['tsx']],
-              ],
-            } as EaCPreactAppProcessor,
-          },
-          docs: {
-            Details: {
-              Name: 'Documentation Site 2',
-              Description: 'Documentation site 2.',
-            },
-            ModifierResolvers: {
-              baseHref: {
-                Priority: 10000,
-              },
-            },
-            Processor: {
-              Type: 'PreactApp',
-              AppDFSLookup: 'local:apps/docs',
-              DocPageConfigPath: './.config.ts',
-              ComponentDFSLookups: [
-                ['local:apps/components', ['tsx']],
-                ['local:apps/docs', ['tsx']],
-              ],
-            } as EaCPreactAppProcessor,
-          },
-          home2: {
-            Details: {
-              Name: 'Marketing Plasmic Site',
-              Description: 'Marketing Plasmic Home site.',
-            },
-            ModifierResolvers: {
-              baseHref: {
-                Priority: 10000,
-              },
-            },
-            Processor: {
-              Type: 'DFS',
-              DFSLookup: 'abs:public-web',
-              CacheControl: {
-                'text\\/html': `private, max-age=${60 * 5}`,
-                'image\\/': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/javascript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/typescript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-              },
-            } as EaCDFSProcessor,
-          },
-          home: {
-            Details: {
-              Name: 'Home Site',
-              Description: 'Home site.',
-            },
-            ModifierResolvers: {
-              baseHref: {
-                Priority: 10000,
-              },
-            },
-            Processor: {
-              Type: 'PreactApp',
-              AppDFSLookup: 'local:apps/home',
-              ComponentDFSLookups: [
-                ['local:apps/components', ['tsx']],
-                ['local:apps/home', ['tsx']],
-              ],
-            } as EaCPreactAppProcessor,
-          },
           msal: {
             Details: {
               Name: 'OAuth Site',
@@ -314,7 +188,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                   Scopes: [
                     'https://management.core.windows.net//user_impersonation',
                   ],
-                  RedirectURI: '/azure/oauth/callback',
+                  RedirectURI: '/workspace/azure/oauth/callback',
                   SuccessRedirect: '/workspace',
                 },
                 MSALSignOutOptions: {
@@ -344,8 +218,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Type: 'Tailwind',
               DFSLookups: [
                 'local:apps/components',
-                'local:apps/docs',
-                'local:apps/home',
+                'local:apps/admin',
+                'local:apps/workspace',
                 'local:apps/src',
                 // 'local:apps/islands',
                 'jsr:@fathym/atomic',
@@ -400,21 +274,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
           },
         },
         DFSs: {
-          'abs:public-web': {
-            Details: {
-              Type: 'AzureBlobStorage',
-              Container: 'deployments',
-              FileRoot: 'o-industrial/v2-oi-automate-lp/latest',
-              DefaultFile: 'index.html',
-              ConnectionString: Deno.env.get('AZURE_STORAGE_CONNECTION_STRING'),
-            } as EaCAzureBlobStorageDistributedFileSystemDetails,
-          },
-          'local:apps/adb2c': {
-            Details: {
-              Type: 'Local',
-              FileRoot: './apps/adb2c/',
-            } as EaCLocalDistributedFileSystemDetails,
-          },
           'local:apps/admin': {
             Details: {
               Type: 'Local',
@@ -429,34 +288,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               FileRoot: './apps/assets/',
             } as EaCLocalDistributedFileSystemDetails,
           },
-          'local:apps/blog': {
-            Details: {
-              Type: 'Local',
-              FileRoot: './apps/blog/',
-              DefaultFile: 'index.tsx',
-              Extensions: ['tsx'],
-            } as EaCLocalDistributedFileSystemDetails,
-          },
           'local:apps/components': {
             Details: {
               Type: 'Local',
               FileRoot: './apps/components/',
-              Extensions: ['tsx'],
-            } as EaCLocalDistributedFileSystemDetails,
-          },
-          'local:apps/docs': {
-            Details: {
-              Type: 'Local',
-              FileRoot: './apps/docs/',
-              DefaultFile: 'index.mdx',
-              Extensions: ['tsx', 'mdx', 'md'],
-            } as EaCLocalDistributedFileSystemDetails,
-          },
-          'local:apps/home': {
-            Details: {
-              Type: 'Local',
-              FileRoot: './apps/home/',
-              DefaultFile: 'index.tsx',
               Extensions: ['tsx'],
             } as EaCLocalDistributedFileSystemDetails,
           },
@@ -538,7 +373,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Name: 'OAuth',
               Description: 'Used to restrict user access to various applications.',
               ProviderLookup: 'adb2c',
-              SignInPath: '/oauth/signin',
+              SignInPath: '/workspace/oauth/signin',
             } as EaCOAuthModifierDetails,
           },
         },
