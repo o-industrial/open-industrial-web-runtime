@@ -390,6 +390,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               PolicyName: Deno.env.get('AZURE_ADB2C_POLICY')!,
               TenantID: Deno.env.get('AZURE_ADB2C_TENANT_ID')!,
               IsPrimary: true,
+              OAuthBase: './workspace'
             } as EaCAzureADB2CProviderDetails,
           },
           azure: {
