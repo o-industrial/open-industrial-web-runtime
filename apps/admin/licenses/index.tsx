@@ -1,6 +1,6 @@
 import { PageProps } from '@fathym/eac-applications/preact';
 import type { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
-import type { EaCLicenseAsCode } from '@fathym/eac-licensing';
+import type { EaCLicenseAsCode, EverythingAsCodeLicensing } from '@fathym/eac-licensing';
 import { AdminNav } from '@o-industrial/common/atomic/molecules';
 import { AdminDashboardTemplate } from '@o-industrial/common/atomic/templates';
 import { OpenIndustrialWebState } from '../../../src/state/OpenIndustrialWebState.ts';
@@ -14,8 +14,10 @@ type LicensesPageData = {
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, LicensesPageData> = {
   GET: (_req, ctx) => {
+    const eac = ctx.Runtime.EaC as EverythingAsCodeLicensing;
+
     return ctx.Render({
-      Licenses: ctx.Runtime.EaC.Licenses || {},
+      Licenses: eac.Licenses || {},
       Username: ctx.State.Username,
     });
   },
