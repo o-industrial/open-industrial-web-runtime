@@ -5,12 +5,26 @@ import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebS
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
   async DELETE(req, ctx) {
-    const { licLookup } = (await req.json()) as NullableArrayOrObject<EverythingAsCode>;
+    try {
+      let licLookup = '';
+      const ct = req.headers.get('content-type') || '';
+      if (ct.includes('application/json')) {
+        const body = (await req.json()) as NullableArrayOrObject<EverythingAsCode> & {
+          licLookup?: string;
+        };
+        licLookup = (body as any).licLookup ?? '';
+      } else {
+        const fd = await req.formData();
+        licLookup = String(fd.get('licLookup') ?? '').trim();
+      }
 
-    const result = await ctx.State.OIClient.Admin.DeleteEaC({
-      Licenses: [licLookup],
-    });
+      if (!licLookup) throw new Error('licLookup is required');
 
-    return Response.json(result);
+      await ctx.State.OIClient.Admin.DeleteEaC({ Licenses: [licLookup] });
+      return Response.redirect('/admin/licenses', 303);
+    } catch (err) {
+      const msg = encodeURIComponent(err instanceof Error ? err.message : 'Delete failed');
+      return Response.redirect(`/admin/licenses?error=${msg}`, 303);
+    }
   },
 };

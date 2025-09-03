@@ -4,15 +4,31 @@ import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebS
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
   async POST(req, ctx) {
-    const { licLookup, license } = await req.json() as {
-      licLookup: string;
-      license: EaCLicenseAsCode;
-    };
+    try {
+      let licLookup = '';
+      let license: EaCLicenseAsCode | undefined = undefined;
 
-    const eac = { Licenses: { [licLookup]: license } };
+      const ct = req.headers.get('content-type') || '';
+      if (ct.includes('application/json')) {
+        const body = (await req.json()) as { licLookup: string; license: EaCLicenseAsCode };
+        licLookup = body.licLookup;
+        license = body.license;
+      } else {
+        const fd = await req.formData();
+        licLookup = String(fd.get('licLookup') ?? '').trim();
+        const licJson = fd.get('license')?.toString();
+        if (licJson) license = JSON.parse(licJson) as EaCLicenseAsCode;
+      }
 
-    const result = await ctx.State.OIClient.Admin.CommitEaC(eac);
+      if (!licLookup || !license) throw new Error('licLookup and license are required');
 
-    return Response.json(result);
+      const eac = { Licenses: { [licLookup]: license } };
+      await ctx.State.OIClient.Admin.CommitEaC(eac);
+
+      return Response.redirect(`/admin/licenses/${licLookup}`, 303);
+    } catch (err) {
+      const msg = encodeURIComponent(err instanceof Error ? err.message : 'Commit failed');
+      return Response.redirect(`/admin/licenses?error=${msg}`, 303);
+    }
   },
 };
