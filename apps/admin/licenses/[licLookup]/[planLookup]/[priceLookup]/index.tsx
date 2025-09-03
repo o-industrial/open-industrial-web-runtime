@@ -10,7 +10,7 @@ import type {
   EaCLicensePriceDetails,
   EverythingAsCodeLicensing,
 } from '@fathym/eac-licensing';
-import { Input } from '@o-industrial/common/atomic/atoms';
+import { Action, Input } from '@o-industrial/common/atomic/atoms';
 import { OpenIndustrialWebState } from '../../../../../../src/state/OpenIndustrialWebState.ts';
 
 export const IsIsland = true;
@@ -71,62 +71,75 @@ export default function PricePage({
     setLocal({ ...local, Details: { ...local.Details, [field]: value } });
 
   return (
-    <div class='-:-:p-4 -:-:space-y-6'>
+    <div class='-:-:p-6 -:-:space-y-6'>
       <div class='-:-:flex -:-:items-center -:-:justify-between'>
-        <h1 class='-:-:text-xl -:-:font-semibold text-white'>Price: {PriceLookup}</h1>
-        {Username && <span class='-:-:text-sm -:-:text-slate-400'>• {Username}</span>}
+        <h1 class='-:-:text-2xl -:-:font-semibold -:-:text-neutral-100'>Price: {PriceLookup}</h1>
+        {Username && <span class='-:-:text-sm -:-:text-neutral-400'>👤 {Username}</span>}
       </div>
 
       {Error && (
-        <div class='-:-:text-sm -:-:text-red-400 -:-:border -:-:border-red-700 -:-:rounded -:-:p-2'>
+        <div class='-:-:text-sm -:-:text-neon-red-400 -:-:border -:-:border-neon-red-700 -:-:rounded -:-:p-2'>
           {Error}
         </div>
       )}
 
-      <form
-        method='POST'
-        action={`/admin/licenses/${LicLookup}/${PlanLookup}/${PriceLookup}/api/update`}
-        class='-:-:space-y-2'
-      >
-        <Input
-          name='Name'
-          placeholder='Name'
-          value={local.Details?.Name ?? ''}
-          onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
-            update('Name', e.currentTarget.value)}
-        />
-        <Input
-          name='Currency'
-          placeholder='Currency (e.g., usd)'
-          value={local.Details?.Currency ?? ''}
-          onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
-            update('Currency', e.currentTarget.value)}
-        />
-        <Input
-          name='Interval'
-          placeholder='Interval (e.g., month)'
-          value={local.Details?.Interval ?? ''}
-          onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
-            update('Interval', e.currentTarget.value)}
-        />
-        <Input
-          name='Value'
-          type='number'
-          placeholder='Value'
-          value={String(local.Details?.Value ?? 0)}
-          onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
-            update('Value', Number(e.currentTarget.value) || 0)}
-        />
-        <Input
-          name='Discount'
-          type='number'
-          placeholder='Discount'
-          value={String(local.Details?.Discount ?? 0)}
-          onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
-            update('Discount', Number(e.currentTarget.value) || 0)}
-        />
-        <button type='submit' class='-:-:px-4 -:-:py-2 -:-:bg-blue-600 -:-:rounded'>Save</button>
-      </form>
+      <div class='-:-:rounded-xl -:-:border -:-:border-neutral-700 -:-:bg-neutral-900/60 -:-:p-4 -:-:space-y-4'>
+        <h2 class='-:-:text-lg -:-:font-semibold -:-:text-neutral-100'>Details</h2>
+        <form
+          method='POST'
+          action={`/admin/licenses/${LicLookup}/${PlanLookup}/${PriceLookup}/api/update`}
+          class='-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4'
+        >
+          <Input
+            label='Name'
+            name='Name'
+            placeholder='Name'
+            value={local.Details?.Name ?? ''}
+            onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
+              update('Name', e.currentTarget.value)}
+          />
+          <Input
+            label='Currency'
+            name='Currency'
+            placeholder='Currency (e.g., usd)'
+            value={local.Details?.Currency ?? ''}
+            onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
+              update('Currency', e.currentTarget.value)}
+          />
+          <Input
+            label='Interval'
+            name='Interval'
+            placeholder='Interval (e.g., month)'
+            value={local.Details?.Interval ?? ''}
+            onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
+              update('Interval', e.currentTarget.value)}
+          />
+          <Input
+            label='Value'
+            name='Value'
+            type='number'
+            placeholder='Value'
+            value={String(local.Details?.Value ?? 0)}
+            onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
+              update('Value', Number(e.currentTarget.value) || 0)}
+          />
+          <div class='md:-:-:col-span-2'>
+            <Input
+              label='Discount'
+              name='Discount'
+              type='number'
+              placeholder='Discount'
+              value={String(local.Details?.Discount ?? 0)}
+              onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
+                update('Discount', Number(e.currentTarget.value) || 0)}
+            />
+          </div>
+          <div class='md:-:-:col-span-2 -:-:flex -:-:justify-end'>
+            <Action type='submit'>Save</Action>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
+
