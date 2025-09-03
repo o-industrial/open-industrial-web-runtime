@@ -21,7 +21,9 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, LicensesPageD
   },
 };
 
-export default function LicensesPage({ Data: { Licenses, Username } }: PageProps<LicensesPageData>) {
+export default function LicensesPage(
+  { Data: { Licenses, Username } }: PageProps<LicensesPageData>,
+) {
   const navItems = [
     { href: '/admin', label: 'Dashboard' },
     { href: '/admin/enterprises', label: 'Enterprises' },
@@ -56,4 +58,3 @@ export default function LicensesPage({ Data: { Licenses, Username } }: PageProps
     </AdminDashboardTemplate>
   );
 }
-

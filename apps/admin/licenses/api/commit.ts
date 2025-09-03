@@ -1,7 +1,6 @@
 import type { EaCLicenseAsCode } from '@fathym/eac-licensing';
 import type { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
-
-import { OpenIndustrialWebState } from '../../../../../src/state/OpenIndustrialWebState.ts';
+import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebState.ts';
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
   async POST(req, ctx) {

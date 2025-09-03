@@ -282,48 +282,84 @@ export default function LicenseEditorPage({ Data, Params }: PageProps<LicenseEdi
                 class='-:-:w-full -:-:p-2 -:-:my-1 -:-:rounded -:-:bg-slate-800'
                 placeholder='Plan Name'
                 value={plan.Details?.Name ?? ''}
-                onInput={(e) => updatePlanDetail(pLookup, 'Name', (e.target as HTMLInputElement).value)}
+                onInput={(e) =>
+                  updatePlanDetail(pLookup, 'Name', (e.target as HTMLInputElement).value)}
               />
               <textarea
                 class='-:-:w-full -:-:p-2 -:-:my-1 -:-:rounded -:-:bg-slate-800'
                 placeholder='Plan Description'
                 value={plan.Details?.Description ?? ''}
-                onInput={(e) => updatePlanDetail(pLookup, 'Description', (e.target as HTMLTextAreaElement).value)}
+                onInput={(e) =>
+                  updatePlanDetail(pLookup, 'Description', (e.target as HTMLTextAreaElement).value)}
               />
 
               <div class='-:-:mt-2 -:-:space-y-2'>
                 <div class='-:-:flex -:-:items-center -:-:justify-between'>
                   <h4 class='-:-:font-semibold'>Prices</h4>
-                  <button type='button' class='-:-:text-blue-400' onClick={() => addPrice(pLookup)}>Add Price</button>
+                  <button
+                    type='button'
+                    class='-:-:text-blue-400'
+                    onClick={() =>
+                      addPrice(pLookup)}
+                  >
+                    Add Price
+                  </button>
                 </div>
                 {Object.entries(plan.Prices || {}).map(([priceLookup, price]) => (
-                  <div key={priceLookup} class='-:-:p-2 -:-:border -:-:border-slate-700 -:-:rounded'>
+                  <div
+                    key={priceLookup}
+                    class='-:-:p-2 -:-:border -:-:border-slate-700 -:-:rounded'
+                  >
                     <h5 class='-:-:font-semibold'>{priceLookup}</h5>
                     <input
                       class='-:-:w-full -:-:p-1 -:-:my-1 -:-:rounded -:-:bg-slate-800'
                       placeholder='Currency'
                       value={price.Details?.Currency ?? ''}
-                      onInput={(e) => updatePriceDetail(pLookup, priceLookup, 'Currency', (e.target as HTMLInputElement).value)}
+                      onInput={(e) =>
+                        updatePriceDetail(
+                          pLookup,
+                          priceLookup,
+                          'Currency',
+                          (e.target as HTMLInputElement).value,
+                        )}
                     />
                     <input
                       class='-:-:w-full -:-:p-1 -:-:my-1 -:-:rounded -:-:bg-slate-800'
                       placeholder='Interval'
                       value={price.Details?.Interval ?? ''}
-                      onInput={(e) => updatePriceDetail(pLookup, priceLookup, 'Interval', (e.target as HTMLInputElement).value)}
+                      onInput={(e) =>
+                        updatePriceDetail(
+                          pLookup,
+                          priceLookup,
+                          'Interval',
+                          (e.target as HTMLInputElement).value,
+                        )}
                     />
                     <input
                       type='number'
                       class='-:-:w-full -:-:p-1 -:-:my-1 -:-:rounded -:-:bg-slate-800'
                       placeholder='Value'
                       value={price.Details?.Value ?? 0}
-                      onInput={(e) => updatePriceDetail(pLookup, priceLookup, 'Value', parseFloat((e.target as HTMLInputElement).value))}
+                      onInput={(e) =>
+                        updatePriceDetail(
+                          pLookup,
+                          priceLookup,
+                          'Value',
+                          parseFloat((e.target as HTMLInputElement).value),
+                        )}
                     />
                     <input
                       type='number'
                       class='-:-:w-full -:-:p-1 -:-:my-1 -:-:rounded -:-:bg-slate-800'
                       placeholder='Discount'
                       value={price.Details?.Discount ?? 0}
-                      onInput={(e) => updatePriceDetail(pLookup, priceLookup, 'Discount', parseFloat((e.target as HTMLInputElement).value))}
+                      onInput={(e) =>
+                        updatePriceDetail(
+                          pLookup,
+                          priceLookup,
+                          'Discount',
+                          parseFloat((e.target as HTMLInputElement).value),
+                        )}
                     />
                   </div>
                 ))}
@@ -332,23 +368,45 @@ export default function LicenseEditorPage({ Data, Params }: PageProps<LicenseEdi
               <div class='-:-:mt-2 -:-:space-y-2'>
                 <div class='-:-:flex -:-:items-center -:-:justify-between'>
                   <h4 class='-:-:font-semibold'>Coupons</h4>
-                  <button type='button' class='-:-:text-blue-400' onClick={() => addCoupon(pLookup)}>Add Coupon</button>
+                  <button
+                    type='button'
+                    class='-:-:text-blue-400'
+                    onClick={() =>
+                      addCoupon(pLookup)}
+                  >
+                    Add Coupon
+                  </button>
                 </div>
                 {Object.entries(plan.Coupons || {}).map(([couponLookup, coupon]) => (
-                  <div key={couponLookup} class='-:-:p-2 -:-:border -:-:border-slate-700 -:-:rounded'>
+                  <div
+                    key={couponLookup}
+                    class='-:-:p-2 -:-:border -:-:border-slate-700 -:-:rounded'
+                  >
                     <h5 class='-:-:font-semibold'>{couponLookup}</h5>
                     <input
                       class='-:-:w-full -:-:p-1 -:-:my-1 -:-:rounded -:-:bg-slate-800'
                       placeholder='Code'
                       value={coupon.Details?.Code ?? ''}
-                      onInput={(e) => updateCouponDetail(pLookup, couponLookup, 'Code', (e.target as HTMLInputElement).value)}
+                      onInput={(e) =>
+                        updateCouponDetail(
+                          pLookup,
+                          couponLookup,
+                          'Code',
+                          (e.target as HTMLInputElement).value,
+                        )}
                     />
                     <input
                       type='number'
                       class='-:-:w-full -:-:p-1 -:-:my-1 -:-:rounded -:-:bg-slate-800'
                       placeholder='Percent Off'
                       value={coupon.Details?.PercentOff ?? 0}
-                      onInput={(e) => updateCouponDetail(pLookup, couponLookup, 'PercentOff', parseFloat((e.target as HTMLInputElement).value))}
+                      onInput={(e) =>
+                        updateCouponDetail(
+                          pLookup,
+                          couponLookup,
+                          'PercentOff',
+                          parseFloat((e.target as HTMLInputElement).value),
+                        )}
                     />
                   </div>
                 ))}
@@ -357,17 +415,28 @@ export default function LicenseEditorPage({ Data, Params }: PageProps<LicenseEdi
               <div class='-:-:mt-2 -:-:space-y-2'>
                 <div class='-:-:flex -:-:items-center -:-:justify-between'>
                   <h4 class='-:-:font-semibold'>Trials</h4>
-                  <button type='button' class='-:-:text-blue-400' onClick={() => addTrial(pLookup)}>Add Trial</button>
+                  <button type='button' class='-:-:text-blue-400' onClick={() => addTrial(pLookup)}>
+                    Add Trial
+                  </button>
                 </div>
                 {Object.entries(plan.Trials || {}).map(([trialLookup, trial]) => (
-                  <div key={trialLookup} class='-:-:p-2 -:-:border -:-:border-slate-700 -:-:rounded'>
+                  <div
+                    key={trialLookup}
+                    class='-:-:p-2 -:-:border -:-:border-slate-700 -:-:rounded'
+                  >
                     <h5 class='-:-:font-semibold'>{trialLookup}</h5>
                     <input
                       type='number'
                       class='-:-:w-full -:-:p-1 -:-:my-1 -:-:rounded -:-:bg-slate-800'
                       placeholder='Days'
                       value={trial.Details?.Days ?? 0}
-                      onInput={(e) => updateTrialDetail(pLookup, trialLookup, 'Days', parseInt((e.target as HTMLInputElement).value))}
+                      onInput={(e) =>
+                        updateTrialDetail(
+                          pLookup,
+                          trialLookup,
+                          'Days',
+                          parseInt((e.target as HTMLInputElement).value),
+                        )}
                     />
                   </div>
                 ))}
@@ -376,9 +445,10 @@ export default function LicenseEditorPage({ Data, Params }: PageProps<LicenseEdi
           ))}
         </section>
 
-        <button type='submit' class='-:-:px-4 -:-:py-2 -:-:bg-blue-600 -:-:rounded'>Save License</button>
+        <button type='submit' class='-:-:px-4 -:-:py-2 -:-:bg-blue-600 -:-:rounded'>
+          Save License
+        </button>
       </form>
     </AdminDashboardTemplate>
   );
 }
-
