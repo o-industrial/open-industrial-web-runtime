@@ -1,50 +1,41 @@
-Open Industrial Web Runtime — Agent Guide
+# Agents Guide — open-industrial-web-runtime
 
-Purpose
-- Admin and workspace web runtime for Open Industrial, built on Deno + Preact with EaC-powered licensing and runtime services.
+Admin and marketing web runtime built on Deno + Preact. Hosts admin screens, public content, and identity/licensing integrations.
 
-How To Run
-- Dev server (watch): `deno task dev`
-- Start server: `deno task start`
-- Test (with coverage): `deno task test`
-- Lint/format/type-check: `deno task check` or `deno task build`
-- Docker: `deno task build:docker`, `deno task deploy:docker`
+## Scope
+- Build admin UIs (e.g., Licenses, Access Rights) under `apps/admin/*`.
+- Implement backend actions in colocated `api/` routes.
+- Integrate with EaC Identity & Licensing for commit flows.
 
-Entrypoints
-- `main.ts`: app/server runtime entry.
-- `dev.ts`: dev server/watcher.
+## Project Map
+- `apps/admin/*`: Admin pages and actions
+- `apps/home`, `apps/docs`, `apps/blog`: Public content
+- `apps/components/*`: Reusable page sections
+- `src/plugins/*`: Runtime plugins (MSAL, Licensing)
+- `src/state/OpenIndustrialWebState.ts`: Shared request state
+- `configs/eac-runtime.config.ts`: Runtime config
 
-Project Structure (selected)
-- `apps/admin/`: Admin UI pages; shared layout `apps/admin/_layout.tsx`.
-- `apps/workspace/`: Workspace-facing pages and debug routes.
-- `apps/home/`, `apps/docs/`, `apps/blog/`, `apps/adb2c/`: Marketing/docs flows and ADB2C pages.
-- `src/state/OpenIndustrialWebState.ts`: Shared runtime state (e.g., AdminNavItems).
-- `src/plugins/`: Runtime plugins (licensing, MSAL, core handlers).
-- `src/agreements/`: Agreements middleware and manager.
-- `configs/`: Tailwind/Atomic config and runtime configurations.
-- `tests/`: Test entry `tests/tests.ts` and focused suites.
+## Commands
+- Dev: `deno task dev` (watches `apps/, configs/, routes/, src/, static/`)
+- Check: `deno task check`
+- Test: `deno task test`
+- Build: `deno task build`
+- Start: `deno task start`
+- Docker: `deno task build:docker` → `deno task refresh:docker`
+  - Default port: 5411
 
-Tooling & Conventions
-- Deno-first: Use `deno task` for all operations. No Node install step is required for core workflows.
-- UI: Preact with Atomic Design Kit components.
-- Imports: Path/JSR/npm mappings defined in `deno.jsonc` under `imports`.
-- Formatting/Linting: Controlled by `deno.jsonc` `fmt`/`lint` sections.
+## Patterns
+- Admin pages follow: page.tsx → form → `apps/.../api/*` handler → `ctx.State.OIClient.Admin.CommitEaC`.
+- Use `@o-industrial/common/*` components for consistent UI.
+- Keep types imported from local `@fathym/eac-*` mappings where configured in `deno.jsonc`.
 
-Environment
-- Place a `.env` file at repo root for local development (see team conventions). Do not store production secrets in local `.env`.
+## PR Checklist
+- `deno task check` and `deno task test` must pass.
+- Avoid wide refactors; match existing style (tailwind utility classes, atoms/molecules).
+- Update or add tests in `tests/` when changing behavior.
 
-Notes for Agents
-- Prefer running the provided `deno task` commands rather than ad-hoc commands.
-- Some imports reference sibling repos (e.g., `../open-industrial-reference-architecture`, `../../fathym-deno`). If absent locally, certain tasks may fail; coordinate or adjust imports as needed for isolated work.
-- Use watch/dev via `deno task dev` during UI changes; use `deno task test` for verification.
-
-Common Tasks
-- Run checks quickly: `deno task check`
-- Publish dry-run: `deno task publish:check`
-- Coverage output: created under `./cov` when running tests.
-
-Troubleshooting
-- Type issues: `deno task check` and follow diagnostics.
-- Styling: Tailwind styles are injected via `apps/tailwind/styles.css` in dev.
-- Env mismatches: Ensure `.env` aligns with local services and API endpoints.
+## Safety
+- No license header changes.
+- Do not add new formatters; use repo formatting rules.
+- Keep API handlers idempotent and redirect with 303 after mutating operations.
 
