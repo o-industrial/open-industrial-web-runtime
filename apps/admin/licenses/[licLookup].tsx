@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 import { useState } from 'preact/hooks';
 import { PageProps } from '@fathym/eac-applications/preact';
 import type { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
