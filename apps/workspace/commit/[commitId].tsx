@@ -15,6 +15,8 @@ type CommitStatusPageData = {
   OIAPIRoot: string;
   OIAPIToken: string;
   Workspace: EverythingAsCodeOIWorkspace;
+  AziCircuitUrl: string;
+  AziWarmQueryCircuitUrl: string;
 };
 
 export const handler: EaCRuntimeHandlerSet<
@@ -26,12 +28,14 @@ export const handler: EaCRuntimeHandlerSet<
       OIAPIRoot: '/api/',
       OIAPIToken: ctx.State.OIJWT,
       Workspace: ctx.State.Workspace!,
+      AziCircuitUrl: Deno.env.get('AZI_MAIN_CIRCUIT_URL')!,
+      AziWarmQueryCircuitUrl: Deno.env.get('AZI_WARM_QUERY_CIRCUIT_URL')!,
     });
   },
 };
 
 export default function CommitStatusPage({
-  Data: { OIAPIRoot, OIAPIToken, Workspace },
+  Data: { OIAPIRoot, OIAPIToken, Workspace, AziCircuitUrl, AziWarmQueryCircuitUrl },
   Params,
 }: PageProps<CommitStatusPageData>) {
   const { commitId } = Params;
@@ -53,13 +57,14 @@ export default function CommitStatusPage({
       const ioc = new IoCContainer();
       ioc.Register(OpenIndustrialAPIClient, () => oiSvc);
       const capabilities = (await OICore.Build(ioc)).Capabilities!;
-      const aziCircuit = '/api/synaptic/circuits/azi';
+
       const mgr = new WorkspaceManager(
         Workspace,
         oiSvc,
         capabilities,
         'workspace',
-        aziCircuit,
+        AziCircuitUrl,
+        AziWarmQueryCircuitUrl,
         OIAPIToken,
       );
       setWorkspaceMgr(mgr);
