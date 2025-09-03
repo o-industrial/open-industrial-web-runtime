@@ -54,7 +54,7 @@ export default function EnterprisesPage({
     (async () => {
       setLoading(true);
       try {
-        const ents = await oiSvc.Admin.ListEnterprises(search);
+        const ents = await oiSvc.Admin.ListWorkspaces(search);
         setEnterprises(ents);
       } catch (err) {
         console.error('Failed to load enterprises', err);
