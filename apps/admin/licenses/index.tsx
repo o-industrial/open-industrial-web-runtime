@@ -1,6 +1,11 @@
 import { PageProps } from '@fathym/eac-applications/preact';
 import type { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
-import type { EaCLicenseAsCode, EverythingAsCodeLicensing } from '@fathym/eac-licensing';
+import type {
+  EaCLicenseAsCode,
+  EaCLicenseStripeDetails,
+  EverythingAsCodeLicensing,
+} from '@fathym/eac-licensing';
+import type { EverythingAsCode } from '@fathym/eac';
 import { useState } from 'preact/hooks';
 import { JSX } from 'preact';
 import { Action, ActionStyleTypes, Input } from '@o-industrial/common/atomic/atoms';
@@ -36,7 +41,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, LicensesPageD
       const licLookup = (payload['licLookup'] || '').trim();
       if (!licLookup) throw new Error('licLookup is required');
 
-      const details: import('@fathym/eac-licensing').EaCLicenseStripeDetails = {
+      const details: EaCLicenseStripeDetails = {
         Name: payload['Name'] ?? '',
         Description: payload['Description'] ?? '',
         Enabled: false,
@@ -45,14 +50,14 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, LicensesPageD
         WebhookSecret: '',
       };
 
-      const commit: import('@fathym/eac').EverythingAsCode = {
+      const commit: EverythingAsCode = {
         Licenses: {
           [licLookup]: {
             Details: details,
             Plans: {},
-          } as import('@fathym/eac-licensing').EaCLicenseAsCode,
+          } as EaCLicenseAsCode,
         },
-      } as import('@fathym/eac').EverythingAsCode;
+      } as EverythingAsCode;
 
       await ctx.State.OIClient.Admin.CommitEaC(commit);
 

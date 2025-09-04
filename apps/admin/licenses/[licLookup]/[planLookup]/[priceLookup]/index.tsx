@@ -12,6 +12,7 @@ import type {
 } from '@fathym/eac-licensing';
 import { Action, Input } from '@o-industrial/common/atomic/atoms';
 import type { EverythingAsCode } from '@fathym/eac';
+import { merge } from '@fathym/common';
 import { OpenIndustrialWebState } from '../../../../../../src/state/OpenIndustrialWebState.ts';
 
 export const IsIsland = true;
@@ -79,11 +80,6 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PricePageData
         Discount: data['Discount'] ? Number(data['Discount']) : currentPriceDetails?.Discount ?? 0,
       } as EaCLicensePriceDetails;
 
-      const newPrice: EaCLicensePriceAsCode = {
-        ...price,
-        Details: details,
-      } as EaCLicensePriceAsCode;
-
       const commit: EverythingAsCode = {
         Licenses: {
           [licLookup]: {
@@ -94,7 +90,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PricePageData
                 ...plan,
                 Prices: {
                   ...(plan.Prices || {}),
-                  [priceLookup]: newPrice,
+                  [priceLookup]: merge(price, { Details: details }),
                 },
               } as EaCLicensePlanAsCode,
             },

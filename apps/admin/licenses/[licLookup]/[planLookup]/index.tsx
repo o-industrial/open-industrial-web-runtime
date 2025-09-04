@@ -15,6 +15,7 @@ import { Action, ActionStyleTypes, Input } from '@o-industrial/common/atomic/ato
 import { OpenIndustrialWebState } from '../../../../../src/state/OpenIndustrialWebState.ts';
 import { IntentTypes } from '@o-industrial/common/types';
 import type { EverythingAsCode } from '@fathym/eac';
+import { merge } from '@fathym/common';
 
 export const IsIsland = true;
 
@@ -115,18 +116,13 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PlanPageData>
           Featured: data['Featured'] ?? currentPlanDetails?.Featured,
         } as EaCLicensePlanDetails;
 
-        const newPlan: EaCLicensePlanAsCode = {
-          ...currentPlan,
-          Details: details,
-        } as EaCLicensePlanAsCode;
-
         const commit: EverythingAsCode = {
           Licenses: {
             [licLookup]: {
               ...lic,
               Plans: {
                 ...(lic.Plans || {}),
-                [planLookup]: newPlan,
+                [planLookup]: merge(currentPlan, { Details: details }),
               },
             } as EaCLicenseAsCode,
           },
