@@ -1,7 +1,7 @@
 import { PageProps } from '@fathym/eac-applications/preact';
 import type { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import type { EaCLicenseAsCode, EverythingAsCodeLicensing } from '@fathym/eac-licensing';
-import { useMemo, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 import { JSX } from 'preact';
 import { Action, ActionStyleTypes, Input } from '@o-industrial/common/atomic/atoms';
 import { OpenIndustrialWebState } from '../../../src/state/OpenIndustrialWebState.ts';
@@ -22,6 +22,45 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, LicensesPageD
       Username: ctx.State.Username,
     });
   },
+  async POST(req, ctx) {
+    try {
+      const ct = req.headers.get('content-type') || '';
+      const payload: Record<string, string> = {};
+      if (ct.includes('application/json')) {
+        Object.assign(payload, await req.json());
+      } else {
+        const fd = await req.formData();
+        fd.forEach((v, k) => (payload[k] = String(v)));
+      }
+
+      const licLookup = (payload['licLookup'] || '').trim();
+      if (!licLookup) throw new Error('licLookup is required');
+
+      const details: import('@fathym/eac-licensing').EaCLicenseStripeDetails = {
+        Name: payload['Name'] ?? '',
+        Description: payload['Description'] ?? '',
+        Enabled: false,
+        PublishableKey: '',
+        SecretKey: '',
+        WebhookSecret: '',
+      };
+
+      const commit: import('@fathym/eac').EverythingAsCode = {
+        Licenses: {
+          [licLookup]: {
+            Details: details,
+            Plans: {},
+          } as import('@fathym/eac-licensing').EaCLicenseAsCode,
+        },
+      } as import('@fathym/eac').EverythingAsCode;
+
+      await ctx.State.OIClient.Admin.CommitEaC(commit);
+
+      return Response.redirect(`/admin/licenses/${licLookup}`, 303);
+    } catch (err) {
+      throw err instanceof Error ? err : new Error(String(err));
+    }
+  },
 };
 
 export default function LicensesPage(
@@ -32,21 +71,7 @@ export default function LicensesPage(
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
-  const licenseJson = useMemo(() => {
-    const lic: EaCLicenseAsCode = {
-      Details: {
-        Name: name,
-        Description: description,
-        Enabled: false,
-        PublishableKey: '',
-        SecretKey: '',
-        WebhookSecret: '',
-      } as any,
-      Plans: {},
-    };
-
-    return JSON.stringify(lic);
-  }, [name, description]);
+  // form posts plain fields; server builds structure
 
   return (
     <div class='-:-:p-6 -:-:space-y-6'>
@@ -71,7 +96,7 @@ export default function LicensesPage(
           <h2 class='-:-:text-lg -:-:font-semibold -:-:text-neutral-100'>Create License</h2>
           <form
             method='POST'
-            action='/admin/licenses/api/commit'
+            action='/admin/licenses'
             class='-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4'
           >
             <div>
@@ -107,8 +132,7 @@ export default function LicensesPage(
               />
             </div>
 
-            {/* Keep JSON license field in sync for API */}
-            <input type='hidden' name='license' value={licenseJson} />
+            {/* Server builds structure; no JSON hidden field */}
 
             <div class='md:-:-:col-span-2 -:-:flex -:-:justify-end -:-:gap-2'>
               <Action type='submit'>Create</Action>

@@ -5,12 +5,16 @@ import { PageProps } from '@fathym/eac-applications/preact';
 import type { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import type {
   EaCLicenseAsCode,
+  EaCLicensePlanAsCode,
+  EaCLicensePlanDetails,
   EaCLicenseStripeDetails,
   EverythingAsCodeLicensing,
 } from '@fathym/eac-licensing';
 import { Action, ActionStyleTypes, CheckboxRow, Input } from '@o-industrial/common/atomic/atoms';
 import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebState.ts';
 import { IntentTypes } from '@o-industrial/common/types';
+import type { EverythingAsCode } from '@fathym/eac';
+import { merge } from '@fathym/common';
 
 export const IsIsland = true;
 
@@ -36,6 +40,79 @@ export const handler: EaCRuntimeHandlerSet<
       Username: ctx.State.Username,
       Error: error ?? undefined,
     });
+  },
+  async POST(req, ctx) {
+    const { licLookup } = ctx.Params as { licLookup: string };
+
+    try {
+      const ct = req.headers.get('content-type') || '';
+      const payload: Record<string, string> = {};
+      if (ct.includes('application/json')) {
+        Object.assign(payload, await req.json());
+      } else {
+        const fd = await req.formData();
+        fd.forEach((v, k) => (payload[k] = String(v)));
+      }
+
+      const eac = ctx.Runtime.EaC as EverythingAsCodeLicensing;
+      const current = (eac.Licenses?.[licLookup] || { Plans: {} }) as EaCLicenseAsCode;
+      const currentDetails = current.Details as EaCLicenseStripeDetails | undefined;
+
+      if (payload['PlanLookup']) {
+        const planLookup = payload['PlanLookup'].trim();
+        if (!planLookup) throw new Error('Plan lookup is required');
+
+        const newPlan: EaCLicensePlanAsCode = {
+          Details: {
+            Name: '',
+            Description: '',
+            Features: [],
+            Priority: 0,
+          } as EaCLicensePlanDetails,
+          Prices: {},
+        } as EaCLicensePlanAsCode;
+
+        const commit: EverythingAsCode = {
+          Licenses: {
+            [licLookup]: {
+              ...current,
+              Plans: {
+                ...(current.Plans || {}),
+                [planLookup]: newPlan,
+              },
+            } as EaCLicenseAsCode,
+          },
+        } as EverythingAsCode;
+
+        await ctx.State.OIClient.Admin.CommitEaC(commit);
+        return Response.redirect(`/admin/licenses/${licLookup}/${planLookup}`, 303);
+      } else if (payload['Delete'] === 'true') {
+        await ctx.State.OIClient.Admin.DeleteEaC({ Licenses: [licLookup] });
+        return Response.redirect('/admin/licenses', 303);
+      } else {
+        const updateBody: Partial<EaCLicenseAsCode> = {
+          Details: {
+            Name: payload['Name'] ?? currentDetails?.Name ?? '',
+            Description: payload['Description'] ?? currentDetails?.Description ?? '',
+            Enabled: (payload['Enabled'] ?? String(currentDetails?.Enabled ?? false)) === 'true',
+            PublishableKey: payload['PublishableKey'] ?? currentDetails?.PublishableKey ?? '',
+            SecretKey: payload['SecretKey'] ?? currentDetails?.SecretKey ?? '',
+            WebhookSecret: payload['WebhookSecret'] ?? currentDetails?.WebhookSecret ?? '',
+          } as EaCLicenseStripeDetails,
+        };
+
+        const commit: EverythingAsCode = {
+          Licenses: {
+            [licLookup]: merge(current ?? {}, updateBody ?? {}),
+          },
+        } as EverythingAsCode;
+
+        await ctx.State.OIClient.Admin.CommitEaC(commit);
+        return Response.redirect(`/admin/licenses/${licLookup}`, 303);
+      }
+    } catch (err) {
+      throw err instanceof Error ? err : new Error(String(err));
+    }
   },
 };
 
@@ -103,7 +180,7 @@ export default function LicensePage({
           </div>
           <form
             method='POST'
-            action={`/admin/licenses/${LicLookup}/api/update`}
+            action={`/admin/licenses/${LicLookup}`}
             class='-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4'
           >
             <Input

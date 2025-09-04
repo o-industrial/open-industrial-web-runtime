@@ -7,11 +7,14 @@ import type {
   EaCLicenseAsCode,
   EaCLicensePlanAsCode,
   EaCLicensePlanDetails,
+  EaCLicensePriceAsCode,
+  EaCLicensePriceDetails,
   EverythingAsCodeLicensing,
 } from '@fathym/eac-licensing';
 import { Action, ActionStyleTypes, Input } from '@o-industrial/common/atomic/atoms';
 import { OpenIndustrialWebState } from '../../../../../src/state/OpenIndustrialWebState.ts';
 import { IntentTypes } from '@o-industrial/common/types';
+import type { EverythingAsCode } from '@fathym/eac';
 
 export const IsIsland = true;
 
@@ -42,10 +45,104 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PlanPageData>
       Error: error ?? undefined,
     });
   },
+  async POST(req, ctx) {
+    const { licLookup, planLookup } = ctx.Params as { licLookup: string; planLookup: string };
+
+    try {
+      const eac = ctx.Runtime.EaC as EverythingAsCodeLicensing;
+      const lic = (eac.Licenses?.[licLookup] || { Plans: {} }) as EaCLicenseAsCode;
+      const currentPlan = (lic.Plans?.[planLookup] || { Prices: {} }) as EaCLicensePlanAsCode;
+
+      const ct = req.headers.get('content-type') || '';
+      const data: Record<string, string> = {};
+      if (ct.includes('application/json')) {
+        Object.assign(data, await req.json());
+      } else {
+        const fd = await req.formData();
+        fd.forEach((v, k) => (data[k] = String(v)));
+      }
+
+      if (data['PriceLookup']) {
+        const priceLookup = data['PriceLookup'].trim();
+        if (!priceLookup) throw new Error('Price lookup is required');
+
+        const newPrice: EaCLicensePriceAsCode = {
+          Details: {
+            Name: '',
+            Currency: 'usd',
+            Interval: 'month',
+            Value: 0,
+            Discount: 0,
+          } as EaCLicensePriceDetails,
+        } as EaCLicensePriceAsCode;
+
+        const commit: EverythingAsCode = {
+          Licenses: {
+            [licLookup]: {
+              ...lic,
+              Plans: {
+                ...(lic.Plans || {}),
+                [planLookup]: {
+                  ...currentPlan,
+                  Prices: {
+                    ...(currentPlan.Prices || {}),
+                    [priceLookup]: newPrice,
+                  },
+                } as EaCLicensePlanAsCode,
+              },
+            } as EaCLicenseAsCode,
+          },
+        } as EverythingAsCode;
+
+        await ctx.State.OIClient.Admin.CommitEaC(commit);
+        return Response.redirect(`/admin/licenses/${licLookup}/${planLookup}/${priceLookup}`, 303);
+      } else {
+        const currentPlanDetails = currentPlan.Details as EaCLicensePlanDetails | undefined;
+        const details: EaCLicensePlanDetails = {
+          Name: data['Name'] ?? currentPlanDetails?.Name ?? '',
+          Description: data['Description'] ?? currentPlanDetails?.Description ?? '',
+          Features: (data['Features']
+            ? data['Features'].split('\n').map((s) =>
+              s.trim()
+            ).filter(Boolean)
+            : currentPlanDetails?.Features ?? []),
+          Priority: data['Priority']
+            ? Number(data['Priority'])
+            : (currentPlanDetails?.Priority ?? 0),
+          TrialPeriodDays: data['TrialPeriodDays']
+            ? Number(data['TrialPeriodDays'])
+            : currentPlanDetails?.TrialPeriodDays,
+          Featured: data['Featured'] ?? currentPlanDetails?.Featured,
+        } as EaCLicensePlanDetails;
+
+        const newPlan: EaCLicensePlanAsCode = {
+          ...currentPlan,
+          Details: details,
+        } as EaCLicensePlanAsCode;
+
+        const commit: EverythingAsCode = {
+          Licenses: {
+            [licLookup]: {
+              ...lic,
+              Plans: {
+                ...(lic.Plans || {}),
+                [planLookup]: newPlan,
+              },
+            } as EaCLicenseAsCode,
+          },
+        } as EverythingAsCode;
+
+        await ctx.State.OIClient.Admin.CommitEaC(commit);
+        return Response.redirect(`/admin/licenses/${licLookup}/${planLookup}`, 303);
+      }
+    } catch (err) {
+      throw err instanceof Error ? err : new Error(String(err));
+    }
+  },
 };
 
 export default function PlanPage({
-  Data: { License, Plan, LicLookup, PlanLookup, Username, Error },
+  Data: { License: _License, Plan, LicLookup, PlanLookup, Username, Error },
 }: PageProps<PlanPageData>) {
   const defaultDetails: EaCLicensePlanDetails = useMemo(
     () => ({ Name: '', Description: '', Features: [], Priority: 0 }),
@@ -86,7 +183,7 @@ export default function PlanPage({
           </div>
           <form
             method='POST'
-            action={`/admin/licenses/${LicLookup}/${PlanLookup}/api/update`}
+            action={`/admin/licenses/${LicLookup}/${PlanLookup}`}
             class='-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4'
           >
             <Input

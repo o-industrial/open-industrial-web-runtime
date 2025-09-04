@@ -12,7 +12,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
         const body = (await req.json()) as NullableArrayOrObject<EverythingAsCode> & {
           licLookup?: string;
         };
-        licLookup = (body as any).licLookup ?? '';
+        licLookup = String(body.licLookup ?? '').trim();
       } else {
         const fd = await req.formData();
         licLookup = String(fd.get('licLookup') ?? '').trim();

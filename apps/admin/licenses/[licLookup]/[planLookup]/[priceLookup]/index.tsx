@@ -11,6 +11,7 @@ import type {
   EverythingAsCodeLicensing,
 } from '@fathym/eac-licensing';
 import { Action, Input } from '@o-industrial/common/atomic/atoms';
+import type { EverythingAsCode } from '@fathym/eac';
 import { OpenIndustrialWebState } from '../../../../../../src/state/OpenIndustrialWebState.ts';
 
 export const IsIsland = true;
@@ -46,6 +47,66 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PricePageData
       Username: ctx.State.Username,
       Error: error ?? undefined,
     });
+  },
+  async POST(req, ctx) {
+    const { licLookup, planLookup, priceLookup } = ctx.Params as {
+      licLookup: string;
+      planLookup: string;
+      priceLookup: string;
+    };
+
+    try {
+      const eac = ctx.Runtime.EaC as EverythingAsCodeLicensing;
+      const lic = (eac.Licenses?.[licLookup] || { Plans: {} }) as EaCLicenseAsCode;
+      const plan = (lic.Plans?.[planLookup] || { Prices: {} }) as EaCLicensePlanAsCode;
+      const price = (plan.Prices?.[priceLookup] || {}) as EaCLicensePriceAsCode;
+
+      const ct = req.headers.get('content-type') || '';
+      const data: Record<string, string> = {};
+      if (ct.includes('application/json')) {
+        Object.assign(data, await req.json());
+      } else {
+        const fd = await req.formData();
+        fd.forEach((v, k) => (data[k] = String(v)));
+      }
+
+      const currentPriceDetails = price.Details as EaCLicensePriceDetails | undefined;
+      const details: EaCLicensePriceDetails = {
+        Name: data['Name'] ?? currentPriceDetails?.Name ?? '',
+        Currency: data['Currency'] ?? currentPriceDetails?.Currency ?? 'usd',
+        Interval: data['Interval'] ?? currentPriceDetails?.Interval ?? 'month',
+        Value: data['Value'] ? Number(data['Value']) : currentPriceDetails?.Value ?? 0,
+        Discount: data['Discount'] ? Number(data['Discount']) : currentPriceDetails?.Discount ?? 0,
+      } as EaCLicensePriceDetails;
+
+      const newPrice: EaCLicensePriceAsCode = {
+        ...price,
+        Details: details,
+      } as EaCLicensePriceAsCode;
+
+      const commit: EverythingAsCode = {
+        Licenses: {
+          [licLookup]: {
+            ...lic,
+            Plans: {
+              ...(lic.Plans || {}),
+              [planLookup]: {
+                ...plan,
+                Prices: {
+                  ...(plan.Prices || {}),
+                  [priceLookup]: newPrice,
+                },
+              } as EaCLicensePlanAsCode,
+            },
+          } as EaCLicenseAsCode,
+        },
+      } as EverythingAsCode;
+
+      await ctx.State.OIClient.Admin.CommitEaC(commit);
+      return Response.redirect(`/admin/licenses/${licLookup}/${planLookup}/${priceLookup}`, 303);
+    } catch (err) {
+      throw err instanceof Error ? err : new Error(String(err));
+    }
   },
 };
 
@@ -87,7 +148,7 @@ export default function PricePage({
         <h2 class='-:-:text-lg -:-:font-semibold -:-:text-neutral-100'>Details</h2>
         <form
           method='POST'
-          action={`/admin/licenses/${LicLookup}/${PlanLookup}/${PriceLookup}/api/update`}
+          action={`/admin/licenses/${LicLookup}/${PlanLookup}/${PriceLookup}`}
           class='-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4'
         >
           <Input

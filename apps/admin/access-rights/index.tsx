@@ -1,10 +1,11 @@
 import { PageProps } from '@fathym/eac-applications/preact';
 import type { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { JSX } from 'preact';
-import { useMemo, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 import type { EaCAccessRightAsCode } from '@fathym/eac-identity';
 import { Action, ActionStyleTypes, Input } from '@o-industrial/common/atomic/atoms';
 import { OpenIndustrialWebState } from '../../../src/state/OpenIndustrialWebState.ts';
+import type { EverythingAsCode } from '@fathym/eac';
 
 export const IsIsland = true;
 
@@ -20,12 +21,53 @@ export const handler: EaCRuntimeHandlerSet<
   AccessRightsPageData
 > = {
   GET: (_req, ctx) => {
-    const eac = ctx.Runtime.EaC as any;
+    const eac = ctx.Runtime.EaC as
+      | { AccessRights?: Record<string, EaCAccessRightAsCode> }
+      | undefined;
 
     return ctx.Render({
       AccessRights: eac?.AccessRights || {},
       Username: ctx.State.Username,
     });
+  },
+  async POST(req, ctx) {
+    try {
+      const ct = req.headers.get('content-type') || '';
+      const payload: Record<string, string> = {};
+      if (ct.includes('application/json')) {
+        Object.assign(payload, await req.json());
+      } else {
+        const fd = await req.formData();
+        fd.forEach((v, k) => (payload[k] = String(v)));
+      }
+
+      const arLookup = (payload['arLookup'] || '').trim();
+      if (!arLookup) throw new Error('arLookup is required');
+
+      const details: NonNullable<EaCAccessRightAsCode['Details']> = {
+        Name: payload['Name']?.trim() || undefined,
+        Description: payload['Description']?.trim() || undefined,
+        Tags: (payload['Tags'] || '')
+          .split(',')
+          .map((t) => t.trim())
+          .filter(Boolean),
+        Enabled: false,
+      } as NonNullable<EaCAccessRightAsCode['Details']>;
+
+      const commit: EverythingAsCode = {
+        AccessRights: {
+          [arLookup]: {
+            Details: details,
+          } as EaCAccessRightAsCode,
+        },
+      } as EverythingAsCode;
+
+      await ctx.State.OIClient.Admin.CommitEaC(commit);
+
+      return Response.redirect(`/admin/access-rights/${arLookup}`, 303);
+    } catch (err) {
+      throw err instanceof Error ? err : new Error(String(err));
+    }
   },
 };
 
@@ -38,20 +80,7 @@ export default function AccessRightsPage({
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState('');
 
-  const accessRightJson = useMemo(() => {
-    const ar: EaCAccessRightAsCode = {
-      Details: {
-        Name: name?.trim() || undefined,
-        Description: description?.trim() || undefined,
-        Tags: tags
-          .split(',')
-          .map((t) => t.trim())
-          .filter((t) => !!t),
-      },
-    };
-
-    return JSON.stringify(ar);
-  }, [name, description, tags]);
+  // form posts plain fields; server builds structure
 
   return (
     <div class='-:-:p-6 -:-:space-y-6'>
@@ -86,7 +115,7 @@ export default function AccessRightsPage({
           </h2>
           <form
             method='POST'
-            action='/admin/access-rights/api/commit'
+            action='/admin/access-rights'
             class='-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4'
           >
             <div>
@@ -131,9 +160,7 @@ export default function AccessRightsPage({
                   setTags(e.currentTarget.value)}
               />
             </div>
-
-            {/* Keep JSON field in sync for API */}
-            <input type='hidden' name='accessRight' value={accessRightJson} />
+            {/* Server-side builds structure; no JSON hidden field */}
 
             <div class='md:-:-:col-span-2 -:-:flex -:-:justify-end -:-:gap-2'>
               <Action type='submit'>Create</Action>
