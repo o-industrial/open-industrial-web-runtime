@@ -69,14 +69,19 @@ export default function LicensesPage(
       {showCreate && (
         <div class='-:-:rounded-xl -:-:border -:-:border-neutral-700 -:-:bg-neutral-900/60 -:-:p-4 -:-:space-y-4 -:-:shadow-neon'>
           <h2 class='-:-:text-lg -:-:font-semibold -:-:text-neutral-100'>Create License</h2>
-          <form method='POST' action='/admin/licenses/api/commit' class='-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4'>
+          <form
+            method='POST'
+            action='/admin/licenses/api/commit'
+            class='-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4'
+          >
             <div>
               <Input
                 label='License Lookup'
                 name='licLookup'
                 placeholder='unique-license-key'
                 value={licLookup}
-                onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) => setLicLookup(e.currentTarget.value)}
+                onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
+                  setLicLookup(e.currentTarget.value)}
               />
             </div>
             <div>
@@ -85,7 +90,8 @@ export default function LicensesPage(
                 name='Name'
                 placeholder='Product License Name'
                 value={name}
-                onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) => setName(e.currentTarget.value)}
+                onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
+                  setName(e.currentTarget.value)}
               />
             </div>
             <div class='md:-:-:col-span-2'>
@@ -96,7 +102,8 @@ export default function LicensesPage(
                 multiline
                 rows={3}
                 value={description}
-                onInput={(e: JSX.TargetedEvent<HTMLTextAreaElement, Event>) => setDescription(e.currentTarget.value)}
+                onInput={(e: JSX.TargetedEvent<HTMLTextAreaElement, Event>) =>
+                  setDescription(e.currentTarget.value)}
               />
             </div>
 
@@ -131,7 +138,10 @@ export default function LicensesPage(
                 </h3>
                 <p class='-:-:text-xs -:-:text-neutral-400'>Lookup: {lookup}</p>
               </div>
-              <Action href={`/admin/licenses/${lookup}`} styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}>
+              <Action
+                href={`/admin/licenses/${lookup}`}
+                styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
+              >
                 Manage
               </Action>
             </div>
@@ -144,4 +154,3 @@ export default function LicensesPage(
     </div>
   );
 }
-
