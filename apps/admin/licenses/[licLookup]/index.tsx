@@ -85,10 +85,18 @@ export const handler: EaCRuntimeHandlerSet<
         } as EverythingAsCode;
 
         await ctx.State.OIClient.Admin.CommitEaC(commit);
-        return Response.redirect(`/admin/licenses/${licLookup}/${planLookup}`, 303);
+        return Response.redirect(
+          ctx.Runtime.URLMatch.FromOrigin(
+            `/admin/licenses/${licLookup}/${planLookup}`,
+          ),
+          303,
+        );
       } else if (payload['Delete'] === 'true') {
         await ctx.State.OIClient.Admin.DeleteEaC({ Licenses: [licLookup] });
-        return Response.redirect('/admin/licenses', 303);
+        return Response.redirect(
+          ctx.Runtime.URLMatch.FromOrigin('/admin/licenses'),
+          303,
+        );
       } else {
         const updateBody: Partial<EaCLicenseAsCode> = {
           Details: {
@@ -108,7 +116,10 @@ export const handler: EaCRuntimeHandlerSet<
         } as EverythingAsCode;
 
         await ctx.State.OIClient.Admin.CommitEaC(commit);
-        return Response.redirect(`/admin/licenses/${licLookup}`, 303);
+        return Response.redirect(
+          ctx.Runtime.URLMatch.FromOrigin(`/admin/licenses/${licLookup}`),
+          303,
+        );
       }
     } catch (err) {
       throw err instanceof Error ? err : new Error(String(err));

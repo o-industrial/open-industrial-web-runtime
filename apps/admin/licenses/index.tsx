@@ -61,7 +61,10 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, LicensesPageD
 
       await ctx.State.OIClient.Admin.CommitEaC(commit);
 
-      return Response.redirect(`/admin/licenses/${licLookup}`, 303);
+      return Response.redirect(
+        ctx.Runtime.URLMatch.FromOrigin(`/admin/licenses/${licLookup}`),
+        303,
+      );
     } catch (err) {
       throw err instanceof Error ? err : new Error(String(err));
     }

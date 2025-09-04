@@ -21,7 +21,10 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
       if (!licLookup) throw new Error('licLookup is required');
 
       await ctx.State.OIClient.Admin.DeleteEaC({ Licenses: [licLookup] });
-      return Response.redirect('/admin/licenses', 303);
+      return Response.redirect(
+        ctx.Runtime.URLMatch.FromOrigin('/admin/licenses'),
+        303,
+      );
     } catch (err) {
       throw err instanceof Error ? err : new Error(String(err));
     }

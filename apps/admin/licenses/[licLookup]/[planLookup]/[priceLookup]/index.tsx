@@ -99,7 +99,12 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PricePageData
       } as EverythingAsCode;
 
       await ctx.State.OIClient.Admin.CommitEaC(commit);
-      return Response.redirect(`/admin/licenses/${licLookup}/${planLookup}/${priceLookup}`, 303);
+      return Response.redirect(
+        ctx.Runtime.URLMatch.FromOrigin(
+          `/admin/licenses/${licLookup}/${planLookup}/${priceLookup}`,
+        ),
+        303,
+      );
     } catch (err) {
       throw err instanceof Error ? err : new Error(String(err));
     }

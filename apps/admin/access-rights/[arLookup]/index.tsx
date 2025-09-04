@@ -4,7 +4,12 @@ import type { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import type { EaCAccessRightAsCode } from '@fathym/eac-identity';
 import { JSX } from 'preact';
 import { useState } from 'preact/hooks';
-import { Action, ActionStyleTypes, CheckboxRow, Input } from '@o-industrial/common/atomic/atoms';
+import {
+  Action,
+  ActionStyleTypes,
+  CheckboxRow,
+  Input,
+} from '@o-industrial/common/atomic/atoms';
 import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebState.ts';
 import { merge } from '@fathym/common';
 
@@ -48,7 +53,8 @@ export const handler: EaCRuntimeHandlerSet<
       }
 
       const eac = ctx.Runtime.EaC as any;
-      const current = (eac?.AccessRights?.[arLookup] || {}) as EaCAccessRightAsCode;
+      const current = (eac?.AccessRights?.[arLookup] ||
+        {}) as EaCAccessRightAsCode;
 
       const updateBody: Partial<EaCAccessRightAsCode> = {
         Details: {
@@ -59,7 +65,8 @@ export const handler: EaCRuntimeHandlerSet<
             .map((t) => t.trim())
             .filter((t) => !!t),
           Enabled:
-            (payload['Enabled'] ?? String((current?.Details as any)?.Enabled ?? false)) === 'true',
+            (payload['Enabled'] ??
+              String((current?.Details as any)?.Enabled ?? false)) === 'true',
         } as any,
       };
 
@@ -71,7 +78,10 @@ export const handler: EaCRuntimeHandlerSet<
 
       await ctx.State.OIClient.Admin.CommitEaC(commit);
 
-      return Response.redirect(`/admin/access-rights/${arLookup}`, 303);
+      return Response.redirect(
+        ctx.Runtime.URLMatch.FromOrigin(`/admin/access-rights/${arLookup}`),
+        303
+      );
     } catch (err) {
       throw err instanceof Error ? err : new Error(String(err));
     }
@@ -83,38 +93,37 @@ export default function AccessRightPage({
 }: PageProps<AccessRightPageData>) {
   const [name, setName] = useState(AccessRight?.Details?.Name ?? '');
   const [description, setDescription] = useState(
-    AccessRight?.Details?.Description ?? '',
+    AccessRight?.Details?.Description ?? ''
   );
   const [tags, setTags] = useState(
-    (AccessRight?.Details?.Tags ?? []).join(', '),
+    (AccessRight?.Details?.Tags ?? []).join(', ')
   );
   const [enabled, setEnabled] = useState(!!AccessRight?.Details?.Enabled);
 
   // local state only; POST handler parses form fields on submit
 
   return (
-    <div class='-:-:p-6 -:-:space-y-6'>
-      <div class='-:-:flex -:-:items-center -:-:justify-between'>
-        <h1 class='-:-:text-2xl -:-:font-semibold -:-:text-neutral-100'>
+    <div class="-:-:p-6 -:-:space-y-6">
+      <div class="-:-:flex -:-:items-center -:-:justify-between">
+        <h1 class="-:-:text-2xl -:-:font-semibold -:-:text-neutral-100">
           Access Right
         </h1>
         {Username && (
-          <span class='-:-:text-sm -:-:text-neutral-400'>
-            {Username}
-          </span>
+          <span class="-:-:text-sm -:-:text-neutral-400">{Username}</span>
         )}
       </div>
 
-      <div class='-:-:rounded-xl -:-:border -:-:border-neutral-700 -:-:bg-neutral-900/60 -:-:p-4 -:-:space-y-4 -:-:shadow-neon'>
-        <div class='-:-:flex -:-:items-start -:-:justify-between'>
+      <div class="-:-:rounded-xl -:-:border -:-:border-neutral-700 -:-:bg-neutral-900/60 -:-:p-4 -:-:space-y-4 -:-:shadow-neon">
+        <div class="-:-:flex -:-:items-start -:-:justify-between">
           <div>
-            <h3 class='-:-:text-base -:-:font-semibold -:-:text-neutral-100'>
+            <h3 class="-:-:text-base -:-:font-semibold -:-:text-neutral-100">
               {AccessRight?.Details?.Name || ArLookup}
             </h3>
-            <p class='-:-:text-xs -:-:text-neutral-400'>Lookup: {ArLookup}</p>
+            <p class="-:-:text-xs -:-:text-neutral-400">Lookup: {ArLookup}</p>
           </div>
           <Action
-            href='/access-rights'
+            href="/admin/access-rights"
+            data-eac-bypass-base
             styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
           >
             Back
@@ -122,14 +131,15 @@ export default function AccessRightPage({
         </div>
 
         <form
-          method='POST'
-          action={`/access-rights/${ArLookup}`}
-          class='-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4'
+          method="POST"
+          action={`/admin/access-rights/${ArLookup}`}
+          data-eac-bypass-base
+          class="-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4"
         >
-          <input type='hidden' name='Enabled' value={String(enabled)} />
-          <div class='md:-:-:col-span-2'>
+          <input type="hidden" name="Enabled" value={String(enabled)} />
+          <div class="md:-:-:col-span-2">
             <CheckboxRow
-              label='Enabled'
+              label="Enabled"
               checked={enabled}
               onToggle={((next: boolean) => setEnabled(next)) as any}
             />
@@ -137,43 +147,47 @@ export default function AccessRightPage({
 
           <div>
             <Input
-              label='Display Name'
-              name='Name'
-              placeholder='Access Right Name'
+              label="Display Name"
+              name="Name"
+              placeholder="Access Right Name"
               value={name}
               onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
-                setName(e.currentTarget.value)}
+                setName(e.currentTarget.value)
+              }
             />
           </div>
 
-          <div class='md:-:-:col-span-2'>
+          <div class="md:-:-:col-span-2">
             <Input
-              label='Description'
-              name='Description'
-              placeholder='Short description'
+              label="Description"
+              name="Description"
+              placeholder="Short description"
               multiline
               rows={3}
               value={description}
               onInput={(e: JSX.TargetedEvent<HTMLTextAreaElement, Event>) =>
-                setDescription(e.currentTarget.value)}
+                setDescription(e.currentTarget.value)
+              }
             />
           </div>
 
-          <div class='md:-:-:col-span-2'>
+          <div class="md:-:-:col-span-2">
             <Input
-              label='Tags (comma-separated)'
-              name='Tags'
-              placeholder='e.g. admin, billing, read-only'
+              label="Tags (comma-separated)"
+              name="Tags"
+              placeholder="e.g. admin, billing, read-only"
               value={tags}
               onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
-                setTags(e.currentTarget.value)}
+                setTags(e.currentTarget.value)
+              }
             />
           </div>
 
-          <div class='md:-:-:col-span-2 -:-:flex -:-:justify-end -:-:gap-2'>
-            <Action type='submit'>Save</Action>
+          <div class="md:-:-:col-span-2 -:-:flex -:-:justify-end -:-:gap-2">
+            <Action type="submit">Save</Action>
             <Action
-              href='/access-rights'
+              href="/admin/access-rights"
+              data-eac-bypass-base
               intentType={2}
               styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
             >
