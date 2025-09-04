@@ -53,8 +53,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
       await ctx.State.OIClient.Admin.CommitEaC(commit);
       return Response.redirect(`/admin/licenses/${licLookup}/${planLookup}/${priceLookup}`, 303);
     } catch (err) {
-      const msg = encodeURIComponent(err instanceof Error ? err.message : 'Failed to create price');
-      return Response.redirect(`/admin/licenses/${licLookup}/${planLookup}?error=${msg}`, 303);
+      throw err instanceof Error ? err : new Error(String(err));
     }
   },
 };

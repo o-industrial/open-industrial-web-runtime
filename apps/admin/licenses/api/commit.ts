@@ -27,8 +27,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
 
       return Response.redirect(`/admin/licenses/${licLookup}`, 303);
     } catch (err) {
-      const msg = encodeURIComponent(err instanceof Error ? err.message : 'Commit failed');
-      return Response.redirect(`/admin/licenses?error=${msg}`, 303);
+      throw err instanceof Error ? err : new Error(String(err));
     }
   },
 };

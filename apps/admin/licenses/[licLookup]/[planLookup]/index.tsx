@@ -11,6 +11,7 @@ import type {
 } from '@fathym/eac-licensing';
 import { Action, ActionStyleTypes, Input } from '@o-industrial/common/atomic/atoms';
 import { OpenIndustrialWebState } from '../../../../../src/state/OpenIndustrialWebState.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 
 export const IsIsland = true;
 
@@ -171,7 +172,7 @@ export default function PlanPage({
               <li key={priceLookup} class='-:-:flex -:-:items-center -:-:justify-between'>
                 <div class='-:-:text-neutral-200'>{price.Details?.Name || priceLookup}</div>
                 <Action
-                  href={`/admin/licenses/${LicLookup}/${PlanLookup}/${priceLookup}`}
+                  href={`/licenses/${LicLookup}/${PlanLookup}/${priceLookup}`}
                   styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
                 >
                   Open
@@ -185,7 +186,7 @@ export default function PlanPage({
             class='-:-:flex -:-:items-end -:-:gap-2'
           >
             <Input label='New price lookup' name='PriceLookup' placeholder='e.g., monthly-usd' />
-            <Action type='submit' intentType={3}>Create Price</Action>
+            <Action type='submit' intentType={IntentTypes.Primary}>Create Price</Action>
           </form>
         </div>
       </section>

@@ -28,8 +28,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
 
       return redirectRequest(`/admin/access-rights/${arLookup}`, false, false, req);
     } catch (err) {
-      const msg = encodeURIComponent(err instanceof Error ? err.message : 'Commit failed');
-      return redirectRequest(`/admin/access-rights?error=${msg}`, false, false, req);
+      throw err instanceof Error ? err : new Error(String(err));
     }
   },
 };

@@ -89,7 +89,7 @@ export default function AccessRightPage({
             <p class="-:-:text-xs -:-:text-neutral-400">Lookup: {ArLookup}</p>
           </div>
           <Action
-            href="/admin/access-rights"
+            href="/access-rights"
             styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
           >
             Back
@@ -98,7 +98,7 @@ export default function AccessRightPage({
 
         <form
           method="POST"
-          action={`/admin/access-rights/${ArLookup}/api/update`}
+          action={`/access-rights/${ArLookup}/api/update`}
           class="-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4"
         >
           <div class="md:-:-:col-span-2">
@@ -152,7 +152,7 @@ export default function AccessRightPage({
           <div class="md:-:-:col-span-2 -:-:flex -:-:justify-end -:-:gap-2">
             <Action type="submit">Save</Action>
             <Action
-              href="/admin/access-rights"
+              href="/access-rights"
               intentType={2}
               styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
             >

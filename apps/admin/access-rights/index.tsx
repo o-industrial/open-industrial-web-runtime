@@ -172,7 +172,7 @@ export default function AccessRightsPage({
                 <p class="-:-:text-xs -:-:text-neutral-400">Lookup: {lookup}</p>
               </div>
               <Action
-                href={`/admin/access-rights/${lookup}`}
+                href={`/access-rights/${lookup}`}
                 styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
               >
                 Manage

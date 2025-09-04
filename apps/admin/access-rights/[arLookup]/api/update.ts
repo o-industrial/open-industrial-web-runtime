@@ -47,8 +47,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
 
       return Response.redirect(`/admin/access-rights/${arLookup}`, 303);
     } catch (err) {
-      const msg = encodeURIComponent(err instanceof Error ? err.message : 'Failed to update access right');
-      return Response.redirect(`/admin/access-rights/${arLookup}?error=${msg}`, 303);
+      throw err instanceof Error ? err : new Error(String(err));
     }
   },
 };
