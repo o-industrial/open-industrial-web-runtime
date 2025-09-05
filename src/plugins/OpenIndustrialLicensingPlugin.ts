@@ -243,110 +243,110 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
     return Promise.resolve(pluginConfig);
   }
 
-  public async Build(
-    _eac: EverythingAsCode,
-    _ioc: IoCContainer,
-    pluginCfg?: EaCRuntimePluginConfig,
-  ): Promise<void> {
-    const label = crypto?.randomUUID?.() ?? `eac-build-${Date.now().toString(36)}`;
-    const mask = (s?: string | null) => !s ? '' : `${s.slice(0, 6)}…${s.slice(-4)}`;
+  // public async Build(
+  //   _eac: EverythingAsCode,
+  //   _ioc: IoCContainer,
+  //   pluginCfg?: EaCRuntimePluginConfig,
+  // ): Promise<void> {
+  //   const label = crypto?.randomUUID?.() ?? `eac-build-${Date.now().toString(36)}`;
+  //   const mask = (s?: string | null) => !s ? '' : `${s.slice(0, 6)}…${s.slice(-4)}`;
 
-    console.time(label);
-    console.info(`[eac-build][${label}] start`);
+  //   console.time(label);
+  //   console.info(`[eac-build][${label}] start`);
 
-    const eacApiKey = Deno.env.get('EAC_API_KEY');
+  //   const eacApiKey = Deno.env.get('EAC_API_KEY');
 
-    if (!eacApiKey) {
-      console.info(`[eac-build][${label}] skip: EAC_API_KEY not set`);
-      console.timeEnd(label);
-      return;
-    }
-    if (!pluginCfg) {
-      console.info(`[eac-build][${label}] skip: pluginCfg not provided`);
-      console.timeEnd(label);
-      return;
-    }
+  //   if (!eacApiKey) {
+  //     console.info(`[eac-build][${label}] skip: EAC_API_KEY not set`);
+  //     console.timeEnd(label);
+  //     return;
+  //   }
+  //   if (!pluginCfg) {
+  //     console.info(`[eac-build][${label}] skip: pluginCfg not provided`);
+  //     console.timeEnd(label);
+  //     return;
+  //   }
 
-    try {
-      console.debug(`[eac-build][${label}] apiKey=${mask(eacApiKey)}`);
+  //   try {
+  //     console.debug(`[eac-build][${label}] apiKey=${mask(eacApiKey)}`);
 
-      const [_header, payload] = await djwt.decode(eacApiKey);
-      const { EnterpriseLookup } = payload as Record<string, string>;
+  //     const [_header, payload] = await djwt.decode(eacApiKey);
+  //     const { EnterpriseLookup } = payload as Record<string, string>;
 
-      if (!EnterpriseLookup) {
-        console.warn(
-          `[eac-build][${label}] JWT payload missing EnterpriseLookup; aborting remote commit`,
-        );
-        console.timeEnd(label);
-        return;
-      }
+  //     if (!EnterpriseLookup) {
+  //       console.warn(
+  //         `[eac-build][${label}] JWT payload missing EnterpriseLookup; aborting remote commit`,
+  //       );
+  //       console.timeEnd(label);
+  //       return;
+  //     }
 
-      console.debug(
-        `[eac-build][${label}] EnterpriseLookup=${EnterpriseLookup}`,
-      );
+  //     console.debug(
+  //       `[eac-build][${label}] EnterpriseLookup=${EnterpriseLookup}`,
+  //     );
 
-      const eacSvc = await loadEaCStewardSvc(eacApiKey);
+  //     const eacSvc = await loadEaCStewardSvc(eacApiKey);
 
-      const body = {
-        EnterpriseLookup,
-        ...(pluginCfg.EaC ?? {}),
-      };
+  //     const body = {
+  //       EnterpriseLookup,
+  //       ...(pluginCfg.EaC ?? {}),
+  //     };
 
-      console.info(
-        `[eac-build][${label}] committing EaC keys=${
-          Object.keys(pluginCfg.EaC ?? {}).join(',') || '∅'
-        }`,
-      );
+  //     console.info(
+  //       `[eac-build][${label}] committing EaC keys=${
+  //         Object.keys(pluginCfg.EaC ?? {}).join(',') || '∅'
+  //       }`,
+  //     );
 
-      const commitResp = await eacSvc.EaC.Commit(body, 600);
+  //     const commitResp = await eacSvc.EaC.Commit(body, 600);
 
-      const status = await waitForStatus(
-        eacSvc,
-        EnterpriseLookup,
-        commitResp.CommitID,
-      );
+  //     const status = await waitForStatus(
+  //       eacSvc,
+  //       EnterpriseLookup,
+  //       commitResp.CommitID,
+  //     );
 
-      const durationMs = status?.EndTime && status?.StartTime
-        ? new Date(status.EndTime).getTime() -
-          new Date(status.StartTime).getTime()
-        : undefined;
+  //     const durationMs = status?.EndTime && status?.StartTime
+  //       ? new Date(status.EndTime).getTime() -
+  //         new Date(status.StartTime).getTime()
+  //       : undefined;
 
-      console.info(
-        `[eac-build][${label}] commit ${commitResp.CommitID} → ${status?.Processing} ` +
-          `(user=${status?.Username}, durationMs=${durationMs ?? 'n/a'})`,
-      );
+  //     console.info(
+  //       `[eac-build][${label}] commit ${commitResp.CommitID} → ${status?.Processing} ` +
+  //         `(user=${status?.Username}, durationMs=${durationMs ?? 'n/a'})`,
+  //     );
 
-      // Optional: tiny messages peek (first 3 keys)
-      const msgKeys = Object.keys(status?.Messages ?? {});
-      if (msgKeys.length) {
-        console.info(
-          `[eac-build][${label}] messages: ${msgKeys.slice(0, 3).join(', ')}${
-            msgKeys.length > 3 ? ', …' : ''
-          }`,
-        );
-      }
+  //     // Optional: tiny messages peek (first 3 keys)
+  //     const msgKeys = Object.keys(status?.Messages ?? {});
+  //     if (msgKeys.length) {
+  //       console.info(
+  //         `[eac-build][${label}] messages: ${msgKeys.slice(0, 3).join(', ')}${
+  //           msgKeys.length > 3 ? ', …' : ''
+  //         }`,
+  //       );
+  //     }
 
-      console.info(status?.Messages);
-    } catch (err) {
-      const safe = err instanceof Error
-        ? { name: err.name, message: err.message, stack: err.stack }
-        : {
-          message: (() => {
-            try {
-              return JSON.stringify(err);
-            } catch {
-              return String(err);
-            }
-          })(),
-        };
+  //     console.info(status?.Messages);
+  //   } catch (err) {
+  //     const safe = err instanceof Error
+  //       ? { name: err.name, message: err.message, stack: err.stack }
+  //       : {
+  //         message: (() => {
+  //           try {
+  //             return JSON.stringify(err);
+  //           } catch {
+  //             return String(err);
+  //           }
+  //         })(),
+  //       };
 
-      console.error(
-        `[eac-build][${label}] Unable to update EaC Licensing, falling back to local config.`,
-        safe,
-      );
-    } finally {
-      console.debug(`[eac-build][${label}] end`);
-      console.timeEnd(label);
-    }
-  }
+  //     console.error(
+  //       `[eac-build][${label}] Unable to update EaC Licensing, falling back to local config.`,
+  //       safe,
+  //     );
+  //   } finally {
+  //     console.debug(`[eac-build][${label}] end`);
+  //     console.timeEnd(label);
+  //   }
+  // }
 }
