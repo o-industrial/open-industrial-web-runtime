@@ -9,8 +9,6 @@
   "tasks": {
     "test:unit": "npx rimraf cov && deno test -A tests/**/*.tests.ts --coverage=cov && deno coverage cov --lcov --output=cov/lcov.info",
     "coverage:check": "deno run -A scripts/coverage-threshold.ts --path=cov/lcov.info --minLines=14",
-    "e2e": "npx --yes playwright test -c playwright.config.ts",
-    "e2e:setup": "npm i -D @playwright/test @axe-core/playwright && npx --yes playwright install --with-deps",
     "build": "deno task build:fmt && deno task build:lint && deno task publish:check && deno task test",
     "build:dev": "deno run -A dev.ts build",
     "build:docker": "docker build --no-cache -t open-industrial-web-runtime -f DOCKERFILE .",
