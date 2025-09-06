@@ -34,12 +34,10 @@ export const handler: EaCRuntimeHandlerSet<
   OpenIndustrialWebState,
   AccessConfigurationPageData
 > = {
-  GET: (_req, ctx) => {
+  GET: async (_req, ctx) => {
     const { acLookup } = ctx.Params as { acLookup: string };
-    const eac = ctx.Runtime.EaC as EverythingAsCodeIdentity;
-    const ac = eac?.AccessConfigurations?.[acLookup] as
-      | EaCAccessConfigurationAsCode
-      | undefined;
+    const eac = await ctx.State.OIClient.Admin.GetEaC<EverythingAsCodeIdentity>();
+    const ac = eac?.AccessConfigurations?.[acLookup];
     const providerOptions = (eac?.Providers || {}) as Record<string, unknown>;
     const accessRightOptions = (eac?.AccessRights || {}) as Record<
       string,
@@ -68,7 +66,7 @@ export const handler: EaCRuntimeHandlerSet<
         fd.forEach((v, k) => (payload[k] = String(v)));
       }
 
-      const eac = ctx.Runtime.EaC as EverythingAsCodeIdentity;
+      const eac = await ctx.State.OIClient.Admin.GetEaC<EverythingAsCodeIdentity>();
       const current = (eac?.AccessConfigurations?.[acLookup] ||
         {}) as EaCAccessConfigurationAsCode;
 

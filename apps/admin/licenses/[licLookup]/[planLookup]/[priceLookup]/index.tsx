@@ -27,13 +27,13 @@ type PricePageData = {
 };
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PricePageData> = {
-  GET: (req, ctx) => {
+  GET: async (req, ctx) => {
     const { licLookup, planLookup, priceLookup } = ctx.Params as {
       licLookup: string;
       planLookup: string;
       priceLookup: string;
     };
-    const eac = ctx.Runtime.EaC as EverythingAsCodeLicensing;
+    const eac = await ctx.State.OIClient.Admin.GetEaC<EverythingAsCodeLicensing>();
     const error = new URL(req.url).searchParams.get('error') ?? undefined;
 
     const lic = eac.Licenses?.[licLookup] as EaCLicenseAsCode | undefined;
@@ -57,7 +57,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PricePageData
     };
 
     try {
-      const eac = ctx.Runtime.EaC as EverythingAsCodeLicensing;
+      const eac = await ctx.State.OIClient.Admin.GetEaC<EverythingAsCodeLicensing>();
       const lic = (eac.Licenses?.[licLookup] || { Plans: {} }) as EaCLicenseAsCode;
       const plan = (lic.Plans?.[planLookup] || { Prices: {} }) as EaCLicensePlanAsCode;
       const price = (plan.Prices?.[priceLookup] || {}) as EaCLicensePriceAsCode;

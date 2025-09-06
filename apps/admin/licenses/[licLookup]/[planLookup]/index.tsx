@@ -29,9 +29,9 @@ type PlanPageData = {
 };
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PlanPageData> = {
-  GET: (req, ctx) => {
+  GET: async (req, ctx) => {
     const { licLookup, planLookup } = ctx.Params as { licLookup: string; planLookup: string };
-    const eac = ctx.Runtime.EaC as EverythingAsCodeLicensing;
+    const eac = await ctx.State.OIClient.Admin.GetEaC<EverythingAsCodeLicensing>();
     const error = new URL(req.url).searchParams.get('error') ?? undefined;
 
     const lic = eac.Licenses?.[licLookup];
@@ -50,7 +50,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PlanPageData>
     const { licLookup, planLookup } = ctx.Params as { licLookup: string; planLookup: string };
 
     try {
-      const eac = ctx.Runtime.EaC as EverythingAsCodeLicensing;
+      const eac = await ctx.State.OIClient.Admin.GetEaC<EverythingAsCodeLicensing>();
       const lic = (eac.Licenses?.[licLookup] || { Plans: {} }) as EaCLicenseAsCode;
       const currentPlan = (lic.Plans?.[planLookup] || { Prices: {} }) as EaCLicensePlanAsCode;
 

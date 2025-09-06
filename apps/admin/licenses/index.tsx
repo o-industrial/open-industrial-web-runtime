@@ -19,8 +19,8 @@ type LicensesPageData = {
 };
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, LicensesPageData> = {
-  GET: (_req, ctx) => {
-    const eac = ctx.Runtime.EaC as EverythingAsCodeLicensing;
+  GET: async (_req, ctx) => {
+    const eac = await ctx.State.OIClient.Admin.GetEaC<EverythingAsCodeLicensing>();
 
     return ctx.Render({
       Licenses: eac.Licenses || {},

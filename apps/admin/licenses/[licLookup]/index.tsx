@@ -29,9 +29,9 @@ export const handler: EaCRuntimeHandlerSet<
   OpenIndustrialWebState,
   LicensePageData
 > = {
-  GET: (req, ctx) => {
+  GET: async (req, ctx) => {
     const { licLookup } = ctx.Params as { licLookup: string };
-    const eac = ctx.Runtime.EaC as EverythingAsCodeLicensing;
+    const eac = await ctx.State.OIClient.Admin.GetEaC<EverythingAsCodeLicensing>();
     const error = new URL(req.url).searchParams.get('error') ?? undefined;
 
     return ctx.Render({
@@ -54,7 +54,7 @@ export const handler: EaCRuntimeHandlerSet<
         fd.forEach((v, k) => (payload[k] = String(v)));
       }
 
-      const eac = ctx.Runtime.EaC as EverythingAsCodeLicensing;
+      const eac = await ctx.State.OIClient.Admin.GetEaC<EverythingAsCodeLicensing>();
       const current = (eac.Licenses?.[licLookup] || { Plans: {} }) as EaCLicenseAsCode;
       const currentDetails = current.Details as EaCLicenseStripeDetails | undefined;
 

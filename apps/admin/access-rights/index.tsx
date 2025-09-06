@@ -19,10 +19,10 @@ export const handler: EaCRuntimeHandlerSet<
   OpenIndustrialWebState,
   AccessRightsPageData
 > = {
-  GET: (_req, ctx) => {
-    const eac = ctx.Runtime.EaC as
-      | { AccessRights?: Record<string, EaCAccessRightAsCode> }
-      | undefined;
+  GET: async (_req, ctx) => {
+    const eac = await ctx.State.OIClient.Admin.GetEaC<
+      { AccessRights?: Record<string, EaCAccessRightAsCode> }
+    >();
 
     return ctx.Render({
       AccessRights: eac?.AccessRights || {},

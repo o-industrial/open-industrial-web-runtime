@@ -17,8 +17,8 @@ export const handler: EaCRuntimeHandlerSet<
   OpenIndustrialWebState,
   AccessConfigsPageData
 > = {
-  GET: (_req, ctx) => {
-    const eac = ctx.Runtime.EaC as EverythingAsCodeIdentity;
+  GET: async (_req, ctx) => {
+    const eac = await ctx.State.OIClient.Admin.GetEaC<EverythingAsCodeIdentity>();
 
     return ctx.Render({
       AccessConfigurations: eac?.AccessConfigurations || {},

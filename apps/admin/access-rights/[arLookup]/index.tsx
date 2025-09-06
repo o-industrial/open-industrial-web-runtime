@@ -30,12 +30,10 @@ export const handler: EaCRuntimeHandlerSet<
   OpenIndustrialWebState,
   AccessRightPageData
 > = {
-  GET: (_req, ctx) => {
+  GET: async (_req, ctx) => {
     const { arLookup } = ctx.Params as { arLookup: string };
-    const eac = ctx.Runtime.EaC as EverythingAsCodeIdentity;
-    const ar = eac?.AccessRights?.[arLookup] as
-      | EaCAccessRightAsCode
-      | undefined;
+    const eac = await ctx.State.OIClient.Admin.GetEaC<EverythingAsCodeIdentity>();
+    const ar = eac?.AccessRights?.[arLookup];
 
     return ctx.Render({
       AccessRight: ar,
@@ -57,7 +55,7 @@ export const handler: EaCRuntimeHandlerSet<
         fd.forEach((v, k) => (payload[k] = String(v)));
       }
 
-      const eac = ctx.Runtime.EaC as any;
+      const eac = await ctx.State.OIClient.Admin.GetEaC<EverythingAsCodeIdentity>();
       const current = (eac?.AccessRights?.[arLookup] ||
         {}) as EaCAccessRightAsCode;
 
