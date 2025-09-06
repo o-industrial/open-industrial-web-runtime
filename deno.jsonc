@@ -38,7 +38,7 @@
     "@fathym/eac-deno-kv": "jsr:@fathym/eac-deno-kv@0.0.21",
     // "@fathym/eac-identity": "jsr:@fathym/eac-identity@0.0.24",
     "@fathym/eac-identity": "../../fathym-deno/eac-identity/src/identity/.exports.ts",
-    "@fathym/eac-licensing": "jsr:@fathym/eac-licensing@0.0.47",
+    "@fathym/eac-licensing": "jsr:@fathym/eac-licensing@0.0.52",
     // "@fathym/eac-licensing": "../../fathym-deno/eac-licensing/src/licensing/.exports.ts",
     // "@fathym/eac-licensing/clients": "../../fathym-deno/eac-licensing/src/clients/.exports.ts",
     // "@fathym/eac-licensing/steward/api": "../../fathym-deno/eac-licensing/src/steward/api/.exports.ts",

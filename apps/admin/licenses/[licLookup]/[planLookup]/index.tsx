@@ -11,7 +11,8 @@ import type {
   EaCLicensePriceDetails,
   EverythingAsCodeLicensing,
 } from '@fathym/eac-licensing';
-import { Action, ActionStyleTypes, Input } from '@o-industrial/common/atomic/atoms';
+import { Action, ActionStyleTypes, CheckboxRow, Input } from '@o-industrial/common/atomic/atoms';
+import { LoadingIcon } from '@o-industrial/common/atomic/icons';
 import { OpenIndustrialWebState } from '../../../../../src/state/OpenIndustrialWebState.ts';
 import { IntentTypes } from '@o-industrial/common/types';
 import type { EverythingAsCode } from '@fathym/eac';
@@ -26,16 +27,18 @@ type PlanPageData = {
   Plan?: EaCLicensePlanAsCode;
   Username?: string;
   Error?: string;
+  AccessConfigurationOptions?: string[];
 };
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PlanPageData> = {
   GET: async (req, ctx) => {
     const { licLookup, planLookup } = ctx.Params as { licLookup: string; planLookup: string };
-    const eac = await ctx.State.OIClient.Admin.GetEaC<EverythingAsCodeLicensing>();
+    const eac = await ctx.State.OIClient.Admin.GetEaC<any>();
     const error = new URL(req.url).searchParams.get('error') ?? undefined;
 
     const lic = eac.Licenses?.[licLookup];
     const plan = lic?.Plans?.[planLookup];
+    const accessConfigs = Object.keys(eac?.AccessConfigurations || {});
 
     return ctx.Render({
       License: lic,
@@ -44,13 +47,14 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PlanPageData>
       Plan: plan,
       Username: ctx.State.Username,
       Error: error ?? undefined,
+      AccessConfigurationOptions: accessConfigs,
     });
   },
   async POST(req, ctx) {
     const { licLookup, planLookup } = ctx.Params as { licLookup: string; planLookup: string };
 
     try {
-      const eac = await ctx.State.OIClient.Admin.GetEaC<EverythingAsCodeLicensing>();
+    const eac = await ctx.State.OIClient.Admin.GetEaC<any>();
       const lic = (eac.Licenses?.[licLookup] || { Plans: {} }) as EaCLicenseAsCode;
       const currentPlan = (lic.Plans?.[planLookup] || { Prices: {} }) as EaCLicensePlanAsCode;
 
@@ -121,13 +125,18 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PlanPageData>
           Featured: data['Featured'] ?? currentPlanDetails?.Featured,
         } as EaCLicensePlanDetails;
 
+        const accessConfigLookups = (data['AccessConfigurationLookups'] || data['AccessConfigurations'] || '')
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
+
         const commit: EverythingAsCode = {
           Licenses: {
             [licLookup]: {
               ...lic,
               Plans: {
                 ...(lic.Plans || {}),
-                [planLookup]: merge(currentPlan, { Details: details }),
+                [planLookup]: merge(currentPlan, { Details: details, AccessConfigurationLookups: accessConfigLookups } as any),
               },
             } as EaCLicenseAsCode,
           },
@@ -145,10 +154,28 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PlanPageData>
       throw err instanceof Error ? err : new Error(String(err));
     }
   },
+  async DELETE(_req, ctx) {
+    const { licLookup, planLookup } = ctx.Params as { licLookup: string; planLookup: string };
+
+    try {
+      await ctx.State.OIClient.Admin.DeleteEaC({
+        Licenses: {
+          [licLookup]: ({
+            Plans: { [planLookup]: null },
+          } as unknown as EaCLicenseAsCode),
+        },
+      } as any);
+
+      return Response.json({ ok: true });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return new Response(msg, { status: 500 });
+    }
+  },
 };
 
 export default function PlanPage({
-  Data: { License: _License, Plan, LicLookup, PlanLookup, Username, Error },
+  Data: { License: _License, Plan, LicLookup, PlanLookup, Username, Error: ErrorMsg, AccessConfigurationOptions = [] },
 }: PageProps<PlanPageData>) {
   const defaultDetails: EaCLicensePlanDetails = useMemo(
     () => ({ Name: '', Description: '', Features: [], Priority: 0 }),
@@ -164,6 +191,10 @@ export default function PlanPage({
       }
       : { Details: defaultDetails, Prices: {} as any } as any
   );
+  const [busy, setBusy] = useState(false);
+  const [accessConfigSelections, setAccessConfigSelections] = useState<Set<string>>(
+    new Set<string>((Plan as any)?.AccessConfigurationLookups || []),
+  );
 
   const updateDetails = (field: keyof EaCLicensePlanDetails, value: any) =>
     setLocal({ ...local, Details: { ...local.Details, [field]: value } });
@@ -175,9 +206,9 @@ export default function PlanPage({
         {Username && <span class='-:-:text-sm -:-:text-neutral-400'>👤 {Username}</span>}
       </div>
 
-      {Error && (
+      {ErrorMsg && (
         <div class='-:-:text-sm -:-:text-neon-red-400 -:-:border -:-:border-neon-red-700 -:-:rounded -:-:p-2'>
-          {Error}
+          {ErrorMsg}
         </div>
       )}
 
@@ -190,6 +221,7 @@ export default function PlanPage({
           <form
             method='POST'
             action={`/admin/licenses/${LicLookup}/${PlanLookup}`}
+            onSubmit={() => setBusy(true) as any}
             class='-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4'
           >
             <Input
@@ -252,8 +284,74 @@ export default function PlanPage({
               />
             </div>
 
-            <div class='md:-:-:col-span-2 -:-:flex -:-:justify-end'>
-              <Action type='submit'>Save</Action>
+            <input
+              type='hidden'
+              name='AccessConfigurationLookups'
+              value={Array.from(accessConfigSelections).join(',')}
+            />
+
+            <div class='md:-:-:col-span-2 -:-:space-y-2'>
+              <h4 class='-:-:text-sm -:-:font-semibold -:-:text-neutral-200'>
+                Access Configurations
+              </h4>
+              <div class='-:-:grid -:-:grid-cols-1 sm:-:-:grid-cols-2 -:-:gap-2'>
+                {AccessConfigurationOptions.map((acl) => {
+                  const checked = accessConfigSelections.has(acl);
+                  return (
+                    <CheckboxRow
+                      key={acl}
+                      label={acl}
+                      checked={checked}
+                      onToggle={((next: boolean) => {
+                        const ns = new Set(accessConfigSelections);
+                        if (next) ns.add(acl); else ns.delete(acl);
+                        setAccessConfigSelections(ns);
+                      }) as any}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+
+            <div
+              class='md:-:-:col-span-2 -:-:flex -:-:justify-end -:-:gap-2 -:-:items-center'
+              aria-busy={busy ? 'true' : 'false'}
+            >
+              {busy ? (
+                <LoadingIcon class='-:-:w-5 -:-:h-5 -:-:animate-spin -:-:text-neon-blue-500' />
+              ) : (
+                <>
+                  <Action type='submit'>Save</Action>
+                  <Action
+                    type='button'
+                    intentType={IntentTypes.Error}
+                    styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
+                    onClick={async () => {
+                      if (!confirm('Delete this plan? This cannot be undone.')) return;
+                      try {
+                        setBusy(true);
+                        const res = await fetch(`/admin/licenses/${LicLookup}/${PlanLookup}`, {
+                          method: 'DELETE',
+                          headers: { 'content-type': 'application/json' },
+                        });
+                        if (res.ok) {
+                          location.href = `/admin/licenses/${LicLookup}`;
+                        } else {
+                          setBusy(false);
+                          const msg = await res.text();
+                          alert(`Delete failed: ${msg || res.status}`);
+                        }
+                      } catch (err) {
+                        setBusy(false);
+                        const msg = err instanceof Error ? err.message : String(err);
+                        alert(`Delete failed: ${msg}`);
+                      }
+                    }}
+                  >
+                    Delete
+                  </Action>
+                </>
+              )}
             </div>
           </form>
         </div>
@@ -275,7 +373,7 @@ export default function PlanPage({
               <li key={priceLookup} class='-:-:flex -:-:items-center -:-:justify-between'>
                 <div class='-:-:text-neutral-200'>{price.Details?.Name || priceLookup}</div>
                 <Action
-                  href={`/licenses/${LicLookup}/${PlanLookup}/${priceLookup}`}
+                  href={`/admin/licenses/${LicLookup}/${PlanLookup}/${priceLookup}`}
                   styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
                 >
                   Open
@@ -285,7 +383,7 @@ export default function PlanPage({
           </ul>
           <form
             method='POST'
-            action={`/admin/licenses/${LicLookup}/${PlanLookup}/prices/api/create`}
+            action={`/admin/licenses/${LicLookup}/${PlanLookup}`}
             class='-:-:flex -:-:items-end -:-:gap-2'
           >
             <Input label='New price lookup' name='PriceLookup' placeholder='e.g., monthly-usd' />

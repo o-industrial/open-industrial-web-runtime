@@ -18,7 +18,6 @@ import { LoadingIcon } from '@o-industrial/common/atomic/icons';
 import { IntentTypes } from '@o-industrial/common/types';
 import { merge } from '@fathym/common';
 import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebState.ts';
-// import { EaCRefreshController } from '@fathym/eac-applications/runtime/refresh';
 
 export const IsIsland = true;
 
@@ -120,10 +119,9 @@ export const handler: EaCRuntimeHandlerSet<
         AccessConfigurations: { [acLookup]: null },
       });
 
-      // const controller = await ctx.Runtime.IoC.Resolve(EaCRefreshController);
-
       // // force=true overrides cooldown and unchanged-hash skips
-      // const result = await controller.RefreshNow(true);
+      // await ctx.State.Refresher.RefreshNow(true);
+
       return Response.json({ ok: true });
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);

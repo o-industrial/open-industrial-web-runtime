@@ -2,6 +2,7 @@ import { EaCRuntimeHandler } from '@fathym/eac/runtime/pipelines';
 import { loadJwtConfig } from '@fathym/common';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 import { OpenIndustrialJWTPayload } from '@o-industrial/common/types';
+import { EaCRefreshController } from '@fathym/eac-applications/runtime/refresh';
 
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 
@@ -28,6 +29,9 @@ export function buildOpenIndustrialAdminMiddleware(): EaCRuntimeHandler<OpenIndu
 
       ctx.State.OIJWT = token;
       ctx.State.OIClient = new OpenIndustrialAPIClient(apiBaseUrl, token);
+      
+      ctx.State.Refresher = await ctx.Runtime.IoC.Resolve(EaCRefreshController);
+
     } catch (err) {
       console.error('Failed to initialize OpenIndustrial admin client:', err);
     }

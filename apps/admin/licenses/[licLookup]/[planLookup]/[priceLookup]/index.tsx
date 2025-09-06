@@ -10,10 +10,12 @@ import type {
   EaCLicensePriceDetails,
   EverythingAsCodeLicensing,
 } from '@fathym/eac-licensing';
-import { Action, Input } from '@o-industrial/common/atomic/atoms';
+import { Action, ActionStyleTypes, Input } from '@o-industrial/common/atomic/atoms';
+import { LoadingIcon } from '@o-industrial/common/atomic/icons';
 import type { EverythingAsCode } from '@fathym/eac';
 import { merge } from '@fathym/common';
 import { OpenIndustrialWebState } from '../../../../../../src/state/OpenIndustrialWebState.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 
 export const IsIsland = true;
 
@@ -109,10 +111,36 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PricePageData
       throw err instanceof Error ? err : new Error(String(err));
     }
   },
+  async DELETE(_req, ctx) {
+    const { licLookup, planLookup, priceLookup } = ctx.Params as {
+      licLookup: string;
+      planLookup: string;
+      priceLookup: string;
+    };
+
+    try {
+      await ctx.State.OIClient.Admin.DeleteEaC({
+        Licenses: {
+          [licLookup]: ({
+            Plans: {
+              [planLookup]: ({
+                Prices: { [priceLookup]: null },
+              } as unknown as EaCLicensePlanAsCode),
+            },
+          } as unknown as EaCLicenseAsCode),
+        },
+      } as any);
+
+      return Response.json({ ok: true });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return new Response(msg, { status: 500 });
+    }
+  },
 };
 
 export default function PricePage({
-  Data: { Price, LicLookup, PlanLookup, PriceLookup, Username, Error },
+  Data: { Price, LicLookup, PlanLookup, PriceLookup, Username, Error: ErrorMsg },
 }: PageProps<PricePageData>) {
   const defaultDetails: EaCLicensePriceDetails = useMemo(
     () => ({ Name: '', Currency: 'usd', Interval: 'month', Value: 0, Discount: 0 }),
@@ -128,6 +156,7 @@ export default function PricePage({
       }
       : { Details: defaultDetails } as any
   );
+  const [busy, setBusy] = useState(false);
 
   const update = (field: keyof EaCLicensePriceDetails, value: any) =>
     setLocal({ ...local, Details: { ...local.Details, [field]: value } });
@@ -139,9 +168,9 @@ export default function PricePage({
         {Username && <span class='-:-:text-sm -:-:text-neutral-400'>👤 {Username}</span>}
       </div>
 
-      {Error && (
+      {ErrorMsg && (
         <div class='-:-:text-sm -:-:text-neon-red-400 -:-:border -:-:border-neon-red-700 -:-:rounded -:-:p-2'>
-          {Error}
+          {ErrorMsg}
         </div>
       )}
 
@@ -150,6 +179,7 @@ export default function PricePage({
         <form
           method='POST'
           action={`/admin/licenses/${LicLookup}/${PlanLookup}/${PriceLookup}`}
+          onSubmit={() => setBusy(true) as any}
           class='-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4'
         >
           <Input
@@ -196,8 +226,45 @@ export default function PricePage({
                 update('Discount', Number(e.currentTarget.value) || 0)}
             />
           </div>
-          <div class='md:-:-:col-span-2 -:-:flex -:-:justify-end'>
-            <Action type='submit'>Save</Action>
+          <div
+            class='md:-:-:col-span-2 -:-:flex -:-:justify-end -:-:gap-2 -:-:items-center'
+            aria-busy={busy ? 'true' : 'false'}
+          >
+            {busy ? (
+              <LoadingIcon class='-:-:w-5 -:-:h-5 -:-:animate-spin -:-:text-neon-blue-500' />
+            ) : (
+              <>
+                <Action type='submit'>Save</Action>
+                <Action
+                  type='button'
+                  intentType={IntentTypes.Error}
+                  styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
+                  onClick={async () => {
+                    if (!confirm('Delete this price? This cannot be undone.')) return;
+                    try {
+                      setBusy(true);
+                      const res = await fetch(`/admin/licenses/${LicLookup}/${PlanLookup}/${PriceLookup}`, {
+                        method: 'DELETE',
+                        headers: { 'content-type': 'application/json' },
+                      });
+                      if (res.ok) {
+                        location.href = `/admin/licenses/${LicLookup}/${PlanLookup}`;
+                      } else {
+                        setBusy(false);
+                        const msg = await res.text();
+                        alert(`Delete failed: ${msg || res.status}`);
+                      }
+                    } catch (err) {
+                      setBusy(false);
+                      const msg = err instanceof Error ? err.message : String(err);
+                      alert(`Delete failed: ${msg}`);
+                    }
+                  }}
+                >
+                  Delete
+                </Action>
+              </>
+            )}
           </div>
         </form>
       </div>
