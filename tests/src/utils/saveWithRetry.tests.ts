@@ -1,4 +1,5 @@
-﻿import { assertEquals, assertRejects } from '../../tests.deps.ts';
+// deno-lint-ignore-file require-await
+import { assertEquals, assertRejects } from '../../tests.deps.ts';
 import { saveWithRetry } from '../../../src/utils/saveWithRetry.ts';
 
 Deno.test('saveWithRetry - succeeds first try', async () => {
@@ -24,7 +25,10 @@ Deno.test('saveWithRetry - retries once on concurrency conflict', async () => {
 
 Deno.test('saveWithRetry - rethrows non-concurrency errors', async () => {
   await assertRejects(
-    () => saveWithRetry(async () => { throw new Error('Boom'); }),
+    () =>
+      saveWithRetry(async () => {
+        throw new Error('Boom');
+      }),
     Error,
     'Boom',
   );

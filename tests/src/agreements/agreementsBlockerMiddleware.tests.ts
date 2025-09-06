@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 import { assert, assertEquals } from '../../tests.deps.ts';
 import { agreementsBlockerMiddleware } from '../../../src/agreements/agreementsBlockerMiddleware.ts';
 import { IoCContainer } from '@fathym/ioc';

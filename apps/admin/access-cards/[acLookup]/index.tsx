@@ -1,18 +1,18 @@
 // deno-lint-ignore-file no-explicit-any
 import { PageProps } from '@fathym/eac-applications/preact';
+export const IsIsland = true;
 import type { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
-import type {
-  EaCAccessConfigurationAsCode,
-  EverythingAsCodeIdentity,
-} from '@fathym/eac-identity';
+import type { EaCAccessConfigurationAsCode, EverythingAsCodeIdentity } from '@fathym/eac-identity';
 import { JSX } from 'preact';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import {
   Action,
   ActionStyleTypes,
+  Badge,
   CheckboxRow,
   Input,
 } from '@o-industrial/common/atomic/atoms';
+import { IntentTypes } from '@o-industrial/common/types';
 import { merge } from '@fathym/common';
 import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebState.ts';
 
@@ -60,25 +60,24 @@ export const handler: EaCRuntimeHandlerSet<
       }
 
       const eac = ctx.Runtime.EaC as EverythingAsCodeIdentity;
-      const current = (eac?.AccessConfigurations?.[acLookup] || {}) as
-        EaCAccessConfigurationAsCode;
+      const current = (eac?.AccessConfigurations?.[acLookup] || {}) as EaCAccessConfigurationAsCode;
 
-      const providerLookups = (payload['Providers'] || '')
+      const providerLookups = (payload['ProviderLookups'] || payload['Providers'] || '')
         .split(',')
         .map((s) => s.trim())
         .filter(Boolean);
-      const accessRightLookups = (payload['AccessRights'] || '')
+      const accessRightLookups = (payload['AccessRightLookups'] || payload['AccessRights'] || '')
         .split(',')
         .map((s) => s.trim())
         .filter(Boolean);
 
-      const updateBody: Partial<EaCAccessConfigurationAsCode> & any = {
+      const updateBody: Partial<EaCAccessConfigurationAsCode> = {
         Details: {
           Name: payload['Name']?.trim() || undefined,
           Description: payload['Description']?.trim() || undefined,
         } as any,
-        Providers: providerLookups,
-        AccessRights: accessRightLookups,
+        ProviderLookups: providerLookups,
+        AccessRightLookups: accessRightLookups,
       };
 
       const commit: EverythingAsCodeIdentity = {
@@ -112,34 +111,82 @@ export default function AccessConfigurationPage({
   const [description, setDescription] = useState(
     AccessConfiguration?.Details?.Description ?? '',
   );
+  const initialProviderLookups = ((AccessConfiguration as any)?.ProviderLookups ??
+    (AccessConfiguration as any)?.Providers ?? []) as string[];
+  const initialAccessRightLookups = ((AccessConfiguration as any)
+    ?.AccessRightLookups ?? (AccessConfiguration as any)?.AccessRights ?? []) as string[];
+
   const [providerSelections, setProviderSelections] = useState<Set<string>>(
-    new Set<string>((AccessConfiguration as any)?.Providers ?? []),
+    new Set<string>(initialProviderLookups),
   );
   const [accessRightSelections, setAccessRightSelections] = useState<Set<string>>(
-    new Set<string>((AccessConfiguration as any)?.AccessRights ?? []),
+    new Set<string>(initialAccessRightLookups),
+  );
+
+  // Keep selections in sync if data from server changes (e.g., after save)
+  useEffect(() => {
+    const nextProv = ((AccessConfiguration as any)?.ProviderLookups ??
+      (AccessConfiguration as any)?.Providers ?? []) as string[];
+    const nextAR = ((AccessConfiguration as any)?.AccessRightLookups ??
+      (AccessConfiguration as any)?.AccessRights ?? []) as string[];
+    setProviderSelections(new Set<string>(nextProv));
+    setAccessRightSelections(new Set<string>(nextAR));
+    // Only when incoming data changes; not on user toggles
+  }, [
+    AcLookup,
+    JSON.stringify(
+      (AccessConfiguration as any)?.ProviderLookups ??
+        (AccessConfiguration as any)?.Providers ?? [],
+    ),
+    JSON.stringify(
+      (AccessConfiguration as any)?.AccessRightLookups ??
+        (AccessConfiguration as any)?.AccessRights ?? [],
+    ),
+  ]);
+
+  // Collect unique tags from access rights for filter controls
+  const allAccessRightTags = new Set<string>();
+  Object.values(AccessRightOptions || {}).forEach((ar: unknown) => {
+    const tags = ((ar as any)?.Details?.Tags as string[] | undefined) ?? [];
+    tags.forEach((t) => t && allAccessRightTags.add(t));
+  });
+
+  const initialActiveTags = new Set<string>(Array.from(allAccessRightTags));
+  const [activeTags, setActiveTags] = useState<Set<string>>(initialActiveTags);
+
+  const visibleAccessRightLookups = Object.keys(AccessRightOptions || {}).filter(
+    (arl) => {
+      const tags = ((AccessRightOptions as any)?.[arl]?.Details?.Tags as
+        | string[]
+        | undefined) ?? [];
+
+      if (activeTags.size === 0) return false; // all filters off => show none
+      if (tags.length === 0) return true; // untagged rights always visible
+
+      // Show if any tag on the right is active
+      return tags.some((t) => activeTags.has(t));
+    },
   );
 
   return (
-    <div class="-:-:p-6 -:-:space-y-6">
-      <div class="-:-:flex -:-:items-center -:-:justify-between">
-        <h1 class="-:-:text-2xl -:-:font-semibold -:-:text-neutral-100">
+    <div class='-:-:p-6 -:-:space-y-6'>
+      <div class='-:-:flex -:-:items-center -:-:justify-between'>
+        <h1 class='-:-:text-2xl -:-:font-semibold -:-:text-neutral-100'>
           Access Configuration
         </h1>
-        {Username && (
-          <span class="-:-:text-sm -:-:text-neutral-400">{Username}</span>
-        )}
+        {Username && <span class='-:-:text-sm -:-:text-neutral-400'>{Username}</span>}
       </div>
 
-      <div class="-:-:rounded-xl -:-:border -:-:border-neutral-700 -:-:bg-neutral-900/60 -:-:p-4 -:-:space-y-4 -:-:shadow-neon">
-        <div class="-:-:flex -:-:items-start -:-:justify-between">
+      <div class='-:-:rounded-xl -:-:border -:-:border-neutral-700 -:-:bg-neutral-900/60 -:-:p-4 -:-:space-y-4 -:-:shadow-neon'>
+        <div class='-:-:flex -:-:items-start -:-:justify-between'>
           <div>
-            <h3 class="-:-:text-base -:-:font-semibold -:-:text-neutral-100">
+            <h3 class='-:-:text-base -:-:font-semibold -:-:text-neutral-100'>
               {AccessConfiguration?.Details?.Name || AcLookup}
             </h3>
-            <p class="-:-:text-xs -:-:text-neutral-400">Lookup: {AcLookup}</p>
+            <p class='-:-:text-xs -:-:text-neutral-400'>Lookup: {AcLookup}</p>
           </div>
           <Action
-            href="/admin/access-cards"
+            href='/admin/access-cards'
             data-eac-bypass-base
             styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
           >
@@ -148,52 +195,50 @@ export default function AccessConfigurationPage({
         </div>
 
         <form
-          method="POST"
+          method='POST'
           action={`/admin/access-cards/${AcLookup}`}
           data-eac-bypass-base
-          class="-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4"
+          class='-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-2 -:-:gap-4'
         >
           <input
-            type="hidden"
-            name="Providers"
+            type='hidden'
+            name='ProviderLookups'
             value={[...providerSelections].join(',')}
           />
           <input
-            type="hidden"
-            name="AccessRights"
+            type='hidden'
+            name='AccessRightLookups'
             value={[...accessRightSelections].join(',')}
           />
           <div>
             <Input
-              label="Display Name"
-              name="Name"
-              placeholder="Access Configuration Name"
+              label='Display Name'
+              name='Name'
+              placeholder='Access Configuration Name'
               value={name}
               onInput={(e: JSX.TargetedEvent<HTMLInputElement, Event>) =>
-                setName(e.currentTarget.value)
-              }
+                setName(e.currentTarget.value)}
             />
           </div>
 
-          <div class="md:-:-:col-span-2">
+          <div class='md:-:-:col-span-2'>
             <Input
-              label="Description"
-              name="Description"
-              placeholder="Short description"
+              label='Description'
+              name='Description'
+              placeholder='Short description'
               multiline
               rows={3}
               value={description}
               onInput={(e: JSX.TargetedEvent<HTMLTextAreaElement, Event>) =>
-                setDescription(e.currentTarget.value)
-              }
+                setDescription(e.currentTarget.value)}
             />
           </div>
 
-          <div class="md:-:-:col-span-2 -:-:space-y-2">
-            <h4 class="-:-:text-sm -:-:font-semibold -:-:text-neutral-200">
+          <div class='md:-:-:col-span-2 -:-:space-y-2'>
+            <h4 class='-:-:text-sm -:-:font-semibold -:-:text-neutral-200'>
               Providers
             </h4>
-            <div class="-:-:grid -:-:grid-cols-1 sm:-:-:grid-cols-2 -:-:gap-2">
+            <div class='-:-:grid -:-:grid-cols-1 sm:-:-:grid-cols-2 -:-:gap-2'>
               {Object.keys(ProviderOptions || {}).map((pl) => {
                 const checked = providerSelections.has(pl);
                 return (
@@ -201,46 +246,70 @@ export default function AccessConfigurationPage({
                     key={pl}
                     label={pl}
                     checked={checked}
-                    onToggle={(next: boolean) => {
+                    onToggle={((next: boolean) => {
                       const ns = new Set(providerSelections);
                       if (next) ns.add(pl);
                       else ns.delete(pl);
                       setProviderSelections(ns);
-                    }}
+                    }) as any}
                   />
                 );
               })}
             </div>
           </div>
 
-          <div class="md:-:-:col-span-2 -:-:space-y-2">
-            <h4 class="-:-:text-sm -:-:font-semibold -:-:text-neutral-200">
+          <div class='md:-:-:col-span-2 -:-:space-y-2'>
+            <h4 class='-:-:text-sm -:-:font-semibold -:-:text-neutral-200'>
               Access Rights
             </h4>
-            <div class="-:-:grid -:-:grid-cols-1 sm:-:-:grid-cols-2 -:-:gap-2">
-              {Object.keys(AccessRightOptions || {}).map((arl) => {
+            {allAccessRightTags.size > 0 && (
+              <div class='-:-:flex -:-:flex-wrap -:-:gap-2 -:-:mb-2'>
+                {Array.from(allAccessRightTags)
+                  .sort((a, b) => a.localeCompare(b))
+                  .map((tag) => {
+                    const isActive = activeTags.has(tag);
+                    return (
+                      <Badge
+                        key={tag}
+                        intentType={isActive ? IntentTypes.Info : IntentTypes.None}
+                        class={`-:-:cursor-pointer ${isActive ? '' : '-:-:opacity-60'}`}
+                        onClick={() => {
+                          const next = new Set(activeTags);
+                          if (isActive) next.delete(tag);
+                          else next.add(tag);
+                          setActiveTags(next);
+                        }}
+                      >
+                        {tag}
+                      </Badge>
+                    );
+                  })}
+              </div>
+            )}
+            <div class='-:-:grid -:-:grid-cols-1 sm:-:-:grid-cols-2 -:-:gap-2'>
+              {visibleAccessRightLookups.map((arl) => {
                 const checked = accessRightSelections.has(arl);
                 return (
                   <CheckboxRow
                     key={arl}
                     label={arl}
                     checked={checked}
-                    onToggle={(next: boolean) => {
+                    onToggle={((next: boolean) => {
                       const ns = new Set(accessRightSelections);
                       if (next) ns.add(arl);
                       else ns.delete(arl);
                       setAccessRightSelections(ns);
-                    }}
+                    }) as any}
                   />
                 );
               })}
             </div>
           </div>
 
-          <div class="md:-:-:col-span-2 -:-:flex -:-:justify-end -:-:gap-2">
-            <Action type="submit">Save</Action>
+          <div class='md:-:-:col-span-2 -:-:flex -:-:justify-end -:-:gap-2'>
+            <Action type='submit'>Save</Action>
             <Action
-              href="/admin/access-cards"
+              href='/admin/access-cards'
               data-eac-bypass-base
               intentType={2}
               styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
