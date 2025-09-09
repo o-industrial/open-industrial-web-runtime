@@ -28,6 +28,7 @@ import { EaCAzureADB2CProviderDetails, EaCAzureADProviderDetails } from '@fathym
 import OpenIndustrialLicensingPlugin from './OpenIndustrialLicensingPlugin.ts';
 import OpenIndustrialMSALPlugin from './OpenIndustrialMSALPlugin.ts';
 import { EaCMSALProcessor } from '@fathym/msal';
+import { resolveAccessRights } from '../security/AccessRightsResolver.ts';
 
 export default class RuntimePlugin implements EaCRuntimePlugin {
   constructor() {}
@@ -580,6 +581,11 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
 
     pluginConfig.IoC!.Register(DefaultMyCoreProcessorHandlerResolver, {
       Type: pluginConfig.IoC!.Symbol('ProcessorHandlerResolver'),
+    });
+
+    // Register AccessRightsResolver for web runtime
+    pluginConfig.IoC!.Register(() => resolveAccessRights, {
+      Type: pluginConfig.IoC!.Symbol('AccessRightsResolver'),
     });
 
     return Promise.resolve(pluginConfig);
