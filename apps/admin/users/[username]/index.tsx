@@ -97,7 +97,7 @@ export default function AdminUserManagePage(
                   <div class='-:-:text-neutral-100 -:-:font-medium'>{(lic as any)?.Details?.Name || lookup}</div>
                   <div class='-:-:text-neutral-400 -:-:text-xs'>Lookup: {lookup}</div>
                 </div>
-                <form method='POST'>
+                <form method='POST' data-eac-bypass-base>
                   <input type='hidden' name='action' value='cancelLicense' />
                   <input type='hidden' name='licLookup' value={lookup} />
                   <Action
@@ -115,7 +115,7 @@ export default function AdminUserManagePage(
 
         <div class='-:-:space-y-4'>
           <h2 class='-:-:text-lg -:-:font-semibold -:-:text-neutral-100'>Access Cards</h2>
-          <form method='POST' class='-:-:flex -:-:gap-2'>
+          <form method='POST' data-eac-bypass-base class='-:-:flex -:-:gap-2'>
             <input type='hidden' name='action' value='addCard' />
             <div class='-:-:flex-1'>
               <label class='-:-:block -:-:text-sm -:-:text-neutral-300'>
@@ -149,7 +149,7 @@ export default function AdminUserManagePage(
                   <div class='-:-:text-neutral-100 -:-:font-medium'>{c.AccessConfigurationLookup}</div>
                   <div class='-:-:text-neutral-400 -:-:text-xs'>Direct assignment</div>
                 </div>
-                <form method='POST'>
+                <form method='POST' data-eac-bypass-base>
                   <input type='hidden' name='action' value='removeCard' />
                   <input
                     type='hidden'

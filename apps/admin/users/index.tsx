@@ -1,10 +1,16 @@
 import type { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
+import { useState } from 'preact/hooks';
+import { Action, ActionStyleTypes, Input } from '@o-industrial/common/atomic/atoms';
 import { OpenIndustrialWebState } from '../../../src/state/OpenIndustrialWebState.ts';
+
+export const IsIsland = true;
 
 type UsersPageData = {
   Users: { Username?: string; EnterpriseName?: string }[];
   Query: string;
+  Invited?: string;
+  Username: string;
 };
 
 export const handler: EaCRuntimeHandlerSet<
@@ -15,77 +21,133 @@ export const handler: EaCRuntimeHandlerSet<
     const url = new URL(req.url);
     const q = (url.searchParams.get('q') || '').trim();
     const users = await ctx.State.OIClient.Admin.ListUsers(q || undefined);
-    return ctx.Render({ Users: users, Query: q });
+    const invited = url.searchParams.get('invited') || undefined;
+    return ctx.Render({
+      Users: users,
+      Query: q,
+      Invited: invited || undefined,
+      Username: ctx.State.Username,
+    });
+  },
+  async POST(req, ctx) {
+    try {
+      const ct = req.headers.get('content-type') || '';
+      let payload: Record<string, string> = {};
+      if (ct.includes('application/json')) {
+        payload = (await req.json()) as Record<string, string>;
+      } else {
+        const fd = await req.formData();
+        fd.forEach((v, k) => (payload[k] = String(v)));
+      }
+
+      const email = (payload['Email'] || payload['Username'] || '').trim();
+      if (!email) return new Response('Email is required', { status: 400 });
+
+      await ctx.State.OIClient.Admin.InviteUser(email);
+
+      const redirect = new URL(ctx.Runtime.URLMatch.FromOrigin('/admin/users'));
+      redirect.searchParams.set('invited', email);
+      return Response.redirect(redirect, 303);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return new Response(msg, { status: 500 });
+    }
   },
 };
 
 export default function AdminUsersPage({
-  Data: { Users, Query },
+  Data: { Users, Query, Invited, Username },
 }: PageProps<UsersPageData>) {
+  const [email, setEmail] = useState('');
+  const [search, setSearch] = useState(Query || '');
+
   return (
-    <div class="-:-:p-4 -:-:space-y-4">
-      <h1 class="-:-:text-xl -:-:font-semibold text-white">Users</h1>
+    <div class="-:-:p-6 -:-:space-y-6 -:-:pb-28">
+      <div class="-:-:flex -:-:items-center -:-:justify-between">
+        <h1 class="-:-:text-2xl -:-:font-semibold -:-:text-neutral-100">Users</h1>
+        {Username && (
+          <span class="-:-:text-sm -:-:text-neutral-400">{Username}</span>
+        )}
+      </div>
+
+      {Invited && (
+        <div class="-:-:rounded-md -:-:border -:-:border-green-700 -:-:bg-green-950/70 -:-:text-green-200 -:-:px-3 -:-:py-2">
+          Invited {Invited} to admin.
+        </div>
+      )}
+
+      
+
       <form method="GET" class="-:-:flex -:-:gap-2 -:-:items-end">
         <div class="-:-:flex-1">
-          <label class="-:-:block -:-:text-sm -:-:text-neutral-300">
-            Search
-          </label>
-          <input
-            type="text"
+          <Input
+            label="Search"
             name="q"
-            value={Query}
             placeholder="Search users"
-            class="-:-:mt-1 -:-:w-full -:-:rounded-md -:-:border -:-:border-neutral-700 -:-:bg-neutral-900 -:-:p-2 -:-:text-neutral-100"
+            value={search}
+            onInput={(e: any) => setSearch(e.currentTarget.value)}
           />
         </div>
-        <button
-          type="submit"
-          class="-:-:rounded-md -:-:bg-neon-blue-600 -:-:text-white -:-:px-3 -:-:py-2"
-        >
+        <Action type="submit" styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}>
           Search
-        </button>
+        </Action>
       </form>
 
-      <div class="-:-:rounded-xl -:-:border -:-:border-neutral-800 -:-:bg-neutral-900/50 -:-:overflow-hidden">
-        <table class="-:-:w-full -:-:text-sm">
-          <thead class="-:-:bg-neutral-900/70">
-            <tr>
-              <th class="-:-:text-left -:-:p-3 -:-:text-neutral-300">
-                Username
-              </th>
-              <th class="-:-:text-left -:-:p-3 -:-:text-neutral-300">
-                Workspace
-              </th>
-              <th class="-:-:p-3"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {Users.map((u) => (
-              <tr
-                class="-:-:border-t -:-:border-neutral-800"
-                key={`${u.Username}-${u.EnterpriseName}`}
-              >
-                <td class="-:-:p-3 -:-:text-neutral-100">
+      <div class="-:-:grid -:-:grid-cols-1 sm:-:-:grid-cols-2 lg:-:-:grid-cols-3 -:-:gap-4">
+        {Users.map((u) => (
+          <div
+            key={`${u.Username || 'unknown'}-${u.EnterpriseName || 'workspace'}`}
+            class="-:-:rounded-xl -:-:border -:-:border-neutral-800 -:-:bg-neutral-900/50 -:-:p-4 -:-:space-y-3 -:-:hover:-:-:border-neon-blue-500 -:-:transition-default"
+          >
+            <div class="-:-:flex -:-:items-start -:-:justify-between">
+              <div>
+                <h3 class="-:-:text-base -:-:font-semibold -:-:text-neutral-100">
                   {u.Username || '—'}
-                </td>
-                <td class="-:-:p-3 -:-:text-neutral-300">
-                  {u.EnterpriseName || '—'}
-                </td>
-                <td class="-:-:p-3 -:-:text-right">
-                  {u.Username && (
-                    <a
-                      href={`/admin/users/${encodeURIComponent(u.Username)}`}
-                      data-eac-bypass-base
-                      class="-:-:text-neon-blue-400 hover:-:-:underline"
-                    >
-                      Manage
-                    </a>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                </h3>
+                <p class="-:-:text-xs -:-:text-neutral-400">
+                  Workspace: {u.EnterpriseName || '—'}
+                </p>
+              </div>
+              {u.Username && (
+                <Action
+                  href={`/admin/users/${encodeURIComponent(u.Username)}`}
+                  data-eac-bypass-base
+                  styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
+                >
+                  Manage
+                </Action>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+      {/* Sticky invite bar pinned to bottom */}
+      <div class="-:-:fixed -:-:bottom-0 -:-:left-0 -:-:right-0 -:-:z-40">
+        <div class="-:-:mx-auto -:-:max-w-6xl -:-:px-4 -:-:pb-4">
+          <div class="-:-:rounded-t-xl -:-:border -:-:border-neutral-800 -:-:bg-neutral-900/80 -:-:backdrop-blur -:-:px-4 -:-:py-3 -:-:shadow-neon">
+            <form
+              method="POST"
+              action="/admin/users"
+              data-eac-bypass-base
+              class="-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-3 -:-:gap-3 -:-:items-end"
+            >
+              <div class="md:-:-:col-span-2">
+                <Input
+                  label="Invite Admin (Email)"
+                  type="email"
+                  name="Email"
+                  placeholder="user@example.com"
+                  required
+                  value={email}
+                  onInput={(e: any) => setEmail(e.currentTarget.value)}
+                />
+              </div>
+              <div class="md:-:-:col-span-1 -:-:flex -:-:justify-end">
+                <Action type="submit" styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}>Invite</Action>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
