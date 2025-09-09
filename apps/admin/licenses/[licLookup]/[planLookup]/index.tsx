@@ -9,7 +9,6 @@ import type {
   EaCLicensePlanDetails,
   EaCLicensePriceAsCode,
   EaCLicensePriceDetails,
-  EverythingAsCodeLicensing,
 } from '@fathym/eac-licensing';
 import { Action, ActionStyleTypes, CheckboxRow, Input } from '@o-industrial/common/atomic/atoms';
 import { LoadingIcon } from '@o-industrial/common/atomic/icons';
@@ -54,7 +53,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PlanPageData>
     const { licLookup, planLookup } = ctx.Params as { licLookup: string; planLookup: string };
 
     try {
-    const eac = await ctx.State.OIClient.Admin.GetEaC<any>();
+      const eac = await ctx.State.OIClient.Admin.GetEaC<any>();
       const lic = (eac.Licenses?.[licLookup] || { Plans: {} }) as EaCLicenseAsCode;
       const currentPlan = (lic.Plans?.[planLookup] || { Prices: {} }) as EaCLicensePlanAsCode;
 
@@ -125,10 +124,11 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PlanPageData>
           Featured: data['Featured'] ?? currentPlanDetails?.Featured,
         } as EaCLicensePlanDetails;
 
-        const accessConfigLookups = (data['AccessConfigurationLookups'] || data['AccessConfigurations'] || '')
-          .split(',')
-          .map((s) => s.trim())
-          .filter(Boolean);
+        const accessConfigLookups =
+          (data['AccessConfigurationLookups'] || data['AccessConfigurations'] || '')
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean);
 
         const commit: EverythingAsCode = {
           Licenses: {
@@ -136,7 +136,10 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PlanPageData>
               ...lic,
               Plans: {
                 ...(lic.Plans || {}),
-                [planLookup]: merge(currentPlan, { Details: details, AccessConfigurationLookups: accessConfigLookups } as any),
+                [planLookup]: merge(
+                  currentPlan,
+                  { Details: details, AccessConfigurationLookups: accessConfigLookups } as any,
+                ),
               },
             } as EaCLicenseAsCode,
           },
@@ -175,7 +178,15 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, PlanPageData>
 };
 
 export default function PlanPage({
-  Data: { License: _License, Plan, LicLookup, PlanLookup, Username, Error: ErrorMsg, AccessConfigurationOptions = [] },
+  Data: {
+    License: _License,
+    Plan,
+    LicLookup,
+    PlanLookup,
+    Username,
+    Error: ErrorMsg,
+    AccessConfigurationOptions = [],
+  },
 }: PageProps<PlanPageData>) {
   const defaultDetails: EaCLicensePlanDetails = useMemo(
     () => ({ Name: '', Description: '', Features: [], Priority: 0 }),
@@ -304,7 +315,8 @@ export default function PlanPage({
                       checked={checked}
                       onToggle={((next: boolean) => {
                         const ns = new Set(accessConfigSelections);
-                        if (next) ns.add(acl); else ns.delete(acl);
+                        if (next) ns.add(acl);
+                        else ns.delete(acl);
                         setAccessConfigSelections(ns);
                       }) as any}
                     />
@@ -317,41 +329,41 @@ export default function PlanPage({
               class='md:-:-:col-span-2 -:-:flex -:-:justify-end -:-:gap-2 -:-:items-center'
               aria-busy={busy ? 'true' : 'false'}
             >
-              {busy ? (
-                <LoadingIcon class='-:-:w-5 -:-:h-5 -:-:animate-spin -:-:text-neon-blue-500' />
-              ) : (
-                <>
-                  <Action type='submit'>Save</Action>
-                  <Action
-                    type='button'
-                    intentType={IntentTypes.Error}
-                    styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
-                    onClick={async () => {
-                      if (!confirm('Delete this plan? This cannot be undone.')) return;
-                      try {
-                        setBusy(true);
-                        const res = await fetch(`/admin/licenses/${LicLookup}/${PlanLookup}`, {
-                          method: 'DELETE',
-                          headers: { 'content-type': 'application/json' },
-                        });
-                        if (res.ok) {
-                          location.href = `/admin/licenses/${LicLookup}`;
-                        } else {
+              {busy
+                ? <LoadingIcon class='-:-:w-5 -:-:h-5 -:-:animate-spin -:-:text-neon-blue-500' />
+                : (
+                  <>
+                    <Action type='submit'>Save</Action>
+                    <Action
+                      type='button'
+                      intentType={IntentTypes.Error}
+                      styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
+                      onClick={async () => {
+                        if (!confirm('Delete this plan? This cannot be undone.')) return;
+                        try {
+                          setBusy(true);
+                          const res = await fetch(`/admin/licenses/${LicLookup}/${PlanLookup}`, {
+                            method: 'DELETE',
+                            headers: { 'content-type': 'application/json' },
+                          });
+                          if (res.ok) {
+                            location.href = `/admin/licenses/${LicLookup}`;
+                          } else {
+                            setBusy(false);
+                            const msg = await res.text();
+                            alert(`Delete failed: ${msg || res.status}`);
+                          }
+                        } catch (err) {
                           setBusy(false);
-                          const msg = await res.text();
-                          alert(`Delete failed: ${msg || res.status}`);
+                          const msg = err instanceof Error ? err.message : String(err);
+                          alert(`Delete failed: ${msg}`);
                         }
-                      } catch (err) {
-                        setBusy(false);
-                        const msg = err instanceof Error ? err.message : String(err);
-                        alert(`Delete failed: ${msg}`);
-                      }
-                    }}
-                  >
-                    Delete
-                  </Action>
-                </>
-              )}
+                      }}
+                    >
+                      Delete
+                    </Action>
+                  </>
+                )}
             </div>
           </form>
         </div>

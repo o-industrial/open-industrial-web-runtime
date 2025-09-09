@@ -230,41 +230,44 @@ export default function PricePage({
             class='md:-:-:col-span-2 -:-:flex -:-:justify-end -:-:gap-2 -:-:items-center'
             aria-busy={busy ? 'true' : 'false'}
           >
-            {busy ? (
-              <LoadingIcon class='-:-:w-5 -:-:h-5 -:-:animate-spin -:-:text-neon-blue-500' />
-            ) : (
-              <>
-                <Action type='submit'>Save</Action>
-                <Action
-                  type='button'
-                  intentType={IntentTypes.Error}
-                  styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
-                  onClick={async () => {
-                    if (!confirm('Delete this price? This cannot be undone.')) return;
-                    try {
-                      setBusy(true);
-                      const res = await fetch(`/admin/licenses/${LicLookup}/${PlanLookup}/${PriceLookup}`, {
-                        method: 'DELETE',
-                        headers: { 'content-type': 'application/json' },
-                      });
-                      if (res.ok) {
-                        location.href = `/admin/licenses/${LicLookup}/${PlanLookup}`;
-                      } else {
+            {busy
+              ? <LoadingIcon class='-:-:w-5 -:-:h-5 -:-:animate-spin -:-:text-neon-blue-500' />
+              : (
+                <>
+                  <Action type='submit'>Save</Action>
+                  <Action
+                    type='button'
+                    intentType={IntentTypes.Error}
+                    styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
+                    onClick={async () => {
+                      if (!confirm('Delete this price? This cannot be undone.')) return;
+                      try {
+                        setBusy(true);
+                        const res = await fetch(
+                          `/admin/licenses/${LicLookup}/${PlanLookup}/${PriceLookup}`,
+                          {
+                            method: 'DELETE',
+                            headers: { 'content-type': 'application/json' },
+                          },
+                        );
+                        if (res.ok) {
+                          location.href = `/admin/licenses/${LicLookup}/${PlanLookup}`;
+                        } else {
+                          setBusy(false);
+                          const msg = await res.text();
+                          alert(`Delete failed: ${msg || res.status}`);
+                        }
+                      } catch (err) {
                         setBusy(false);
-                        const msg = await res.text();
-                        alert(`Delete failed: ${msg || res.status}`);
+                        const msg = err instanceof Error ? err.message : String(err);
+                        alert(`Delete failed: ${msg}`);
                       }
-                    } catch (err) {
-                      setBusy(false);
-                      const msg = err instanceof Error ? err.message : String(err);
-                      alert(`Delete failed: ${msg}`);
-                    }
-                  }}
-                >
-                  Delete
-                </Action>
-              </>
-            )}
+                    }}
+                  >
+                    Delete
+                  </Action>
+                </>
+              )}
           </div>
         </form>
       </div>

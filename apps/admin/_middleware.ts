@@ -29,9 +29,8 @@ export function buildOpenIndustrialAdminMiddleware(): EaCRuntimeHandler<OpenIndu
 
       ctx.State.OIJWT = token;
       ctx.State.OIClient = new OpenIndustrialAPIClient(apiBaseUrl, token);
-      
-      ctx.State.Refresher = await ctx.Runtime.IoC.Resolve(EaCRefreshController);
 
+      ctx.State.Refresher = await ctx.Runtime.IoC.Resolve(EaCRefreshController);
     } catch (err) {
       console.error('Failed to initialize OpenIndustrial admin client:', err);
     }

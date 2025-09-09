@@ -22,8 +22,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, UserManagePag
       ctx.State.OIClient.Admin.ListUserAccessCards(username),
       ctx.State.OIClient.Admin.GetEaC<any>(),
     ]);
-    const acMap: Record<string, { Details?: { Name?: string } }> =
-      eac?.AccessConfigurations || {};
+    const acMap: Record<string, { Details?: { Name?: string } }> = eac?.AccessConfigurations || {};
     const allCfgs = Object.entries(acMap).map(([lookup, ac]) => ({
       lookup,
       name: ac?.Details?.Name ?? lookup,
@@ -74,8 +73,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, UserManagePag
 };
 
 export default function AdminUserManagePage(
-  { Data: { Username, Licenses, Cards, AvailableConfigs } }:
-    PageProps<UserManagePageData>,
+  { Data: { Username, Licenses, Cards, AvailableConfigs } }: PageProps<UserManagePageData>,
 ) {
   return (
     <div class='-:-:p-6 -:-:space-y-6'>
@@ -94,7 +92,9 @@ export default function AdminUserManagePage(
             {Object.entries(Licenses).map(([lookup, lic]) => (
               <div class='-:-:p-4 -:-:flex -:-:items-center -:-:justify-between' key={lookup}>
                 <div>
-                  <div class='-:-:text-neutral-100 -:-:font-medium'>{(lic as any)?.Details?.Name || lookup}</div>
+                  <div class='-:-:text-neutral-100 -:-:font-medium'>
+                    {(lic as any)?.Details?.Name || lookup}
+                  </div>
                   <div class='-:-:text-neutral-400 -:-:text-xs'>Lookup: {lookup}</div>
                 </div>
                 <form method='POST' data-eac-bypass-base>
@@ -129,7 +129,8 @@ export default function AdminUserManagePage(
                 <option value=''>Select an access configuration</option>
                 {AvailableConfigs.map((c) => (
                   <option value={c.lookup} key={c.lookup}>
-                    {c.name}{c.name !== c.lookup ? ` (${c.lookup})` : ''}
+                    {c.name}
+                    {c.name !== c.lookup ? ` (${c.lookup})` : ''}
                   </option>
                 ))}
               </select>
@@ -144,9 +145,14 @@ export default function AdminUserManagePage(
               <div class='-:-:p-4 -:-:text-neutral-400'>No access cards assigned.</div>
             )}
             {Cards.map((c) => (
-              <div class='-:-:p-4 -:-:flex -:-:items-center -:-:justify-between' key={c.AccessConfigurationLookup}>
+              <div
+                class='-:-:p-4 -:-:flex -:-:items-center -:-:justify-between'
+                key={c.AccessConfigurationLookup}
+              >
                 <div>
-                  <div class='-:-:text-neutral-100 -:-:font-medium'>{c.AccessConfigurationLookup}</div>
+                  <div class='-:-:text-neutral-100 -:-:font-medium'>
+                    {c.AccessConfigurationLookup}
+                  </div>
                   <div class='-:-:text-neutral-400 -:-:text-xs'>Direct assignment</div>
                 </div>
                 <form method='POST' data-eac-bypass-base>

@@ -1,9 +1,7 @@
+// deno-lint-ignore-file no-explicit-any
 import { EaCApplicationsRuntimeContext } from '@fathym/eac-applications/runtime';
 import type { EverythingAsCodeIdentity } from '@fathym/eac-identity';
-import type {
-  EaCLicensePlanAsCode,
-  EverythingAsCodeLicensing,
-} from '@fathym/eac-licensing';
+import type { EaCLicensePlanAsCode, EverythingAsCodeLicensing } from '@fathym/eac-licensing';
 import type { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 import type { OpenIndustrialWebState } from '../state/OpenIndustrialWebState.ts';
 import { loadJwtConfig } from '@fathym/common';
@@ -21,7 +19,7 @@ export async function resolveAccessRights(
     OpenIndustrialWebState,
     Record<string, unknown>,
     EverythingAsCodeOIWorkspace
-  >
+  >,
 ): Promise<{
   rights: string[];
   sources?: { cards?: string[]; licenses?: string[] };
