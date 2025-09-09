@@ -89,7 +89,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 Priority: 500,
                 IsPrivate: true,
                 IsTriggerSignIn: true,
-                AccessRightLookups: ['Godmin'],
+                // AccessRightLookups: ['Godmin'],
               },
               automateConference: {
                 PathPattern: '/automateconference*',
