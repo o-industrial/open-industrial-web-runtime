@@ -5,6 +5,7 @@ import { OpenIndustrialJWTPayload } from '@o-industrial/common/types';
 import { EaCRefreshController } from '@fathym/eac-applications/runtime/refresh';
 
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
+import { EaCApplicationsRuntimeContext } from '@fathym/eac-applications/runtime';
 
 export default [
   buildOpenIndustrialAdminMiddleware(),
@@ -13,6 +14,8 @@ export default [
 export function buildOpenIndustrialAdminMiddleware(): EaCRuntimeHandler<OpenIndustrialWebState> {
   return async (_req, ctx) => {
     try {
+      const appCtx = ctx as EaCApplicationsRuntimeContext<OpenIndustrialWebState>;
+
       const username = ctx.State.Username!;
 
       const oiApiRoot = Deno.env.get('OPEN_INDUSTRIAL_API_ROOT');
@@ -25,6 +28,7 @@ export function buildOpenIndustrialAdminMiddleware(): EaCRuntimeHandler<OpenIndu
       const token = await loadJwtConfig().Create({
         Username: username,
         WorkspaceLookup: workspaceLookup as string,
+        AccessRights: appCtx.Runtime.AccessRights,
       } as OpenIndustrialJWTPayload);
 
       ctx.State.OIJWT = token;

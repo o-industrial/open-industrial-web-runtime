@@ -12,6 +12,7 @@ import { loadEaCActuators } from '../../configs/eac-actuators.config.ts';
 import { EaCRuntimeContext } from '@fathym/eac/runtime';
 import { EaCAzureADProviderDetails } from '@fathym/eac-identity';
 import { createAzureADOAuthConfig, createOAuthHelpers } from '@fathym/common/oauth';
+import { EaCApplicationsRuntimeContext } from '@fathym/eac-applications/runtime';
 
 export default [
   agreementsBlockerMiddleware,
@@ -34,6 +35,8 @@ export function buildOpenIndustrialRuntimeMiddleware(
       EverythingAsCodeOIWorkspace
     >,
   ) => {
+    const appCtx = ctx as EaCApplicationsRuntimeContext<OpenIndustrialWebState>;
+
     const username = ctx.State.Username!;
     const kv = await ctx.Runtime.IoC.Resolve(Deno.Kv, kvLookup);
     ctx.State.OIKV = kv;
@@ -55,6 +58,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
     ctx.State.OIJWT = await loadJwtConfig().Create({
       Username: username,
       WorkspaceLookup: lookup,
+      AccessRights: appCtx.Runtime.AccessRights,
     } as OpenIndustrialJWTPayload);
 
     ctx.State.OIClient = new OpenIndustrialAPIClient(
@@ -71,6 +75,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
       ctx.State.OIJWT = await loadJwtConfig().Create({
         Username: username,
         WorkspaceLookup: lookup,
+        AccessRights: appCtx.Runtime.AccessRights,
       } as OpenIndustrialJWTPayload);
 
       ctx.State.OIClient = new OpenIndustrialAPIClient(
@@ -93,6 +98,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
         ctx.State.OIJWT = await loadJwtConfig().Create({
           Username: username,
           WorkspaceLookup: lookup,
+          AccessRights: appCtx.Runtime.AccessRights,
         } as OpenIndustrialJWTPayload);
 
         ctx.State.OIClient = new OpenIndustrialAPIClient(
@@ -137,6 +143,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
         Username: username,
         EnterpriseLookup: lookup,
         WorkspaceLookup: lookup,
+        AccessRights: appCtx.Runtime.AccessRights,
       } as unknown as OpenIndustrialJWTPayload);
 
       ctx.State.OIClient = new OpenIndustrialAPIClient(
@@ -194,6 +201,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
         EnterpriseLookup: ctx.Runtime.EaC.EnterpriseLookup!,
         WorkspaceLookup: ctx.Runtime.EaC.EnterpriseLookup!,
         Username: username,
+        AccessRights: appCtx.Runtime.AccessRights,
       });
 
       const licSvc = await loadEaCLicensingSvc(parentJwt);
@@ -217,9 +225,12 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
 export function buildAgreementsRedirectMiddleware(): EaCRuntimeHandler<OpenIndustrialWebState> {
   return async (req, ctx) => {
+    const appCtx = ctx as EaCApplicationsRuntimeContext<OpenIndustrialWebState>;
+
     const token = await loadJwtConfig().Create({
       WorkspaceLookup: ctx.State.WorkspaceLookup,
       Username: ctx.State.Username,
+      AccessRights: appCtx.Runtime.AccessRights,
     });
 
     ctx.State.OIJWT = token;

@@ -20,6 +20,7 @@ import { IoCContainer } from '@fathym/ioc';
 import { EverythingAsCode } from '@fathym/eac';
 import { EaCUserLicense, EverythingAsCodeLicensing } from '@fathym/eac-licensing';
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
+import { EaCApplicationsRuntimeContext } from '@fathym/eac-applications/runtime';
 
 export const IsIsland = true;
 
@@ -28,6 +29,8 @@ type WorkspacePageData = {
   OIAPIRoot: string;
   OIAPIToken: string;
   OILicense?: EaCUserLicense;
+  AccessRights?: string[];
+  DeployAccessRight?: string;
   Username: string;
   Workspace: EverythingAsCodeOIWorkspace;
   AziCircuitUrl: string;
@@ -39,11 +42,18 @@ export const handler: EaCRuntimeHandlerSet<
   WorkspacePageData
 > = {
   GET: (_req, ctx) => {
+    const appCtx = ctx as EaCApplicationsRuntimeContext<
+      OpenIndustrialWebState,
+      WorkspacePageData
+    >;
+
     return ctx.Render({
       ParentEaC: ctx.Runtime.EaC,
       OIAPIRoot: '/api/',
       OIAPIToken: ctx.State.OIJWT,
       OILicense: ctx.State.UserLicenses?.['o-industrial'],
+      AccessRights: appCtx.Runtime.AccessRights ?? [],
+      DeployAccessRight: Deno.env.get('DEPLOY_ACCESS_RIGHT_LOOKUP') || 'Workspace.Deploy',
       Username: ctx.State.Username,
       Workspace: ctx.State.Workspace!,
       AziCircuitUrl: Deno.env.get('AZI_MAIN_CIRCUIT_URL')!,
@@ -58,6 +68,8 @@ export default function WorkspacePage({
     OIAPIRoot: oiApiRoot,
     OIAPIToken: oiApiToken,
     OILicense: oiLicense,
+    AccessRights: accessRights,
+    DeployAccessRight: deployRightLookup,
     ParentEaC,
     Username,
     AziCircuitUrl: aziUrl,
@@ -138,9 +150,14 @@ export default function WorkspacePage({
 
   const history = workspaceMgr.UseHistory();
 
-  const onActivateClick = oiLicense ? undefined : () => showLicense();
+  // Determine deploy capability based on a specific access right if configured; otherwise fallback to license
+  const canDeploy = deployRightLookup
+    ? accessRights?.includes(deployRightLookup) ?? false
+    : !!oiLicense;
 
-  const onDeployClick = oiLicense
+  const onActivateClick = canDeploy ? undefined : () => showLicense();
+
+  const onDeployClick = canDeploy
     ? async () => {
       await history.deploy();
     }

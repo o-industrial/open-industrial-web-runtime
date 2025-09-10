@@ -3,24 +3,30 @@ import { loadJwtConfig } from '@fathym/common';
 
 import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebState.ts';
 import { OpenIndustrialJWTPayload } from '@o-industrial/common/types';
+import { EaCApplicationsRuntimeContext } from '@fathym/eac-applications/runtime';
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
   GET: async (req, ctx) => {
     try {
+      const appCtx = ctx as EaCApplicationsRuntimeContext<OpenIndustrialWebState>;
+
       const url = new URL(req.url);
 
       // Accept minutes via `minutes` or `expMinutes`; default to 60 minutes
-      const minutesParam = url.searchParams.get('minutes') ??
-        url.searchParams.get('expMinutes');
+      const minutesParam = url.searchParams.get('minutes') ?? url.searchParams.get('expMinutes');
 
       const minutes = minutesParam ? Number(minutesParam) : 60;
 
       const expDate = new Date(Date.now() + Math.max(1, minutes) * 60_000);
 
-      const token = await loadJwtConfig().Create({
-        Username: ctx.State.Username!,
-        WorkspaceLookup: ctx.State.WorkspaceLookup,
-      } as OpenIndustrialJWTPayload, expDate.getTime());
+      const token = await loadJwtConfig().Create(
+        {
+          Username: ctx.State.Username!,
+          WorkspaceLookup: ctx.State.WorkspaceLookup,
+          AccessRights: appCtx.Runtime.AccessRights,
+        } as OpenIndustrialJWTPayload,
+        expDate.getTime(),
+      );
 
       return Response.json({ Token: token });
     } catch (err) {
