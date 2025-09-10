@@ -62,6 +62,7 @@ export default class OpenIndustrialLicensingPlugin implements EaCRuntimePlugin {
                     EnterpriseLookup: entLookup,
                     WorkspaceLookup: entLookup,
                     Username: username,
+                    // AccessRights: TODO: pass through context in this helper
                   });
                   log.debug(
                     () => `[lic-sub][${traceId}] JWT created (token not logged)`,
