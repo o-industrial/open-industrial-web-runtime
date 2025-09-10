@@ -8,15 +8,18 @@ import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 import OICore from '@o-industrial/common/packs/oi-core';
 import { IoCContainer } from '@fathym/ioc';
 import { OpenIndustrialWebState } from '../../../src/state/OpenIndustrialWebState.ts';
+import { EaCUserLicense } from '@fathym/eac-licensing';
 
 export const IsIsland = true;
 
 type CommitStatusPageData = {
-  OIAPIRoot: string;
-  OIAPIToken: string;
-  Workspace: EverythingAsCodeOIWorkspace;
   AziCircuitUrl: string;
   AziWarmQueryCircuitUrl: string;
+  OIAPIRoot: string;
+  OIAPIToken: string;
+  OILicense?: EaCUserLicense;
+  Username: string;
+  Workspace: EverythingAsCodeOIWorkspace;
 };
 
 export const handler: EaCRuntimeHandlerSet<
@@ -25,17 +28,27 @@ export const handler: EaCRuntimeHandlerSet<
 > = {
   GET: (_req, ctx) => {
     return ctx.Render({
-      OIAPIRoot: '/api/',
-      OIAPIToken: ctx.State.OIJWT,
-      Workspace: ctx.State.Workspace!,
       AziCircuitUrl: Deno.env.get('AZI_MAIN_CIRCUIT_URL')!,
       AziWarmQueryCircuitUrl: Deno.env.get('AZI_WARM_QUERY_CIRCUIT_URL')!,
+      OIAPIRoot: '/api/',
+      OIAPIToken: ctx.State.OIJWT,
+      OILicense: ctx.State.UserLicenses?.['o-industrial'],
+      Username: ctx.State.Username,
+      Workspace: ctx.State.Workspace!,
     });
   },
 };
 
 export default function CommitStatusPage({
-  Data: { OIAPIRoot, OIAPIToken, Workspace, AziCircuitUrl, AziWarmQueryCircuitUrl },
+  Data: {
+    AziCircuitUrl,
+    AziWarmQueryCircuitUrl,
+    OIAPIRoot,
+    OIAPIToken,
+    OILicense,
+    Workspace,
+    Username,
+  },
   Params,
 }: PageProps<CommitStatusPageData>) {
   const { commitId } = Params;
@@ -60,6 +73,8 @@ export default function CommitStatusPage({
 
       const mgr = new WorkspaceManager(
         Workspace,
+        Username,
+        OILicense,
         oiSvc,
         capabilities,
         'workspace',
@@ -82,7 +97,11 @@ export default function CommitStatusPage({
   }, [workspaceMgr, commitId]);
 
   if (!status) {
-    return <div class='w-full h-full flex items-center justify-center'>Loading commit...</div>;
+    return (
+      <div class='w-full h-full flex items-center justify-center'>
+        Loading commit...
+      </div>
+    );
   }
 
   return (

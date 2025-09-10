@@ -3,8 +3,6 @@ import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 import { AdminManager } from '@o-industrial/common/flow';
-import { AdminNav } from '@o-industrial/common/atomic/molecules';
-import { AdminDashboardTemplate } from '@o-industrial/common/atomic/templates';
 import type { EverythingAsCode } from '@fathym/eac';
 import type { EaCUserLicense, EverythingAsCodeLicensing } from '@fathym/eac-licensing';
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
@@ -32,7 +30,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, AdminPageData
 };
 
 export default function AdminPage({
-  Data: { OIAPIRoot, OIAPIToken, OILicense, Username },
+  Data: { OIAPIRoot, OIAPIToken, OILicense },
 }: PageProps<AdminPageData>) {
   const origin = typeof location !== 'undefined' && location?.origin
     ? location.origin
@@ -66,52 +64,25 @@ export default function AdminPage({
     })();
   }, [adminMgr]);
 
-  const navItems = [
-    { href: '/admin', label: 'Dashboard' },
-    { href: '/admin/enterprises', label: 'Enterprises' },
-    { href: '/admin/access-rights', label: 'Access Rights' },
-    { href: '/admin/access-cards', label: 'Access Cards' },
-    { href: '/admin/licenses', label: 'Licenses' },
-    { href: '/admin/users', label: 'Users' },
-  ];
-
   return (
-    <AdminDashboardTemplate
-      appBar={
-        <div class='-:-:sticky -:-:top-0 -:-:z-50 -:-:p-4 -:-:border-b -:-:border-slate-700 -:-:bg-slate-900/95 -:-:backdrop-blur -:-:text-lg -:-:font-semibold'>
-          Admin Dashboard
-          <span class='-:-:ml-2 -:-:text-xs -:-:text-slate-400 -:-:font-normal'>
-            {Username ? `· ${Username}` : ''}
-          </span>
+    <section class='-:-:p-4 -:-:grid -:-:grid-cols-1 sm:-:-:grid-cols-3 -:-:gap-4'>
+      {[
+        { label: 'Active Workspaces', value: summary.enterprises },
+        { label: 'Active Users', value: summary.users },
+        { label: 'Enterprise Growth Index', value: summary.egi },
+      ].map((c) => (
+        <div
+          key={c.label}
+          class='-:-:p-4 -:-:bg-slate-800 -:-:rounded-lg -:-:border -:-:border-slate-700 -:-:shadow-sm'
+          role='status'
+          aria-live='polite'
+        >
+          <h3 class='-:-:text-slate-400 -:-:mb-2 -:-:text-sm'>{c.label}</h3>
+          <p class='-:-:text-3xl -:-:tabular-nums'>
+            {loading ? <span class='-:-:animate-pulse -:-:text-slate-500'>…</span> : c.value}
+          </p>
         </div>
-      }
-      nav={
-        <AdminNav
-          items={navItems}
-          title='Navigation'
-          footer={<div class='-:-:text-[10px] -:-:text-slate-500'>v0.1 · Open Industrial</div>}
-        />
-      }
-    >
-      <section class='-:-:grid -:-:grid-cols-1 sm:-:-:grid-cols-3 -:-:gap-4'>
-        {[
-          { label: 'Active Enterprises', value: summary.enterprises },
-          { label: 'Active Users', value: summary.users },
-          { label: 'Enterprise Growth Index', value: summary.egi },
-        ].map((c) => (
-          <div
-            key={c.label}
-            class='-:-:p-4 -:-:bg-slate-800 -:-:rounded-lg -:-:border -:-:border-slate-700 -:-:shadow-sm'
-            role='status'
-            aria-live='polite'
-          >
-            <h3 class='-:-:text-slate-400 -:-:mb-2 -:-:text-sm'>{c.label}</h3>
-            <p class='-:-:text-3xl -:-:tabular-nums'>
-              {loading ? <span class='-:-:animate-pulse -:-:text-slate-500'>…</span> : c.value}
-            </p>
-          </div>
-        ))}
-      </section>
-    </AdminDashboardTemplate>
+      ))}
+    </section>
   );
 }

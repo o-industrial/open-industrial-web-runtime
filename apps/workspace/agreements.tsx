@@ -77,21 +77,28 @@ export default function AgreementsPage({
 
   return (
     <>
-      <div class='py-16 px-4 bg-neutral-500/75'>
-        <div class='mx-auto block w-[350px] text-center'>
-          <h1 class='text-4xl font-bold mb-4'>Review and Accept</h1>
-
-          <p class='text-sm text-neutral-200'>
-            Please review and accept our agreements before continuing.
+      {/* Header */}
+      <div class='px-6 pt-10 pb-4'>
+        <div class='max-w-4xl mx-auto text-center'>
+          <h1 class='text-3xl font-semibold tracking-tight mb-2'>
+            Review and Accept Agreements
+          </h1>
+          <p class='text-sm text-neutral-600 dark:text-neutral-300'>
+            Please review and accept the agreements below to continue.
           </p>
         </div>
       </div>
 
-      <div class='p-8'>
-        <AgreementList
-          agreements={Data.agreements}
-          onAllAccepted={handleAllAccepted}
-        />
+      {/* Content Card */}
+      <div class='px-6 pb-10'>
+        <div class='max-w-4xl mx-auto rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white/70 dark:bg-neutral-900/60 shadow-md backdrop-blur-sm'>
+          <div class='p-6 sm:p-8'>
+            <AgreementList
+              agreements={Data.agreements}
+              onAllAccepted={handleAllAccepted}
+            />
+          </div>
+        </div>
       </div>
     </>
   );
