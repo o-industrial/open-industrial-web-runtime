@@ -4,6 +4,8 @@ import { PageProps } from '@fathym/eac-applications/preact';
 import { Action, ActionStyleTypes } from '@o-industrial/common/atomic/atoms';
 import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebState.ts';
 
+export const IsIsland = true;
+
 type UserAccessCard = { AccessConfigurationLookup: string; Username: string };
 
 type UserManagePageData = {
@@ -61,6 +63,14 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, UserManagePag
         const lic = (body['licLookup'] || '').trim();
         if (!lic) throw new Error('licLookup required');
         await ctx.State.OIClient.Admin.CancelUserLicense(username, lic);
+      } else if (action === 'deleteUser') {
+        await ctx.State.OIClient.Admin.DeleteUser(username);
+        return Response.redirect(
+          ctx.Runtime.URLMatch.FromOrigin(
+            `/admin/users?deleted=${encodeURIComponent(username)}`,
+          ),
+          303,
+        );
       }
       return Response.redirect(
         ctx.Runtime.URLMatch.FromOrigin(`/admin/users/${encodeURIComponent(username)}`),
@@ -79,7 +89,27 @@ export default function AdminUserManagePage(
     <div class='-:-:p-6 -:-:space-y-6'>
       <div class='-:-:flex -:-:items-center -:-:justify-between'>
         <h1 class='-:-:text-2xl -:-:font-semibold -:-:text-neutral-100'>User</h1>
-        <span class='-:-:text-sm -:-:text-neutral-400'>{Username}</span>
+        <div class='-:-:flex -:-:items-center -:-:gap-3'>
+          <span class='-:-:text-sm -:-:text-neutral-400'>{Username}</span>
+          <form
+            method='POST'
+            data-eac-bypass-base
+            onSubmit={(e) => {
+              if (!confirm('Delete this user? This cannot be undone.')) {
+                e.preventDefault();
+              }
+            }}
+          >
+            <input type='hidden' name='action' value='deleteUser' />
+            <Action
+              type='submit'
+              intentType={2}
+              styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
+            >
+              Delete
+            </Action>
+          </form>
+        </div>
       </div>
 
       <div class='-:-:grid -:-:grid-cols-1 lg:-:-:grid-cols-2 -:-:gap-6'>
