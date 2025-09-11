@@ -1,7 +1,6 @@
 import { redirectRequest } from '@fathym/common';
 import type { EaCCloudAzureDetails } from '@fathym/eac-azure';
-import { loadEaCStewardSvc } from '@fathym/eac/steward/clients';
-import { EaCStatusProcessingTypes, waitForStatus } from '@fathym/eac/steward/status';
+import { EaCStatusProcessingTypes } from '@fathym/eac/steward/status';
 import { EaCRuntimeHandlers } from '@fathym/eac/runtime/pipelines';
 import { OpenIndustrialWebState } from '../../../../../src/state/OpenIndustrialWebState.ts';
 
@@ -9,18 +8,19 @@ export const handler: EaCRuntimeHandlers<OpenIndustrialWebState> = {
   async POST(req, ctx) {
     const formData = await req.formData();
 
-    const cloudLookup = (formData.get('cloudLookup') as string) || crypto.randomUUID();
+    const cloudLookup = 'Workspace';
 
     const azureToken = await ctx.State.AzureAccessToken?.();
 
-    const eac = {
-      EnterpriseLookup: ctx.Runtime.EaC!.EnterpriseLookup,
+    // Build minimal EaC workspace update for cloud configuration
+    const wkspc = {
+      EnterpriseLookup: ctx.State.WorkspaceLookup ?? ctx.Runtime.EaC!.EnterpriseLookup,
       Clouds: {
         [cloudLookup]: {
-          Token: azureToken,
           Details: {
-            Name: formData.get('name') as string,
-            Description: formData.get('description') as string,
+            Name: (formData.get('name') as string) ?? 'Workspace Cloud',
+            Description: (formData.get('description') as string) ??
+              'The cloud used by the workspace.',
             ApplicationID: formData.get('application-id') as string,
             AuthKey: formData.get('auth-key') as string,
             SubscriptionID: formData.get('subscription-id') as string,
@@ -29,30 +29,30 @@ export const handler: EaCRuntimeHandlers<OpenIndustrialWebState> = {
             BillingScope: formData.get('billing-scope') as string,
             IsDev: (formData.get('is-dev') as string) === 'true' || undefined,
             Type: 'Azure',
+            Token: azureToken,
           } as EaCCloudAzureDetails,
         },
       },
     };
 
-    const { Token } = await ctx.State.OIClient.Workspaces.EaCJWT();
-    const eacSvc = await loadEaCStewardSvc(Token);
-
-    const commitResp = await eacSvc.EaC.Commit(eac, 60);
-
-    const status = await waitForStatus(
-      eacSvc,
-      commitResp.EnterpriseLookup,
-      commitResp.CommitID,
-    );
-
-    if (status.Processing === EaCStatusProcessingTypes.COMPLETE) {
-      return redirectRequest('/workspace', false, false);
-    } else {
-      return redirectRequest(
-        `/workspace?commitId=${commitResp.CommitID}`,
-        false,
-        false,
+    try {
+      const status = await ctx.State.OIClient.Workspaces.Commit(
+        {
+          deletes: {},
+          eac: wkspc,
+        },
+        true,
       );
+
+      if (status.Processing === EaCStatusProcessingTypes.COMPLETE) {
+        return redirectRequest('/workspace', false, false);
+      }
+
+      // If not complete, fall through to show commit status page
+      return redirectRequest(`/workspace/commit/${status.ID}`, false, false);
+    } catch (_err) {
+      // On API error, redirect back to workspace with a generic failure hint
+      return redirectRequest('/workspace?commit=error', false, false);
     }
   },
 };
