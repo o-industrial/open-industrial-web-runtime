@@ -3,7 +3,7 @@ import type { EaCCloudAzureDetails } from '@fathym/eac-azure';
 import { loadEaCStewardSvc } from '@fathym/eac/steward/clients';
 import { EaCStatusProcessingTypes, waitForStatus } from '@fathym/eac/steward/status';
 import { EaCRuntimeHandlers } from '@fathym/eac/runtime/pipelines';
-import { OpenIndustrialWebState } from '../../../../../../src/state/OpenIndustrialWebState.ts';
+import { OpenIndustrialWebState } from '../../../../../src/state/OpenIndustrialWebState.ts';
 
 export const handler: EaCRuntimeHandlers<OpenIndustrialWebState> = {
   async POST(req, ctx) {
