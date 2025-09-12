@@ -14,12 +14,14 @@ export const handler: EaCRuntimeHandlers<OpenIndustrialWebState> = {
 
     // Build minimal EaC workspace update for cloud configuration
     const wkspc = {
-      EnterpriseLookup: ctx.State.WorkspaceLookup ?? ctx.Runtime.EaC!.EnterpriseLookup,
+      EnterpriseLookup:
+        ctx.State.WorkspaceLookup ?? ctx.Runtime.EaC!.EnterpriseLookup,
       Clouds: {
         [cloudLookup]: {
           Details: {
             Name: (formData.get('name') as string) ?? 'Workspace Cloud',
-            Description: (formData.get('description') as string) ??
+            Description:
+              (formData.get('description') as string) ??
               'The cloud used by the workspace.',
             ApplicationID: formData.get('application-id') as string,
             AuthKey: formData.get('auth-key') as string,
@@ -29,8 +31,8 @@ export const handler: EaCRuntimeHandlers<OpenIndustrialWebState> = {
             BillingScope: formData.get('billing-scope') as string,
             IsDev: (formData.get('is-dev') as string) === 'true' || undefined,
             Type: 'Azure',
-            Token: azureToken,
           } as EaCCloudAzureDetails,
+          Token: azureToken,
         },
       },
     };
@@ -41,7 +43,7 @@ export const handler: EaCRuntimeHandlers<OpenIndustrialWebState> = {
           deletes: {},
           eac: wkspc,
         },
-        true,
+        true
       );
 
       if (status.Processing === EaCStatusProcessingTypes.COMPLETE) {
