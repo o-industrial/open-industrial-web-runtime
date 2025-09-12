@@ -2,6 +2,7 @@
 import type { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
 import { Action, ActionStyleTypes } from '@o-industrial/common/atomic/atoms';
+import { WorkspaceList } from '@o-industrial/common/atomic/molecules';
 import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebState.ts';
 
 export const IsIsland = true;
@@ -13,16 +14,18 @@ type UserManagePageData = {
   Licenses: Record<string, any>;
   Cards: UserAccessCard[];
   AvailableConfigs: { lookup: string; name: string }[];
+  Workspaces: any[];
 };
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, UserManagePageData> = {
   GET: async (_req, ctx) => {
     const { username: rawUsername } = ctx.Params as { username: string };
     const username = decodeURIComponent(rawUsername || '');
-    const [lics, acs, eac] = await Promise.all([
+    const [lics, acs, eac, wss] = await Promise.all([
       ctx.State.OIClient.Admin.ListUserLicenses(username),
       ctx.State.OIClient.Admin.ListUserAccessCards(username),
       ctx.State.OIClient.Admin.GetEaC<any>(),
+      ctx.State.OIClient.Admin.ListUserWorkspaces(username),
     ]);
     const acMap: Record<string, { Details?: { Name?: string } }> = eac?.AccessConfigurations || {};
     const allCfgs = Object.entries(acMap).map(([lookup, ac]) => ({
@@ -36,6 +39,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, UserManagePag
       Licenses: lics,
       Cards: acs,
       AvailableConfigs: available,
+      Workspaces: wss,
     });
   },
   POST: async (req, ctx) => {
@@ -83,7 +87,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, UserManagePag
 };
 
 export default function AdminUserManagePage(
-  { Data: { Username, Licenses, Cards, AvailableConfigs } }: PageProps<UserManagePageData>,
+  { Data: { Username, Licenses, Cards, AvailableConfigs, Workspaces } }: PageProps<UserManagePageData>,
 ) {
   return (
     <div class='-:-:p-6 -:-:space-y-6'>
@@ -204,6 +208,24 @@ export default function AdminUserManagePage(
             ))}
           </div>
         </div>
+      </div>
+
+      {/* User Workspaces */}
+      <div class='-:-:space-y-3'>
+        <h2 class='-:-:text-lg -:-:font-semibold -:-:text-neutral-100'>Workspaces</h2>
+        {Workspaces.length === 0
+          ? <div class='-:-:text-neutral-400'>No workspaces found.</div>
+          : (
+            <WorkspaceList
+              workspaces={Workspaces}
+              onSelect={(eac) => {
+                const lookup = eac.EnterpriseLookup || '';
+                if (lookup) {
+                  location.href = `/admin/workspaces/${encodeURIComponent(lookup)}`;
+                }
+              }}
+            />
+          )}
       </div>
     </div>
   );
