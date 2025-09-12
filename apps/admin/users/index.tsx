@@ -11,6 +11,7 @@ type UsersPageData = {
   Users: { Username?: string; EnterpriseName?: string }[];
   Query: string;
   Invited?: string;
+  Deleted?: string;
   Username: string;
 };
 
@@ -23,10 +24,12 @@ export const handler: EaCRuntimeHandlerSet<
     const q = (url.searchParams.get('q') || '').trim();
     const users = await ctx.State.OIClient.Admin.ListUsers(q || undefined);
     const invited = url.searchParams.get('invited') || undefined;
+    const deleted = url.searchParams.get('deleted') || undefined;
     return ctx.Render({
       Users: users,
       Query: q,
       Invited: invited || undefined,
+      Deleted: deleted || undefined,
       Username: ctx.State.Username,
     });
   },
@@ -40,15 +43,24 @@ export const handler: EaCRuntimeHandlerSet<
         const fd = await req.formData();
         fd.forEach((v, k) => (payload[k] = String(v)));
       }
+      const action = (payload['action'] || '').trim();
+      if (action === 'deleteUser') {
+        const delUser = (payload['Username'] || '').trim();
+        if (!delUser) return new Response('Username is required', { status: 400 });
+        await ctx.State.OIClient.Admin.DeleteUser(delUser);
+        const redirect = new URL(ctx.Runtime.URLMatch.FromOrigin('/admin/users'));
+        redirect.searchParams.set('deleted', delUser);
+        return Response.redirect(redirect, 303);
+      } else {
+        const email = (payload['Email'] || payload['Username'] || '').trim();
+        if (!email) return new Response('Email is required', { status: 400 });
 
-      const email = (payload['Email'] || payload['Username'] || '').trim();
-      if (!email) return new Response('Email is required', { status: 400 });
+        await ctx.State.OIClient.Admin.InviteUser(email);
 
-      await ctx.State.OIClient.Admin.InviteUser(email);
-
-      const redirect = new URL(ctx.Runtime.URLMatch.FromOrigin('/admin/users'));
-      redirect.searchParams.set('invited', email);
-      return Response.redirect(redirect, 303);
+        const redirect = new URL(ctx.Runtime.URLMatch.FromOrigin('/admin/users'));
+        redirect.searchParams.set('invited', email);
+        return Response.redirect(redirect, 303);
+      }
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       return new Response(msg, { status: 500 });
@@ -57,7 +69,7 @@ export const handler: EaCRuntimeHandlerSet<
 };
 
 export default function AdminUsersPage({
-  Data: { Users, Query, Invited, Username },
+  Data: { Users, Query, Invited, Deleted, Username },
 }: PageProps<UsersPageData>) {
   const [email, setEmail] = useState('');
   const [search, setSearch] = useState(Query || '');
@@ -74,6 +86,11 @@ export default function AdminUsersPage({
       {Invited && (
         <div class='-:-:rounded-md -:-:border -:-:border-green-700 -:-:bg-green-950/70 -:-:text-green-200 -:-:px-3 -:-:py-2'>
           Invited {Invited} to admin.
+        </div>
+      )}
+      {Deleted && (
+        <div class='-:-:rounded-md -:-:border -:-:border-red-700 -:-:bg-red-950/70 -:-:text-red-200 -:-:px-3 -:-:py-2'>
+          Deleted {Deleted} from admin.
         </div>
       )}
 
@@ -112,13 +129,15 @@ export default function AdminUsersPage({
                 </p>
               </div>
               {u.Username && (
-                <Action
-                  href={`/admin/users/${encodeURIComponent(u.Username)}`}
-                  data-eac-bypass-base
-                  styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
-                >
-                  Manage
-                </Action>
+                <div class='-:-:flex -:-:gap-2'>
+                  <Action
+                    href={`/admin/users/${encodeURIComponent(u.Username)}`}
+                    data-eac-bypass-base
+                    styleType={ActionStyleTypes.Outline | ActionStyleTypes.Rounded}
+                  >
+                    Manage
+                  </Action>
+                </div>
               )}
             </div>
           </div>
@@ -134,6 +153,7 @@ export default function AdminUsersPage({
               data-eac-bypass-base
               class='-:-:grid -:-:grid-cols-1 md:-:-:grid-cols-3 -:-:gap-3 -:-:items-end'
             >
+              <input type='hidden' name='action' value='inviteUser' />
               <div class='md:-:-:col-span-2'>
                 <Input
                   label='Invite Admin (Email)'
