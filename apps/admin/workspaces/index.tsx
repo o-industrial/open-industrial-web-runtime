@@ -66,19 +66,17 @@ export default function WorkspacesPage({
           setSearch((e.target as HTMLInputElement).value)}
         placeholder='Search workspaces…'
       />
-      {loading
-        ? <div class='-:-:text-slate-400'>Loading…</div>
-        : (
-          <WorkspaceList
-            workspaces={workspaces}
-            onSelect={(eac) => {
-              const lookup = eac.EnterpriseLookup || '';
-              if (lookup) {
-                location.href = `/admin/workspaces/${encodeURIComponent(lookup)}`;
-              }
-            }}
-          />
-        )}
+      {loading ? <div class='-:-:text-slate-400'>Loading…</div> : (
+        <WorkspaceList
+          workspaces={workspaces}
+          onSelect={(eac) => {
+            const lookup = eac.EnterpriseLookup || '';
+            if (lookup) {
+              location.href = `/admin/workspaces/${encodeURIComponent(lookup)}`;
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

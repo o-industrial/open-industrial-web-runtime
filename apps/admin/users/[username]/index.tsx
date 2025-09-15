@@ -87,7 +87,9 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, UserManagePag
 };
 
 export default function AdminUserManagePage(
-  { Data: { Username, Licenses, Cards, AvailableConfigs, Workspaces } }: PageProps<UserManagePageData>,
+  { Data: { Username, Licenses, Cards, AvailableConfigs, Workspaces } }: PageProps<
+    UserManagePageData
+  >,
 ) {
   return (
     <div class='-:-:p-6 -:-:space-y-6'>
