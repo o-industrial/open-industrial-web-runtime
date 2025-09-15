@@ -13,6 +13,7 @@ import { EaCRuntimeContext } from '@fathym/eac/runtime';
 import { EaCAzureADProviderDetails } from '@fathym/eac-identity';
 import { createAzureADOAuthConfig, createOAuthHelpers } from '@fathym/common/oauth';
 import { EaCApplicationsRuntimeContext } from '@fathym/eac-applications/runtime';
+import { CurrentUserManager } from '../../src/managers/CurrentUserManager.ts';
 
 export default [
   agreementsBlockerMiddleware,
@@ -41,19 +42,14 @@ export function buildOpenIndustrialRuntimeMiddleware(
     const kv = await ctx.Runtime.IoC.Resolve(Deno.Kv, kvLookup);
     ctx.State.OIKV = kv;
 
+    ctx.State.CurrentUser = new CurrentUserManager(ctx.State.OIKV);
+
     const oiApiRoot = Deno.env.get('OPEN_INDUSTRIAL_API_ROOT')!;
     const apiBaseUrl = new URL(oiApiRoot);
 
     let lookup: string | undefined;
 
-    const current = await kv.get<string>([
-      'User',
-      username,
-      'Current',
-      'EnterpriseLookup',
-    ]);
-
-    lookup = current.value ?? undefined;
+    lookup = await ctx.State.CurrentUser.GetActiveWorkspace(username);
 
     ctx.State.OIJWT = await loadJwtConfig().Create({
       Username: username,
@@ -93,7 +89,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
       lookup = ctx.State.UserWorkspaces[0]?.EnterpriseLookup;
 
       if (lookup) {
-        await kv.set(['User', username, 'Current', 'EnterpriseLookup'], lookup);
+        await ctx.State.CurrentUser.SetActiveWorkspace(username, lookup);
 
         ctx.State.OIJWT = await loadJwtConfig().Create({
           Username: username,
@@ -137,7 +133,7 @@ export function buildOpenIndustrialRuntimeMiddleware(
 
       lookup = createResp.EnterpriseLookup;
 
-      await kv.set(['User', username, 'Current', 'EnterpriseLookup'], lookup);
+      await ctx.State.CurrentUser.SetActiveWorkspace(username, lookup);
 
       ctx.State.OIJWT = await loadJwtConfig().Create({
         Username: username,
