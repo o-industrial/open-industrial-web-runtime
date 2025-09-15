@@ -33,7 +33,7 @@
     "@fathym/atomic-icons": "jsr:@fathym/atomic-icons@0.0.97",
     "@fathym/common": "jsr:@fathym/common@0.2.266",
     "@fathym/eac": "jsr:@fathym/eac@0.2.120",
-    "@fathym/eac-applications": "jsr:@fathym/eac-applications@0.0.187",
+    "@fathym/eac-applications": "jsr:@fathym/eac-applications@0.0.190",
     // "@fathym/eac-applications": "../eac-applications/src/applications/.exports.ts",
     // "@fathym/eac-applications/modifiers": "../eac-applications/src/applications/modifiers/.exports.ts",
     // "@fathym/eac-applications/preact": "../eac-applications/src/preact/.exports.ts",
