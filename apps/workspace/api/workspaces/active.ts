@@ -22,8 +22,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
         ct.includes('multipart/form-data')
       ) {
         const form = await req.formData();
-        lookup =
-          (form.get('WorkspaceLookup') as string) ||
+        lookup = (form.get('WorkspaceLookup') as string) ||
           (form.get('EnterpriseLookup') as string) ||
           (form.get('Lookup') as string) ||
           '';
@@ -34,8 +33,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
           lookup = body.WorkspaceLookup || body.EnterpriseLookup || body.Lookup || '';
         } catch {
           const form = await req.formData();
-          lookup =
-            (form.get('WorkspaceLookup') as string) ||
+          lookup = (form.get('WorkspaceLookup') as string) ||
             (form.get('EnterpriseLookup') as string) ||
             (form.get('Lookup') as string) ||
             '';
