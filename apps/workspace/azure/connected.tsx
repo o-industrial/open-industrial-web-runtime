@@ -12,14 +12,14 @@ export default function AzureConnectedPage() {
       try {
         const message = { type: 'azure-auth-success' } as const;
 
-        if (window.opener && !window.opener.closed) {
-          window.opener.postMessage(message, window.location.origin);
+        if (globalThis.opener && !globalThis.opener.closed) {
+          globalThis.opener.postMessage(message, location.origin);
           setStatus('sent');
 
           // Give the opener a moment to process, then close.
           setTimeout(() => {
             try {
-              window.close();
+              self.close();
             } catch (_) {
               // ignore if close is blocked
             }
@@ -36,26 +36,24 @@ export default function AzureConnectedPage() {
     notifyOpener();
   }, []);
 
-  const headline = status === 'sent'
-    ? 'Azure sign-in complete'
-    : 'Azure sign-in ready';
+  const headline = status === 'sent' ? 'Azure sign-in complete' : 'Azure sign-in ready';
 
   const details = status === 'sent'
     ? 'You can close this window. Your workspace should update momentarily.'
     : 'Please return to the workspace tab to continue. If this window did not open automatically, close it now.';
 
   return (
-    <main class="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6">
-      <div class="max-w-md text-center space-y-3">
-        <h1 class="text-2xl font-semibold">{headline}</h1>
-        <p class="text-sm text-slate-300">{details}</p>
+    <main class='min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6'>
+      <div class='max-w-md text-center space-y-3'>
+        <h1 class='text-2xl font-semibold'>{headline}</h1>
+        <p class='text-sm text-slate-300'>{details}</p>
         {status !== 'sent' && (
           <button
-            type="button"
-            class="inline-flex items-center justify-center rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-sm font-medium hover:border-slate-500 hover:bg-slate-700"
+            type='button'
+            class='inline-flex items-center justify-center rounded-full border border-slate-600 bg-slate-800 px-4 py-2 text-sm font-medium hover:border-slate-500 hover:bg-slate-700'
             onClick={() => {
               try {
-                window.close();
+                self.close();
               } catch (_) {
                 // ignore if close is blocked
               }

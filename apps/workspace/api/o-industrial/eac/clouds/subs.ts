@@ -78,9 +78,7 @@ export const handler: EaCRuntimeHandlers<OpenIndustrialWebState> = {
 
       return Response.json({ status, redirect });
     } catch (err) {
-      const message = err instanceof Error
-        ? err.message
-        : 'Failed to start managed subscription.';
+      const message = err instanceof Error ? err.message : 'Failed to start managed subscription.';
 
       return Response.json({ error: message }, { status: 500 });
     }
