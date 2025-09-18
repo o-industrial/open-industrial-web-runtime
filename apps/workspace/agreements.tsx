@@ -23,7 +23,7 @@ export const handler: EaCRuntimeHandlerSet<
 
     const agreementsToAccept = agreements.filter((agreement) => {
       const acceptedVersion = userAccepted[agreement.key];
-      return !acceptedVersion || acceptedVersion < agreement.version;
+      return !acceptedVersion || acceptedVersion !== agreement.version;
     });
 
     const url = new URL(req.url);

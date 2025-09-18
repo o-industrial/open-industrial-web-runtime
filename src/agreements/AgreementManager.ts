@@ -2,6 +2,13 @@ import { merge } from '@fathym/common';
 import { AgreementData } from '@o-industrial/common/atomic/organisms';
 import { IoCContainer } from '@fathym/ioc';
 import { saveWithRetry } from '../utils/saveWithRetry.ts';
+import { fromFileUrl, join } from 'jsr:@std/path@1.0.6';
+
+type AgreementVersionCacheEntry = {
+  version: string;
+  mtimeMs: number | null;
+  size: number;
+};
 
 export class AgreementManager {
   static Definitions = [
@@ -23,39 +30,26 @@ export class AgreementManager {
 
   static RootUrl = '/assets/agreements';
 
+  private static versionCache = new Map<string, AgreementVersionCacheEntry>();
+
   constructor(
     protected ioc: IoCContainer,
     protected oiKvLookup: string = 'oi',
   ) {}
 
-  /**
-   * Loads the system's defined agreements and computes their version from filesystem metadata.
-   * @returns A Promise resolving to an array of AgreementData.
-   */
   async LoadAgreements(): Promise<AgreementData[]> {
-    const localFilesRoot = Deno.env.get('LOCAL_FILES_ROOT') ?? '';
-
-    const agreementsDir = import.meta
-      .resolve(`${localFilesRoot}../../apps/assets/agreements`)
-      .replace('file:///', '');
-
-    console.log(
-      '----------------------------------agreementsDir-------------------------------------------------------------',
-    );
-    console.log(agreementsDir);
+    const agreementsDir = AgreementManager.resolveAgreementsDir();
 
     const agreements = await Promise.all(
       AgreementManager.Definitions.map(async (def) => {
-        const filePath = `${agreementsDir}/${def.file}`;
+        const filePath = join(agreementsDir, def.file);
 
         try {
-          console.log(
-            '----------------------------------filePath-------------------------------------------------------------',
-          );
-          console.log(filePath);
-
           const stat = await Deno.stat(filePath);
-          const version = stat.mtime?.toISOString() ?? new Date().toISOString();
+          const version = await AgreementManager.getAgreementVersion(
+            filePath,
+            stat,
+          );
 
           return {
             key: def.key,
@@ -77,12 +71,6 @@ export class AgreementManager {
     return agreements.filter((a): a is AgreementData => Boolean(a));
   }
 
-  /**
-   * Loads the agreements a user has accepted from DenoKV.
-   * @param username The user's username.
-   * @returns A Promise resolving to a mapping of agreement keys to version strings.
-   * @throws Error if the username is not provided.
-   */
   async LoadUserAccepted(username: string): Promise<Record<string, string>> {
     if (!username) {
       throw new Error('LoadUserAccepted: Username is required.');
@@ -97,14 +85,6 @@ export class AgreementManager {
     return accepted?.value ?? {};
   }
 
-  /**
-   * Saves the user's newly accepted agreements, merging safely with existing accepted agreements.
-   * Uses optimistic concurrency and retries once on conflict.
-   *
-   * @param username The user's username.
-   * @param agreedKeys Array of agreement keys the user is accepting.
-   * @throws Error if username is missing or concurrency issues persist.
-   */
   async SaveUserAccepted(
     username: string,
     agreedKeys: string[],
@@ -147,20 +127,57 @@ export class AgreementManager {
     });
   }
 
-  /**
-   * Checks whether any of the current system agreements are out-of-date compared to the user's accepted agreements.
-   *
-   * @param agreements Array of system AgreementData objects.
-   * @param userAccepted Record of agreement keys and versions the user has accepted.
-   * @returns True if any agreement is missing or outdated, otherwise false.
-   */
   AgreementsOutOfDate(
     agreements: AgreementData[],
     userAccepted: Record<string, string>,
   ): boolean {
     return agreements.some((agreement) => {
       const acceptedVersion = userAccepted[agreement.key];
-      return !acceptedVersion || acceptedVersion < agreement.version;
+      return !acceptedVersion || acceptedVersion !== agreement.version;
     });
+  }
+
+  private static resolveAgreementsDir(): string {
+    const localFilesRoot = Deno.env.get('LOCAL_FILES_ROOT') ?? '';
+    const resolved = import.meta.resolve(
+      `${localFilesRoot}../../apps/assets/agreements/`,
+    );
+
+    return fromFileUrl(new URL(resolved));
+  }
+
+  private static async getAgreementVersion(
+    filePath: string,
+    stat: Deno.FileInfo,
+  ): Promise<string> {
+    const cacheEntry = AgreementManager.versionCache.get(filePath);
+    const mtimeMs = stat.mtime?.getTime() ?? null;
+    const size = stat.size ?? 0;
+
+    if (
+      cacheEntry &&
+      cacheEntry.mtimeMs === mtimeMs &&
+      cacheEntry.size === size
+    ) {
+      return cacheEntry.version;
+    }
+
+    const version = await AgreementManager.hashFile(filePath);
+
+    AgreementManager.versionCache.set(filePath, {
+      version,
+      mtimeMs,
+      size,
+    });
+
+    return version;
+  }
+
+  private static async hashFile(filePath: string): Promise<string> {
+    const bytes = await Deno.readFile(filePath);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
   }
 }
