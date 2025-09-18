@@ -2,7 +2,7 @@ import { merge } from '@fathym/common';
 import { AgreementData } from '@o-industrial/common/atomic/organisms';
 import { IoCContainer } from '@fathym/ioc';
 import { saveWithRetry } from '../utils/saveWithRetry.ts';
-import { fromFileUrl, join } from 'jsr:@std/path@1.0.6';
+import { fromFileUrl, join } from '@std/path';
 
 type AgreementVersionCacheEntry = {
   version: string;
