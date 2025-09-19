@@ -2,7 +2,10 @@ import { EaCAtomicIconsProcessor } from '@fathym/atomic-icons';
 import { FathymAtomicIconsPlugin } from '@fathym/atomic-icons/plugin';
 import { DefaultMyCoreProcessorHandlerResolver } from './DefaultMyCoreProcessorHandlerResolver.ts';
 import { IoCContainer } from '@fathym/ioc';
-import { EaCRuntimeConfig, EaCRuntimePluginConfig } from '@fathym/eac/runtime/config';
+import {
+  EaCRuntimeConfig,
+  EaCRuntimePluginConfig,
+} from '@fathym/eac/runtime/config';
 import { EaCRuntimePlugin } from '@fathym/eac/runtime/plugins';
 import { EverythingAsCode } from '@fathym/eac';
 import { EverythingAsCodeApplications } from '@fathym/eac-applications';
@@ -10,6 +13,7 @@ import {
   EaCDFSProcessor,
   EaCOAuthProcessor,
   EaCPreactAppProcessor,
+  EaCProxyProcessor,
   EaCRedirectProcessor,
   EaCTailwindProcessor,
 } from '@fathym/eac-applications/processors';
@@ -24,7 +28,10 @@ import {
   EaCJSRDistributedFileSystemDetails,
   EaCLocalDistributedFileSystemDetails,
 } from '@fathym/eac/dfs';
-import { EaCAzureADB2CProviderDetails, EaCAzureADProviderDetails } from '@fathym/eac-identity';
+import {
+  EaCAzureADB2CProviderDetails,
+  EaCAzureADProviderDetails,
+} from '@fathym/eac-identity';
 import OpenIndustrialLicensingPlugin from './OpenIndustrialLicensingPlugin.ts';
 import OpenIndustrialMSALPlugin from './OpenIndustrialMSALPlugin.ts';
 import { EaCMSALProcessor } from '@fathym/msal';
@@ -117,7 +124,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 PathPattern: '*',
                 Priority: 100,
               },
-              home2: {
+              home_plasmic: {
                 PathPattern: '/landing*',
                 Priority: 300,
               },
@@ -195,9 +202,15 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               CacheControl: {
                 'text\\/html': `private, max-age=${60 * 5}`,
                 'image\\/': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/javascript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/typescript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'application\\/javascript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'application\\/typescript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'text\\/css': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
               },
             } as EaCDFSProcessor,
           },
@@ -263,7 +276,19 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               ],
             } as EaCPreactAppProcessor,
           },
-          home2: {
+          home: {
+            Details: {
+              Name: 'Synaptic',
+              Description: 'The API for accessing synaptic cricuits',
+            },
+            ModifierResolvers: {},
+            Processor: {
+              Type: 'Proxy',
+              ProxyRoot:
+                'https://vercel.com/kilian-carrolls-projects/v0-open-industrial-homepage',
+            } as EaCProxyProcessor,
+          },
+          home_plasmic: {
             Details: {
               Name: 'Marketing Plasmic Site',
               Description: 'Marketing Plasmic Home site.',
@@ -279,13 +304,19 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               CacheControl: {
                 'text\\/html': `private, max-age=${60 * 5}`,
                 'image\\/': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/javascript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/typescript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'application\\/javascript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'application\\/typescript': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
+                'text\\/css': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
               },
             } as EaCDFSProcessor,
           },
-          home: {
+          home_old: {
             Details: {
               Name: 'Home Site',
               Description: 'Home site.',
@@ -313,9 +344,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Type: 'MSAL',
               Config: {
                 MSALSignInOptions: {
-                  Scopes: [
-                    'https://management.azure.com/user_impersonation',
-                  ],
+                  Scopes: ['https://management.azure.com/user_impersonation'],
                   RedirectURI: '/azure/oauth/callback',
                   SuccessRedirect: '/workspace',
                 },
@@ -357,7 +386,9 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               ConfigPath: './tailwind.config.ts',
               StylesTemplatePath: './apps/tailwind/styles.css',
               CacheControl: {
-                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
+                'text\\/css': `public, max-age=${
+                  60 * 60 * 24 * 365
+                }, immutable`,
               },
             } as EaCTailwindProcessor,
           },
@@ -396,8 +427,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'DenoKV',
               Name: 'OI',
-              Description: 'The Deno KV database to use for open industrial web',
-              DenoKVPath: Deno.env.get('OPEN_INDUSTRIAL_DENO_KV_PATH') || undefined,
+              Description:
+                'The Deno KV database to use for open industrial web',
+              DenoKVPath:
+                Deno.env.get('OPEN_INDUSTRIAL_DENO_KV_PATH') || undefined,
             } as EaCDenoKVDetails,
           },
         },
@@ -523,14 +556,16 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'BaseHREF',
               Name: 'Base HREF',
-              Description: 'Adjusts the base HREF of a response based on configureation.',
+              Description:
+                'Adjusts the base HREF of a response based on configureation.',
             } as EaCBaseHREFModifierDetails,
           },
           keepAlive: {
             Details: {
               Type: 'KeepAlive',
               Name: 'Deno KV Cache',
-              Description: 'Lightweight cache to use that stores data in a DenoKV database.',
+              Description:
+                'Lightweight cache to use that stores data in a DenoKV database.',
               KeepAlivePath: '/_eac/alive',
             } as EaCKeepAliveModifierDetails,
           },
@@ -538,7 +573,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'OAuth',
               Name: 'OAuth',
-              Description: 'Used to restrict user access to various applications.',
+              Description:
+                'Used to restrict user access to various applications.',
               ProviderLookup: 'adb2c',
               SignInPath: '/oauth/signin',
             } as EaCOAuthModifierDetails,
@@ -549,7 +585,8 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             DatabaseLookup: 'oauth',
             Details: {
               Name: 'Azure ADB2C OAuth Provider',
-              Description: 'The provider used to connect with our azure adb2c instance',
+              Description:
+                'The provider used to connect with our azure adb2c instance',
               ClientID: Deno.env.get('AZURE_ADB2C_CLIENT_ID')!,
               ClientSecret: Deno.env.get('AZURE_ADB2C_CLIENT_SECRET')!,
               Scopes: ['openid', Deno.env.get('AZURE_ADB2C_CLIENT_ID')!],

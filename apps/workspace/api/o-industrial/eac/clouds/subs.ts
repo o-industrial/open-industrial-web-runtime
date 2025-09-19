@@ -37,9 +37,9 @@ export const handler: EaCRuntimeHandlers<OpenIndustrialWebState> = {
     const agreementType = body.agreementType ?? Deno.env.get('AZURE_MANAGED_AGREEMENT_TYPE');
 
     const cloudLookup = 'Workspace';
-    const workspaceName = ctx.State.Workspace?.Details?.Name ?? 'Workspace';
+    const workspaceName = ctx.State.Workspace.EnterpriseLookup;
 
-    const name = body.name ?? `${workspaceName} Managed Cloud`;
+    const name = workspaceName;
     const description = body.description ??
       'Managed Azure subscription provisioned by Open Industrial.';
     const isDev = body.isDev ?? true;

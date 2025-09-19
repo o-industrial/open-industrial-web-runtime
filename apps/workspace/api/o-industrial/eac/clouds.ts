@@ -17,6 +17,7 @@ export const handler: EaCRuntimeHandlers<OpenIndustrialWebState> = {
       EnterpriseLookup: ctx.State.WorkspaceLookup ?? ctx.Runtime.EaC!.EnterpriseLookup,
       Clouds: {
         [cloudLookup]: {
+          Token: azureToken,
           Details: {
             Name: (formData.get('name') as string) ?? 'Workspace Cloud',
             Description: (formData.get('description') as string) ??
@@ -30,7 +31,6 @@ export const handler: EaCRuntimeHandlers<OpenIndustrialWebState> = {
             IsDev: (formData.get('is-dev') as string) === 'true' || undefined,
             Type: 'Azure',
           } as EaCCloudAzureDetails,
-          Token: azureToken,
         },
       },
     };
