@@ -1,4 +1,28 @@
 import { PageProps } from '@fathym/eac-applications/preact';
+import { MarketingNavigation } from '@o-industrial/common/atomic/organisms';
+import {
+  ctaLinks,
+  footerPrimaryLinks,
+  footerSecondaryLinks,
+  MarketingNavLink,
+  marketingTagline,
+  primaryNavLinks,
+} from '../../src/marketing/navigation.ts';
+
+const renderFooterLink = (
+  link: MarketingNavLink,
+  className = 'transition-colors hover:text-neutral-900 dark:hover:text-white',
+) => (
+  <a
+    key={link.href}
+    href={link.href}
+    target={link.external ? '_blank' : undefined}
+    rel={link.external ? 'noopener noreferrer' : undefined}
+    class={`text-sm ${className}`}
+  >
+    {link.label}
+  </a>
+);
 
 export default function HomeLayout({
   Data: _Data,
@@ -11,7 +35,7 @@ export default function HomeLayout({
         <meta charset='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
 
-        <title>OpenIndustrial | Reflex-Powered Runtime</title>
+        <title>Open Industrial | Marketing Runtime</title>
 
         <link
           rel='shortcut icon'
@@ -35,51 +59,81 @@ export default function HomeLayout({
       </head>
 
       <body class='bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50'>
-        <div class='min-h-screen flex flex-col'>
-          {/* Sticky Header with Logo */}
-          <header class='fixed top-0 z-50 w-full backdrop-blur transition-all bg-white/20 dark:bg-neutral-950/20 border-b border-neutral-200 dark:border-white/10'>
-            <div class='max-w-7xl mx-auto px-6 py-4 flex items-center'>
-              <a href='/' class='flex items-center space-x-2 group'>
-                {/* Light and Dark Mode Logos */}
+        <div class='flex min-h-screen flex-col'>
+          <header class='sticky top-0 z-50 border-b border-neutral-200/80 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-neutral-950/80'>
+            <div class='mx-auto flex max-w-7xl items-center gap-4 px-6 py-4'>
+              <a href='/' class='flex items-center gap-3 group' data-eac-bypass-base>
                 <img
                   src='/assets/logos/openIndustrialLogo.svg'
-                  alt='OpenIndustrial'
-                  class='h-8 block dark:hidden group-hover:opacity-90 transition-opacity duration-200'
+                  alt='Open Industrial'
+                  class='h-8 w-auto transition-opacity duration-200 group-hover:opacity-90 dark:hidden'
                   data-eac-bypass-base
                 />
                 <img
                   src='/assets/logos/openIndustrialLogoWhiteOpen.svg'
-                  alt='OpenIndustrial'
-                  class='h-8 hidden dark:block group-hover:opacity-90 transition-opacity duration-200'
+                  alt='Open Industrial'
+                  class='hidden h-8 w-auto transition-opacity duration-200 group-hover:opacity-90 dark:block'
                   data-eac-bypass-base
                 />
               </a>
+
+              <div class='ml-auto flex flex-1 justify-end'>
+                <MarketingNavigation
+                  links={primaryNavLinks}
+                  ctas={ctaLinks}
+                  class='w-full justify-end'
+                />
+              </div>
             </div>
           </header>
 
-          <main class='flex-1 overflow-x-hidden overflow-y-auto mt-16'>
+          <main class='flex-1 overflow-y-auto overflow-x-hidden'>
             <Component />
           </main>
 
-          {/* Footer */}
-          <footer class='py-12 px-6 border-t border-neutral-200 dark:border-white/10 text-center text-sm text-neutral-600 dark:text-neutral-500'>
-            <div class='mb-4'>
-              <img
-                src='/assets/logos/openIndustrialLogo.svg'
-                alt='OpenIndustrial'
-                class='mx-auto h-6 block dark:hidden opacity-70'
-                data-eac-bypass-base
-              />
-              <img
-                src='/assets/logos/openIndustrialLogoAllWhite.svg'
-                alt='OpenIndustrial'
-                class='mx-auto h-6 hidden dark:block opacity-70'
-                data-eac-bypass-base
-              />
+          <footer class='border-t border-neutral-200/80 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-neutral-950/80'>
+            <div class='mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-12 md:grid-cols-[1fr_auto] md:items-start'>
+              <div class='max-w-xl space-y-4'>
+                <a href='/' class='inline-flex items-center gap-3 group' data-eac-bypass-base>
+                  <img
+                    src='/assets/logos/openIndustrialLogo.svg'
+                    alt='Open Industrial'
+                    class='h-6 w-auto transition-opacity duration-200 group-hover:opacity-90 dark:hidden'
+                    data-eac-bypass-base
+                  />
+                  <img
+                    src='/assets/logos/openIndustrialLogoAllWhite.svg'
+                    alt='Open Industrial'
+                    class='hidden h-6 w-auto transition-opacity duration-200 group-hover:opacity-90 dark:block'
+                    data-eac-bypass-base
+                  />
+                </a>
+                <p class='text-sm text-neutral-600 dark:text-neutral-400'>{marketingTagline}</p>
+              </div>
+
+              <div class='flex flex-col gap-6 text-sm sm:flex-row'>
+                <div class='flex flex-col gap-2 text-neutral-600 dark:text-neutral-300'>
+                  {footerPrimaryLinks.map((link) =>
+                    renderFooterLink(
+                      link,
+                      'text-sm text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white',
+                    )
+                  )}
+                </div>
+                <div class='flex flex-col gap-2 text-neutral-600 dark:text-neutral-300'>
+                  {footerSecondaryLinks.map((link) =>
+                    renderFooterLink(
+                      link,
+                      'text-sm text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white',
+                    )
+                  )}
+                </div>
+              </div>
             </div>
-            <p>
-              © {new Date().getFullYear()} OpenIndustrial. All rights reserved.
-            </p>
+
+            <div class='px-6 pb-10 text-center text-xs text-neutral-500 dark:text-neutral-500'>
+              Ac {new Date().getFullYear()} Open Industrial. All rights reserved.
+            </div>
           </footer>
         </div>
       </body>
