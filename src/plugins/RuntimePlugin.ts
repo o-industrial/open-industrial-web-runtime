@@ -118,10 +118,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 PathPattern: '*',
                 Priority: 100,
               },
-              home_plasmic: {
-                PathPattern: '/landing*',
-                Priority: 300,
-              },
+              // home_plasmic: {
+              //   PathPattern: '/landing*',
+              //   Priority: 300,
+              // },
               licensingApi: {
                 PathPattern: '/workspace/api/o-industrial/licensing/*',
                 Priority: 700,
@@ -264,7 +264,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               ],
             } as EaCPreactAppProcessor,
           },
-          home: {
+          home_new: {
             Details: {
               Name: 'Synaptic',
               Description: 'The API for accessing synaptic cricuits',
@@ -275,7 +275,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               ProxyRoot: 'https://vercel.com/kilian-carrolls-projects/v0-open-industrial-homepage',
             } as EaCProxyProcessor,
           },
-          home_plasmic: {
+          home: {
             Details: {
               Name: 'Marketing Plasmic Site',
               Description: 'Marketing Plasmic Home site.',
