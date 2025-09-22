@@ -118,10 +118,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 PathPattern: '*',
                 Priority: 100,
               },
-              // home_plasmic: {
-              //   PathPattern: '/landing*',
-              //   Priority: 300,
-              // },
+              home_plasmic: {
+                PathPattern: '/landing*',
+                Priority: 300,
+              },
               licensingApi: {
                 PathPattern: '/workspace/api/o-industrial/licensing/*',
                 Priority: 700,
@@ -275,7 +275,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               ProxyRoot: 'https://vercel.com/kilian-carrolls-projects/v0-open-industrial-homepage',
             } as EaCProxyProcessor,
           },
-          home: {
+          home_plasmic: {
             Details: {
               Name: 'Marketing Plasmic Site',
               Description: 'Marketing Plasmic Home site.',
@@ -297,7 +297,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             } as EaCDFSProcessor,
           },
-          home_old: {
+          home: {
             Details: {
               Name: 'Home Site',
               Description: 'Home site.',
