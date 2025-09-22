@@ -1,14 +1,13 @@
-import type {
-  MarketingNavCTA,
-  MarketingNavLink,
-} from '../../../open-industrial-reference-architecture/atomic/organisms/marketing/NavigationBar.tsx';
-
-export type { MarketingNavCTA, MarketingNavLink };
+import type { MarketingNavCTA, MarketingNavLink } from '@o-industrial/common/atomic/organisms';
 
 export const primaryNavLinks: MarketingNavLink[] = [
   { label: 'About', href: '/about' },
   { label: 'Batch Quality', href: '/use-case/batch-quality' },
-  { label: 'Docs', href: 'https://www.openindustrial.co/docs/', external: true },
+  {
+    label: 'Docs',
+    href: 'https://www.openindustrial.co/docs/',
+    external: true,
+  },
   { label: 'Contact', href: '/contact' },
 ];
 
@@ -28,8 +27,16 @@ export const footerPrimaryLinks: MarketingNavLink[] = [
 ];
 
 export const footerSecondaryLinks: MarketingNavLink[] = [
-  { label: 'Docs', href: 'https://www.openindustrial.co/docs/', external: true },
-  { label: 'Workspace', href: 'https://www.openindustrial.co/workspace', external: true },
+  {
+    label: 'Docs',
+    href: 'https://www.openindustrial.co/docs/',
+    external: true,
+  },
+  {
+    label: 'Workspace',
+    href: 'https://www.openindustrial.co/workspace',
+    external: true,
+  },
 ];
 
 export const marketingTagline =

@@ -1,6 +1,6 @@
 import type { ComponentType } from 'preact';
 import type { JSX } from 'preact';
-import type { GradientIntent } from '@o-industrial/common/atomic/atoms/marketing/GradientIconBadge.tsx';
+import type { GradientIntent } from '@o-industrial/common/atomic/atoms';
 
 export type MarketingActionIntent = 'primary' | 'secondary' | 'ghost';
 
