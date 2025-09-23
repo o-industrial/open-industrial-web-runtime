@@ -21,7 +21,8 @@ export default function SharedTruthSection(): JSX.Element {
         ),
         description: (
           <span class='text-base text-neutral-300 dark:text-neutral-300'>
-            Give operations, quality, and IT the same live source of truth to coordinate faster decisions.
+            Give operations, quality, and IT the same live source of truth to coordinate faster
+            decisions.
           </span>
         ),
         align: 'center',
@@ -33,4 +34,3 @@ export default function SharedTruthSection(): JSX.Element {
     />
   );
 }
-

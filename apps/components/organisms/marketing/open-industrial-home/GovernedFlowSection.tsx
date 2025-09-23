@@ -1,4 +1,4 @@
-﻿import { JSX } from 'preact';
+import { JSX } from 'preact';
 
 import { StepsSection } from '@o-industrial/common/atomic/organisms';
 
@@ -19,7 +19,8 @@ export default function GovernedFlowSection(): JSX.Element {
         ),
         description: (
           <span class='block text-base text-neon-indigo-100/80'>
-            Three steps to move explainable answers into production workflows without leaving your governed boundary.
+            Three steps to move explainable answers into production workflows without leaving your
+            governed boundary.
           </span>
         ),
         align: 'center',

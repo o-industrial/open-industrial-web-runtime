@@ -1,4 +1,4 @@
-﻿import { JSX } from 'preact';
+import { JSX } from 'preact';
 
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 import { SectionHeader } from '@o-industrial/common/atomic/molecules';
@@ -15,8 +15,7 @@ export default function UnifiedMetricsSection(): JSX.Element {
     {
       label: 'Pre-built integrations',
       value: `${integrationCount}+`,
-      description:
-        'Protocols, middleware, and line-of-business systems ready to connect.',
+      description: 'Protocols, middleware, and line-of-business systems ready to connect.',
     },
     {
       label: 'Steps to governed insight',
@@ -26,8 +25,7 @@ export default function UnifiedMetricsSection(): JSX.Element {
     {
       label: 'Cloud control options',
       value: `${homeContent.cloudControlItems.length}`,
-      description:
-        'Run in your tenant, shared cloud, or fully managed environments.',
+      description: 'Run in your tenant, shared cloud, or fully managed environments.',
     },
   ];
 
@@ -42,9 +40,11 @@ export default function UnifiedMetricsSection(): JSX.Element {
         {...homeContent.valuePropositionHeading}
         align='center'
         class='relative mx-auto max-w-3xl text-center'
-        title={(
+        title={
           <span class='block text-balance leading-tight'>
-            <span class='block text-sm font-semibold uppercase tracking-[0.34em] text-white/55'>Unified operational intelligence</span>
+            <span class='block text-sm font-semibold uppercase tracking-[0.34em] text-white/55'>
+              Unified operational intelligence
+            </span>
             <span class='mt-4 block text-3xl font-semibold sm:text-[2.6rem]'>
               Governing data from control room to boardroom
             </span>
@@ -52,12 +52,13 @@ export default function UnifiedMetricsSection(): JSX.Element {
               Metrics ready for every workflow
             </span>
           </span>
-        )}
-        description={(
+        }
+        description={
           <span class='mt-6 block text-base text-white/70'>
-            Open Industrial ingests live telemetry and orchestrates governed activation across your operational stack.
+            Open Industrial ingests live telemetry and orchestrates governed activation across your
+            operational stack.
           </span>
-        )}
+        }
       />
       <div class='grid w-full gap-6 md:grid-cols-3'>
         {metrics.map((metric) => (

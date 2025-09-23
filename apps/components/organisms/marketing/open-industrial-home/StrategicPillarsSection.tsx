@@ -1,4 +1,4 @@
-﻿import { JSX } from 'preact';
+import { JSX } from 'preact';
 
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 
@@ -14,8 +14,7 @@ const pillars = [
   },
   {
     title: 'Explainable intelligence',
-    description:
-      'Every answer shows its KQL so engineers can validate context before action.',
+    description: 'Every answer shows its KQL so engineers can validate context before action.',
     badge: 'Explainability',
     accent: 'from-neon-indigo-600 via-neon-blue-500 to-neon-cyan-400',
     glow:
@@ -23,8 +22,7 @@ const pillars = [
   },
   {
     title: 'Activation anywhere',
-    description:
-      'Publish queries as APIs, dashboards, and automations with zero manual lift.',
+    description: 'Publish queries as APIs, dashboards, and automations with zero manual lift.',
     badge: 'Activation',
     accent: 'from-neon-cyan-400 via-neon-green-400 to-neon-green-600',
     glow:
@@ -56,7 +54,8 @@ export default function StrategicPillarsSection(): JSX.Element {
           Guardrails that make Open Industrial different
         </h2>
         <p class='mt-4 text-base text-neutral-300'>
-          Each pillar keeps human oversight, governance, and activation aligned—so teams can ship confident, explainable outcomes.
+          Each pillar keeps human oversight, governance, and activation aligned—so teams can ship
+          confident, explainable outcomes.
         </p>
       </header>
 
@@ -71,7 +70,9 @@ export default function StrategicPillarsSection(): JSX.Element {
               class={`pointer-events-none absolute -top-20 right-[-35%] h-60 w-60 rounded-full bg-gradient-to-br opacity-80 blur-3xl transition-opacity duration-500 group-hover:opacity-100 ${pillar.glow}`}
             />
             <div class='relative flex items-center justify-between text-xs uppercase tracking-[0.3em] text-neutral-300/80'>
-              <span class={`inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br text-[0.7rem] font-semibold text-white shadow-lg shadow-black/20 ${pillar.accent}`}>
+              <span
+                class={`inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br text-[0.7rem] font-semibold text-white shadow-lg shadow-black/20 ${pillar.accent}`}
+              >
                 {String(index + 1).padStart(2, '0')}
               </span>
               <span class='font-medium text-neutral-200'>{pillar.badge}</span>

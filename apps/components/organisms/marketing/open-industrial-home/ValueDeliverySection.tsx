@@ -23,7 +23,8 @@ export default function ValueDeliverySection(): JSX.Element {
         ),
         description: (
           <span class='mx-auto mt-4 block max-w-3xl text-base text-white/70'>
-            Break down data silos across OT and IT systems by turning live plant data into actionable, audit-ready insight your teams can act on.
+            Break down data silos across OT and IT systems by turning live plant data into
+            actionable, audit-ready insight your teams can act on.
           </span>
         ),
         align: 'center',

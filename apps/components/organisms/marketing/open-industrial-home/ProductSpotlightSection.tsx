@@ -1,4 +1,4 @@
-﻿import { JSX } from 'preact';
+import { JSX } from 'preact';
 
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 import { SectionHeader } from '@o-industrial/common/atomic/molecules';
@@ -34,7 +34,7 @@ export default function ProductSpotlightSection(): JSX.Element {
               {...homeContent.valuePropositionHeading}
               align='left'
               class='text-left'
-              title={(
+              title={
                 <span class='block text-balance leading-tight'>
                   <span class='block text-neutral-900 dark:text-white'>
                     Connect your data.
@@ -43,12 +43,12 @@ export default function ProductSpotlightSection(): JSX.Element {
                     Ask anything. Share anywhere.
                   </span>
                 </span>
-              )}
-              description={(
+              }
+              description={
                 <span class='text-base text-neutral-600 dark:text-neutral-300'>
                   {homeContent.valuePropositionHeading.description}
                 </span>
-              )}
+              }
             />
             <div class='space-y-4'>
               {spotlightHighlights.map((item, index) => {
@@ -73,7 +73,9 @@ export default function ProductSpotlightSection(): JSX.Element {
                     <div
                       class={`relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-white shadow-lg shadow-black/30 ${badgeGradient}`}
                     >
-                      {item.icon ? <item.icon class='h-6 w-6' /> : <span class='text-sm font-semibold'>{index + 1}</span>}
+                      {item.icon
+                        ? <item.icon class='h-6 w-6' />
+                        : <span class='text-sm font-semibold'>{index + 1}</span>}
                     </div>
                     <div class='relative space-y-1'>
                       <h4 class='text-base font-semibold text-white'>{item.title}</h4>

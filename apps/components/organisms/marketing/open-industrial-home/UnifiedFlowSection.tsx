@@ -21,7 +21,8 @@ export default function UnifiedFlowSection(): JSX.Element {
         ),
         description: (
           <span class='text-base text-neutral-300 dark:text-neutral-300'>
-            Visualize how telemetry lands in Open Industrial and flows back out into apps, agents, and APIs.
+            Visualize how telemetry lands in Open Industrial and flows back out into apps, agents,
+            and APIs.
           </span>
         ),
         align: 'center',
@@ -33,4 +34,3 @@ export default function UnifiedFlowSection(): JSX.Element {
     />
   );
 }
-

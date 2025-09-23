@@ -41,19 +41,19 @@ export default function HeroExperienceSection(): JSX.Element {
         <div class='space-y-10'>
           <SectionHeader
             eyebrow={homeContent.hero.eyebrow}
-            title={(
+            title={
               <span class='block text-balance leading-tight'>
                 Ask anything about your plant{' '}
                 <span class='bg-gradient-to-r from-neon-purple-500 via-neon-blue-500 to-neon-green-400 bg-clip-text text-transparent'>
                   and get answers instantly
                 </span>
               </span>
-            )}
-            description={(
+            }
+            description={
               <span class='text-lg text-neutral-200/90'>
                 {homeContent.hero.description}
               </span>
-            )}
+            }
             align='center'
             class='mx-auto max-w-3xl text-center'
           />

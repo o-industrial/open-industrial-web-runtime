@@ -21,7 +21,8 @@ export default function GovernedDeploymentSection(): JSX.Element {
         ),
         description: (
           <span class='text-base text-neutral-300 dark:text-neutral-300'>
-            Run Open Industrial in your Azure tenant for full access and control, or choose from shared cloud or fully managed options.
+            Run Open Industrial in your Azure tenant for full access and control, or choose from
+            shared cloud or fully managed options.
           </span>
         ),
         align: 'center',
@@ -33,4 +34,3 @@ export default function GovernedDeploymentSection(): JSX.Element {
     />
   );
 }
-

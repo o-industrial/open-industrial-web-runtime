@@ -1,4 +1,4 @@
-﻿import { JSX } from 'preact';
+import { JSX } from 'preact';
 
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 import { QuoteCard, SectionHeader } from '@o-industrial/common/atomic/molecules';
@@ -17,20 +17,26 @@ export default function AIConversationsSection(): JSX.Element {
     >
       <SectionHeader
         eyebrow='Meet Azi, your AI query assistant'
-        title={(
+        title={
           <span class='block text-balance leading-tight'>
-            <span class='text-sm font-semibold uppercase tracking-[0.36em] text-white/55'>Plain-language answers</span>
-            <span class='mt-4 block text-3xl font-semibold sm:text-4xl'>Ask once. Deploy everywhere.</span>
+            <span class='text-sm font-semibold uppercase tracking-[0.36em] text-white/55'>
+              Plain-language answers
+            </span>
+            <span class='mt-4 block text-3xl font-semibold sm:text-4xl'>
+              Ask once. Deploy everywhere.
+            </span>
             <span class='mt-3 inline-block bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-neon-green-400 bg-clip-text text-base font-medium text-transparent'>
               Governed industrial data, explained
             </span>
           </span>
-        )}
-        description={(
+        }
+        description={
           <span class='mx-auto mt-4 block max-w-2xl text-base text-white/70'>
-            Azi gives engineers direct access to live plant intelligence - no scripts, no SQL, no waiting on hand-offs. Every response stays governed and ready for dashboards, APIs, or automations.
+            Azi gives engineers direct access to live plant intelligence - no scripts, no SQL, no
+            waiting on hand-offs. Every response stays governed and ready for dashboards, APIs, or
+            automations.
           </span>
-        )}
+        }
         align='center'
         class='relative text-center'
       />
