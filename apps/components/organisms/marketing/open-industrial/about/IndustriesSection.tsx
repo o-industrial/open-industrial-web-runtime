@@ -3,7 +3,7 @@ import { JSX } from 'preact';
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 import { ChecklistGroup, SectionHeader } from '@o-industrial/common/atomic/molecules';
 
-import { industriesServed } from '../../../../../src/marketing/about.ts';
+import { industriesServed } from '../../../../../../src/marketing/about.ts';
 
 export default function IndustriesSection(): JSX.Element {
   return (

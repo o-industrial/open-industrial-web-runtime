@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 
 import { ValueGridSection } from '@o-industrial/common/atomic/organisms';
 
-import { batchQualityHowHelpItems } from '../../../../../src/marketing/use-case-batch-quality.ts';
+import { batchQualityHowHelpItems } from '../../../../../../src/marketing/use-case-batch-quality.ts';
 
 export default function BatchQualityValueSection(): JSX.Element {
   return (

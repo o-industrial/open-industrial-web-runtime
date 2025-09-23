@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 
 import { LegalDocument } from '../../legal/LegalDocument.tsx';
-import type { LegalDocumentContent } from '../../../../../src/marketing/content.ts';
+import { LegalDocumentContent } from '../../../../../../src/marketing/content.ts';
 
 export function LegalDocumentPageSection(
   { document }: { document: LegalDocumentContent },

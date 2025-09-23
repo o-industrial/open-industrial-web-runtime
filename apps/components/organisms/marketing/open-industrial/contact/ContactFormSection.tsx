@@ -4,7 +4,7 @@ import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 import { SectionHeader } from '@o-industrial/common/atomic/molecules';
 
 import { HubspotForm } from '../../HubspotForm.tsx';
-import { contactFormHeader } from '../../../../../src/marketing/contact.ts';
+import { contactFormHeader } from '../../../../../../src/marketing/contact.ts';
 
 export default function ContactFormSection(): JSX.Element {
   return (

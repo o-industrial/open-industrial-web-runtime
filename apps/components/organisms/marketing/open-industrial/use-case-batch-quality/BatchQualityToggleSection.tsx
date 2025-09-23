@@ -3,7 +3,7 @@ import { JSX } from 'preact';
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 import { SectionHeader, ToggleQueryCard } from '@o-industrial/common/atomic/molecules';
 
-import { batchQualityToggleQueries } from '../../../../../src/marketing/use-case-batch-quality.ts';
+import { batchQualityToggleQueries } from '../../../../../../src/marketing/use-case-batch-quality.ts';
 
 export default function BatchQualityToggleSection(): JSX.Element {
   return (

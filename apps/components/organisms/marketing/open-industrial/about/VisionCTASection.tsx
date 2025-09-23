@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 
 import { CTADeepLinkSection } from '@o-industrial/common/atomic/organisms';
 
-import { visionCTA } from '../../../../../src/marketing/about.ts';
+import { visionCTA } from '../../../../../../src/marketing/about.ts';
 
 export default function VisionCTASection(): JSX.Element {
   return (

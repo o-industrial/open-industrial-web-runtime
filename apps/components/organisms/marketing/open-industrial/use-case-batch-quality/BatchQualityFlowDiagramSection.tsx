@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 
 import { FlowDiagramSection } from '@o-industrial/common/atomic/organisms';
 
-import { batchQualityIntegrationDiagram } from '../../../../../src/marketing/use-case-batch-quality.ts';
+import { batchQualityIntegrationDiagram } from '../../../../../../src/marketing/use-case-batch-quality.ts';
 
 export default function BatchQualityFlowDiagramSection(): JSX.Element {
   return (

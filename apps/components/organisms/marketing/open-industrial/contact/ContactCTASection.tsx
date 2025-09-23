@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 
 import { CTADeepLinkSection } from '@o-industrial/common/atomic/organisms';
 
-import { contactCTA } from '../../../../../src/marketing/contact.ts';
+import { contactCTA } from '../../../../../../src/marketing/contact.ts';
 
 export default function ContactCTASection(): JSX.Element {
   return (

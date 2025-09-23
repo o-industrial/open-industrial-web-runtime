@@ -3,7 +3,7 @@ import { JSX } from 'preact';
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 import { SectionHeader } from '@o-industrial/common/atomic/molecules';
 
-import { batchQualityIntegrationSteps } from '../../../../../src/marketing/use-case-batch-quality.ts';
+import { batchQualityIntegrationSteps } from '../../../../../../src/marketing/use-case-batch-quality.ts';
 
 export default function BatchQualityIntegrationOverviewSection(): JSX.Element {
   return (

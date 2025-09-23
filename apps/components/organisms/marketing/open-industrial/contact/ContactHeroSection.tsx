@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 
 import { HeroShowcase } from '@o-industrial/common/atomic/organisms';
 
-import { contactHero } from '../../../../../src/marketing/contact.ts';
+import { contactHero } from '../../../../../../src/marketing/contact.ts';
 
 export default function ContactHeroSection(): JSX.Element {
   return (

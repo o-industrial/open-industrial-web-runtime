@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 
 import { ValueGridSection } from '@o-industrial/common/atomic/organisms';
 
-import { capabilityCards } from '../../../../../src/marketing/about.ts';
+import { capabilityCards } from '../../../../../../src/marketing/about.ts';
 
 export default function CapabilitiesSection(): JSX.Element {
   return (

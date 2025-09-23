@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 
 import { CTADeepLinkSection } from '@o-industrial/common/atomic/organisms';
 
-import { batchQualityOutcome } from '../../../../../src/marketing/use-case-batch-quality.ts';
+import { batchQualityOutcome } from '../../../../../../src/marketing/use-case-batch-quality.ts';
 
 export default function BatchQualityCTASection(): JSX.Element {
   return (

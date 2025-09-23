@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 
 import { ValueGridSection } from '@o-industrial/common/atomic/organisms';
 
-import { contactIntro, contactMethods } from '../../../../../src/marketing/contact.ts';
+import { contactIntro, contactMethods } from '../../../../../../src/marketing/contact.ts';
 
 export default function ContactChannelsSection(): JSX.Element {
   return (
