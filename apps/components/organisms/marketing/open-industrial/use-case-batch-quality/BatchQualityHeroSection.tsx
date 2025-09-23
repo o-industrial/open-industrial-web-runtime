@@ -1,11 +1,12 @@
 import { JSX } from 'preact';
 
-import { Action, ActionStyleTypes, IntentTypes } from '@o-industrial/common/atomic/atoms';
+import { Action, ActionStyleTypes } from '@o-industrial/common/atomic/atoms';
 
 import {
   batchQualityHero,
   batchQualityQueryExample,
 } from '../../../../../../src/marketing/use-case-batch-quality.ts';
+import { IntentTypes } from '@o-industrial/common/types';
 
 function mapIntent(intent?: 'primary' | 'secondary' | 'ghost'): ActionStyleTypes {
   switch (intent) {
