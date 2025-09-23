@@ -1,4 +1,4 @@
-import { JSX } from 'preact';
+﻿import { JSX } from 'preact';
 
 import { StepsSection } from '@o-industrial/common/atomic/organisms';
 
@@ -10,19 +10,26 @@ export default function GovernedFlowSection(): JSX.Element {
       header={{
         eyebrow: 'From ingestion to activation',
         title: (
-          <span class='block text-balance'>
-            How governed insight flows to action
+          <span class='block text-balance leading-tight text-white'>
+            <span class='text-white/85'>How governed insight</span>{' '}
+            <span class='bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-emerald-400 bg-clip-text text-transparent'>
+              flows to action
+            </span>
           </span>
         ),
-        description:
-          'Three steps to get governed answers into production workflows.',
+        description: (
+          <span class='block text-base text-indigo-100/80'>
+            Three steps to move explainable answers into production workflows without leaving your governed boundary.
+          </span>
+        ),
         align: 'center',
       }}
       steps={homeContent.howItWorksSteps}
-      width='wide'
-      contentClass='max-w-6xl'
-      class='relative overflow-hidden border-y border-white/60 bg-gradient-to-br from-white via-[#eef3ff] to-[#f8f1ff] shadow-[0_45px_140px_-100px_rgba(62,45,171,0.55)] dark:border-white/5 dark:from-white/10 dark:via-white/5 dark:to-white/10'
+      width='full'
+      tone='emphasis'
+      variant='dark'
+      contentClass='max-w-6xl px-0 sm:px-6'
+      class='border-y border-white/10 bg-transparent py-28 px-0 text-center'
     />
   );
 }
-
