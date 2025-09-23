@@ -6,6 +6,7 @@ import ProductSpotlightSection from '../components/organisms/marketing/open-indu
 import UnifiedMetricsSection from '../components/organisms/marketing/open-industrial-home/UnifiedMetricsSection.tsx';
 import GovernedFlowSection from '../components/organisms/marketing/open-industrial-home/GovernedFlowSection.tsx';
 import AIConversationsSection from '../components/organisms/marketing/open-industrial-home/AIConversationsSection.tsx';
+import StrategicPillarsSection from '../components/organisms/marketing/open-industrial-home/StrategicPillarsSection.tsx';
 import ValueDeliverySection from '../components/organisms/marketing/open-industrial-home/ValueDeliverySection.tsx';
 import IntegrationEcosystemSection from '../components/organisms/marketing/open-industrial-home/IntegrationEcosystemSection.tsx';
 import UnifiedFlowSection from '../components/organisms/marketing/open-industrial-home/UnifiedFlowSection.tsx';
@@ -40,9 +41,11 @@ export default function HomePage({}: PageProps<HomepageData>) {
         <div class='absolute right-[-14%] bottom-[-8%] h-[460px] w-[460px] rounded-full bg-[radial-gradient(circle,_rgba(255,168,236,0.2),_rgba(255,255,255,0)_72%)] blur-[140px] dark:bg-[radial-gradient(circle,_rgba(218,147,255,0.28),_rgba(255,255,255,0)_75%)]' />
       </div>
 
-        <HeroExperienceSection />
+      <HeroExperienceSection />
 
       <ProductSpotlightSection />
+
+      <StrategicPillarsSection />
 
       <UnifiedMetricsSection />
 
