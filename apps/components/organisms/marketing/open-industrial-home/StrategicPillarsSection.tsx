@@ -8,27 +8,27 @@ const pillars = [
     description:
       'Deploy in your Azure tenant with private networking, least-privilege access, and SOC-ready logging.',
     badge: 'Governance',
-    accent: 'from-[#a855f7] via-[#6366f1] to-[#22d3ee]',
+    accent: 'from-neon-purple-500 via-neon-indigo-500 to-neon-cyan-400',
     glow:
-      'from-[rgba(168,85,247,0.35)] via-[rgba(99,102,241,0.22)] to-transparent dark:from-[rgba(168,85,247,0.45)] dark:via-[rgba(99,102,241,0.25)] dark:to-transparent',
+      'from-[rgba(129,140,248,0.36)] via-[rgba(99,102,241,0.22)] to-transparent dark:from-[rgba(129,140,248,0.46)] dark:via-[rgba(99,102,241,0.26)] dark:to-transparent',
   },
   {
     title: 'Explainable intelligence',
     description:
       'Every answer shows its KQL so engineers can validate context before action.',
     badge: 'Explainability',
-    accent: 'from-[#4f46e5] via-[#3b82f6] to-[#22d3ee]',
+    accent: 'from-neon-indigo-600 via-neon-blue-500 to-neon-cyan-400',
     glow:
-      'from-[rgba(79,70,229,0.32)] via-[rgba(59,130,246,0.22)] to-transparent dark:from-[rgba(99,102,241,0.42)] dark:via-[rgba(59,130,246,0.28)] dark:to-transparent',
+      'from-[rgba(96,165,250,0.3)] via-[rgba(34,211,238,0.2)] to-transparent dark:from-[rgba(96,165,250,0.4)] dark:via-[rgba(34,211,238,0.26)] dark:to-transparent',
   },
   {
     title: 'Activation anywhere',
     description:
       'Publish queries as APIs, dashboards, and automations with zero manual lift.',
     badge: 'Activation',
-    accent: 'from-[#22d3ee] via-[#34d399] to-[#16a34a]',
+    accent: 'from-neon-cyan-400 via-neon-green-400 to-neon-green-600',
     glow:
-      'from-[rgba(34,211,238,0.32)] via-[rgba(52,211,153,0.22)] to-transparent dark:from-[rgba(34,211,238,0.42)] dark:via-[rgba(52,211,153,0.28)] dark:to-transparent',
+      'from-[rgba(34,211,238,0.3)] via-[rgba(52,211,153,0.22)] to-transparent dark:from-[rgba(34,211,238,0.4)] dark:via-[rgba(52,211,153,0.28)] dark:to-transparent',
   },
 ] as const;
 
@@ -38,7 +38,7 @@ export default function StrategicPillarsSection(): JSX.Element {
       tone='default'
       width='wide'
       contentClass='relative mx-auto flex w-full max-w-6xl flex-col gap-8 px-6'
-      class='relative overflow-hidden border-y border-white/10 bg-gradient-to-r from-[#0a1029] via-[#101535] to-[#07091b] py-20 shadow-[0_55px_160px_-90px_rgba(24,20,64,0.75)] backdrop-blur-[18px]'
+      class='relative overflow-hidden border-y border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-20 shadow-[0_55px_160px_-90px_rgba(15,23,42,0.7)] backdrop-blur-[18px]'
     >
       <div
         aria-hidden='true'
@@ -64,7 +64,7 @@ export default function StrategicPillarsSection(): JSX.Element {
         {pillars.map((pillar, index) => (
           <article
             key={pillar.title}
-            class='group relative flex h-full flex-col gap-4 overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-[rgba(18,23,58,0.9)] via-[rgba(21,27,70,0.76)] to-[rgba(9,12,31,0.85)] p-6 text-left shadow-[0_30px_110px_-80px_rgba(40,32,88,0.7)] backdrop-blur-xl transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_60px_150px_-90px_rgba(70,60,135,0.75)]'
+            class='group relative flex h-full flex-col gap-4 overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-[rgba(13,16,29,0.92)] via-[rgba(16,21,35,0.78)] to-[rgba(8,11,23,0.88)] p-6 text-left shadow-[0_30px_110px_-80px_rgba(15,23,42,0.65)] backdrop-blur-xl transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_60px_150px_-90px_rgba(15,23,42,0.75)]'
           >
             <div
               aria-hidden='true'

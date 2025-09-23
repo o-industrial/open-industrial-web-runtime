@@ -34,11 +34,11 @@ export const handler: EaCRuntimeHandlerSet<
 
 export default function HomePage({}: PageProps<HomepageData>) {
   return (
-    <div class='relative flex flex-col overflow-hidden bg-gradient-to-b from-[#f9fbff] via-white to-[#f4f0ff] dark:from-[#020312] dark:via-[#05091d] dark:to-[#02010e]'>
+    <div class='relative flex flex-col overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900'>
       <div aria-hidden='true' class='pointer-events-none absolute inset-0'>
-        <div class='absolute left-1/2 top-[-18%] h-[620px] w-[980px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(141,121,255,0.35),_rgba(255,255,255,0)_72%)] opacity-70 blur-3xl dark:opacity-90' />
-        <div class='absolute left-[-12%] top-1/4 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,_rgba(82,206,255,0.18),_rgba(255,255,255,0)_68%)] blur-[120px] dark:bg-[radial-gradient(circle,_rgba(82,206,255,0.32),_rgba(255,255,255,0)_70%)]' />
-        <div class='absolute right-[-14%] bottom-[-8%] h-[460px] w-[460px] rounded-full bg-[radial-gradient(circle,_rgba(255,168,236,0.2),_rgba(255,255,255,0)_72%)] blur-[140px] dark:bg-[radial-gradient(circle,_rgba(218,147,255,0.28),_rgba(255,255,255,0)_75%)]' />
+        <div class='absolute left-1/2 top-[-18%] h-[620px] w-[980px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(129,140,248,0.35),_rgba(255,255,255,0)_72%)] opacity-70 blur-3xl dark:opacity-90' />
+        <div class='absolute left-[-12%] top-1/4 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,_rgba(34,211,238,0.18),_rgba(255,255,255,0)_68%)] blur-[120px] dark:bg-[radial-gradient(circle,_rgba(34,211,238,0.32),_rgba(255,255,255,0)_70%)]' />
+        <div class='absolute right-[-14%] bottom-[-8%] h-[460px] w-[460px] rounded-full bg-[radial-gradient(circle,_rgba(249,168,212,0.2),_rgba(255,255,255,0)_72%)] blur-[140px] dark:bg-[radial-gradient(circle,_rgba(196,181,253,0.28),_rgba(255,255,255,0)_75%)]' />
       </div>
 
       <HeroExperienceSection />

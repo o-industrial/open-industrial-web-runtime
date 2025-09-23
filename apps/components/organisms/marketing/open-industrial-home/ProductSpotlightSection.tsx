@@ -6,10 +6,10 @@ import { SectionHeader } from '@o-industrial/common/atomic/molecules';
 import { homeContent } from '../../../../../src/marketing/home.ts';
 
 const badgeSurface: Record<string, string> = {
-  purple: 'from-[#a855f7] to-[#6366f1]',
-  orange: 'from-[#f97316] to-[#facc15]',
-  blue: 'from-[#3b82f6] to-[#22d3ee]',
-  green: 'from-[#10b981] to-[#34d399]',
+  purple: 'from-neon-purple-500 to-neon-indigo-500',
+  orange: 'from-neon-orange-500 to-neon-yellow-400',
+  blue: 'from-neon-blue-500 to-neon-cyan-400',
+  green: 'from-neon-green-500 to-neon-teal-400',
 };
 
 export default function ProductSpotlightSection(): JSX.Element {
@@ -20,12 +20,12 @@ export default function ProductSpotlightSection(): JSX.Element {
       tone='default'
       width='full'
       contentClass='relative mx-auto w-full px-0'
-      class='relative overflow-hidden bg-gradient-to-b from-[#05070f] via-[#060a18] to-[#03040a] py-28 px-0'
+      class='relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 py-28 px-0'
     >
       <div aria-hidden='true' class='pointer-events-none absolute inset-0'>
-        <div class='absolute inset-y-0 left-0 w-full bg-[linear-gradient(110deg,_rgba(9,13,26,0.95)_0%,_rgba(9,13,26,0.85)_48%,_rgba(6,9,24,0.6)_70%,_rgba(6,9,24,0)_100%)]' />
-        <div class='absolute left-[32%] top-[-18%] h-[26rem] w-[28rem] rounded-full bg-[radial-gradient(circle,_rgba(82,206,255,0.32),_rgba(255,255,255,0)_80%)] blur-[220px]' />
-        <div class='absolute right-[-6%] bottom-[-25%] h-[24rem] w-[28rem] rounded-full bg-[conic-gradient(from_140deg,_rgba(167,139,250,0.32),_rgba(56,189,248,0.2),_rgba(34,211,238,0.24),_rgba(255,255,255,0))] blur-[210px]' />
+        <div class='absolute inset-y-0 left-0 w-full bg-[linear-gradient(110deg,_rgba(11,15,35,0.95)_0%,_rgba(11,18,40,0.85)_48%,_rgba(7,12,29,0.6)_70%,_rgba(7,12,29,0)_100%)]' />
+        <div class='absolute left-[32%] top-[-18%] h-[26rem] w-[28rem] rounded-full bg-[radial-gradient(circle,_rgba(34,211,238,0.28),_rgba(255,255,255,0)_82%)] blur-[220px]' />
+        <div class='absolute right-[-6%] bottom-[-25%] h-[24rem] w-[28rem] rounded-full bg-[conic-gradient(from_140deg,_rgba(129,140,248,0.28),_rgba(236,72,153,0.18),_rgba(34,211,238,0.24),_rgba(255,255,255,0))] blur-[210px]' />
       </div>
       <div class='relative grid min-h-[30rem] w-full grid-cols-1 overflow-hidden lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]'>
         <div class='relative flex items-center justify-center px-6 py-16 sm:px-10 lg:order-2 lg:px-16'>
@@ -39,7 +39,7 @@ export default function ProductSpotlightSection(): JSX.Element {
                   <span class='block text-neutral-900 dark:text-white'>
                     Connect your data.
                   </span>
-                  <span class='block bg-gradient-to-r from-neon-blue-500 via-neon-purple-500 to-emerald-400 bg-clip-text text-transparent'>
+                  <span class='block bg-gradient-to-r from-neon-blue-500 via-neon-purple-500 to-neon-green-400 bg-clip-text text-transparent'>
                     Ask anything. Share anywhere.
                   </span>
                 </span>
@@ -58,7 +58,7 @@ export default function ProductSpotlightSection(): JSX.Element {
                 return (
                   <article
                     key={String(item.title)}
-                    class='group relative flex items-start gap-4 overflow-hidden rounded-[22px] border border-white/10 bg-gradient-to-br from-[rgba(16,21,38,0.95)] via-[rgba(18,24,44,0.82)] to-[rgba(9,14,29,0.88)] p-5 shadow-[0_28px_80px_-70px_rgba(20,27,54,0.7)] transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_45px_120px_-80px_rgba(32,40,80,0.75)]'
+                    class='group relative flex items-start gap-4 overflow-hidden rounded-[22px] border border-white/10 bg-gradient-to-br from-[rgba(12,16,35,0.95)] via-[rgba(11,18,40,0.82)] to-[rgba(7,12,28,0.9)] p-5 shadow-[0_28px_80px_-70px_rgba(15,23,42,0.68)] transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_45px_120px_-80px_rgba(15,23,42,0.75)]'
                   >
                     <div
                       aria-hidden='true'
@@ -67,7 +67,7 @@ export default function ProductSpotlightSection(): JSX.Element {
                           ? 'from-[rgba(249,115,22,0.28)] via-[rgba(250,204,21,0.18)] to-transparent'
                           : intent === 'blue'
                           ? 'from-[rgba(59,130,246,0.28)] via-[rgba(34,211,238,0.18)] to-transparent'
-                          : 'from-[rgba(168,85,247,0.32)] via-[rgba(99,102,241,0.22)] to-transparent'
+                          : 'from-[rgba(139,92,246,0.32)] via-[rgba(99,102,241,0.22)] to-transparent'
                       }`}
                     />
                     <div
@@ -100,7 +100,7 @@ export default function ProductSpotlightSection(): JSX.Element {
             class='pointer-events-none absolute inset-0 h-full w-full object-cover object-left-top'
             data-eac-bypass-base
           />
-          <div class='pointer-events-none absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-[radial-gradient(circle,_rgba(82,206,255,0.28),_rgba(255,255,255,0)_80%)] blur-[120px]' />
+          <div class='pointer-events-none absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-[radial-gradient(circle,_rgba(34,211,238,0.22),_rgba(255,255,255,0)_82%)] blur-[120px]' />
         </div>
       </div>
     </SectionSurface>

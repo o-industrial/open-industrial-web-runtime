@@ -13,7 +13,7 @@ export default function AIConversationsSection(): JSX.Element {
       tone='default'
       width='wide'
       contentClass='relative mx-auto flex w-full max-w-6xl flex-col items-center gap-12 px-6'
-      class='relative overflow-hidden border-y border-white/10 bg-[radial-gradient(circle_at_top,_rgba(72,63,143,0.32),_rgba(7,9,18,0)),radial-gradient(circle_at_bottom_right,_rgba(46,204,193,0.22),_rgba(6,9,18,0)),linear-gradient(140deg,_rgba(8,11,24,0.96),_rgba(3,4,10,0.92))] py-24 text-center text-white'
+      class='relative overflow-hidden border-y border-white/10 bg-[radial-gradient(circle_at_top,_rgba(129,140,248,0.2),_rgba(7,9,18,0)),radial-gradient(circle_at_bottom_right,_rgba(34,211,238,0.15),_rgba(6,9,18,0)),linear-gradient(140deg,_rgba(9,11,22,0.95),_rgba(4,6,14,0.9))] py-24 text-center text-white'
     >
       <SectionHeader
         eyebrow='Meet Azi, your AI query assistant'
@@ -21,7 +21,7 @@ export default function AIConversationsSection(): JSX.Element {
           <span class='block text-balance leading-tight'>
             <span class='text-sm font-semibold uppercase tracking-[0.36em] text-white/55'>Plain-language answers</span>
             <span class='mt-4 block text-3xl font-semibold sm:text-4xl'>Ask once. Deploy everywhere.</span>
-            <span class='mt-3 inline-block bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-emerald-400 bg-clip-text text-base font-medium text-transparent'>
+            <span class='mt-3 inline-block bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-neon-green-400 bg-clip-text text-base font-medium text-transparent'>
               Governed industrial data, explained
             </span>
           </span>

@@ -36,7 +36,7 @@ export default function UnifiedMetricsSection(): JSX.Element {
       tone='default'
       width='wide'
       contentClass='relative mx-auto flex w-full max-w-6xl flex-col items-center gap-12 px-6'
-      class='relative overflow-hidden border-y border-white/10 bg-[radial-gradient(circle_at_top,_rgba(78,70,160,0.28),_rgba(8,10,20,0)),radial-gradient(circle_at_bottom,_rgba(52,211,153,0.18),_rgba(10,12,24,0)),linear-gradient(160deg,_rgba(7,9,20,0.96),_rgba(4,6,14,0.92))] py-24 text-center text-white'
+      class='relative overflow-hidden border-y border-white/10 bg-[radial-gradient(circle_at_top,_rgba(129,140,248,0.18),_rgba(10,12,24,0)),radial-gradient(circle_at_bottom,_rgba(34,211,238,0.12),_rgba(8,12,24,0)),linear-gradient(160deg,_rgba(9,11,22,0.95),_rgba(6,8,18,0.95))] py-24 text-center text-white'
     >
       <SectionHeader
         {...homeContent.valuePropositionHeading}
@@ -48,7 +48,7 @@ export default function UnifiedMetricsSection(): JSX.Element {
             <span class='mt-4 block text-3xl font-semibold sm:text-[2.6rem]'>
               Governing data from control room to boardroom
             </span>
-            <span class='mt-2 inline-block bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-emerald-400 bg-clip-text text-base font-medium text-transparent'>
+            <span class='mt-2 inline-block bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-neon-green-400 bg-clip-text text-base font-medium text-transparent'>
               Metrics ready for every workflow
             </span>
           </span>
@@ -63,11 +63,11 @@ export default function UnifiedMetricsSection(): JSX.Element {
         {metrics.map((metric) => (
           <article
             key={metric.label}
-            class='group relative overflow-hidden rounded-[24px] border border-white/12 bg-[linear-gradient(130deg,rgba(19,23,44,0.92),rgba(8,11,26,0.96))] p-6 text-left shadow-[0_36px_140px_-110px_rgba(10,14,42,0.95)] transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_56px_170px_-120px_rgba(18,26,76,0.95)] sm:text-center'
+            class='group relative overflow-hidden rounded-[24px] border border-white/12 bg-[linear-gradient(135deg,rgba(13,17,32,0.92),rgba(7,10,22,0.96))] p-6 text-left shadow-[0_36px_140px_-110px_rgba(14,20,40,0.9)] transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_56px_170px_-120px_rgba(18,26,60,0.9)] sm:text-center'
           >
             <div
               aria-hidden='true'
-              class='pointer-events-none absolute -top-16 right-[-18%] h-48 w-48 rounded-full bg-[radial-gradient(circle,_rgba(130,127,255,0.38),rgba(255,255,255,0)_70%)] opacity-0 blur-[110px] transition-opacity duration-500 group-hover:opacity-100'
+              class='pointer-events-none absolute -top-16 right-[-18%] h-48 w-48 rounded-full bg-[radial-gradient(circle,_rgba(129,140,248,0.32),rgba(255,255,255,0)_70%)] opacity-0 blur-[110px] transition-opacity duration-500 group-hover:opacity-100'
             />
             <div class='relative space-y-3'>
               <div class='text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-white/55'>

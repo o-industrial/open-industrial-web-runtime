@@ -12,7 +12,7 @@ export default function ValueDeliverySection(): JSX.Element {
         title: (
           <span class='block text-balance leading-tight text-white'>
             <span class='block text-3xl font-semibold sm:text-[2.75rem]'>
-              <span class='bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-emerald-400 bg-clip-text text-transparent'>
+              <span class='bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-neon-green-400 bg-clip-text text-transparent'>
                 Turn industrial data
               </span>
             </span>
