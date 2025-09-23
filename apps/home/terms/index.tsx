@@ -1,5 +1,8 @@
 import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
+
+import { LegalDocument } from '../../components/organisms/marketing/legal/LegalDocument.tsx';
+import { termsOfUse } from '../../../src/marketing/legal/terms.ts';
 import { OpenIndustrialWebState } from '../../../src/state/OpenIndustrialWebState.ts';
 
 export const IsIsland = true;
@@ -15,21 +18,12 @@ export const handler: EaCRuntimeHandlerSet<
 
 export default function TermsPage({}: PageProps<TermsPageData>) {
   return (
-    <section class='min-h-[60vh] flex items-center justify-center px-6 py-24 text-center'>
-      <div class='space-y-4 max-w-2xl'>
-        <p class='text-xs uppercase tracking-[0.35em] text-neutral-400 dark:text-neutral-500'>
-          Marketing Migration
-        </p>
-        <h1 class='text-3xl font-semibold text-neutral-900 dark:text-neutral-50'>
-          Terms & Conditions Migration
-        </h1>
-        <p class='text-base text-neutral-600 dark:text-neutral-400'>
-          Legal terms from the marketing site will be ported in Phase 3.
-        </p>
-        <p class='text-sm text-neutral-500 dark:text-neutral-500'>
-          Final content will be introduced during Phase 3.
-        </p>
-      </div>
-    </section>
+    <div class='flex flex-col bg-neutral-50 dark:bg-neutral-950'>
+      <section class='bg-gradient-to-b from-neutral-50 via-white to-neutral-100 py-20 dark:from-neutral-950 dark:via-[#090b19] dark:to-neutral-950'>
+        <div class='mx-auto w-full max-w-5xl px-6'>
+          <LegalDocument document={termsOfUse} />
+        </div>
+      </section>
+    </div>
   );
 }

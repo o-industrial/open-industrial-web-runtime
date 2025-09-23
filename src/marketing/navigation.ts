@@ -2,10 +2,11 @@ import type { MarketingNavCTA, MarketingNavLink } from '@o-industrial/common/ato
 
 export const primaryNavLinks: MarketingNavLink[] = [
   { label: 'About', href: '/about' },
+  { label: 'Use Cases', href: '/use-case' },
   { label: 'Batch Quality', href: '/use-case/batch-quality' },
   {
     label: 'Docs',
-    href: 'https://www.openindustrial.co/docs/',
+    href: '/docs',
     external: true,
   },
   { label: 'Contact', href: '/contact' },
@@ -14,13 +15,14 @@ export const primaryNavLinks: MarketingNavLink[] = [
 export const ctaLinks: MarketingNavCTA[] = [
   {
     label: 'Get Started',
-    href: 'https://www.openindustrial.co/workspace',
+    href: '/workspace',
     external: true,
     intent: 'primary',
   },
 ];
 
 export const footerPrimaryLinks: MarketingNavLink[] = [
+  { label: 'Use Cases', href: '/use-case' },
   { label: 'Privacy', href: '/privacy' },
   { label: 'Terms', href: '/terms' },
   { label: 'Contact', href: '/contact' },

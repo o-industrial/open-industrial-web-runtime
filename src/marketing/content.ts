@@ -98,3 +98,26 @@ export interface HeroContent {
   secondaryAction?: MarketingAction;
   hubspotFormId?: string;
 }
+export interface LegalListItemContent {
+  title?: string;
+  description?: string;
+}
+
+export interface LegalSectionContent {
+  title?: string;
+  subtitle?: string;
+  paragraphs?: string[];
+  list?: {
+    ordered?: boolean;
+    items: LegalListItemContent[];
+  };
+  footnote?: string;
+}
+
+export interface LegalDocumentContent {
+  title: string;
+  effectiveDate?: string;
+  lastUpdated?: string;
+  intro?: string[];
+  sections: LegalSectionContent[];
+}

@@ -132,7 +132,7 @@ export default function HomeLayout({
             </div>
 
             <div class='px-6 pb-10 text-center text-xs text-neutral-500 dark:text-neutral-500'>
-              Ac {new Date().getFullYear()} Open Industrial. All rights reserved.
+              &copy; {new Date().getFullYear()} Open Industrial. All rights reserved.
             </div>
           </footer>
         </div>
