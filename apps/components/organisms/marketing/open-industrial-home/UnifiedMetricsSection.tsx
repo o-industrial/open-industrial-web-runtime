@@ -33,57 +33,50 @@ export default function UnifiedMetricsSection(): JSX.Element {
 
   return (
     <SectionSurface
-      tone='emphasis'
-      width='full'
-      contentClass='relative mx-auto flex w-full max-w-6xl flex-col items-center gap-12 px-0 sm:px-6'
-      class='relative overflow-hidden !bg-transparent py-28 px-0 text-center shadow-[0_60px_200px_-140px_rgba(12,18,36,0.85)]'
+      tone='default'
+      width='wide'
+      contentClass='relative mx-auto flex w-full max-w-6xl flex-col items-center gap-12 px-6'
+      class='relative overflow-hidden border-y border-white/10 bg-[radial-gradient(circle_at_top,_rgba(78,70,160,0.28),_rgba(8,10,20,0)),radial-gradient(circle_at_bottom,_rgba(52,211,153,0.18),_rgba(10,12,24,0)),linear-gradient(160deg,_rgba(7,9,20,0.96),_rgba(4,6,14,0.92))] py-24 text-center text-white'
     >
-      <div aria-hidden='true' class='pointer-events-none absolute inset-0'>
-        <div class='absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(34,30,80,0.35),_rgba(5,7,16,0))] opacity-90' />
-        <div class='absolute -top-32 left-1/2 h-[28rem] w-[42rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(76,76,255,0.3),_rgba(64,18,137,0)_70%)] blur-[200px]' />
-        <div class='absolute inset-x-[-25%] bottom-[-48%] h-[36rem] bg-[radial-gradient(circle,_rgba(80,195,255,0.22),_rgba(8,11,26,0))] blur-[220px]' />
-        <div class='absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent opacity-60' />
-        <div class='absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent opacity-50' />
-        <div class='absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent opacity-50' />
-      </div>
       <SectionHeader
         {...homeContent.valuePropositionHeading}
         align='center'
         class='relative mx-auto max-w-3xl text-center'
         title={(
           <span class='block text-balance leading-tight'>
-            <span class='bg-gradient-to-r from-[#7e7bff] via-neon-blue-500 to-emerald-400 bg-clip-text text-transparent'>
-              Unified operational intelligence
-            </span>
-            <span class='mt-3 block text-3xl font-semibold text-white md:text-4xl'>
+            <span class='block text-sm font-semibold uppercase tracking-[0.34em] text-white/55'>Unified operational intelligence</span>
+            <span class='mt-4 block text-3xl font-semibold sm:text-[2.6rem]'>
               Governing data from control room to boardroom
+            </span>
+            <span class='mt-2 inline-block bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-emerald-400 bg-clip-text text-base font-medium text-transparent'>
+              Metrics ready for every workflow
             </span>
           </span>
         )}
         description={(
-          <span class='mt-6 block text-base text-indigo-100/80'>
+          <span class='mt-6 block text-base text-white/70'>
             Open Industrial ingests live telemetry and orchestrates governed activation across your operational stack.
           </span>
         )}
       />
-      <div class='relative grid w-full gap-6 sm:grid-cols-3'>
+      <div class='grid w-full gap-6 md:grid-cols-3'>
         {metrics.map((metric) => (
           <article
             key={metric.label}
-            class='group relative overflow-hidden rounded-[26px] border border-white/10 bg-[linear-gradient(140deg,rgba(18,25,49,0.82),rgba(10,14,32,0.94))] p-6 shadow-[0_32px_120px_-80px_rgba(12,18,42,0.9)] transition-transform duration-200 hover:-translate-y-1'
+            class='group relative overflow-hidden rounded-[24px] border border-white/12 bg-[linear-gradient(130deg,rgba(19,23,44,0.92),rgba(8,11,26,0.96))] p-6 text-left shadow-[0_36px_140px_-110px_rgba(10,14,42,0.95)] transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_56px_170px_-120px_rgba(18,26,76,0.95)] sm:text-center'
           >
             <div
               aria-hidden='true'
-              class='absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(130,127,255,0.32),rgba(255,255,255,0)_70%)] opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100'
+              class='pointer-events-none absolute -top-16 right-[-18%] h-48 w-48 rounded-full bg-[radial-gradient(circle,_rgba(130,127,255,0.38),rgba(255,255,255,0)_70%)] opacity-0 blur-[110px] transition-opacity duration-500 group-hover:opacity-100'
             />
-            <div class='relative space-y-3 text-left sm:text-center'>
-              <div class='text-[0.65rem] font-semibold uppercase tracking-[0.32em] text-white/55'>
+            <div class='relative space-y-3'>
+              <div class='text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-white/55'>
                 {metric.label}
               </div>
               <div class='text-4xl font-semibold text-white sm:text-[2.65rem]'>
                 {metric.value}
               </div>
-              <p class='text-sm text-indigo-100/80'>
+              <p class='text-sm text-white/65'>
                 {metric.description}
               </p>
             </div>
