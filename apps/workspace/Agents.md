@@ -11,28 +11,28 @@ Authenticated workspace experience delivering execution surfaces, simulators, an
 
 ## Project Map
 
-- _layout.tsx - Workspace shell with navigation, workspace selector, and global toasts.
-- _middleware.ts - Validates workspace membership and enforces authentication.
-- index.tsx - Default workspace overview.
-- greements.tsx, sink.tsx, and feature directories (pi/, zure/, commit/, debug/) for specialized tools.
+- `_layout.tsx` - Workspace shell with navigation, workspace selector, and global toasts.
+- `_middleware.ts` - Validates workspace membership and enforces authentication.
+- `index.tsx` - Default workspace overview.
+- `agreements.tsx`, `sink.tsx`, and feature directories (`api/`, `azure/`, `commit/`, `debug/`) for specialized tools.
 - API route counterparts live under each feature directory; ensure commit flows return to UI with 303 redirects.
 
 ## Commands
 
-- deno task dev - Run runtime locally; simulate workspace data via seeded KV or mocks.
-- deno task test --filter workspace - Execute unit/integration tests targeting workspace flows.
-- deno task test:e2e - Run end-to-end scenarios (commit pipelines, simulators) before release.
+- `deno task dev` - Run runtime locally; simulate workspace data via seeded KV or mocks.
+- `deno task test --filter workspace` - Execute unit/integration tests targeting workspace flows.
+- `deno task test:e2e` - Run end-to-end scenarios (commit pipelines, simulators) before release.
 
 ## Patterns
 
 - Leverage atomic organisms/templates for dashboards and editors; avoid forking UI unless necessary.
-- Use shared hooks for workspace context (useWorkspaceContext planned) and telemetry streaming.
-- Build commit flows with ctx.State.OIClient.Workspace.CommitEaC to ensure auditability.
+- Use shared hooks for workspace context (`useWorkspaceContext` planned) and telemetry streaming.
+- Build commit flows with `ctx.State.OIClient.Workspace.CommitEaC` to ensure auditability.
 - Surface feature flags through context providers so UI and API stay in sync.
 
 ## Review & Test Checklist
 
-- Validate authentication and tenant scoping in _middleware.ts with integration tests.
+- Validate authentication and tenant scoping in `_middleware.ts` with integration tests.
 - Ensure commit actions are idempotent and log audit entries.
 - Confirm loading/error states for long-running operations (simulators, pipelines).
 - Coordinate with backend team for schema or DTO updates; update shared types accordingly.
@@ -41,7 +41,7 @@ Authenticated workspace experience delivering execution surfaces, simulators, an
 
 - Do not expose raw EaC responses directly; sanitize and map to UI-friendly DTOs.
 - Protect against leaking workspace IDs or secrets in logs.
-- Use exponential backoff/retry helpers from tomic/utils when polling backend services.
+- Use exponential backoff/retry helpers from `atomic/utils` when polling backend services.
 
 ## Ownership Signals
 
@@ -58,7 +58,7 @@ Authenticated workspace experience delivering execution surfaces, simulators, an
 ## Related Docs
 
 - Parent: [Apps overview](../Agents.md).
-- Backend reference: workspace API docs (link TBD) and open-industrial-impulse-runtime/Agents.md for simulator context.
+- Backend reference: workspace API docs (link TBD) and `open-industrial-impulse-runtime/Agents.md` for simulator context.
 - UI support: [Atomic organisms guide](../../../open-industrial-reference-architecture/atomic/organisms/Agents.md).
 
 ## Changelog Expectations
