@@ -1,8 +1,7 @@
 import { JSX } from 'preact';
 
 import { Action, ActionStyleTypes, SectionSurface } from '@o-industrial/common/atomic/atoms';
-
-import { useCaseOverview } from '../../../../../src/marketing/use-cases.ts';
+import { useCaseOverview } from '../../../../../../src/marketing/use-cases.ts';
 
 export default function UseCaseListSection(): JSX.Element {
   return (
