@@ -28,7 +28,7 @@ export default function UnifiedFlowSection(): JSX.Element {
       }}
       content={homeContent.flowDiagram}
       width='wide'
-      contentClass='max-w-7xl'
+      contentClass='max-w-6xl'
       class='relative overflow-hidden border-y border-white/10 bg-[radial-gradient(circle_at_top,_rgba(236,72,153,0.12),rgba(11,15,32,0.92)),radial-gradient(circle_at_bottom,_rgba(34,211,238,0.12),rgba(11,15,32,0.9)),linear-gradient(160deg,rgba(9,12,26,0.96),rgba(6,10,22,0.94))]'
     />
   );
