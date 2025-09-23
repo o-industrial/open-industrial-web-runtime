@@ -29,7 +29,7 @@ export default function GovernedDeploymentSection(): JSX.Element {
       items={homeContent.cloudControlItems}
       width='wide'
       contentClass='max-w-7xl'
-      class='relative overflow-hidden border-y border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
+      class='relative overflow-hidden border-y border-white/10 bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.14),rgba(9,12,24,0.9)),linear-gradient(150deg,rgba(8,11,24,0.97),rgba(15,23,42,0.94))]'
     />
   );
 }

@@ -29,7 +29,7 @@ export default function SharedTruthSection(): JSX.Element {
       items={homeContent.benefitsItems}
       width='wide'
       contentClass='max-w-7xl'
-      class='relative overflow-hidden border-y border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
+      class='relative overflow-hidden border-y border-white/10 bg-[radial-gradient(circle_at_top,_rgba(129,140,248,0.18),rgba(9,11,24,0.9)),linear-gradient(155deg,rgba(8,11,24,0.97),rgba(13,17,33,0.94))]'
     />
   );
 }

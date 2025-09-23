@@ -39,7 +39,7 @@ export default function IntegrationEcosystemSection(): JSX.Element {
       columns={homeContent.integrationColumns}
       width='wide'
       contentClass='max-w-7xl'
-      class='relative overflow-hidden border-y border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
+      class='relative overflow-hidden border-y border-white/10 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.14),rgba(9,12,24,0.92)),radial-gradient(circle_at_bottom,_rgba(129,140,248,0.12),rgba(8,12,24,0.9)),linear-gradient(150deg,rgba(8,11,24,0.98),rgba(12,16,32,0.94))]'
     />
   );
 }

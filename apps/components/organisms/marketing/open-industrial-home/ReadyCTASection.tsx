@@ -13,7 +13,7 @@ export default function ReadyCTASection(): JSX.Element {
       }}
       width='wide'
       contentClass='max-w-5xl'
-      class='relative overflow-hidden rounded-t-[48px] border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 shadow-[0_60px_160px_-90px_rgba(15,23,42,0.65)] backdrop-blur-xl'
+      class='relative overflow-hidden rounded-t-[48px] border border-white/10 bg-[radial-gradient(circle_at_top,_rgba(129,140,248,0.16),rgba(11,16,32,0.92)),linear-gradient(140deg,rgba(8,11,24,0.98),rgba(14,18,36,0.95))] shadow-[0_60px_160px_-90px_rgba(15,23,42,0.65)] backdrop-blur-xl'
     />
   );
 }

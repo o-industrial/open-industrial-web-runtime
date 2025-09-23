@@ -1,4 +1,4 @@
-﻿import { JSX } from 'preact';
+import { JSX } from 'preact';
 
 import { ValueGridSection } from '@o-industrial/common/atomic/organisms';
 
@@ -36,7 +36,8 @@ export default function ValueDeliverySection(): JSX.Element {
       showIndexBadge
       columns={2}
       contentClass='relative mx-auto flex w-full max-w-6xl flex-col gap-16 px-6'
-      class='relative overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(66,72,177,0.25),rgba(4,5,12,0)),radial-gradient(circle_at_bottom,_rgba(33,196,180,0.18),rgba(3,5,10,0)),linear-gradient(150deg,rgba(6,8,18,0.95),rgba(2,3,8,0.92))] py-28 text-white'
+      disableAccents
+      class='bg-slate-950 py-28 text-white'
     />
   );
 }
