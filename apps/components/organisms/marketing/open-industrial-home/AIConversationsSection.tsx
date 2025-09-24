@@ -1,109 +1,57 @@
 import { JSX } from 'preact';
-import { useCallback } from 'preact/hooks';
 
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 import { QuoteCard, SectionHeader } from '@o-industrial/common/atomic/molecules';
 
-import { AIConversationsBackdrop } from '../shared/backgrounds.tsx';
-import { marketingSectionContent } from '../shared/layout.ts';
-import { trackQuoteInteraction } from '../../../../../src/marketing/analytics.ts';
 import { homeContent } from '../../../../../src/marketing/home.ts';
 
 const quoteIntents = ['purple', 'blue', 'green'] as const;
-const loggedQuoteInteractions = new Set<string>();
 
 export default function AIConversationsSection(): JSX.Element {
-  const header = homeContent.sections.aiConversations;
-
-  const handleQuoteInteraction = useCallback(
-    (quote: string, index: number, intent: string, action: 'hover' | 'focus') => {
-      const key = `${index}-${action}`;
-      if (loggedQuoteInteractions.has(key)) {
-        return;
-      }
-
-      loggedQuoteInteractions.add(key);
-      trackQuoteInteraction(quote, index, intent, action);
-    },
-    [],
-  );
-
   return (
     <SectionSurface
       tone='default'
       width='wide'
-      contentClass={marketingSectionContent({
-        width: 'wide',
-        padding: 'md',
-        center: true,
-        extra: 'flex flex-col items-center gap-12',
-      })}
-      class='relative overflow-hidden border-y border-white/10 py-24 text-center text-white'
+      contentClass='relative mx-auto flex w-full max-w-6xl flex-col items-center gap-12 px-6'
+      class='relative overflow-hidden border-y border-white/10 bg-[radial-gradient(circle_at_top,_rgba(129,140,248,0.2),_rgba(7,9,18,0)),radial-gradient(circle_at_bottom_right,_rgba(34,211,238,0.15),_rgba(6,9,18,0)),linear-gradient(140deg,_rgba(9,11,22,0.95),_rgba(4,6,14,0.9))] py-24 text-center text-white'
     >
-      <AIConversationsBackdrop />
       <SectionHeader
-        eyebrow={header.eyebrow}
+        eyebrow='Meet Azi, your AI query assistant'
         title={
           <span class='block text-balance leading-tight'>
-            {header.strapline
-              ? (
-                <span class='text-sm font-semibold uppercase tracking-[0.36em] text-white/55'>
-                  {header.strapline}
-                </span>
-              )
-              : null}
-            {header.titleLines.map((line, index) => (
-              <span
-                key={'ai-title-' + index + '-' + line.text}
-                class={'mt-4 block text-3xl font-semibold sm:text-4xl ' +
-                  (line.highlight
-                    ? 'bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-neon-green-400 bg-clip-text text-transparent'
-                    : 'text-white')}
-              >
-                {line.text}
-              </span>
-            ))}
-            {header.kicker
-              ? (
-                <span class='mt-3 inline-block bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-neon-green-400 bg-clip-text text-base font-medium text-transparent'>
-                  {header.kicker}
-                </span>
-              )
-              : null}
+            <span class='text-sm font-semibold uppercase tracking-[0.36em] text-white/55'>
+              Plain-language answers
+            </span>
+            <span class='mt-4 block text-3xl font-semibold sm:text-4xl'>
+              Ask once. Deploy everywhere.
+            </span>
+            <span class='mt-3 inline-block bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-neon-green-400 bg-clip-text text-base font-medium text-transparent'>
+              Governed industrial data, explained
+            </span>
           </span>
         }
-        description={header.description
-          ? (
-            <span class='mx-auto mt-4 block max-w-2xl text-base text-white/70'>
-              {header.description}
-            </span>
-          )
-          : undefined}
-        align={header.align ?? 'center'}
+        description={
+          <span class='mx-auto mt-4 block max-w-2xl text-base text-white/70'>
+            Azi gives engineers direct access to live plant intelligence - no scripts, no SQL, no
+            waiting on hand-offs. Every response stays governed and ready for dashboards, APIs, or
+            automations.
+          </span>
+        }
+        align='center'
         class='relative text-center'
       />
       <div class='grid w-full gap-6 md:grid-cols-3'>
-        {homeContent.conversationalQuotes.map((quote, index) => {
-          const intent = quoteIntents[index % quoteIntents.length];
-
-          return (
-            <div
-              key={`quote-${index}`}
-              tabIndex={0}
-              onMouseEnter={() => handleQuoteInteraction(quote.quote, index, intent, 'hover')}
-              onFocus={() => handleQuoteInteraction(quote.quote, index, intent, 'focus')}
-            >
-              <QuoteCard
-                quote={quote.quote}
-                attribution={quote.attribution}
-                role={quote.role}
-                variant='dark'
-                intent={intent}
-                class='h-full'
-              />
-            </div>
-          );
-        })}
+        {homeContent.conversationalQuotes.map((quote, index) => (
+          <QuoteCard
+            key={`quote-${index}`}
+            quote={quote.quote}
+            attribution={quote.attribution}
+            role={quote.role}
+            variant='dark'
+            intent={quoteIntents[index % quoteIntents.length]}
+            class='h-full'
+          />
+        ))}
       </div>
     </SectionSurface>
   );

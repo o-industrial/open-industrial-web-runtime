@@ -18,15 +18,12 @@ import type {
   HeroContent,
   IntegrationColumnContent,
   MediaContent,
-  MetricHighlightContent,
-  PillarItemContent,
   QuoteItemContent,
   SectionHeaderContent,
   StepItemContent,
-  StructuredSectionHeaderContent,
 } from './content.ts';
 
-export type HomeContent = {
+type HomeContent = {
   hero: HeroContent;
   valuePropositionHeading: SectionHeaderContent;
   howItWorksSteps: StepItemContent[];
@@ -37,32 +34,13 @@ export type HomeContent = {
   benefitsItems: ChecklistItemContent[];
   cloudControlItems: ChecklistItemContent[];
   futureVisionItems: ChecklistItemContent[];
-  strategicPillars: PillarItemContent[];
-  metrics: MetricHighlightContent[];
-  productSpotlightHighlights: ChecklistItemContent[];
   cta: CTAContent;
   productSpotlightMedia: MediaContent;
-  sections: {
-    productSpotlight: StructuredSectionHeaderContent;
-    aiConversations: StructuredSectionHeaderContent;
-    governedFlow: StructuredSectionHeaderContent;
-    integrationEcosystem: StructuredSectionHeaderContent;
-    unifiedMetrics: StructuredSectionHeaderContent;
-    sharedTruth: StructuredSectionHeaderContent;
-    valueDelivery: StructuredSectionHeaderContent;
-    unifiedFlow: StructuredSectionHeaderContent;
-    governedDeployment: StructuredSectionHeaderContent;
-    futureVision: StructuredSectionHeaderContent;
-    strategicPillars: StructuredSectionHeaderContent;
-  };
 };
 
 const hero: HeroContent = {
   eyebrow: 'AI-Powered Industrial Intelligence',
-  headline: {
-    leading: 'Ask anything about your plant',
-    highlight: 'and get answers instantly',
-  },
+  title: 'Ask anything about your plant - get answers instantly',
   description:
     'Connect industrial systems. Stream telemetry. Ask questions in plain English. Share insights anywhere - no pipelines, no delay.',
   primaryAction: {
@@ -80,8 +58,6 @@ const hero: HeroContent = {
   media: {
     src: '/assets/marketing/azi-industrial-dashboard.png',
     alt: 'Azi Industrial Monitoring Interface with real-time plant data and AI insights',
-    width: 1440,
-    height: 900,
   },
 };
 
@@ -267,170 +243,6 @@ const futureVisionItems: ChecklistItemContent[] = [
   },
 ];
 
-const strategicPillars: PillarItemContent[] = [
-  {
-    title: 'Governed by design',
-    description:
-      'Deploy in your Azure tenant with private networking, least-privilege access, and SOC-ready logging.',
-    badge: 'Governance',
-    accentToken: 'pillar-governance-accent',
-    glowToken: 'pillar-governance-glow',
-  },
-  {
-    title: 'Explainable intelligence',
-    description: 'Every answer shows its KQL so engineers can validate context before action.',
-    badge: 'Explainability',
-    accentToken: 'pillar-explainability-accent',
-    glowToken: 'pillar-explainability-glow',
-  },
-  {
-    title: 'Activation anywhere',
-    description: 'Publish queries as APIs, dashboards, and automations with zero manual lift.',
-    badge: 'Activation',
-    accentToken: 'pillar-activation-accent',
-    glowToken: 'pillar-activation-glow',
-  },
-];
-
-const integrationCount = integrationColumns.reduce(
-  (total, column) => total + column.items.length,
-  0,
-);
-
-const metrics: MetricHighlightContent[] = [
-  {
-    label: 'Pre-built integrations',
-    value: `${integrationCount}+`,
-    description: 'Protocols, middleware, and line-of-business systems ready to connect.',
-    intent: 'info',
-    trend: [48, 52, 56, 60, integrationCount],
-  },
-  {
-    label: 'Steps to governed insight',
-    value: `${howItWorksSteps.length}`,
-    description: 'From ingestion to activation in a guided, explainable flow.',
-    intent: 'primary',
-    trend: [3, howItWorksSteps.length, howItWorksSteps.length],
-  },
-  {
-    label: 'Cloud control options',
-    value: `${cloudControlItems.length}`,
-    description: 'Run in your tenant, shared cloud, or fully managed environments.',
-    intent: 'secondary',
-    trend: [2, 3, cloudControlItems.length],
-  },
-];
-
-const productSpotlightHighlights: ChecklistItemContent[] = futureVisionItems.slice(0, 3);
-
-const productSpotlightSection: StructuredSectionHeaderContent = {
-  eyebrow: valuePropositionHeading.eyebrow,
-  titleLines: [
-    { text: 'Connect your data.' },
-    { text: 'Ask anything. Share anywhere.', highlight: true },
-  ],
-  description: valuePropositionHeading.description,
-  align: 'left',
-};
-
-const sections: HomeContent['sections'] = {
-  productSpotlight: productSpotlightSection,
-  aiConversations: {
-    eyebrow: 'Meet Azi, your AI query assistant',
-    strapline: 'Plain-language answers',
-    titleLines: [{ text: 'Ask once. Deploy everywhere.' }],
-    kicker: 'Governed industrial data, explained',
-    description:
-      'Azi gives engineers direct access to live plant intelligence - no scripts, no SQL, no waiting on hand-offs. Every response stays governed and ready for dashboards, APIs, or automations.',
-    align: 'center',
-  },
-  governedFlow: {
-    eyebrow: 'From ingestion to activation',
-    titleLines: [
-      { text: 'How governed insight' },
-      { text: 'flows to action', highlight: true },
-    ],
-    description:
-      'Three steps to move explainable answers into production workflows without leaving your governed boundary.',
-    align: 'center',
-  },
-  integrationEcosystem: {
-    eyebrow: 'Works with your stack',
-    titleLines: [
-      { text: 'Connect seamlessly', highlight: true },
-      { text: 'To your current industrial systems' },
-    ],
-    description:
-      'Pre-built connectors map protocols, middleware, and execution systems into a single hub.',
-    kicker: `\${integrationCount}+ integration endpoints ready out of the box`,
-    align: 'center',
-  },
-  unifiedMetrics: {
-    eyebrow: 'Unified Operational Data',
-    strapline: 'Unified operational intelligence',
-    titleLines: [
-      { text: 'Governing data from control room to boardroom' },
-      { text: 'Metrics ready for every workflow', highlight: true },
-    ],
-    description:
-      'Open Industrial ingests live telemetry and orchestrates governed activation across your operational stack.',
-    align: 'center',
-  },
-  sharedTruth: {
-    eyebrow: 'Why teams choose Open Industrial',
-    titleLines: [
-      { text: 'Operational clarity for every team', highlight: true },
-      { text: 'Shared truth across operations, quality, and IT' },
-    ],
-    description:
-      'Give operations, quality, and IT the same live source of truth to coordinate faster decisions.',
-    align: 'center',
-  },
-  valueDelivery: {
-    eyebrow: 'Operational intelligence, delivered',
-    titleLines: [
-      { text: 'Turn industrial data', highlight: true },
-      { text: 'Into trusted, governed insight' },
-    ],
-    description:
-      'Break down data silos across OT and IT systems by turning live plant data into actionable, audit-ready insight your teams can act on.',
-    align: 'center',
-  },
-  unifiedFlow: {
-    eyebrow: 'Unified intelligence hub',
-    titleLines: [
-      { text: 'Data in, insight out', highlight: true },
-      { text: 'Trace governed telemetry from edge to action' },
-    ],
-    description:
-      'Visualize how telemetry lands in Open Industrial and flows back out into apps, agents, and APIs.',
-    align: 'center',
-  },
-  governedDeployment: {
-    eyebrow: 'Your cloud, your rules',
-    titleLines: [
-      { text: 'Deploy with governed flexibility', highlight: true },
-      { text: 'Choose the control plane that matches your policy' },
-    ],
-    description:
-      'Run Open Industrial in your Azure tenant for full access and control, or choose from shared cloud or fully managed options.',
-    align: 'center',
-  },
-  futureVision: {
-    titleLines: [{ text: 'From insight to action' }],
-    description:
-      'Open Industrial is evolving into a modular automation platform with adaptive agents that observe data, trigger workflows, and coordinate logic across systems.',
-    align: 'center',
-  },
-  strategicPillars: {
-    strapline: 'Three non-negotiables',
-    titleLines: [{ text: 'Guardrails that make Open Industrial different' }],
-    description:
-      'Each pillar keeps human oversight, governance, and activation aligned - so teams can ship confident, explainable outcomes.',
-    align: 'center',
-  },
-};
-
 const cta: CTAContent = {
   title: 'Ready to unlock instant telemetry insights?',
   description: 'Connect, query, and act on insights from the plant floor.',
@@ -460,10 +272,6 @@ export const homeContent: HomeContent = {
   benefitsItems,
   cloudControlItems,
   futureVisionItems,
-  strategicPillars,
-  metrics,
-  productSpotlightHighlights,
   cta,
   productSpotlightMedia,
-  sections,
 };
