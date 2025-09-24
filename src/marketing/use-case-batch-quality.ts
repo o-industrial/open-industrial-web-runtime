@@ -14,20 +14,22 @@ import type {
 } from './content.ts';
 
 export const batchQualityHero: HeroContent = {
-  eyebrow: 'Use Case',
-  title: 'Batch quality and compliance',
+  eyebrow: 'Batch Quality & Compliance',
+  headline: {
+    leading: 'Batch quality and compliance',
+  },
   description:
-    'Unify MES, LIMS, QMS, ERP, and DMS into an explainable, audit-ready query layer for every batch.',
+    'Monitor and manage batch execution data in real-time. Identify anomalies, catch deviations, and satisfy compliance requirements without waiting on manual reports.',
   primaryAction: {
-    label: 'Schedule a demo',
-    href: '/contact',
+    label: 'Talk to Us',
+    href: 'https://www.openindustrial.co/workspace',
     intent: 'primary',
+    external: true,
   },
   secondaryAction: {
-    label: 'Learn more',
-    href: 'https://www.openindustrial.co/docs/',
+    label: 'See Capabilities',
+    href: '/docs',
     intent: 'secondary',
-    external: true,
   },
 };
 

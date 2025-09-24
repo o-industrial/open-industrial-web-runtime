@@ -2,6 +2,8 @@ import type { ComponentType } from 'preact';
 import type { JSX } from 'preact';
 import type { GradientIntent } from '@o-industrial/common/atomic/atoms';
 
+import type { MarketingGradientToken } from './gradients.ts';
+
 export type MarketingActionIntent = 'primary' | 'secondary' | 'ghost';
 
 export interface MarketingAction {
@@ -25,6 +27,20 @@ export interface SectionHeaderContent {
   description?: string;
   align?: 'left' | 'center';
   kicker?: string;
+}
+
+export interface SectionHeaderLineContent {
+  text: string;
+  highlight?: boolean;
+}
+
+export interface StructuredSectionHeaderContent {
+  eyebrow?: string;
+  strapline?: string;
+  titleLines: SectionHeaderLineContent[];
+  description?: string;
+  kicker?: string;
+  align?: 'left' | 'center';
 }
 
 export interface FeatureItemContent {
@@ -54,6 +70,32 @@ export interface QuoteItemContent {
   quote: string;
   attribution?: string;
   role?: string;
+}
+
+export interface PillarItemContent {
+  title: string;
+  description: string;
+  badge: string;
+  accentToken: MarketingGradientToken;
+  glowToken: MarketingGradientToken;
+}
+
+export type MetricIntent =
+  | 'none'
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'info'
+  | 'warning'
+  | 'error';
+
+export interface MetricHighlightContent {
+  label: string;
+  value: string;
+  description?: string;
+  intent?: MetricIntent;
+  delta?: number;
+  trend?: number[];
 }
 
 export interface ToggleQueryContent {
@@ -88,9 +130,15 @@ export interface CTAContent {
   secondaryAction?: MarketingAction;
 }
 
+export interface HeroHeadlineContent {
+  leading: string;
+  highlight?: string;
+  trailing?: string;
+}
+
 export interface HeroContent {
   eyebrow?: string;
-  title: string;
+  headline: HeroHeadlineContent;
   description?: string;
   supporting?: string;
   media?: MediaContent;

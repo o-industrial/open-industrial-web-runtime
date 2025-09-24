@@ -17,7 +17,9 @@ import {
 import { EaCDenoKVDetails, EverythingAsCodeDenoKV } from '@fathym/eac-deno-kv';
 import {
   EaCBaseHREFModifierDetails,
+  EaCGoogleTagMgrModifierDetails,
   EaCKeepAliveModifierDetails,
+  EaCMSAppInsightsModifierDetails,
   EaCOAuthModifierDetails,
 } from '@fathym/eac-applications/modifiers';
 import {
@@ -77,7 +79,13 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             },
             ModifierResolvers: {
+              googleTagMgr: {
+                Priority: 5000,
+              },  
               keepAlive: {
+                Priority: 5000,
+              },
+              msAppInsights: {
                 Priority: 5000,
               },
               oauth: {
@@ -536,6 +544,14 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Description: 'Adjusts the base HREF of a response based on configureation.',
             } as EaCBaseHREFModifierDetails,
           },
+          googleTagMgr: {
+            Details: {
+              Type: 'GoogleTagMgr',
+              Name: 'Google Tag Manager',
+              Description: 'Adds code to pages to support Google Analytics and other actions',
+              GoogleID: Deno.env.get('GOOGLE_TAGS_ID')!,
+            } as EaCGoogleTagMgrModifierDetails,
+          },
           keepAlive: {
             Details: {
               Type: 'KeepAlive',
@@ -543,6 +559,15 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Description: 'Lightweight cache to use that stores data in a DenoKV database.',
               KeepAlivePath: '/_eac/alive',
             } as EaCKeepAliveModifierDetails,
+          },
+          msAppInsights: {
+            Details: {
+              Type: 'MSAppInsights',
+              Name: 'Microsoft Application Insights',
+              Description:
+                'Adds code to pages to support Microsoft Azure Application Insights and other actions',
+              InstrumentationKey: Deno.env.get('APP_INSIGHTS_INSTRUMENTATION_KEY')!,
+            } as EaCMSAppInsightsModifierDetails,
           },
           oauth: {
             Details: {
