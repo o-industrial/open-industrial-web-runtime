@@ -2,43 +2,57 @@ import { JSX } from 'preact';
 
 import { ValueGridSection } from '@o-industrial/common/atomic/organisms';
 
+import { marketingSectionContent } from '../shared/layout.ts';
 import { homeContent } from '../../../../../src/marketing/home.ts';
 
 export default function ValueDeliverySection(): JSX.Element {
+  const header = homeContent.sections.valueDelivery;
+
   return (
     <ValueGridSection
       header={{
-        eyebrow: 'Operational intelligence, delivered',
+        eyebrow: header.eyebrow,
         title: (
           <span class='block text-balance leading-tight text-white'>
-            <span class='block text-3xl font-semibold sm:text-[2.75rem]'>
-              <span class='bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-neon-green-400 bg-clip-text text-transparent'>
-                Turn industrial data
+            {header.titleLines.map((line, index) => (
+              <span
+                key={'value-delivery-title-' + index + '-' + line.text}
+                class={'block ' +
+                  (index === 0
+                    ? 'text-3xl font-semibold sm:text-[2.75rem] '
+                    : 'mt-3 text-3xl font-semibold sm:text-[2.2rem] ') +
+                  (line.highlight
+                    ? 'bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-neon-green-400 bg-clip-text text-transparent'
+                    : 'text-white')}
+              >
+                {line.text}
               </span>
-            </span>
-            <span class='mt-3 block text-3xl font-semibold sm:text-[2.2rem]'>
-              Into trusted, governed insight
-            </span>
+            ))}
           </span>
         ),
-        description: (
-          <span class='mx-auto mt-4 block max-w-3xl text-base text-white/70'>
-            Break down data silos across OT and IT systems by turning live plant data into
-            actionable, audit-ready insight your teams can act on.
-          </span>
-        ),
-        align: 'center',
+        description: header.description
+          ? (
+            <span class='mx-auto mt-4 block max-w-3xl text-base text-white/70'>
+              {header.description}
+            </span>
+          )
+          : undefined,
+        align: header.align ?? 'center',
       }}
-      items={homeContent.featureGridItems}
+      items={homeContent.featureGridItems.map((item) => ({ ...item }))}
       width='full'
       tone='emphasis'
       variant='dark'
       cardVariant='dark'
       showIndexBadge
       columns={2}
-      contentClass='relative mx-auto flex w-full max-w-6xl flex-col gap-16 px-6'
-      disableAccents
-      class='bg-slate-950 py-28 text-white'
+      contentClass={marketingSectionContent({
+        width: 'wide',
+        padding: 'md',
+        center: true,
+        extra: 'flex flex-col gap-16',
+      })}
+      class='border-y border-white/10 py-28 text-white'
     />
   );
 }
