@@ -37,6 +37,11 @@ export default function DashboardLayout({
         <div class='relative w-screen h-screen max-w-full flex flex-col overflow-hidden'>
           <Component />
         </div>
+        <script
+          type='module'
+          src='/assets/js/oi-interface-loader.js'
+          data-eac-bypass-base
+        />
       </body>
     </html>
   );

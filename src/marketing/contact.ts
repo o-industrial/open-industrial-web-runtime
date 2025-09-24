@@ -8,24 +8,21 @@ import type {
 
 export const contactHero: HeroContent = {
   eyebrow: 'Contact Open Industrial',
-  title: "Let's connect",
+  headline: {
+    leading: "Let's connect",
+  },
   description:
-    'Discuss how Open Industrial unifies your OT systems, streams telemetry, and delivers insights you can trust.',
+    'Reach out to discuss production trials, integrations, and how Open Industrial can align to your governance roadmap.',
   primaryAction: {
-    label: 'Get Started',
-    href: 'https://www.openindustrial.co/workspace',
+    label: 'Message the Team',
+    href: 'mailto:hello@openindustrial.co',
     intent: 'primary',
-    external: true,
   },
   secondaryAction: {
-    label: 'View Documentation',
-    href: 'https://www.openindustrial.co/docs/',
+    label: 'Request a Demo',
+    href: 'https://www.openindustrial.co/workspace',
     intent: 'secondary',
     external: true,
-  },
-  media: {
-    src: '/assets/marketing/azi-industrial-dashboard.png',
-    alt: 'Operators analyzing plant data inside the Open Industrial workspace.',
   },
 };
 
