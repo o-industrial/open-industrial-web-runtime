@@ -115,7 +115,6 @@ export default function WorkspacePage({
           'workspace',
           aziUrl,
           aziWarmQueryUrl,
-          undefined,
           accessRights,
           oiApiToken,
         );
@@ -127,55 +126,6 @@ export default function WorkspacePage({
       }
     })();
   }, []);
-
-  useEffect(() => {
-    if (!workspaceMgr) return;
-
-    const registry = (globalThis as unknown as {
-      OIInterface?: {
-        onAction?: (
-          handler: (
-            detail: {
-              action?: { type: string; payload?: unknown; lookup?: string; workspace?: string };
-              element?: Element;
-            },
-          ) => void,
-        ) => (() => void) | void;
-      };
-    }).OIInterface;
-    if (!registry?.onAction) return;
-
-    const unsubscribe = registry.onAction((detail) => {
-      if (!detail || typeof detail !== 'object') return;
-      const action = (detail as {
-        action?: { type: string; payload?: unknown; lookup?: string; workspace?: string };
-      }).action;
-      if (!action || typeof action.type !== 'string') return;
-
-      const lookup = action.lookup || '';
-      if (lookup) {
-        workspaceMgr.CreateInterfaceAziIfNotExist?.(lookup);
-      }
-
-      const payload = {
-        lookup,
-        type: action.type,
-        payload: action.payload,
-        workspace: action.workspace,
-      };
-
-      try {
-        (workspaceMgr as unknown as { DispatchInterfaceAction?: (value: typeof payload) => void })
-          .DispatchInterfaceAction?.(payload);
-      } catch (err) {
-        console.warn('[WorkspacePage] Failed to dispatch interface action', err);
-      }
-    });
-
-    return () => {
-      if (typeof unsubscribe === 'function') unsubscribe();
-    };
-  }, [workspaceMgr]);
 
   if (!workspaceMgr) return <div>Loading workspace...</div>;
 

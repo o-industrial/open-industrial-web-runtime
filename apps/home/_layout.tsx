@@ -1,6 +1,5 @@
 import { PageProps } from '@fathym/eac-applications/preact';
 import { MarketingNavigation } from '@o-industrial/common/atomic/organisms';
-import { resolveMarketingAnalyticsConfig } from '../../src/marketing/config.ts';
 import {
   ctaLinks,
   footerPrimaryLinks,
@@ -30,16 +29,8 @@ export default function HomeLayout({
   Component,
   Revision,
 }: PageProps) {
-  const analyticsConfig = resolveMarketingAnalyticsConfig();
-  const runtimeConfigJson = JSON.stringify({ analytics: analyticsConfig }).replace(/</g, '\u003c');
-  const hubspotEnabled = Boolean(
-    analyticsConfig.enableHubspotForms &&
-      analyticsConfig.hubspotPortalId &&
-      analyticsConfig.hubspotFormId,
-  );
-
   return (
-    <html lang='en'>
+    <html>
       <head>
         <meta charset='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
@@ -59,40 +50,15 @@ export default function HomeLayout({
           data-eac-bypass-base
         />
 
-        <link rel='preconnect' href='https://cdn.segment.com' crossOrigin='anonymous' />
-        <link rel='dns-prefetch' href='https://cdn.segment.com' />
-        {hubspotEnabled
-          ? (
-            <>
-              <link rel='preconnect' href='https://js.hsforms.net' crossOrigin='anonymous' />
-              <link rel='dns-prefetch' href='https://js.hsforms.net' />
-              <link rel='preconnect' href='https://forms.hsforms.com' crossOrigin='anonymous' />
-            </>
-          )
-          : null}
-
         <script
-          dangerouslySetInnerHTML={{
-            __html: `window.__OI_MARKETING_RUNTIME__ = ${runtimeConfigJson};`,
-          }}
-        />
-        {hubspotEnabled
-          ? (
-            <script
-              charSet='utf-8'
-              type='text/javascript'
-              src='https://js.hsforms.net/forms/embed/v2.js'
-              defer
-            >
-            </script>
-          )
-          : null}
+          charset='utf-8'
+          type='text/javascript'
+          src='https://js.hsforms.net/forms/embed/v2.js'
+        >
+        </script>
       </head>
 
-      <body
-        class='bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50'
-        data-hubspot-enabled={hubspotEnabled ? 'true' : 'false'}
-      >
+      <body class='bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50'>
         <div class='flex min-h-screen flex-col'>
           <header class='sticky top-0 z-50 border-b border-neutral-200/80 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-neutral-950/80'>
             <div class='mx-auto flex max-w-7xl items-center gap-4 px-6 py-4'>
@@ -165,7 +131,7 @@ export default function HomeLayout({
               </div>
             </div>
 
-            <div class='px-6 pb-10 text-center text-xs text-neutral-600 dark:text-neutral-400'>
+            <div class='px-6 pb-10 text-center text-xs text-neutral-500 dark:text-neutral-500'>
               &copy; {new Date().getFullYear()} Open Industrial. All rights reserved.
             </div>
           </footer>

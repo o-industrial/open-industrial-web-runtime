@@ -2,49 +2,35 @@ import { JSX } from 'preact';
 
 import { BenefitsSection } from '@o-industrial/common/atomic/organisms';
 
-import { SharedTruthBackdrop } from '../shared/backgrounds.tsx';
-import { marketingSectionContent } from '../shared/layout.ts';
 import { homeContent } from '../../../../../src/marketing/home.ts';
 
 export default function SharedTruthSection(): JSX.Element {
-  const header = homeContent.sections.sharedTruth;
-
   return (
-    <section class='relative overflow-hidden border-y border-white/10'>
-      <SharedTruthBackdrop />
-      <BenefitsSection
-        header={{
-          eyebrow: header.eyebrow,
-          title: (
-            <span class='block text-balance leading-tight text-white'>
-              {header.titleLines.map((line, index) => (
-                <span
-                  key={'shared-truth-title-' + index + '-' + line.text}
-                  class={'block ' +
-                    (index > 0 ? 'mt-2 ' : '') +
-                    (line.highlight
-                      ? 'bg-gradient-to-r from-neon-purple-500 via-neon-blue-500 to-neon-green-400 bg-clip-text text-transparent'
-                      : 'text-white')}
-                >
-                  {line.text}
-                </span>
-              ))}
+    <BenefitsSection
+      header={{
+        eyebrow: 'Why teams choose Open Industrial',
+        title: (
+          <span class='block text-balance leading-tight'>
+            <span class='bg-gradient-to-r from-neon-purple-500 via-neon-blue-500 to-neon-green-400 bg-clip-text text-transparent'>
+              Operational clarity for every team
             </span>
-          ),
-          description: header.description
-            ? (
-              <span class='mx-auto mt-4 block max-w-3xl text-base text-white/70'>
-                {header.description}
-              </span>
-            )
-            : undefined,
-          align: header.align ?? 'center',
-        }}
-        items={homeContent.benefitsItems}
-        width='wide'
-        contentClass={marketingSectionContent({ width: 'xwide', padding: 'none' })}
-        class='relative py-24 text-white'
-      />
-    </section>
+            <span class='mt-2 block text-neutral-100 dark:text-white'>
+              Shared truth across operations, quality, and IT
+            </span>
+          </span>
+        ),
+        description: (
+          <span class='text-base text-neutral-300 dark:text-neutral-300'>
+            Give operations, quality, and IT the same live source of truth to coordinate faster
+            decisions.
+          </span>
+        ),
+        align: 'center',
+      }}
+      items={homeContent.benefitsItems}
+      width='wide'
+      contentClass='max-w-7xl'
+      class='relative overflow-hidden border-y border-white/10 bg-[radial-gradient(circle_at_top,_rgba(129,140,248,0.18),rgba(9,11,24,0.9)),linear-gradient(155deg,rgba(8,11,24,0.97),rgba(13,17,33,0.94))]'
+    />
   );
 }
