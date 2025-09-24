@@ -1,5 +1,8 @@
 import { useEffect, useRef } from 'preact/hooks';
 
+import { trackHubspotLoaded, trackHubspotSubmitted } from '../../../../src/marketing/analytics.ts';
+import { getHubspotFormConfig, isHubspotFormsEnabled } from '../../../../src/marketing/runtime.ts';
+
 export const IsIsland = true;
 
 // deno-lint-ignore no-explicit-any
@@ -7,8 +10,8 @@ declare const hbspt: any;
 
 export function HubspotForm({
   id = 'hubspot-form',
-  portalId = '2687377',
-  formId = '560105cb-d75e-480b-9e1a-cdbd10172e56',
+  portalId,
+  formId,
 }: {
   id?: string;
   portalId?: string;
@@ -16,35 +19,67 @@ export function HubspotForm({
 }) {
   const formRef = useRef<HTMLDivElement>(null);
 
-  console.log(`[HubspotForm] Form #${id} loading`);
+  const configIds = getHubspotFormConfig();
+  const resolvedPortalId = portalId ?? configIds.portalId;
+  const resolvedFormId = formId ?? configIds.formId;
+  const configEnabled = isHubspotFormsEnabled();
+  const hubspotReady = Boolean(
+    resolvedPortalId &&
+      resolvedFormId &&
+      (configEnabled || (portalId && formId)),
+  );
 
   useEffect(() => {
+    if (!hubspotReady || !resolvedPortalId || !resolvedFormId) {
+      return;
+    }
+
+    let loadedTracked = false;
+    let cancelled = false;
+
     const waitForHbspt = () => {
+      if (cancelled) {
+        return;
+      }
+
       if (
         typeof hbspt !== 'undefined' &&
         typeof hbspt.forms?.create === 'function'
       ) {
-        console.log(`[HubspotForm] Initializing form #${id}`);
         hbspt.forms.create({
-          portalId,
-          formId,
+          portalId: resolvedPortalId,
+          formId: resolvedFormId,
           region: 'na1',
-          target: `#${id}`,
+          target: '#' + id,
           onFormReady: () => {
-            console.log(`[HubspotForm] Form #${id} ready`);
+            if (!loadedTracked) {
+              trackHubspotLoaded(resolvedPortalId, resolvedFormId);
+              loadedTracked = true;
+            }
           },
-          onFormSubmit: () => {
-            console.log(`[HubspotForm] Form #${id} submitted`);
+          onFormSubmit: (form: unknown) => {
+            const submissionId = (form as { guid?: string } | undefined)?.guid;
+            trackHubspotSubmitted(resolvedPortalId, resolvedFormId, submissionId);
           },
         });
       } else {
-        console.log('[HubspotForm] hbspt not ready yet, retrying...');
-        setTimeout(waitForHbspt, 100); // retry until loaded
+        setTimeout(waitForHbspt, 100);
       }
     };
 
     waitForHbspt();
-  }, [id, portalId, formId]);
 
-  return <div ref={formRef} id={id} class='w-full max-w-xl mx-auto' />;
+    return () => {
+      cancelled = true;
+    };
+  }, [hubspotReady, id, resolvedPortalId, resolvedFormId]);
+
+  return (
+    <div
+      ref={formRef}
+      id={id}
+      data-hubspot-ready={hubspotReady ? 'true' : 'false'}
+      class='w-full max-w-xl mx-auto'
+    />
+  );
 }

@@ -25,6 +25,8 @@
     "refresh:docker": "npx rimraf cov && deno task build:docker && deno task network:docker && deno task clean:docker && deno task deploy:docker",
     "start": "deno run -A main.ts",
     "test": "npx rimraf cov && deno test -A tests/**/*.tests.ts --coverage=cov",
+    "qa:smoke": "deno test -A tests/qa/home_smoke.test.ts",
+    "qa:lighthouse": "deno run -A scripts/qa-lighthouse.ts",
     "version": "deno run -A jsr:@fathym/common@0/build/version"
   },
   "imports": {
