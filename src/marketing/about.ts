@@ -7,7 +7,9 @@ import type {
 
 export const aboutHero: HeroContent = {
   eyebrow: 'About Open Industrial',
-  title: 'Your industrial data - unified, queryable, actionable',
+  headline: {
+    leading: 'Your industrial data - unified, queryable, actionable',
+  },
   description:
     'Open Industrial is an Azure-powered telemetry hub for operational technology. We ingest data from control systems, MES, lab tools, historians, and IoT devices - making it instantly queryable in natural language or APIs, ready for analytics, agents, and automation.',
   primaryAction: {

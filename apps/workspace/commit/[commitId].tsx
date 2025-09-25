@@ -15,6 +15,7 @@ export const IsIsland = true;
 type CommitStatusPageData = {
   AziCircuitUrl: string;
   AziWarmQueryCircuitUrl: string;
+  AziInterfaceCircuitUrl: string;
   OIAPIRoot: string;
   OIAPIToken: string;
   OILicense?: EaCUserLicense;
@@ -27,9 +28,19 @@ export const handler: EaCRuntimeHandlerSet<
   CommitStatusPageData
 > = {
   GET: (_req, ctx) => {
+    const interfaceCircuitUrl = Deno.env.get('AZI_INTERFACE_CIRCUIT_URL') ??
+      Deno.env.get('AZI_WARM_QUERY_CIRCUIT_URL');
+
+    if (!interfaceCircuitUrl) {
+      throw new Error(
+        'AZI_INTERFACE_CIRCUIT_URL or AZI_WARM_QUERY_CIRCUIT_URL must be configured.',
+      );
+    }
+
     return ctx.Render({
       AziCircuitUrl: Deno.env.get('AZI_MAIN_CIRCUIT_URL')!,
       AziWarmQueryCircuitUrl: Deno.env.get('AZI_WARM_QUERY_CIRCUIT_URL')!,
+      AziInterfaceCircuitUrl: interfaceCircuitUrl,
       OIAPIRoot: '/api/',
       OIAPIToken: ctx.State.OIJWT,
       OILicense: ctx.State.UserLicenses?.['o-industrial'],
@@ -43,6 +54,7 @@ export default function CommitStatusPage({
   Data: {
     AziCircuitUrl,
     AziWarmQueryCircuitUrl,
+    AziInterfaceCircuitUrl,
     OIAPIRoot,
     OIAPIToken,
     OILicense,
@@ -80,7 +92,7 @@ export default function CommitStatusPage({
         'workspace',
         AziCircuitUrl,
         AziWarmQueryCircuitUrl,
-        undefined,
+        AziInterfaceCircuitUrl,
         undefined,
         OIAPIToken,
       );
