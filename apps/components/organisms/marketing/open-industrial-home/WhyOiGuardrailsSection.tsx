@@ -1,4 +1,4 @@
-﻿import type { JSX } from 'preact';
+import type { JSX } from 'preact';
 
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 
@@ -53,7 +53,9 @@ export default function WhyOiGuardrailsSection(): JSX.Element {
           <h3 class='text-2xl font-semibold tracking-tight text-neutral-900 dark:text-white'>
             {guardrails.title}
           </h3>
-          <p class='text-sm text-neutral-600 sm:text-base dark:text-neutral-300'>{guardrails.body}</p>
+          <p class='text-sm text-neutral-600 sm:text-base dark:text-neutral-300'>
+            {guardrails.body}
+          </p>
         </div>
 
         <div class='mt-10 grid gap-6 sm:grid-cols-3'>

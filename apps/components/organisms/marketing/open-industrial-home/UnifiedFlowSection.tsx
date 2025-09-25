@@ -1,4 +1,4 @@
-﻿import type { JSX } from 'preact';
+import type { JSX } from 'preact';
 
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 
@@ -48,7 +48,9 @@ export default function UnifiedFlowSection(): JSX.Element {
             class='rounded-2xl border border-neutral-200/70 bg-white px-5 py-4 text-sm shadow-sm dark:border-white/10 dark:bg-neutral-900 dark:shadow-[0_20px_60px_-40px_rgba(15,23,42,0.85)]'
           >
             <div class='flex items-start gap-3 text-left text-neutral-700 dark:text-neutral-200'>
-              <span class={`mt-1 h-2.5 w-2.5 rounded-full ${bulletGlows[index % bulletGlows.length]}`} />
+              <span
+                class={`mt-1 h-2.5 w-2.5 rounded-full ${bulletGlows[index % bulletGlows.length]}`}
+              />
               <span>{bullet}</span>
             </div>
           </li>

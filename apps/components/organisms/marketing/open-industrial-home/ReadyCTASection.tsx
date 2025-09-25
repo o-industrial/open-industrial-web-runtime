@@ -1,4 +1,4 @@
-﻿import type { JSX } from 'preact';
+import type { JSX } from 'preact';
 
 import { Action, ActionStyleTypes, SectionSurface } from '@o-industrial/common/atomic/atoms';
 import type { MarketingAction } from '../../../../../src/marketing/content.ts';

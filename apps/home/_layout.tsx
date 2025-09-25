@@ -1,4 +1,4 @@
-﻿import { PageProps } from '@fathym/eac-applications/preact';
+import { PageProps } from '@fathym/eac-applications/preact';
 import { MarketingNavigation } from '@o-industrial/common/atomic/organisms';
 import type { MarketingNavLink } from '@o-industrial/common/atomic/organisms';
 import {
@@ -11,7 +11,8 @@ import {
 
 const renderFooterLink = (
   link: MarketingNavLink,
-  className = 'transition-colors text-neutral-600 hover:text-neutral-900 dark:text-neutral-200 dark:hover:text-white',
+  className =
+    'transition-colors text-neutral-600 hover:text-neutral-900 dark:text-neutral-200 dark:hover:text-white',
 ) => (
   <a
     key={link.href}

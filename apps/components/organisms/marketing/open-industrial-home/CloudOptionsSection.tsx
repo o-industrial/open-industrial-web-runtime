@@ -1,4 +1,4 @@
-﻿import type { JSX } from 'preact';
+import type { JSX } from 'preact';
 
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 
@@ -50,16 +50,22 @@ export default function CloudOptionsSection(): JSX.Element {
 
       <div class='rounded-3xl border border-neutral-200/70 bg-white px-6 py-10 text-center shadow-sm dark:border-white/10 dark:bg-neutral-900 dark:shadow-[0_35px_90px_-70px_rgba(15,23,42,0.85)]'>
         <h3 class='text-2xl font-semibold text-neutral-900 dark:text-white'>{sovereignty.title}</h3>
-        <p class='mt-3 text-sm text-neutral-600 sm:text-base dark:text-neutral-300'>{sovereignty.body}</p>
+        <p class='mt-3 text-sm text-neutral-600 sm:text-base dark:text-neutral-300'>
+          {sovereignty.body}
+        </p>
         <ul class='mt-6 grid gap-3 text-sm sm:grid-cols-2'>
           {sovereignty.bullets.map((bullet, index) => (
             <li
               key={bullet}
               class='flex items-start gap-3 rounded-2xl border border-neutral-200/60 bg-white px-4 py-3 text-left shadow-sm dark:border-white/10 dark:bg-neutral-900'
             >
-              <span class={`mt-1 h-2.5 w-2.5 rounded-full ${index % 2 === 0
-                ? 'bg-neon-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.75)]'
-                : 'bg-neon-purple-500 shadow-[0_0_8px_rgba(139,92,246,0.75)]'}`} />
+              <span
+                class={`mt-1 h-2.5 w-2.5 rounded-full ${
+                  index % 2 === 0
+                    ? 'bg-neon-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.75)]'
+                    : 'bg-neon-purple-500 shadow-[0_0_8px_rgba(139,92,246,0.75)]'
+                }`}
+              />
               <span class='text-neutral-700 dark:text-neutral-200'>{bullet}</span>
             </li>
           ))}

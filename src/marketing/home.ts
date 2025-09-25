@@ -1,4 +1,4 @@
-﻿import type { MarketingAction, MediaContent } from './content.ts';
+import type { MarketingAction, MediaContent } from './content.ts';
 
 type HomeHeroContent = {
   headline: string;
@@ -130,13 +130,11 @@ export const homeContent: HomeContent = {
       },
       {
         title: 'Ask Azi',
-        body:
-          'Type a natural-language question. Azi translates it into governed, explainable KQL.',
+        body: 'Type a natural-language question. Azi translates it into governed, explainable KQL.',
       },
       {
         title: 'Share',
-        body:
-          'Save queries as APIs to power dashboards, reports, and workflows - instantly.',
+        body: 'Save queries as APIs to power dashboards, reports, and workflows - instantly.',
       },
     ],
   },
@@ -204,7 +202,8 @@ export const homeContent: HomeContent = {
       },
       {
         title: 'Flexible Output',
-        body: 'Publish insights as governed APIs that feed dashboards, workflows, and applications.',
+        body:
+          'Publish insights as governed APIs that feed dashboards, workflows, and applications.',
       },
     ],
     guardrails: {
@@ -259,7 +258,8 @@ export const homeContent: HomeContent = {
     pillars: [
       {
         title: 'Schema-Aware Workflows',
-        body: 'Define workflows that understand production context and enforce automation guardrails.',
+        body:
+          'Define workflows that understand production context and enforce automation guardrails.',
       },
       {
         title: 'Adaptive Agents',

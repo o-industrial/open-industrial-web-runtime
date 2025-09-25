@@ -1,7 +1,7 @@
-﻿import type { JSX } from 'preact';
+import type { JSX } from 'preact';
 
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
-import { ConnectionIcon, WarmQueryIcon, StackIcon } from '@o-industrial/common/atomic/icons';
+import { ConnectionIcon, StackIcon, WarmQueryIcon } from '@o-industrial/common/atomic/icons';
 
 import { homeContent } from '../../../../../src/marketing/home.ts';
 

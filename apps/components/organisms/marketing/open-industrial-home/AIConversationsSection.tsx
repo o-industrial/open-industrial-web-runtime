@@ -1,4 +1,4 @@
-﻿import type { JSX } from 'preact';
+import type { JSX } from 'preact';
 
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 
@@ -32,7 +32,9 @@ export default function AIConversationsSection(): JSX.Element {
         <h2 class='text-balance text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl dark:text-white'>
           {headline}
         </h2>
-        <p class='mx-auto max-w-2xl text-base text-neutral-600 sm:text-lg dark:text-neutral-300'>{body}</p>
+        <p class='mx-auto max-w-2xl text-base text-neutral-600 sm:text-lg dark:text-neutral-300'>
+          {body}
+        </p>
       </div>
 
       <ul class='grid w-full gap-4 sm:grid-cols-3'>
@@ -45,7 +47,9 @@ export default function AIConversationsSection(): JSX.Element {
               <span class='h-1.5 w-1.5 rounded-full bg-neon-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.85)]' />
               Prompt
             </span>
-            <span class='mt-3 block text-base font-medium text-neutral-900 dark:text-white'>{example}</span>
+            <span class='mt-3 block text-base font-medium text-neutral-900 dark:text-white'>
+              {example}
+            </span>
           </li>
         ))}
       </ul>

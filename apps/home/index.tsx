@@ -1,4 +1,4 @@
-﻿import { PageProps } from '@fathym/eac-applications/preact';
+import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 
 import HeroExperienceSection from '../components/organisms/marketing/open-industrial-home/HeroExperienceSection.tsx';

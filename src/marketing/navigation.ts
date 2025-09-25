@@ -1,4 +1,4 @@
-﻿import type { MarketingNavCTA, MarketingNavLink } from '@o-industrial/common/atomic/organisms';
+import type { MarketingNavCTA, MarketingNavLink } from '@o-industrial/common/atomic/organisms';
 
 export const primaryNavLinks: MarketingNavLink[] = [
   { label: 'About', href: '/about' },

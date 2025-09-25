@@ -1,11 +1,11 @@
-﻿import type { JSX } from 'preact';
+import type { JSX } from 'preact';
 
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 import {
   CompositeSchemaIcon,
+  SignalIcon,
   TimelineIcon,
   VisibilityIcon,
-  SignalIcon,
 } from '@o-industrial/common/atomic/icons';
 
 import { homeContent } from '../../../../../src/marketing/home.ts';
