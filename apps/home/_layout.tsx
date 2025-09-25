@@ -11,7 +11,7 @@ import {
 
 const renderFooterLink = (
   link: MarketingNavLink,
-  className = 'transition-colors hover:text-neutral-900 dark:hover:text-white',
+  className = 'transition-colors text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white',
 ) => (
   <a
     key={link.href}
@@ -72,7 +72,7 @@ export default function HomeLayout({
 
       <body class='bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50'>
         <div class='flex min-h-screen flex-col'>
-          <header class='sticky top-0 z-50 border-b border-neutral-200/80 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-neutral-950/80'>
+          <header class='sticky top-0 z-50 border-b border-neutral-200/80 bg-white/85 backdrop-blur-lg dark:border-white/10 dark:bg-neutral-950/90'>
             <div class='mx-auto flex max-w-7xl items-center gap-4 px-6 py-4'>
               <a href='/' class='flex items-center gap-3 group' data-eac-bypass-base>
                 <img
@@ -103,7 +103,7 @@ export default function HomeLayout({
             <Component />
           </main>
 
-          <footer class='border-t border-neutral-200/80 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-neutral-950/80'>
+          <footer class='border-t border-neutral-200/80 bg-white/85 backdrop-blur-lg dark:border-white/10 dark:bg-neutral-950/90'>
             <div class='mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-12 md:grid-cols-[1fr_auto] md:items-start'>
               <div class='max-w-xl space-y-4'>
                 <a href='/' class='inline-flex items-center gap-3 group' data-eac-bypass-base>
@@ -120,7 +120,7 @@ export default function HomeLayout({
                     data-eac-bypass-base
                   />
                 </a>
-                <p class='text-sm text-neutral-600 dark:text-neutral-400'>{marketingTagline}</p>
+                <p class='text-sm text-neutral-600 dark:text-neutral-300'>{marketingTagline}</p>
               </div>
 
               <div class='flex flex-col gap-6 text-sm sm:flex-row'>
@@ -128,7 +128,7 @@ export default function HomeLayout({
                   {footerPrimaryLinks.map((link) =>
                     renderFooterLink(
                       link,
-                      'text-sm text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white',
+                      'text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white',
                     )
                   )}
                 </div>
@@ -136,14 +136,14 @@ export default function HomeLayout({
                   {footerSecondaryLinks.map((link) =>
                     renderFooterLink(
                       link,
-                      'text-sm text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white',
+                      'text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white',
                     )
                   )}
                 </div>
               </div>
             </div>
 
-            <div class='px-6 pb-10 text-center text-xs text-neutral-500 dark:text-neutral-500'>
+            <div class='px-6 pb-10 text-center text-xs text-neutral-500 dark:text-neutral-400'>
               &copy; {new Date().getFullYear()} Open Industrial. All rights reserved.
             </div>
           </footer>

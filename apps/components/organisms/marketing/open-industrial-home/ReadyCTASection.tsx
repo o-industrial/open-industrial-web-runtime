@@ -5,8 +5,6 @@ import type { MarketingAction } from '../../../../../src/marketing/content.ts';
 
 import { homeContent } from '../../../../../src/marketing/home.ts';
 
-const PRE_HEADLINE_CLASS = 'text-xs font-semibold uppercase tracking-[0.3em] text-neutral-400';
-
 function mapIntent(intent?: 'primary' | 'secondary' | 'ghost'): ActionStyleTypes {
   switch (intent) {
     case 'secondary':
@@ -36,6 +34,19 @@ function renderAction(action: MarketingAction): JSX.Element | null {
   );
 }
 
+function PreHeadline({ value }: { value?: string }): JSX.Element | null {
+  if (!value) {
+    return null;
+  }
+
+  return (
+    <span class='inline-flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-[0.32em] text-neutral-600 dark:text-neutral-300'>
+      <span class='h-2 w-2 rounded-full bg-gradient-to-br from-neon-blue-500 via-neon-purple-500 to-neon-pink-500 shadow-[0_0_10px_rgba(129,140,248,0.45)]' />
+      {value}
+    </span>
+  );
+}
+
 export default function ReadyCTASection(): JSX.Element {
   const { preHeadline, headline, subhead, primaryCta, secondaryCta } = homeContent.cta;
 
@@ -52,7 +63,7 @@ export default function ReadyCTASection(): JSX.Element {
       </div>
 
       <div class='space-y-4'>
-        <span class={PRE_HEADLINE_CLASS}>{preHeadline}</span>
+        <PreHeadline value={preHeadline} />
         <h2 class='text-balance text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl dark:text-white'>
           {headline}
         </h2>

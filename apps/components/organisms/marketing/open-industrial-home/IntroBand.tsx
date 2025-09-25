@@ -11,13 +11,14 @@ export default function IntroBand(): JSX.Element {
     <SectionSurface
       tone='muted'
       width='wide'
-      contentClass='mx-auto flex w-full max-w-5xl flex-col gap-3 px-6 py-14 text-center'
-      class='border-y border-neutral-200/60 dark:border-white/10'
+      contentClass='mx-auto flex w-full max-w-5xl flex-col gap-4 px-6 py-14 text-center'
+      class='relative border-y border-neutral-200/70 bg-white dark:border-white/10 dark:bg-neutral-950'
     >
-      <h2 class='text-balance text-2xl font-semibold tracking-tight sm:text-3xl'>
+      <div class='pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-neon-blue-500 via-neon-purple-500 to-neon-pink-500 opacity-50' />
+      <h2 class='text-balance text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl dark:text-white'>
         {headline}
       </h2>
-      <p class='text-base sm:text-lg'>{body}</p>
+      <p class='text-base text-neutral-600 sm:text-lg dark:text-neutral-300'>{body}</p>
     </SectionSurface>
   );
 }
