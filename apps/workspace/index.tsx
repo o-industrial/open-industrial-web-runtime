@@ -115,6 +115,7 @@ export default function WorkspacePage({
           'workspace',
           aziUrl,
           aziWarmQueryUrl,
+          undefined,
           accessRights,
           oiApiToken,
         );

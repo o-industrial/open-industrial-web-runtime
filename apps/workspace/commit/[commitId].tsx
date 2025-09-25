@@ -80,6 +80,8 @@ export default function CommitStatusPage({
         'workspace',
         AziCircuitUrl,
         AziWarmQueryCircuitUrl,
+        undefined,
+        undefined,
         OIAPIToken,
       );
       setWorkspaceMgr(mgr);
