@@ -1,4 +1,8 @@
-import axe from 'npm:axe-core@4.9.1';
+import axe, {
+  type AxeResults,
+  type NodeResult,
+  type Result as AxeRuleResult,
+} from 'npm:axe-core@4.9.1';
 import { launchBrowser } from './utils/browser.ts';
 
 const baseUrl = Deno.env.get('QA_BASE_URL');
@@ -8,6 +12,8 @@ const sanitizeOptions = {
   sanitizeOps: false,
   sanitizeResources: false,
 };
+
+type AxeEvaluationResult = Pick<AxeResults, 'violations'>;
 
 Deno.test({
   name: 'marketing home a11y: axe wcag2a/aa',
@@ -21,9 +27,9 @@ Deno.test({
     await page.goto(targetUrl!, { waitUntil: 'networkidle0' });
 
     await page.addScriptTag({ content: (axe as { source: string }).source });
-    const results = await page.evaluate(async () => {
-      // @ts-ignore axe injected globally
-      return await window.axe.run(document, {
+    const rawResults = await page.evaluate(() => {
+      // @ts-ignore axe injected globally by addScriptTag above
+      return globalThis.axe.run(document, {
         runOnly: {
           type: 'tag',
           values: ['wcag2a', 'wcag2aa'],
@@ -31,12 +37,19 @@ Deno.test({
       });
     });
 
+    const results = rawResults as AxeEvaluationResult;
+
     if (results.violations.length > 0) {
-      const summary = results.violations.map((violation: any) => {
+      const summary = results.violations.map((violation: AxeRuleResult) => {
         const impact = violation.impact ?? 'unknown';
-        const nodes = violation.nodes?.slice(0, 3) ?? [];
-        const targets = nodes.map((node: any) => node.target?.join(' > ')).join('; ');
-        return `- [${impact}] ${violation.id}: ${violation.help} (${targets})`;
+        const nodes = (violation.nodes ?? []) as NodeResult[];
+        const targets = nodes
+          .slice(0, 3)
+          .map((node) => node.target?.join(' > '))
+          .filter((target): target is string => Boolean(target))
+          .join('; ');
+
+        return `- [${impact}] ${violation.id}: ${violation.help}${targets ? ` (${targets})` : ''}`;
       }).join('\n');
 
       throw new Error(`Axe found ${results.violations.length} violations:\n${summary}`);
