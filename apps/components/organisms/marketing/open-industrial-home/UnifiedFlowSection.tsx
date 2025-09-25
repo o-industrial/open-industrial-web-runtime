@@ -1,36 +1,39 @@
-import { JSX } from 'preact';
+﻿import type { JSX } from 'preact';
 
-import { FlowDiagramSection } from '@o-industrial/common/atomic/organisms';
+import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 
 import { homeContent } from '../../../../../src/marketing/home.ts';
 
+const PRE_HEADLINE_CLASS = 'text-xs font-semibold uppercase tracking-[0.3em] text-neutral-400';
+
 export default function UnifiedFlowSection(): JSX.Element {
+  const { preHeadline, headline, subhead, bullets } = homeContent.unifiedHub;
+
   return (
-    <FlowDiagramSection
-      header={{
-        eyebrow: 'Unified intelligence hub',
-        title: (
-          <span class='block text-balance leading-tight'>
-            <span class='bg-gradient-to-r from-neon-purple-500 via-neon-blue-500 to-neon-green-400 bg-clip-text text-transparent'>
-              Data in, insight out
-            </span>
-            <span class='mt-2 block text-neutral-100 dark:text-white'>
-              Trace governed telemetry from edge to action
-            </span>
-          </span>
-        ),
-        description: (
-          <span class='text-base text-neutral-300 dark:text-neutral-300'>
-            Visualize how telemetry lands in Open Industrial and flows back out into apps, agents,
-            and APIs.
-          </span>
-        ),
-        align: 'center',
-      }}
-      content={homeContent.flowDiagram}
+    <SectionSurface
+      tone='default'
       width='wide'
-      contentClass='max-w-6xl'
-      class='relative overflow-hidden border-y border-white/10 bg-[radial-gradient(circle_at_top,_rgba(236,72,153,0.12),rgba(11,15,32,0.92)),radial-gradient(circle_at_bottom,_rgba(34,211,238,0.12),rgba(11,15,32,0.9)),linear-gradient(160deg,rgba(9,12,26,0.96),rgba(6,10,22,0.94))]'
-    />
+      contentClass='mx-auto flex w-full max-w-4xl flex-col gap-8 px-6 py-20 text-center'
+      class='border-y border-neutral-200/60 bg-white dark:border-white/10 dark:bg-neutral-950'
+    >
+      <div class='space-y-4'>
+        <span class={PRE_HEADLINE_CLASS}>{preHeadline}</span>
+        <h2 class='text-balance text-3xl font-semibold tracking-tight sm:text-4xl'>
+          {headline}
+        </h2>
+        <p class='text-base sm:text-lg'>{subhead}</p>
+      </div>
+
+      <ul class='grid gap-4 sm:grid-cols-3'>
+        {bullets.map((bullet) => (
+          <li
+            key={bullet}
+            class='rounded-2xl border border-neutral-200/70 bg-white px-5 py-4 text-sm shadow-sm dark:border-white/10 dark:bg-neutral-900 dark:shadow-[0_20px_60px_-40px_rgba(15,23,42,0.85)]'
+          >
+            {bullet}
+          </li>
+        ))}
+      </ul>
+    </SectionSurface>
   );
 }

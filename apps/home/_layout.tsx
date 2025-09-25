@@ -1,4 +1,4 @@
-import { PageProps } from '@fathym/eac-applications/preact';
+﻿import { PageProps } from '@fathym/eac-applications/preact';
 import { MarketingNavigation } from '@o-industrial/common/atomic/organisms';
 import {
   ctaLinks,
@@ -35,7 +35,19 @@ export default function HomeLayout({
         <meta charset='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
 
-        <title>Open Industrial | Marketing Runtime</title>
+        <title>Open Industrial - Telemetry Intelligence for OT & IT</title>
+        <meta
+          name='description'
+          content='Connect MES, SCADA, historians, and lab systems. Ask in plain English. Get governed answers in seconds and publish insights as APIs in your Azure tenant.'
+        />
+        <meta
+          property='og:title'
+          content='Open Industrial - Telemetry Intelligence for OT & IT'
+        />
+        <meta
+          property='og:description'
+          content='Connect industrial systems, ask naturally with Azi, and share governed insights anywhere - all inside your cloud.'
+        />
 
         <link
           rel='shortcut icon'

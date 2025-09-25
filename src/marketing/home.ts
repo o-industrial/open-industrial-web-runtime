@@ -1,277 +1,287 @@
-import {
-  AgentIcon,
-  AppIcon,
-  CompositeSchemaIcon,
-  ConnectionIcon,
-  MapIcon,
-  SignalIcon,
-  StackIcon,
-  TimelineIcon,
-  VisibilityIcon,
-  WarmQueryIcon,
-} from '@o-industrial/common/atomic/icons';
-import type {
-  ChecklistItemContent,
-  CTAContent,
-  FeatureItemContent,
-  FlowDiagramContent,
-  HeroContent,
-  IntegrationColumnContent,
-  MediaContent,
-  QuoteItemContent,
-  SectionHeaderContent,
-  StepItemContent,
-} from './content.ts';
+﻿import type { MarketingAction, MediaContent } from './content.ts';
+
+type HomeHeroContent = {
+  headline: string;
+  subhead: string;
+  primaryCta: MarketingAction;
+  secondaryCta: MarketingAction;
+  visual: MediaContent;
+};
+
+type IntroContent = {
+  headline: string;
+  body: string;
+};
+
+type HowItWorksContent = {
+  preHeadline: string;
+  headline: string;
+  steps: { title: string; body: string }[];
+};
+
+type AziContent = {
+  preHeadline: string;
+  headline: string;
+  body: string;
+  examples: string[];
+};
+
+type UseCaseCardContent = {
+  title: string;
+  prompt: string;
+  body: string;
+};
+
+type UseCasesContent = {
+  preHeadline: string;
+  headline: string;
+  body: string;
+  cards: UseCaseCardContent[];
+};
+
+type UnifiedHubContent = {
+  preHeadline: string;
+  headline: string;
+  subhead: string;
+  bullets: string[];
+};
+
+type WhyOiContent = {
+  preHeadline: string;
+  headline: string;
+  subhead: string;
+  coreBenefits: { title: string; body: string }[];
+  guardrails: {
+    title: string;
+    body: string;
+    items: { title: string; body: string }[];
+  };
+};
+
+type CloudContent = {
+  preHeadline: string;
+  headline: string;
+  subhead: string;
+  options: { title: string; body: string }[];
+  sovereignty: {
+    title: string;
+    body: string;
+    bullets: string[];
+  };
+};
+
+type FutureVisionContent = {
+  preHeadline: string;
+  headline: string;
+  body: string;
+  pillars: { title: string; body: string }[];
+};
+
+type FinalCtaContent = {
+  preHeadline: string;
+  headline: string;
+  subhead: string;
+  primaryCta: MarketingAction;
+  secondaryCta: MarketingAction;
+};
 
 type HomeContent = {
-  hero: HeroContent;
-  valuePropositionHeading: SectionHeaderContent;
-  howItWorksSteps: StepItemContent[];
-  conversationalQuotes: QuoteItemContent[];
-  featureGridItems: FeatureItemContent[];
-  integrationColumns: IntegrationColumnContent[];
-  flowDiagram: FlowDiagramContent;
-  benefitsItems: ChecklistItemContent[];
-  cloudControlItems: ChecklistItemContent[];
-  futureVisionItems: ChecklistItemContent[];
-  cta: CTAContent;
-  productSpotlightMedia: MediaContent;
+  hero: HomeHeroContent;
+  intro: IntroContent;
+  howItWorks: HowItWorksContent;
+  azi: AziContent;
+  useCases: UseCasesContent;
+  unifiedHub: UnifiedHubContent;
+  whyOi: WhyOiContent;
+  cloud: CloudContent;
+  future: FutureVisionContent;
+  cta: FinalCtaContent;
 };
-
-const hero: HeroContent = {
-  eyebrow: 'AI-Powered Industrial Intelligence',
-  title: 'Ask anything about your plant - get answers instantly',
-  description:
-    'Connect industrial systems. Stream telemetry. Ask questions in plain English. Share insights anywhere - no pipelines, no delay.',
-  primaryAction: {
-    label: 'Get Started',
-    href: 'https://www.openindustrial.co/workspace',
-    intent: 'primary',
-    external: true,
-  },
-  secondaryAction: {
-    label: 'Learn More',
-    href: 'https://www.openindustrial.co/docs/',
-    intent: 'secondary',
-    external: true,
-  },
-  media: {
-    src: '/assets/marketing/azi-industrial-dashboard.png',
-    alt: 'Azi Industrial Monitoring Interface with real-time plant data and AI insights',
-  },
-};
-
-const valuePropositionHeading: SectionHeaderContent = {
-  eyebrow: 'Unified Operational Data',
-  title: 'Connect your data. Ask anything. Share anywhere.',
-  description:
-    'Open Industrial ingests live telemetry from DCS, SCADA, MES, historians, and lab systems - making it instantly queryable through natural language, APIs, and dashboards.',
-  align: 'center',
-};
-
-const howItWorksSteps: StepItemContent[] = [
-  {
-    title: 'Connect Your Data',
-    description:
-      'Ingest from control, execution, lab, and sensor systems using secure connectors. Merge live operational data into a governed hub.',
-    icon: ConnectionIcon,
-    intent: 'purple',
-  },
-  {
-    title: 'Ask Azi Anything',
-    description:
-      'Pose questions in plain English. Azi generates explainable KQL queries, executes them instantly, and packages actionable results.',
-    icon: WarmQueryIcon,
-    intent: 'orange',
-  },
-  {
-    title: 'Share & Integrate',
-    description:
-      'Publish queries as APIs for dashboards, reports, workflows, and applications. Deliver governed insights wherever you need them.',
-    icon: StackIcon,
-    intent: 'blue',
-  },
-];
-
-const conversationalQuotes: QuoteItemContent[] = [
-  { quote: 'Show flow anomalies for Line 4 over the past 24 hours.' },
-  { quote: 'Compare batch temperatures for Reactor 2.' },
-  { quote: 'List top causes of downtime last week.' },
-];
-
-const featureGridItems: FeatureItemContent[] = [
-  {
-    title: 'Downtime Diagnosis & Root Cause',
-    description:
-      'Unify SCADA, historian, and PLC data to diagnose downtime faster. Get clear answers with context from codes, timing, and trends without waiting on vendor support or manual analysis.',
-    highlights: ['What caused Line 4 downtime for the past 24 hours?'],
-    icon: TimelineIcon,
-    intent: 'orange',
-  },
-  {
-    title: 'Batch Quality & Compliance',
-    description:
-      'Track batches across MES, LIMS, and historian data with repeatable, audit-ready queries. Compare results with expected parameters to document investigations and accelerate resolutions.',
-    highlights: ['Which Reactor 2 batches had temp above 140 degrees C this week?'],
-    icon: CompositeSchemaIcon,
-    intent: 'purple',
-  },
-  {
-    title: 'Cross-Line Performance Reporting',
-    description:
-      'Generate consistent OEE, yield, and downtime reports across shifts and lines - governed by your context, free from spreadsheets and manual effort.',
-    highlights: ['Show throughput and top 3 downtime causes for Line 4 today.'],
-    icon: VisibilityIcon,
-    intent: 'blue',
-  },
-  {
-    title: 'Safety & Compliance Triggers',
-    description:
-      'Set rules on safety telemetry and capture incidents with complete historian and SCADA context. Maintain governed, auditable trails for every event.',
-    highlights: ['Log all pressure events above 80 psi with full context.'],
-    icon: SignalIcon,
-    intent: 'green',
-  },
-];
-
-const integrationColumns: IntegrationColumnContent[] = [
-  {
-    title: 'Protocols',
-    items: ['HTTP', 'MQTT', 'AMQP', 'OPC UA'],
-  },
-  {
-    title: 'Middleware',
-    items: ['HighByte', 'HiveMQ', 'FBxEdge'],
-  },
-  {
-    title: 'Systems',
-    items: ['DCS', 'MES', 'SCADA', 'LIMS', 'DeltaV', 'Syncade'],
-  },
-  {
-    title: 'Apps',
-    items: ['Mobius Suite', 'ProofCheck', 'AlertTrack+', 'QuickView+'],
-  },
-];
-
-const flowDiagram: FlowDiagramContent = {
-  inputs: [
-    { title: 'Control Systems', subtitle: 'DCS, SCADA, PLC' },
-    { title: 'Manufacturing Systems', subtitle: 'MES, ERP, WMS' },
-    { title: 'Quality & Lab Systems', subtitle: 'LIMS, QMS, Historians' },
-    { title: 'IoT & Sensors', subtitle: 'Edge devices, Protocols' },
-  ],
-  hub: {
-    title: 'Open Industrial',
-    description:
-      'AI-powered hub for real-time ingestion, natural language queries, and instant APIs.',
-  },
-  outputs: [
-    { title: 'Custom Applications', subtitle: 'Web apps, Mobile apps' },
-    { title: 'Intelligent Agents', subtitle: 'Monitoring, Alerts, Actions' },
-    { title: 'BI & Analytics Tools', subtitle: 'Power BI, Tableau, Grafana' },
-    { title: 'APIs & Integrations', subtitle: 'REST APIs, Webhooks' },
-  ],
-};
-
-const benefitsItems: ChecklistItemContent[] = [
-  {
-    title: 'Universal Connectivity',
-    description: 'Connect any industrial system through standard protocols and APIs.',
-    icon: MapIcon,
-    intent: 'green',
-  },
-  {
-    title: 'Instant Intelligence',
-    description: 'Ask questions in plain English and get immediate, explainable insights.',
-    icon: AgentIcon,
-    intent: 'purple',
-  },
-  {
-    title: 'Flexible Output',
-    description:
-      'Publish insights as governed APIs that feed dashboards, workflows, and applications.',
-    icon: AppIcon,
-    intent: 'blue',
-  },
-];
-
-const cloudControlItems: ChecklistItemContent[] = [
-  {
-    title: 'Your data, your access policies',
-    description: 'Control tenant, region, and network boundaries with your security posture.',
-    icon: ConnectionIcon,
-    intent: 'purple',
-  },
-  {
-    title: 'Full auditability and governance',
-    description: 'Trace every query, workflow, and change with immutable logs.',
-    icon: TimelineIcon,
-    intent: 'orange',
-  },
-  {
-    title: 'Secure APIs with token-scoped permissions',
-    description: 'Deliver principle-of-least-privilege access for every consuming system.',
-    icon: SignalIcon,
-    intent: 'green',
-  },
-  {
-    title: 'Automated, seamless setup',
-    description: 'Provision Azure resources, connectors, and policies with one click.',
-    icon: StackIcon,
-    intent: 'blue',
-  },
-];
-
-const futureVisionItems: ChecklistItemContent[] = [
-  {
-    title: 'Define schema-aware workflows',
-    description: 'Teach agents how production context maps to automation guardrails.',
-    icon: CompositeSchemaIcon,
-    intent: 'purple',
-  },
-  {
-    title: 'Deploy adaptive agents that monitor, respond, and evolve',
-    description: 'Blend human-in-the-loop approvals with AI co-pilots for safer automation.',
-    icon: AgentIcon,
-    intent: 'orange',
-  },
-  {
-    title: 'Coordinate action across MES, SCADA, LIMS, and cloud systems',
-    description: 'Orchestrate automations that bridge plant-floor reliability with cloud scale.',
-    icon: StackIcon,
-    intent: 'blue',
-  },
-];
-
-const cta: CTAContent = {
-  title: 'Ready to unlock instant telemetry insights?',
-  description: 'Connect, query, and act on insights from the plant floor.',
-  primaryAction: {
-    label: 'Get Started Today',
-    href: 'https://www.openindustrial.co/workspace',
-    intent: 'primary',
-    external: true,
-  },
-  secondaryAction: {
-    label: 'Schedule Demo',
-    href: '/contact',
-    intent: 'secondary',
-  },
-};
-
-const productSpotlightMedia: MediaContent = hero.media!;
 
 export const homeContent: HomeContent = {
-  hero,
-  valuePropositionHeading,
-  howItWorksSteps,
-  conversationalQuotes,
-  featureGridItems,
-  integrationColumns,
-  flowDiagram,
-  benefitsItems,
-  cloudControlItems,
-  futureVisionItems,
-  cta,
-  productSpotlightMedia,
+  hero: {
+    headline: 'Turn Industrial Data Into Instant Insight',
+    subhead:
+      'Connect MES, SCADA, historians, and lab systems. Ask in plain English. Get governed answers in seconds - no pipelines, no scripts, no delay.',
+    primaryCta: { label: 'Schedule a Demo', href: '/contact#form', intent: 'primary' },
+    secondaryCta: {
+      label: 'Get Started',
+      href: '/workspace',
+      intent: 'secondary',
+    },
+    visual: {
+      src: '/assets/marketing/azi-industrial-dashboard.png',
+      alt: 'Open Industrial product experience showing live plant telemetry and AI insights',
+    },
+  },
+  intro: {
+    headline: 'Connect your data. Ask anything. Share anywhere.',
+    body:
+      'Open Industrial ingests live telemetry from DCS, SCADA, MES, historians, and lab systems - making it instantly queryable through natural language, APIs, and dashboards.',
+  },
+  howItWorks: {
+    preHeadline: 'How it works',
+    headline: 'How Governed Insight Flows to Action',
+    steps: [
+      {
+        title: 'Connect',
+        body:
+          'Stream telemetry from OT systems and brokers (OPC UA, MQTT, SQL, CSV) - no custom pipelines.',
+      },
+      {
+        title: 'Ask Azi',
+        body:
+          'Type a natural-language question. Azi translates it into governed, explainable KQL.',
+      },
+      {
+        title: 'Share',
+        body:
+          'Save queries as APIs to power dashboards, reports, and workflows - instantly.',
+      },
+    ],
+  },
+  azi: {
+    preHeadline: 'AI assistant',
+    headline: 'Meet Azi - Your AI Query Assistant',
+    body:
+      'Ask anything about your plant. Azi turns plain-English questions into safe, explainable queries - and returns live results you can trust.',
+    examples: [
+      'Which Reactor 2 batches exceeded 140 degrees C this week?',
+      'What caused Line 3 downtime in the past 12 hours?',
+      'Show throughput and top downtime causes for Line A today.',
+    ],
+  },
+  useCases: {
+    preHeadline: 'Use cases',
+    headline: 'Turn Plant Data Into Trusted Insight',
+    body:
+      'Break down data silos across OT and IT systems by turning live plant data into actionable, audit-ready insight your teams can act on.',
+    cards: [
+      {
+        title: 'Batch Quality & Compliance',
+        prompt: 'Which Reactor 2 batches had temp >140 degrees C this week?',
+        body:
+          'Trace batches across MES/LIMS/ERP. Answer auditor questions instantly with audit-ready outputs.',
+      },
+      {
+        title: 'Downtime Diagnosis',
+        prompt: 'What caused Line 4 downtime for the past 24 hours?',
+        body:
+          'Correlate SCADA, historian, and PLC data. Cut troubleshooting time from days to minutes.',
+      },
+      {
+        title: 'Cross-Line Performance',
+        prompt: 'Show throughput and top 3 downtime causes for Line 4 today.',
+        body: 'Generate OEE and shift summaries without stitching spreadsheets.',
+      },
+      {
+        title: 'Safety & Compliance Triggers',
+        prompt: 'Log all pressure events >80psi with full context.',
+        body:
+          'Log threshold events with full telemetry context. Trigger governed alerts and reports automatically.',
+      },
+    ],
+  },
+  unifiedHub: {
+    preHeadline: 'Governed APIs',
+    headline: 'Data In -> Insight Out',
+    subhead: 'Trace governed telemetry from ingestion to instant APIs.',
+    bullets: ['Real-time ingestion', 'Natural language queries', 'Instant API generation'],
+  },
+  whyOi: {
+    preHeadline: 'Why Open Industrial',
+    headline: 'Operational Clarity Across Operations, Quality, and IT',
+    subhead:
+      'Open Industrial ensures every team can access governed, audit-ready insight they can trust.',
+    coreBenefits: [
+      {
+        title: 'Universal Connectivity',
+        body: 'Connect any industrial system through standard protocols and APIs.',
+      },
+      {
+        title: 'Instant Intelligence',
+        body: 'Ask questions in plain English and get immediate, explainable insights.',
+      },
+      {
+        title: 'Flexible Output',
+        body: 'Publish insights as governed APIs that feed dashboards, workflows, and applications.',
+      },
+    ],
+    guardrails: {
+      title: 'Guardrails Built for Industrial Confidence',
+      body:
+        'Every insight is governed, explainable, and ready for action - so teams can trust what they see and activate it anywhere.',
+      items: [
+        {
+          title: 'Governed from the Start',
+          body:
+            'Runs in your Azure tenant with private networking, least-privilege access, and SOC-ready logging.',
+        },
+        {
+          title: 'Explainable by Default',
+          body:
+            'Every answer shows its query and context - so engineers can validate before action.',
+        },
+        {
+          title: 'Instant Activation',
+          body: 'Publish insights as APIs, dashboards, or alerts with zero manual lift.',
+        },
+      ],
+    },
+  },
+  cloud: {
+    preHeadline: 'Deployment choices',
+    headline: 'Choose How You Deploy',
+    subhead:
+      'Start in the cloud for fast evaluation, then scale into managed or self-hosted Azure - always with governance and control.',
+    options: [
+      { title: 'Evaluation Cloud', body: 'Quick start with sample data.' },
+      { title: 'Managed Azure', body: 'Dedicated runtime managed for you.' },
+      { title: 'Bring Your Own Azure', body: 'Deploy in your tenant for full sovereignty.' },
+    ],
+    sovereignty: {
+      title: 'Your Cloud, Your Rules',
+      body:
+        'Run Open Industrial in your Azure tenant for full access and control - with enterprise-grade security and governance built in.',
+      bullets: [
+        'Your data, your access policies',
+        'Secure APIs with token-scoped permissions',
+        'Full auditability and governance',
+        'Automated, seamless setup',
+      ],
+    },
+  },
+  future: {
+    preHeadline: 'Looking ahead',
+    headline: 'From Instant Insight -> To Adaptive Action',
+    body:
+      'Open Industrial is evolving into a modular automation platform with adaptive agents - extending governed insight into safe, coordinated action across your operations.',
+    pillars: [
+      {
+        title: 'Schema-Aware Workflows',
+        body: 'Define workflows that understand production context and enforce automation guardrails.',
+      },
+      {
+        title: 'Adaptive Agents',
+        body:
+          'Deploy agents that monitor signals, trigger responses, and evolve safely - with human-in-the-loop approvals where needed.',
+      },
+      {
+        title: 'Cross-System Orchestration',
+        body:
+          'Coordinate logic across MES, SCADA, LIMS, and cloud services - blending plant-floor reliability with cloud-scale agility.',
+      },
+    ],
+  },
+  cta: {
+    preHeadline: 'Get started',
+    headline: 'Ready to Unlock Instant Telemetry Insight?',
+    subhead: 'See how fast you can go from Data In -> Insight Out.',
+    primaryCta: { label: 'Schedule a Demo', href: '/contact#form', intent: 'primary' },
+    secondaryCta: {
+      label: 'Get Started',
+      href: '/workspace',
+      intent: 'secondary',
+    },
+  },
 };

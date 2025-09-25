@@ -1,36 +1,39 @@
-import { JSX } from 'preact';
+﻿import type { JSX } from 'preact';
 
-import { StepsSection } from '@o-industrial/common/atomic/organisms';
+import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 
 import { homeContent } from '../../../../../src/marketing/home.ts';
 
+const PRE_HEADLINE_CLASS = 'text-xs font-semibold uppercase tracking-[0.3em] text-neutral-400';
+
 export default function GovernedFlowSection(): JSX.Element {
+  const { preHeadline, headline, steps } = homeContent.howItWorks;
+
   return (
-    <StepsSection
-      header={{
-        eyebrow: 'From ingestion to activation',
-        title: (
-          <span class='block text-balance leading-tight text-white'>
-            <span class='text-white/85'>How governed insight</span>{' '}
-            <span class='bg-gradient-to-r from-neon-blue-400 via-neon-purple-500 to-neon-green-400 bg-clip-text text-transparent'>
-              flows to action
-            </span>
-          </span>
-        ),
-        description: (
-          <span class='block text-base text-neon-indigo-100/80'>
-            Three steps to move explainable answers into production workflows without leaving your
-            governed boundary.
-          </span>
-        ),
-        align: 'center',
-      }}
-      steps={homeContent.howItWorksSteps}
-      width='full'
-      tone='emphasis'
-      variant='dark'
-      contentClass='max-w-6xl px-0 sm:px-6'
-      class='border-y border-white/10 bg-gradient-to-b from-slate-950/90 via-slate-900/95 to-slate-950/90 py-28 px-0 text-center'
-    />
+    <SectionSurface
+      tone='default'
+      width='wide'
+      contentClass='mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 py-20'
+      class='border-y border-neutral-200/60 bg-white dark:border-white/10 dark:bg-neutral-950'
+    >
+      <div class='mx-auto max-w-3xl text-center space-y-4'>
+        <span class={PRE_HEADLINE_CLASS}>{preHeadline}</span>
+        <h2 class='text-balance text-3xl font-semibold tracking-tight sm:text-4xl'>
+          {headline}
+        </h2>
+      </div>
+
+      <div class='grid gap-6 sm:grid-cols-3'>
+        {steps.map((step) => (
+          <div
+            key={step.title}
+            class='h-full rounded-3xl border border-neutral-200/70 bg-white px-6 py-8 text-left shadow-sm dark:border-white/10 dark:bg-neutral-900 dark:shadow-[0_30px_80px_-50px_rgba(15,23,42,0.9)]'
+          >
+            <h3 class='text-lg font-semibold'>{step.title}</h3>
+            <p class='mt-3 text-sm'>{step.body}</p>
+          </div>
+        ))}
+      </div>
+    </SectionSurface>
   );
 }
