@@ -9,6 +9,7 @@ import OICore from '@o-industrial/common/packs/oi-core';
 import { IoCContainer } from '@fathym/ioc';
 import { OpenIndustrialWebState } from '../../../src/state/OpenIndustrialWebState.ts';
 import { EaCUserLicense } from '@fathym/eac-licensing';
+import { EaCStatus } from '@fathym/eac/steward/status';
 
 export const IsIsland = true;
 
@@ -75,7 +76,7 @@ export default function CommitStatusPage({
   const [workspaceMgr, setWorkspaceMgr] = useState<WorkspaceManager | null>(
     null,
   );
-  const [status, setStatus] = useState<unknown>(null);
+  const [status, setStatus] = useState<EaCStatus>();
 
   useEffect(() => {
     (async () => {
@@ -104,8 +105,7 @@ export default function CommitStatusPage({
     if (!workspaceMgr) return;
 
     (async () => {
-      const commits = workspaceMgr.UseCommits();
-      const cs = await commits.GetCommitStatus(commitId);
+      const cs = await workspaceMgr.GetCommitStatus(commitId!);
       setStatus(cs);
     })();
   }, [workspaceMgr, commitId]);
@@ -120,7 +120,7 @@ export default function CommitStatusPage({
 
   return (
     <div class='w-full h-full'>
-      <CommitStatusPanel commit={status} />
+      <CommitStatusPanel commits={[status]} />
     </div>
   );
 }
