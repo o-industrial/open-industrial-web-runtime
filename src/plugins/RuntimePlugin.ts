@@ -81,7 +81,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             ModifierResolvers: {
               googleTagMgr: {
                 Priority: 5000,
-              },  
+              },
               keepAlive: {
                 Priority: 5000,
               },
