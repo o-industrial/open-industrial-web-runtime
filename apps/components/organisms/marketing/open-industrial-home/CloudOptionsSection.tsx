@@ -1,4 +1,4 @@
-﻿import type { JSX } from 'preact';
+import type { JSX } from 'preact';
 
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 
@@ -25,9 +25,9 @@ export default function CloudOptionsSection(): JSX.Element {
       tone='default'
       width='wide'
       contentClass='mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 py-24'
-      class='relative overflow-hidden border-y border-neutral-200/70 bg-gradient-to-r from-[#eefaff] via-white to-[#fef6ff] shadow-[0_80px_230px_-150px_rgba(59,130,246,0.32)] dark:border-white/10 dark:bg-gradient-to-r dark:from-[#071422] dark:via-[#0b182a] dark:to-[#0a1426] dark:shadow-[0_95px_250px_-160px_rgba(59,130,246,0.5)]'
+      class='relative overflow-hidden border-y border-neutral-200/70 bg-white shadow-[0_45px_150px_-120px_rgba(15,23,42,0.16)] dark:border-white/10 dark:bg-slate-950 dark:shadow-[0_60px_200px_-140px_rgba(15,23,42,0.55)]'
     >
-      <div class='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,_rgba(59,130,246,0.16),rgba(255,255,255,0)_70%)] opacity-75 blur-[140px] dark:bg-[radial-gradient(circle,_rgba(59,130,246,0.28),rgba(9,13,27,0)_72%)]' />
+      <div class='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,_rgba(59,130,246,0.08),rgba(255,255,255,0)_72%)] opacity-70 blur-[150px] dark:bg-[radial-gradient(circle,_rgba(59,130,246,0.18),rgba(6,10,25,0)_76%)]' />
 
       <div class='relative z-10 mx-auto max-w-3xl space-y-4 text-center text-neutral-700 dark:text-neutral-200'>
         <PreHeadline value={preHeadline} />

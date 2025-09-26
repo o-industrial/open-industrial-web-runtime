@@ -1,4 +1,4 @@
-﻿import type { JSX } from 'preact';
+import type { JSX } from 'preact';
 
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 
@@ -31,9 +31,9 @@ export default function AIConversationsSection(): JSX.Element {
       tone='default'
       width='wide'
       contentClass='relative mx-auto flex w-full max-w-5xl flex-col items-center gap-10 px-6 py-20 text-center text-neutral-900 dark:text-white'
-      class='relative overflow-hidden border-y border-neutral-200/80 bg-gradient-to-r from-[#fbf7ff] via-white to-[#f1f8ff] shadow-[0_60px_180px_-130px_rgba(236,72,153,0.25)] dark:border-white/10 dark:bg-gradient-to-r dark:from-[#0b1023] dark:via-[#131b35] dark:to-[#0a1327] dark:shadow-[0_80px_210px_-140px_rgba(236,72,153,0.45)]'
+      class='relative overflow-hidden border-y border-neutral-200/70 bg-white shadow-[0_45px_140px_-110px_rgba(15,23,42,0.15)] dark:border-white/10 dark:bg-slate-950 dark:shadow-[0_60px_190px_-130px_rgba(15,23,42,0.55)]'
     >
-      <div class='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,_rgba(236,72,153,0.18),rgba(255,255,255,0)_76%)] opacity-70 blur-[130px] dark:bg-[radial-gradient(circle,_rgba(236,72,153,0.26),rgba(9,10,22,0)_78%)]' />
+      <div class='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,_rgba(236,72,153,0.08),rgba(255,255,255,0)_74%)] opacity-70 blur-[150px] dark:bg-[radial-gradient(circle,_rgba(236,72,153,0.18),rgba(5,8,21,0)_76%)]' />
 
       <div class='relative z-10 space-y-4 text-neutral-700 dark:text-neutral-200'>
         <PreHeadline value={preHeadline} />
@@ -53,7 +53,9 @@ export default function AIConversationsSection(): JSX.Element {
               <span class={`h-1.5 w-1.5 rounded-full ${promptGlow[index % promptGlow.length]}`} />
               Prompt
             </span>
-            <span class='mt-3 block text-base font-medium text-neutral-900 dark:text-white'>{example}</span>
+            <span class='mt-3 block text-base font-medium text-neutral-900 dark:text-white'>
+              {example}
+            </span>
           </li>
         ))}
       </ul>

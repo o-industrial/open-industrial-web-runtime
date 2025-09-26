@@ -1,4 +1,4 @@
-﻿import type { JSX } from 'preact';
+import type { JSX } from 'preact';
 
 import { SectionSurface } from '@o-industrial/common/atomic/atoms';
 
@@ -31,9 +31,9 @@ export default function UnifiedFlowSection(): JSX.Element {
       tone='default'
       width='wide'
       contentClass='relative mx-auto flex w-full max-w-4xl flex-col gap-10 px-6 py-20 text-center text-neutral-900 dark:text-white'
-      class='relative overflow-hidden border-y border-neutral-200/80 bg-gradient-to-r from-[#f5fbff] via-white to-[#fef6ff] shadow-[0_70px_200px_-140px_rgba(59,130,246,0.25)] dark:border-white/10 dark:bg-gradient-to-r dark:from-[#071322] dark:via-[#0b1a2f] dark:to-[#081424] dark:shadow-[0_85px_230px_-150px_rgba(59,130,246,0.45)]'
+      class='relative overflow-hidden border-y border-neutral-200/70 bg-white shadow-[0_40px_130px_-110px_rgba(15,23,42,0.16)] dark:border-white/10 dark:bg-slate-950 dark:shadow-[0_55px_180px_-130px_rgba(15,23,42,0.55)]'
     >
-      <div class='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,_rgba(59,130,246,0.16),rgba(255,255,255,0)_72%)] opacity-75 blur-[150px] dark:bg-[radial-gradient(circle,_rgba(59,130,246,0.28),rgba(8,18,36,0)_76%)]' />
+      <div class='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,_rgba(59,130,246,0.07),rgba(255,255,255,0)_72%)] opacity-75 blur-[150px] dark:bg-[radial-gradient(circle,_rgba(59,130,246,0.18),rgba(6,12,30,0)_78%)]' />
 
       <div class='relative z-10 space-y-4 text-neutral-700 dark:text-neutral-200'>
         <PreHeadline value={preHeadline} />
@@ -50,7 +50,9 @@ export default function UnifiedFlowSection(): JSX.Element {
             class='rounded-2xl border border-neutral-200/70 bg-white px-5 py-4 text-sm shadow-[0_35px_110px_-70px_rgba(59,130,246,0.32)] transition-transform duration-200 hover:-translate-y-1 dark:border-white/10 dark:bg-neutral-900 dark:shadow-[0_40px_130px_-80px_rgba(59,130,246,0.55)]'
           >
             <div class='flex items-start gap-3 text-left text-neutral-700 dark:text-neutral-200'>
-              <span class={`mt-1 h-2.5 w-2.5 rounded-full ${bulletGlows[index % bulletGlows.length]}`} />
+              <span
+                class={`mt-1 h-2.5 w-2.5 rounded-full ${bulletGlows[index % bulletGlows.length]}`}
+              />
               <span>{bullet}</span>
             </div>
           </li>

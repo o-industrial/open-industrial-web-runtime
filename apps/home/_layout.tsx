@@ -1,6 +1,6 @@
-﻿import { PageProps } from '@fathym/eac-applications/preact';
+import { PageProps } from '@fathym/eac-applications/preact';
 import MarketingNavigationIsland from '../components/shared/MarketingNavigationIsland.tsx';
-import type { MarketingNavLink, MarketingNavCTA } from '@o-industrial/common/atomic/organisms';
+import type { MarketingNavCTA, MarketingNavLink } from '@o-industrial/common/atomic/organisms';
 import {
   ctaLinks as baseCtaLinks,
   footerPrimaryLinks,
