@@ -17,9 +17,9 @@ export default function BatchQualityIntegrationOverviewSection(): JSX.Element {
     <MarketingSectionShell variant='neutral'>
       <div class='space-y-12 text-neutral-700 dark:text-neutral-200'>
         <div class='mx-auto max-w-3xl space-y-4 text-center'>
-          <MarketingPreHeadline value='System integration' />
+          <MarketingPreHeadline value='System Integration' />
           <h2 class='text-balance text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl dark:text-white'>
-            Unite every batch system in one governed layer
+            Unite Every Batch System in One Governed Layer
           </h2>
           <p class='text-base leading-relaxed text-neutral-700 sm:text-lg dark:text-neutral-300'>
             Open Industrial connects ERP, MES, QMS, LIMS, and DMS to create an explainable

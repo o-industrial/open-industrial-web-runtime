@@ -11,9 +11,9 @@ export default function BatchQualityToggleSection(): JSX.Element {
     <MarketingSectionShell variant='midnight'>
       <div class='space-y-12 text-white/80'>
         <div class='mx-auto max-w-4xl space-y-4 text-center'>
-          <MarketingPreHeadline value='Azi warm queries' tone='inverse' />
+          <MarketingPreHeadline value='Azi Warm Queries' tone='inverse' />
           <h2 class='text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl'>
-            Ask batch quality questions in natural language
+            Ask Batch Quality Questions in Natural Language
           </h2>
           <p class='text-base leading-relaxed text-white/75 sm:text-lg'>
             Use Azi to translate plain-English requests into governed KQL. Switch between English
@@ -24,6 +24,7 @@ export default function BatchQualityToggleSection(): JSX.Element {
         <div class='grid gap-6 md:grid-cols-2'>
           {batchQualityToggleQueries.map((toggle) => (
             <ToggleQueryCard
+              expandable
               key={toggle.title}
               eyebrow={toggle.eyebrow}
               title={toggle.title}

@@ -8,8 +8,8 @@ export default function BatchQualityValueSection(): JSX.Element {
   return (
     <ValueGridSection
       header={{
-        eyebrow: 'How Open Industrial helps',
-        title: 'Accelerate investigations and compliance',
+        eyebrow: 'How Open Industrial Helps',
+        title: 'Accelerate Investigations and Compliance',
         description:
           'Deliver governed, explainable answers for every batch by turning warm queries into reusable assets.',
         align: 'center',
@@ -17,7 +17,7 @@ export default function BatchQualityValueSection(): JSX.Element {
       items={batchQualityHowHelpItems}
       columns={2}
       variant='dark'
-      class='relative overflow-hidden border border-white/10 bg-gradient-to-br from-[#050914] via-[#0b1228] to-[#060916] py-24 shadow-[0_120px_280px_-180px_rgba(129,140,248,0.45)]'
+      class='relative overflow-hidden border-y border-white/10 bg-gradient-to-br from-[#110b23] via-[#160f33] to-[#0a0618] py-24 shadow-[0_120px_280px_-170px_rgba(129,140,248,0.55)]'
     />
   );
 }

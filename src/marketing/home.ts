@@ -1,4 +1,4 @@
-import type { MarketingAction, MediaContent } from './content.ts';
+import type { HubFlowContent, MarketingAction, MediaContent } from './content.ts';
 
 type HomeHeroContent = {
   headline: string;
@@ -37,21 +37,6 @@ type UseCasesContent = {
   headline: string;
   body: string;
   cards: UseCaseCardContent[];
-};
-
-type UnifiedHubContent = {
-  preHeadline: string;
-  headline: string;
-  subhead: string;
-  inputsLabel: string;
-  inputs: { title: string; items: string[] }[];
-  hub: {
-    title: string;
-    subtitle: string;
-    bullets: string[];
-  };
-  outputsLabel: string;
-  outputs: { title: string; items: string[] }[];
 };
 
 type IntegrationEcosystemContent = {
@@ -106,7 +91,7 @@ type HomeContent = {
   howItWorks: HowItWorksContent;
   azi: AziContent;
   useCases: UseCasesContent;
-  unifiedHub: UnifiedHubContent;
+  unifiedHub: HubFlowContent;
   ecosystem: IntegrationEcosystemContent;
   whyOi: WhyOiContent;
   cloud: CloudContent;

@@ -81,6 +81,21 @@ export interface FlowDiagramContent {
   outputs: FlowNodeContent[];
 }
 
+export interface HubFlowContent {
+  preHeadline?: string;
+  headline: string;
+  subhead?: string;
+  inputsLabel: string;
+  inputs: { title: string; items: string[] }[];
+  hub: {
+    title: string;
+    subtitle?: string;
+    bullets: string[];
+  };
+  outputsLabel: string;
+  outputs: { title: string; items: string[] }[];
+}
+
 export interface CTAContent {
   title: string;
   description?: string;

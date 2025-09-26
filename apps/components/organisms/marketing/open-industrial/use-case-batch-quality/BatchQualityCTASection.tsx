@@ -22,7 +22,7 @@ export default function BatchQualityCTASection(): JSX.Element {
   return (
     <MarketingSectionShell variant='midnight'>
       <div class='mx-auto flex w-full max-w-3xl flex-col items-center gap-6 text-center text-white/80'>
-        <MarketingPreHeadline value='Next up' tone='inverse' />
+        <MarketingPreHeadline value='Next Up' tone='inverse' />
         <h2 class='text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl'>
           {batchQualityOutcome.title}
         </h2>
