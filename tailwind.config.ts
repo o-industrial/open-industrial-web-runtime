@@ -152,6 +152,7 @@ const typoConfig = (theme: (path: string) => any) => ({
 });
 
 const config: Config = {
+  darkMode: ['class', ':root'],
   content: ['./**/*.tsx'],
   theme: {
     extend: {
