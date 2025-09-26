@@ -5,6 +5,7 @@ import AboutHeroSection from '../../components/organisms/marketing/open-industri
 import CapabilitiesSection from '../../components/organisms/marketing/open-industrial/about/CapabilitiesSection.tsx';
 import IndustriesSection from '../../components/organisms/marketing/open-industrial/about/IndustriesSection.tsx';
 import MissionStatementSection from '../../components/organisms/marketing/open-industrial/about/MissionStatementSection.tsx';
+import NonNegotiablesSection from '../../components/organisms/marketing/open-industrial/about/NonNegotiablesSection.tsx';
 import VisionCTASection from '../../components/organisms/marketing/open-industrial/about/VisionCTASection.tsx';
 import VisionStatementSection from '../../components/organisms/marketing/open-industrial/about/VisionStatementSection.tsx';
 import { MarketingPageFrame } from '../../components/shared/MarketingPageFrame.tsx';
@@ -34,6 +35,8 @@ export default function AboutPage({}: PageProps<AboutPageData>) {
       <IndustriesSection />
 
       <VisionStatementSection />
+
+      <NonNegotiablesSection />
 
       <VisionCTASection />
     </MarketingPageFrame>

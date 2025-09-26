@@ -18,7 +18,7 @@ export default function CapabilitiesSection(): JSX.Element {
         <div class='mx-auto max-w-3xl space-y-4 text-center'>
           <MarketingPreHeadline value='Capabilities' />
           <h2 class='text-balance text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl dark:text-white'>
-            What we do
+            What We Do
           </h2>
           <p class='text-base leading-relaxed text-neutral-700 sm:text-lg dark:text-neutral-300'>
             Open Industrial transforms how organizations interact with their industrial data through
@@ -53,3 +53,4 @@ export default function CapabilitiesSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+

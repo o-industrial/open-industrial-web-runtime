@@ -7,18 +7,17 @@ import type {
 
 export const aboutHero: HeroContent = {
   eyebrow: 'About Open Industrial',
-  title: 'Your industrial data - unified, queryable, actionable',
+  title: 'Telemetry Intelligence You Can Trust',
   description:
-    'Open Industrial is an Azure-powered telemetry hub for operational technology. We ingest data from control systems, MES, lab tools, historians, and IoT devices - making it instantly queryable in natural language or APIs, ready for analytics, agents, and automation.',
+    'Open Industrial was built to make operational data instantly explainable, governed, and ready for action \u2014 so every team, from control room to boardroom, can make decisions with confidence.',
   primaryAction: {
-    label: 'Get Started',
-    href: 'https://www.openindustrial.co/workspace',
+    label: 'Schedule a Demo',
+    href: '/contact#form',
     intent: 'primary',
-    external: true,
   },
   secondaryAction: {
-    label: 'Learn More',
-    href: 'https://www.openindustrial.co/docs/',
+    label: 'Get Started',
+    href: 'https://www.openindustrial.co/workspace',
     intent: 'secondary',
     external: true,
   },
@@ -29,9 +28,9 @@ export const aboutHero: HeroContent = {
 };
 
 export const missionCopy = {
-  title: 'Our mission',
+  title: 'Our Mission',
   description:
-    'Help industrial teams unify data across systems, access insights without delay, and coordinate actions across the operations that keep plants running.',
+    'To bridge OT and IT with a single telemetry intelligence platform. Open Industrial makes data from DCS, MES, SCADA, historians, and lab systems queryable in plain English, explainable by default, and governed from the start.',
   align: 'center' as const,
 };
 
@@ -83,26 +82,42 @@ export const industriesServed: ChecklistItemContent[] = [
 ];
 
 export const visionCopy = {
-  title: 'Our vision',
+  title: 'Our Vision',
   description:
-    'Industrial data should work as hard as the operations it supports. We unify legacy OT systems with modern tools so teams can access insights, coordinate workflows, and act with confidence.',
+    'We believe regulated and precision-driven industries deserve the same agility as digital-first enterprises \u2014 without giving up the compliance, validation, and safety they rely on. Our vision is a world where operational data flows freely, securely, and transparently across systems, empowering both people and AI to collaborate on better outcomes.',
   align: 'center' as const,
 };
 
+export const nonNegotiables: FeatureItemContent[] = [
+  {
+    title: 'Governance by Design',
+    description:
+      'Deployable in your Azure tenant with least-privilege access, private networking, and SOC-ready logging.',
+  },
+  {
+    title: 'Explainability by Default',
+    description:
+      'Every answer shows its query and context, so engineers and auditors can validate results.',
+  },
+  {
+    title: 'Activation Anywhere',
+    description:
+      'Turn insights into governed APIs that feed dashboards, workflows, and automations.',
+  },
+];
+
 export const visionCTA: CTAContent = {
-  title: 'The future of industrial intelligence',
-  description:
-    'Connect your systems. Ask questions in plain English. Act on insights with confidence.',
+  title: 'Want to Learn More?',
   primaryAction: {
-    label: 'Get Started',
-    href: 'https://www.openindustrial.co/workspace',
+    label: 'Schedule a Demo',
+    href: '/contact#form',
     intent: 'primary',
-    external: true,
   },
   secondaryAction: {
-    label: 'Learn More',
-    href: 'https://www.openindustrial.co/docs/',
+    label: 'Get Started',
+    href: 'https://www.openindustrial.co/workspace',
     intent: 'secondary',
     external: true,
   },
 };
+
