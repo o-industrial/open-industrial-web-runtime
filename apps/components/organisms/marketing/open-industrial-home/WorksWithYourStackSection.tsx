@@ -67,10 +67,10 @@ const layoutPresets: Record<string, QuadrantLayoutConfig> = {
     angleOffset: Math.PI * 1.05,
     arcSpan: Math.PI * 0.9,
     customPositions: [
-      { top: 10, left: 10 },
-      { top: 10, right: 10 },
-      { bottom: 10, left: 10 },
-      { bottom: 10, right: 10 },
+      { top: 8, left: 50, centerX: true },
+      { top: 50, right: 2, centerY: true },
+      { top: 50, left: 2, centerY: true },
+      { bottom: 8, left: 50, centerX: true },
     ],
   },
   Middleware: {
@@ -78,9 +78,9 @@ const layoutPresets: Record<string, QuadrantLayoutConfig> = {
     angleOffset: Math.PI * 0.3,
     arcSpan: Math.PI * 0.85,
     customPositions: [
-      { top: 12, centerX: true },
-      { top: 72, left: 20, centerY: true },
-      { top: 72, right: 20, centerY: true },
+      { top: 12, left: 50, centerX: true },
+      { bottom: 8, left: 25, centerY: true },
+      { bottom: 8, right: 25, centerY: true },
     ],
   },
   Systems: {
@@ -89,12 +89,12 @@ const layoutPresets: Record<string, QuadrantLayoutConfig> = {
     angleOffset: Math.PI * 1.2,
     arcSpan: Math.PI,
     customPositions: [
-      { top: 27, left: 33 },
-      { top: 27, left: 67 },
-      { top: 50, left: 84 },
-      { top: 73, left: 67 },
-      { top: 73, left: 33 },
-      { top: 50, left: 16 },
+      { top: 50, left: 2, centerY: true },
+      { top: 12, left: 25 },
+      { top: 12, right: 25 },
+      { top: 50, right: 2, centerY: true },
+      { bottom: 8, left: 25 },
+      { bottom: 8, right: 25 },
     ],
   },
   Apps: {
@@ -102,10 +102,10 @@ const layoutPresets: Record<string, QuadrantLayoutConfig> = {
     angleOffset: Math.PI * 0.4,
     arcSpan: Math.PI * 0.9,
     customPositions: [
-      { top: 18, centerX: true },
-      { top: 50, right: 18, centerY: true },
-      { top: 50, left: 18, centerY: true },
-      { bottom: 18, centerX: true },
+      { top: 8, left: 8 },
+      { top: 8, right: 8 },
+      { bottom: 8, left: 8 },
+      { bottom: 8, right: 8 },
     ],
   },
 };
@@ -175,7 +175,8 @@ function computePositions(
 
   const outerRadius = layout.radius ?? defaultRadius;
   const innerRadius = layout.innerRadius ?? Math.max(outerRadius - 8, 24);
-  const angleOffset = layout.angleOffset ?? quadrantAngleOffsets[categoryIndex % quadrantAngleOffsets.length];
+  const angleOffset = layout.angleOffset ??
+    quadrantAngleOffsets[categoryIndex % quadrantAngleOffsets.length];
   const arcSpan = layout.arcSpan ?? (totalItems > 4 ? Math.PI * 1.05 : Math.PI * 0.8);
 
   const useDualRing = totalItems > 4;

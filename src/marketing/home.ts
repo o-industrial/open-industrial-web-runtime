@@ -240,7 +240,12 @@ export const homeContent: HomeContent = {
       },
       {
         title: 'Apps',
-        items: ['Historian Dashboards', 'Alarm Management', 'Batch Reporting', 'Maintenance Planning'],
+        items: [
+          'Historian Dashboards',
+          'Maintenance Planning',
+          'Alarm Management',
+          'Batch Reporting',
+        ],
       },
     ],
   },
