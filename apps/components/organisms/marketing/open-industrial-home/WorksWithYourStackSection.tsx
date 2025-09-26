@@ -44,23 +44,48 @@ const quadrantAccents = [
   },
 ];
 
+type PolarPosition = {
+  top?: number;
+  left?: number;
+  right?: number;
+  bottom?: number;
+};
+
 type QuadrantLayoutConfig = {
   radius?: number;
   innerRadius?: number;
   angleOffset?: number;
   arcSpan?: number;
+  customPositions?: PolarPosition[];
 };
 
 const layoutPresets: Record<string, QuadrantLayoutConfig> = {
-  Protocols: { radius: 32, angleOffset: Math.PI * 1.05, arcSpan: Math.PI * 0.9 },
-  Middleware: { radius: 34, angleOffset: Math.PI * 0.3, arcSpan: Math.PI * 0.85 },
+  Protocols: {
+    radius: 32,
+    angleOffset: Math.PI * 1.05,
+    arcSpan: Math.PI * 0.9,
+    customPositions: [
+      { top: 10, left: 10 },
+      { top: 10, right: 10 },
+      { top: 82, left: 10 },
+      { top: 82, right: 10 },
+    ],
+  },
+  Middleware: {
+    radius: 34,
+    angleOffset: Math.PI * 0.3,
+    arcSpan: Math.PI * 0.85,
+    customPositions: [
+      { top: 10, left: 50 },
+      { top: 72, left: 20 },
+      { top: 72, right: 20 },
+    ],
+  },
   Systems: { radius: 40, innerRadius: 30, angleOffset: Math.PI * 1.2, arcSpan: Math.PI },
   Apps: { radius: 34, angleOffset: Math.PI * 0.4, arcSpan: Math.PI * 0.9 },
 };
 
 const quadrantAngleOffsets = [Math.PI * 0.85, Math.PI * 0.15, Math.PI * 1.15, Math.PI * 0.35];
-
-type PolarPosition = { top: number; left: number };
 
 function computePositions(
   totalItems: number,
@@ -69,6 +94,30 @@ function computePositions(
 ): PolarPosition[] {
   if (totalItems === 0) {
     return [];
+  }
+
+  if (layout.customPositions && layout.customPositions.length) {
+    return layout.customPositions.slice(0, totalItems).map((position) => {
+      const normalized: PolarPosition = {};
+
+      if (typeof position.top === 'number') {
+        normalized.top = Math.max(8, Math.min(92, position.top));
+      }
+
+      if (typeof position.bottom === 'number') {
+        normalized.bottom = Math.max(8, Math.min(92, position.bottom));
+      }
+
+      if (typeof position.left === 'number') {
+        normalized.left = Math.max(8, Math.min(92, position.left));
+      }
+
+      if (typeof position.right === 'number') {
+        normalized.right = Math.max(8, Math.min(92, position.right));
+      }
+
+      return normalized;
+    });
   }
 
   const defaultRadius = (() => {
@@ -188,9 +237,25 @@ export default function WorksWithYourStackSection(): JSX.Element {
                 </div>
                 {category.items.map((item, itemIndex) => {
                   const coordinates = positions[itemIndex];
-                  const top = coordinates.top;
-                  const left = coordinates.left;
-                  const style = `top:${top}%;left:${left}%`;
+                  const styleParts: string[] = [];
+
+                  if (typeof coordinates.top === 'number') {
+                    styleParts.push(`top:${coordinates.top}%`);
+                  }
+
+                  if (typeof coordinates.bottom === 'number') {
+                    styleParts.push(`bottom:${coordinates.bottom}%`);
+                  }
+
+                  if (typeof coordinates.left === 'number') {
+                    styleParts.push(`left:${coordinates.left}%`);
+                  }
+
+                  if (typeof coordinates.right === 'number') {
+                    styleParts.push(`right:${coordinates.right}%`);
+                  }
+
+                  const style = styleParts.join(';');
 
                   return (
                     <span

@@ -43,7 +43,15 @@ type UnifiedHubContent = {
   preHeadline: string;
   headline: string;
   subhead: string;
-  bullets: string[];
+  inputsLabel: string;
+  inputs: { title: string; items: string[] }[];
+  hub: {
+    title: string;
+    subtitle: string;
+    bullets: string[];
+  };
+  outputsLabel: string;
+  outputs: { title: string; items: string[] }[];
 };
 
 type IntegrationEcosystemContent = {
@@ -191,8 +199,26 @@ export const homeContent: HomeContent = {
   unifiedHub: {
     preHeadline: 'Governed APIs',
     headline: 'Data In -> Insight Out',
-    subhead: 'Trace governed telemetry from ingestion to instant APIs.',
-    bullets: ['Real-time ingestion', 'Natural language queries', 'Instant API generation'],
+    subhead: 'Trace governed telemetry from edge to action.',
+    inputsLabel: 'Input systems',
+    inputs: [
+      { title: 'Control Systems', items: ['DCS', 'SCADA', 'PLC'] },
+      { title: 'Manufacturing Systems', items: ['MES', 'ERP', 'WMS'] },
+      { title: 'Quality & Lab Systems', items: ['LIMS', 'QMS', 'Historians'] },
+      { title: 'IoT & Sensors', items: ['Edge devices', 'Protocols'] },
+    ],
+    hub: {
+      title: 'Open Industrial',
+      subtitle: 'AI-powered hub',
+      bullets: ['Real-time ingestion', 'Natural language queries', 'Instant API generation'],
+    },
+    outputsLabel: 'Output destinations',
+    outputs: [
+      { title: 'Custom Applications', items: ['Web experiences', 'Mobile apps'] },
+      { title: 'Intelligent Agents', items: ['Monitoring', 'Alerts', 'Actions'] },
+      { title: 'BI & Analytics Tools', items: ['Power BI', 'Tableau', 'Grafana'] },
+      { title: 'APIs & Integrations', items: ['REST APIs', 'Webhooks'] },
+    ],
   },
   ecosystem: {
     preHeadline: 'Integration ecosystem',
