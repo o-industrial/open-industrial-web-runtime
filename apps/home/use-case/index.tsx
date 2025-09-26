@@ -4,7 +4,7 @@ import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import UseCaseHeroSection from '../../components/organisms/marketing/open-industrial/use-case/UseCaseHeroSection.tsx';
 import UseCaseListSection from '../../components/organisms/marketing/open-industrial/use-case/UseCaseListSection.tsx';
 import { MarketingPageFrame } from '../../components/shared/MarketingPageFrame.tsx';
-import { OpenIndustrialWebState } from '../../../src/state/OpenIndustrialWebState.ts';
+import { OpenIndustrialWebState } from '../@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 

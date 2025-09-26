@@ -3,7 +3,7 @@ import type { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
 import { Action, ActionStyleTypes } from '@o-industrial/common/atomic/atoms';
 import { WorkspaceList } from '@o-industrial/common/atomic/molecules';
-import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebState.ts';
+import { OpenIndustrialWebState } from '../../@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 
@@ -232,3 +232,4 @@ export default function AdminUserManagePage(
     </div>
   );
 }
+

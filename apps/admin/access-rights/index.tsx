@@ -4,7 +4,7 @@ import { JSX } from 'preact';
 import { useState } from 'preact/hooks';
 import type { EaCAccessRightAsCode, EverythingAsCodeIdentity } from '@fathym/eac-identity';
 import { Action, ActionStyleTypes, Input } from '@o-industrial/common/atomic/atoms';
-import { OpenIndustrialWebState } from '../../../src/state/OpenIndustrialWebState.ts';
+import { OpenIndustrialWebState } from '../@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 
@@ -214,3 +214,4 @@ export default function AccessRightsPage({
     </div>
   );
 }
+

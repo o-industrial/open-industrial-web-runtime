@@ -6,7 +6,7 @@ import ContactChannelsSection from '../../components/organisms/marketing/open-in
 import ContactFormSection from '../../components/organisms/marketing/open-industrial/contact/ContactFormSection.tsx';
 import ContactHeroSection from '../../components/organisms/marketing/open-industrial/contact/ContactHeroSection.tsx';
 import { MarketingPageFrame } from '../../components/shared/MarketingPageFrame.tsx';
-import { OpenIndustrialWebState } from '../../../src/state/OpenIndustrialWebState.ts';
+import { OpenIndustrialWebState } from '../@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 

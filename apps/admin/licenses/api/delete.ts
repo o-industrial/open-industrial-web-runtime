@@ -1,7 +1,7 @@
 import { NullableArrayOrObject } from '@fathym/common';
 import { EverythingAsCode } from '@fathym/eac';
 import type { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
-import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebState.ts';
+import { OpenIndustrialWebState } from '../../@o-industrial/common/runtimes';
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
   async DELETE(req, ctx) {
@@ -30,3 +30,4 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
     }
   },
 };
+

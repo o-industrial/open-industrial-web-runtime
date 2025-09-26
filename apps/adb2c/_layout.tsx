@@ -1,6 +1,6 @@
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
-import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
+import { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
   async GET(_req, ctx) {
@@ -162,3 +162,4 @@ export default function ADB2CLayout({ Data, Component, Revision }: PageProps) {
     </html>
   );
 }
+

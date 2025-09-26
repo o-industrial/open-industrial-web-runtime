@@ -19,7 +19,7 @@ import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 import { IoCContainer } from '@fathym/ioc';
 import { EverythingAsCode } from '@fathym/eac';
 import { EaCUserLicense, EverythingAsCodeLicensing } from '@fathym/eac-licensing';
-import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
+import { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 import { EaCApplicationsRuntimeContext } from '@fathym/eac-applications/runtime';
 
 export const IsIsland = true;
@@ -217,3 +217,4 @@ export default function WorkspacePage({
     </RuntimeWorkspaceDashboardTemplate>
   );
 }
+

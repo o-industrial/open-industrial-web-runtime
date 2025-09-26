@@ -1,5 +1,5 @@
 import { EaCRuntimeHandlers } from '@fathym/eac/runtime/pipelines';
-import { OpenIndustrialWebState } from '../../../../../src/state/OpenIndustrialWebState.ts';
+import { OpenIndustrialWebState } from '../../../@o-industrial/common/runtimes';
 
 export const handler: EaCRuntimeHandlers<OpenIndustrialWebState> = {
   async POST(req, ctx) {
@@ -32,3 +32,4 @@ export const handler: EaCRuntimeHandlers<OpenIndustrialWebState> = {
 };
 
 export default handler;
+

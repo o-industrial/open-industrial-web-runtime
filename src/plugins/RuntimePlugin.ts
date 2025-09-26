@@ -28,10 +28,10 @@ import {
   EaCLocalDistributedFileSystemDetails,
 } from '@fathym/eac/dfs';
 import { EaCAzureADB2CProviderDetails, EaCAzureADProviderDetails } from '@fathym/eac-identity';
-import OpenIndustrialLicensingPlugin from './OpenIndustrialLicensingPlugin.ts';
-import OpenIndustrialMSALPlugin from './OpenIndustrialMSALPlugin.ts';
+import { OpenIndustrialLicensingPlugin, OpenIndustrialMSALPlugin } from '@o-industrial/common/runtimes';
+
 import { EaCMSALProcessor } from '@fathym/msal';
-import { resolveAccessRights } from '../security/AccessRightsResolver.ts';
+import { resolveAccessRights } from '@o-industrial/common/runtimes';
 
 export default class RuntimePlugin implements EaCRuntimePlugin {
   constructor() {}
@@ -626,3 +626,4 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
     return Promise.resolve(pluginConfig);
   }
 }
+

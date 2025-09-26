@@ -8,7 +8,7 @@ import MissionStatementSection from '../../components/organisms/marketing/open-i
 import VisionCTASection from '../../components/organisms/marketing/open-industrial/about/VisionCTASection.tsx';
 import VisionStatementSection from '../../components/organisms/marketing/open-industrial/about/VisionStatementSection.tsx';
 import { MarketingPageFrame } from '../../components/shared/MarketingPageFrame.tsx';
-import { OpenIndustrialWebState } from '../../../src/state/OpenIndustrialWebState.ts';
+import { OpenIndustrialWebState } from '../@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 
