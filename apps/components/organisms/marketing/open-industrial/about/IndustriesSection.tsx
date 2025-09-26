@@ -16,7 +16,8 @@ export default function IndustriesSection(): JSX.Element {
             Who we serve
           </h2>
           <p class='text-base leading-relaxed text-neutral-700 sm:text-lg dark:text-neutral-300'>
-            We partner with OT engineers, process automation leads, lab managers, and industrial IT teams across manufacturing, life sciences, energy, utilities, and more.
+            We partner with OT engineers, process automation leads, lab managers, and industrial IT
+            teams across manufacturing, life sciences, energy, utilities, and more.
           </p>
         </div>
 

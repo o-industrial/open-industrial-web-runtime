@@ -53,7 +53,9 @@ export default function BatchQualityCTASection(): JSX.Element {
                 href={batchQualityOutcome.secondaryAction.href}
                 styleType={mapIntent(batchQualityOutcome.secondaryAction.intent)}
                 target={batchQualityOutcome.secondaryAction.external ? '_blank' : undefined}
-                rel={batchQualityOutcome.secondaryAction.external ? 'noopener noreferrer' : undefined}
+                rel={batchQualityOutcome.secondaryAction.external
+                  ? 'noopener noreferrer'
+                  : undefined}
               >
                 {batchQualityOutcome.secondaryAction.label}
               </Action>

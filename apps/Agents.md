@@ -1,69 +1,67 @@
-# Agents Guide - Web Runtime Apps
+# Agents Guide � Web Runtime Apps
 
-Directory-level guide for all user-facing experiences in the Open Industrial web runtime. This overview maps each app surface, shared building blocks, and review expectations.
+Directory-level guide for user-facing experiences in the Open Industrial web runtime. Admin surfaces are now served from [`open-industrial-admin-runtime`](../../open-industrial-admin-runtime/apps/Agents.md); this overview covers the remaining apps in this repo.
 
 ## Scope
 
-- Covers content and admin applications under `apps/*`, including routing and UI wiring.
-- Explains how app routes integrate with runtime state, plugins, and atomic components.
-- Outlines shared assets, middleware, and components used across multiple apps.
-- Excludes backend API handlers in `routes/api`; see runtime root Agents guide for server logic.
+- Public marketing, documentation, and blog applications under `apps/*`.
+- Authenticated workspace UX (`apps/workspace/*`).
+- Shared runtime components, middleware, and assets consumed across apps.
 
 ## Project Map
 
-- `admin/` - Authenticated admin portal for licenses, access rights, and workspace management. See [admin guide](admin/Agents.md).
-- `home/` - Marketing landing surfaces and top-level storytelling. See [home guide](home/Agents.md).
-- `docs/` - Developer documentation and product learning paths. See [docs guide](docs/Agents.md).
-- `blog/` - Editorial content hub powered by MDX. See [blog guide](blog/Agents.md).
-- `workspace/` - Authenticated workspace UX and execution tools. See [workspace guide](workspace/Agents.md).
-- `adb2c/` - Azure AD B2C templates for auth flows; evaluate whether separate Agents.md is needed.
-- `components/` - Shared organisms used across apps (mirrors atomic patterns but runtime-specific).
-- `assets/` - Static assets, marketing images, and diagrams; ensure licensing compliance.
+- `home/` � Marketing landing surfaces and storytelling. See [home guide](home/Agents.md).
+- `docs/` � Developer documentation and product learning paths. See [docs guide](docs/Agents.md).
+- `blog/` � Editorial content hub powered by MDX. See [blog guide](blog/Agents.md).
+- `workspace/` � Authenticated workspace UX and execution tools. See [workspace guide](workspace/Agents.md).
+- `adb2c/` � Azure AD B2C templates for auth flows.
+- `components/` � Shared runtime-specific UI pieces.
+- `assets/` � Static assets, marketing images, and diagrams; ensure licensing compliance.
 
 ## Commands
 
-- `deno task dev --app=<name>` - Launch a focused dev server when working on a specific app (pass directory alias via env or config).
-- `deno task check` - Validate types and lint across the runtime; required before PRs.
-- `deno task test` - Run runtime test suite, including Playwright tests for critical app flows.
-- `deno task build` - Production build to confirm bundling before release.
+- `deno task dev` � launch dev server with watch mode.
+- `deno task check` � format check, lint, and type-check (required before PRs).
+- `deno task test` � run runtime test suite.
+- `deno task build` � production validation.
 
 ## Patterns
 
-- Every app folder uses `_layout.tsx` for page shell, `_middleware.ts` for auth/routing, and route files for content.
-- Keep UI layers thin: leverage `@o-industrial/common/*` exports and runtime `apps/components/*` when possible.
-- Use `ctx.State.OIClient.*` clients within route handlers for EaC integration; avoid direct `fetch` calls.
-- Store page metadata in co-located `config.ts` or frontmatter for SEO consistency.
+- Each app can provide `_layout.tsx` for page shells and `_middleware.ts` for auth/routing requirements.
+- UI layers should rely on `@o-industrial/common/*` exports or `apps/components/*` to avoid duplication.
+- Route handlers use `ctx.State.OIClient.*` for EaC integration; avoid bare `fetch`.
+- Store page metadata in co-located helpers/frontmatter for SEO consistency.
 
 ## Review & Test Checklist
 
-- Confirm `_middleware.ts` enforces correct auth for protected apps.
-- Ensure Playwright coverage exists (or is updated) for critical flows when behavior changes.
-- Validate responsive layouts across breakpoints; update Tailwind configs if new utilities are required.
-- Cross-check navigation menus and breadcrumbs for broken links after structural changes.
+- Confirm `_middleware.ts` enforces correct auth for protected routes.
+- Update Playwright coverage for critical flows when altering behavior.
+- Validate responsive layouts across breakpoints; update Tailwind config if new utilities are required.
+- Ensure navigation menus and breadcrumbs remain accurate after structural changes.
 
 ## Safety & Guardrails
 
-- Do not commit secrets or env values; rely on `configs/eac-runtime.config.ts` and environment variables.
-- Keep asset sizes optimized; large media requires compression before adding to `assets/`.
-- Avoid coupling apps directly�shared components should live in `apps/components` or the atomic library.
+- No secrets committed; rely on env files ignored by git.
+- Optimize large assets before adding to `assets/`.
+- Shared logic belongs in `apps/components` or the reference architecture.
 
 ## Ownership Signals
 
-- **Primary owner:** Web Platform Team - Mika Ito.
-- **Point of contact:** #open-industrial-web-runtime Slack channel.
+- **Primary owner:** Web Platform Team � Mika Ito.
+- **Contact:** #open-industrial-web-runtime Slack channel.
 - **Escalation:** Runtime Architecture Guild (Jordan Blake).
 
 ## Dependencies & Integrations
 
 - Relies on runtime plugins in `src/plugins/*` (MSAL, licensing) and shared state in `src/state/OpenIndustrialWebState.ts`.
-- Consumes configs from `configs/eac-runtime.config.ts` and secrets provided via Deno KV.
-- Builds on atomic components (`@o-industrial/common/*`) exported from the reference architecture repo.
+- Consumes configuration from `configs/eac-runtime.config.ts` and secrets supplied via Deno KV.
+- Builds on atomic components exported from the reference architecture (`@o-industrial/common/*`).
 
 ## Related Docs
 
 - Parent: [open-industrial-web-runtime/AGENTS.md](../AGENTS.md).
-- Sibling guides: [Admin](admin/Agents.md), [Home](home/Agents.md), [Docs](docs/Agents.md), [Blog](blog/Agents.md), [Workspace](workspace/Agents.md).
-- Shared plugin guidance forthcoming in `src/plugins/Agents.md` (Phase 2).
+- Admin runtime guide: [`open-industrial-admin-runtime/apps/Agents.md`](../../open-industrial-admin-runtime/apps/Agents.md).
+- Sibling guides: [Home](home/Agents.md), [Docs](docs/Agents.md), [Blog](blog/Agents.md), [Workspace](workspace/Agents.md).
 
 ## Changelog Expectations
 

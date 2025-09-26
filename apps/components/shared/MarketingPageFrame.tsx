@@ -49,13 +49,13 @@ export function MarketingPageFrame({
 
   return (
     <div
-      class={`relative flex min-h-screen flex-col overflow-hidden ${variantBackgrounds[variant]} ${className}`}
+      class={`relative flex min-h-screen flex-col overflow-hidden ${
+        variantBackgrounds[variant]
+      } ${className}`}
     >
       {mergedOverlays.length > 0 && (
         <div aria-hidden='true' class='pointer-events-none absolute inset-0'>
-          {mergedOverlays.map((overlayClass, index) => (
-            <div key={index} class={overlayClass} />
-          ))}
+          {mergedOverlays.map((overlayClass, index) => <div key={index} class={overlayClass} />)}
         </div>
       )}
 

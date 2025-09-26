@@ -21,7 +21,8 @@ export default function CapabilitiesSection(): JSX.Element {
             What we do
           </h2>
           <p class='text-base leading-relaxed text-neutral-700 sm:text-lg dark:text-neutral-300'>
-            Open Industrial transforms how organizations interact with their industrial data through four core capabilities.
+            Open Industrial transforms how organizations interact with their industrial data through
+            four core capabilities.
           </p>
         </div>
 

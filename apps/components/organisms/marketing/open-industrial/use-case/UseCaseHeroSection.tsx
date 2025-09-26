@@ -12,7 +12,8 @@ export default function UseCaseHeroSection(): JSX.Element {
           Explore industrial intelligence in action
         </h1>
         <p class='text-base leading-relaxed text-white/75 sm:text-lg'>
-          Dive into curated stories that show how Open Industrial unlocks governed insights across batch quality, maintenance, and production performance.
+          Dive into curated stories that show how Open Industrial unlocks governed insights across
+          batch quality, maintenance, and production performance.
         </p>
         <div class='flex flex-wrap items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-white/60'>
           <span class='inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-white/80'>

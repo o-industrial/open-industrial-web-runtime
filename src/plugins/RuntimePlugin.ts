@@ -28,7 +28,10 @@ import {
   EaCLocalDistributedFileSystemDetails,
 } from '@fathym/eac/dfs';
 import { EaCAzureADB2CProviderDetails, EaCAzureADProviderDetails } from '@fathym/eac-identity';
-import { OpenIndustrialLicensingPlugin, OpenIndustrialMSALPlugin } from '@o-industrial/common/runtimes';
+import {
+  OpenIndustrialLicensingPlugin,
+  OpenIndustrialMSALPlugin,
+} from '@o-industrial/common/runtimes';
 
 import { EaCMSALProcessor } from '@fathym/msal';
 import { resolveAccessRights } from '@o-industrial/common/runtimes';
@@ -93,13 +96,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             },
             ApplicationResolvers: {
-              admin: {
-                PathPattern: '/admin*',
-                Priority: 500,
-                IsPrivate: true,
-                IsTriggerSignIn: true,
-                AccessRightLookups: ['Godmin'],
-              },
               automateConference: {
                 PathPattern: '/automateconference*',
                 Priority: 500,
@@ -169,27 +165,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               AppDFSLookup: 'local:apps/adb2c',
               BypassEaCBase: true,
               ComponentDFSLookups: [['local:apps/adb2c', ['tsx']]],
-            } as EaCPreactAppProcessor,
-          },
-          admin: {
-            Details: {
-              Name: 'Admin Site',
-              Description: 'Admin site.',
-            },
-            ModifierResolvers: {
-              baseHref: {
-                Priority: 10000,
-              },
-            },
-            Processor: {
-              Type: 'PreactApp',
-              AppDFSLookup: 'local:apps/admin',
-              ComponentDFSLookups: [
-                ['local:apps/components', ['tsx']],
-                ['local:apps/admin', ['tsx']],
-                ['jsr:@fathym/atomic', ['tsx']],
-                ['jsr:@fathym/atomic-design-kit', ['tsx']],
-              ],
             } as EaCPreactAppProcessor,
           },
           assets: {
@@ -435,14 +410,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               FileRoot: './apps/adb2c/',
             } as EaCLocalDistributedFileSystemDetails,
           },
-          'local:apps/admin': {
-            Details: {
-              Type: 'Local',
-              FileRoot: './apps/admin/',
-              DefaultFile: 'index.tsx',
-              Extensions: ['tsx'],
-            } as EaCLocalDistributedFileSystemDetails,
-          },
           'local:apps/assets': {
             Details: {
               Type: 'Local',
@@ -626,4 +593,3 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
     return Promise.resolve(pluginConfig);
   }
 }
-

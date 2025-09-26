@@ -22,7 +22,8 @@ export default function UseCaseListSection(): JSX.Element {
             Discover guided pathways to governed insight
           </h2>
           <p class='text-base leading-relaxed text-neutral-700 sm:text-lg dark:text-neutral-300'>
-            Start with proven blueprints for batch quality, downtime recovery, and performance visibility. Each accelerates deployment without sacrificing governance.
+            Start with proven blueprints for batch quality, downtime recovery, and performance
+            visibility. Each accelerates deployment without sacrificing governance.
           </p>
         </div>
 

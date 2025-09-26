@@ -9,7 +9,8 @@ type MarketingPreHeadlineProps = {
 
 const toneStyles: Record<MarketingPreHeadlineTone, { text: string; dot: string; pill: string }> = {
   default: {
-    text: 'text-[0.65rem] font-semibold uppercase tracking-[0.32em] text-neutral-600 dark:text-neutral-300',
+    text:
+      'text-[0.65rem] font-semibold uppercase tracking-[0.32em] text-neutral-600 dark:text-neutral-300',
     dot:
       'h-2 w-2 rounded-full bg-gradient-to-br from-neon-blue-500 via-neon-purple-500 to-neon-pink-500 shadow-[0_0_10px_rgba(129,140,248,0.45)]',
     pill: 'inline-flex items-center gap-2',

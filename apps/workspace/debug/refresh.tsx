@@ -1,7 +1,7 @@
 import { redirectRequest } from '@fathym/common';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
-import { OpenIndustrialWebState } from '../@o-industrial/common/runtimes';
+import { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 import { loadEaCActuators } from '../../../configs/eac-actuators.config.ts';
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
@@ -19,4 +19,3 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
     return redirectRequest(ctx.Runtime.URLMatch.Base, false, false);
   },
 };
-

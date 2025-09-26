@@ -17,4 +17,3 @@ export const handler: EaCRuntimeHandlerSet<
 export default function ADB2CException({}: PageProps<ADB2CExceptionPageData>) {
   return <div id='api' role='main'></div>;
 }
-

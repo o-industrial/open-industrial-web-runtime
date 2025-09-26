@@ -7,7 +7,7 @@ import { WorkspaceManager } from '@o-industrial/common/flow';
 import { EverythingAsCodeOIWorkspace } from '@o-industrial/common/eac';
 import OICore from '@o-industrial/common/packs/oi-core';
 import { IoCContainer } from '@fathym/ioc';
-import { OpenIndustrialWebState } from '../@o-industrial/common/runtimes';
+import { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 import { EaCUserLicense } from '@fathym/eac-licensing';
 
 export const IsIsland = true;
@@ -111,4 +111,3 @@ export default function CommitStatusPage({
     </div>
   );
 }
-

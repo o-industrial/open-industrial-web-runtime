@@ -16,7 +16,8 @@ export default function BatchQualityToggleSection(): JSX.Element {
             Ask batch quality questions in natural language
           </h2>
           <p class='text-base leading-relaxed text-white/75 sm:text-lg'>
-            Use Azi to translate plain-English requests into governed KQL. Switch between English and KQL to see the explainable query every answer is built on.
+            Use Azi to translate plain-English requests into governed KQL. Switch between English
+            and KQL to see the explainable query every answer is built on.
           </p>
         </div>
 

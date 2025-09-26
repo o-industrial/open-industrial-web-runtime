@@ -22,7 +22,8 @@ export default function BatchQualityIntegrationOverviewSection(): JSX.Element {
             Unite every batch system in one governed layer
           </h2>
           <p class='text-base leading-relaxed text-neutral-700 sm:text-lg dark:text-neutral-300'>
-            Open Industrial connects ERP, MES, QMS, LIMS, and DMS to create an explainable electronic batch record ready for investigations and audits.
+            Open Industrial connects ERP, MES, QMS, LIMS, and DMS to create an explainable
+            electronic batch record ready for investigations and audits.
           </p>
         </div>
 

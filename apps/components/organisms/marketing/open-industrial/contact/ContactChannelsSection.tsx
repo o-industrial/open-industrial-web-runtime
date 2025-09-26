@@ -6,7 +6,8 @@ import { contactIntro, contactMethods } from '../../../../../../src/marketing/co
 
 const intentGradients: Record<string, { badge: string; bar: string; bullet: string }> = {
   purple: {
-    badge: 'bg-gradient-to-br from-neon-purple-500/20 via-neon-blue-500/15 to-neon-pink-500/25 text-neon-purple-100',
+    badge:
+      'bg-gradient-to-br from-neon-purple-500/20 via-neon-blue-500/15 to-neon-pink-500/25 text-neon-purple-100',
     bar: 'from-neon-purple-500 via-neon-blue-500 to-neon-pink-500',
     bullet: 'from-neon-purple-500 to-neon-blue-500',
   },
@@ -16,7 +17,8 @@ const intentGradients: Record<string, { badge: string; bar: string; bullet: stri
     bullet: 'from-neon-blue-500 to-cyan-400',
   },
   green: {
-    badge: 'bg-gradient-to-br from-neon-green-500/20 via-teal-400/20 to-cyan-400/25 text-emerald-100',
+    badge:
+      'bg-gradient-to-br from-neon-green-500/20 via-teal-400/20 to-cyan-400/25 text-emerald-100',
     bar: 'from-neon-green-500 via-teal-400 to-cyan-400',
     bullet: 'from-neon-green-500 to-teal-400',
   },
@@ -69,7 +71,9 @@ export default function ContactChannelsSection(): JSX.Element {
                     <ul class='mt-2 space-y-2 text-sm text-neutral-600 dark:text-neutral-300'>
                       {method.highlights.map((highlight) => (
                         <li key={highlight} class='flex items-center gap-2'>
-                          <span class={`inline-flex h-1.5 w-1.5 rounded-full bg-gradient-to-r ${gradients.bullet}`} />
+                          <span
+                            class={`inline-flex h-1.5 w-1.5 rounded-full bg-gradient-to-r ${gradients.bullet}`}
+                          />
                           <span>{highlight}</span>
                         </li>
                       ))}

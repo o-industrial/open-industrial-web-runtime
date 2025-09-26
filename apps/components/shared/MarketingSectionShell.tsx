@@ -56,9 +56,7 @@ export function MarketingSectionShell({
     >
       {overlayClasses.length > 0 && (
         <div aria-hidden='true' class='pointer-events-none absolute inset-0'>
-          {overlayClasses.map((overlayClass, index) => (
-            <div key={index} class={overlayClass} />
-          ))}
+          {overlayClasses.map((overlayClass, index) => <div key={index} class={overlayClass} />)}
         </div>
       )}
 
