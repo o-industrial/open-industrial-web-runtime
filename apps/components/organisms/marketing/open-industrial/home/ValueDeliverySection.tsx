@@ -8,7 +8,7 @@ import {
   VisibilityIcon,
 } from '@o-industrial/common/atomic/icons';
 
-import { homeContent } from '../../../../../src/marketing/home.ts';
+import { homeContent } from '../../../../../../src/marketing/home.ts';
 
 const cardIcons = [CompositeSchemaIcon, TimelineIcon, VisibilityIcon, SignalIcon];
 
