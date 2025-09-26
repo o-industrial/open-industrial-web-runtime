@@ -17,6 +17,40 @@ function PreHeadline({ value }: { value?: string }): JSX.Element | null {
   );
 }
 
+function Headline({ value }: { value: string }): JSX.Element {
+  const parts = value.split('->').map((part) => part.trim());
+
+  if (parts.length !== 2) {
+    return <>{value}</>;
+  }
+
+  const [start, end] = parts;
+
+  return (
+    <>
+      <span>{start}</span>
+      <span class='mx-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-teal-400 via-cyan-300 to-sky-400 text-slate-900 shadow-[0_0_28px_rgba(10,216,232,0.45)] dark:text-slate-950'>
+        <svg
+          viewBox='0 0 24 24'
+          fill='none'
+          xmlns='http://www.w3.org/2000/svg'
+          class='h-4 w-4 text-slate-900 dark:text-white'
+        >
+          <path
+            d='M5 12h14m0 0-5-5m5 5-5 5'
+            stroke='currentColor'
+            stroke-width='1.8'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+          />
+        </svg>
+        <span class='sr-only'>to</span>
+      </span>
+      <span>{end}</span>
+    </>
+  );
+}
+
 export default function FutureVisionSection(): JSX.Element {
   const { preHeadline, headline, body, pillars } = homeContent.future;
 
@@ -32,7 +66,7 @@ export default function FutureVisionSection(): JSX.Element {
       <div class='relative z-10 space-y-4 text-white/80'>
         <PreHeadline value={preHeadline} />
         <h2 class='text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl'>
-          {headline}
+          <Headline value={headline} />
         </h2>
         <p class='text-base sm:text-lg text-white/75'>{body}</p>
       </div>

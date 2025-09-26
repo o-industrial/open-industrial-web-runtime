@@ -3,6 +3,7 @@ import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 
 import UseCaseHeroSection from '../../components/organisms/marketing/open-industrial/use-case/UseCaseHeroSection.tsx';
 import UseCaseListSection from '../../components/organisms/marketing/open-industrial/use-case/UseCaseListSection.tsx';
+import { MarketingPageFrame } from '../../components/shared/MarketingPageFrame.tsx';
 import { OpenIndustrialWebState } from '../../../src/state/OpenIndustrialWebState.ts';
 
 export const IsIsland = true;
@@ -18,10 +19,10 @@ export const handler: EaCRuntimeHandlerSet<
 
 export default function UseCasesPage({}: PageProps<UseCasesPageData>) {
   return (
-    <div class='flex flex-col bg-neutral-50 dark:bg-neutral-950'>
+    <MarketingPageFrame>
       <UseCaseHeroSection />
 
       <UseCaseListSection />
-    </div>
+    </MarketingPageFrame>
   );
 }

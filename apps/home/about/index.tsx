@@ -7,6 +7,7 @@ import IndustriesSection from '../../components/organisms/marketing/open-industr
 import MissionStatementSection from '../../components/organisms/marketing/open-industrial/about/MissionStatementSection.tsx';
 import VisionCTASection from '../../components/organisms/marketing/open-industrial/about/VisionCTASection.tsx';
 import VisionStatementSection from '../../components/organisms/marketing/open-industrial/about/VisionStatementSection.tsx';
+import { MarketingPageFrame } from '../../components/shared/MarketingPageFrame.tsx';
 import { OpenIndustrialWebState } from '../../../src/state/OpenIndustrialWebState.ts';
 
 export const IsIsland = true;
@@ -23,7 +24,7 @@ export const handler: EaCRuntimeHandlerSet<
 
 export default function AboutPage({}: PageProps<AboutPageData>) {
   return (
-    <div class='flex flex-col'>
+    <MarketingPageFrame>
       <AboutHeroSection />
 
       <MissionStatementSection />
@@ -35,6 +36,6 @@ export default function AboutPage({}: PageProps<AboutPageData>) {
       <VisionStatementSection />
 
       <VisionCTASection />
-    </div>
+    </MarketingPageFrame>
   );
 }
