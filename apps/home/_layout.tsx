@@ -1,14 +1,18 @@
-import { PageProps } from '@fathym/eac-applications/preact';
-import { MarketingNavigation } from '@o-industrial/common/atomic/organisms';
-import type { MarketingNavLink } from '@o-industrial/common/atomic/organisms';
+﻿import { PageProps } from '@fathym/eac-applications/preact';
+import MarketingNavigationIsland from '../components/shared/MarketingNavigationIsland.tsx';
+import type { MarketingNavLink, MarketingNavCTA } from '@o-industrial/common/atomic/organisms';
 import {
-  ctaLinks,
+  ctaLinks as baseCtaLinks,
   footerPrimaryLinks,
   footerSecondaryLinks,
   marketingTagline,
   primaryNavLinks,
 } from '../../src/marketing/navigation.ts';
 
+const ctaLinks: MarketingNavCTA[] = baseCtaLinks.map((cta) => ({
+  ...cta,
+  intent: cta.intent ?? 'primary',
+}));
 const renderFooterLink = (
   link: MarketingNavLink,
   className =
@@ -91,7 +95,7 @@ export default function HomeLayout({
               </a>
 
               <div class='ml-auto flex flex-1 justify-end'>
-                <MarketingNavigation
+                <MarketingNavigationIsland
                   links={primaryNavLinks}
                   ctas={ctaLinks}
                   class='w-full justify-end'
