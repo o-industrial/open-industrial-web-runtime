@@ -44,33 +44,94 @@ const quadrantAccents = [
   },
 ];
 
-const layoutPresets: Record<string, { top?: string; left?: string; right?: string }[]> = {
-  Protocols: [
-    { top: '6%', left: '6%' },
-    { top: '30%', left: '34%' },
-    { top: '58%', left: '10%' },
-    { top: '72%', left: '36%' },
-  ],
-  Middleware: [
-    { top: '12%', left: '40%' },
-    { top: '42%', right: '12%' },
-    { top: '68%', left: '52%' },
-  ],
-  Systems: [
-    { top: '4%', left: '8%' },
-    { top: '22%', left: '34%' },
-    { top: '40%', left: '12%' },
-    { top: '56%', left: '38%' },
-    { top: '70%', left: '10%' },
-    { top: '80%', left: '32%' },
-  ],
-  Apps: [
-    { top: '8%', right: '30%' },
-    { top: '32%', right: '8%' },
-    { top: '58%', right: '36%' },
-    { top: '74%', right: '10%' },
-  ],
+type QuadrantLayoutConfig = {
+  radius?: number;
+  innerRadius?: number;
+  angleOffset?: number;
+  arcSpan?: number;
 };
+
+const layoutPresets: Record<string, QuadrantLayoutConfig> = {
+  Protocols: { radius: 32, angleOffset: Math.PI * 1.05, arcSpan: Math.PI * 0.9 },
+  Middleware: { radius: 34, angleOffset: Math.PI * 0.3, arcSpan: Math.PI * 0.85 },
+  Systems: { radius: 40, innerRadius: 30, angleOffset: Math.PI * 1.2, arcSpan: Math.PI },
+  Apps: { radius: 34, angleOffset: Math.PI * 0.4, arcSpan: Math.PI * 0.9 },
+};
+
+const quadrantAngleOffsets = [Math.PI * 0.85, Math.PI * 0.15, Math.PI * 1.15, Math.PI * 0.35];
+
+type PolarPosition = { top: number; left: number };
+
+function computePositions(
+  totalItems: number,
+  categoryIndex: number,
+  layout: QuadrantLayoutConfig,
+): PolarPosition[] {
+  if (totalItems === 0) {
+    return [];
+  }
+
+  const defaultRadius = (() => {
+    if (totalItems <= 2) {
+      return 24;
+    }
+
+    if (totalItems === 3) {
+      return 28;
+    }
+
+    if (totalItems === 4) {
+      return 32;
+    }
+
+    if (totalItems <= 6) {
+      return 36;
+    }
+
+    return 40;
+  })();
+
+  const outerRadius = layout.radius ?? defaultRadius;
+  const innerRadius = layout.innerRadius ?? Math.max(outerRadius - 8, 24);
+  const angleOffset = layout.angleOffset ?? quadrantAngleOffsets[categoryIndex % quadrantAngleOffsets.length];
+  const arcSpan = layout.arcSpan ?? (totalItems > 4 ? Math.PI * 1.05 : Math.PI * 0.8);
+
+  const useDualRing = totalItems > 4;
+  const outerCount = useDualRing ? Math.ceil(totalItems / 2) : totalItems;
+  const innerCount = useDualRing ? totalItems - outerCount : 0;
+
+  const positions: PolarPosition[] = [];
+
+  const addRingPositions = (count: number, radius: number, offsetAdjustment = 0) => {
+    if (count <= 0) {
+      return;
+    }
+
+    const startAngle = angleOffset - arcSpan / 2;
+    const step = count > 1 ? arcSpan / (count - 1) : 0;
+
+    for (let index = 0; index < count; index++) {
+      const angle = startAngle + step * index + offsetAdjustment;
+      let top = 50 + Math.sin(angle) * radius;
+      let left = 50 + Math.cos(angle) * radius;
+
+      // Keep within safe bounds to avoid clipping while feeling free-form.
+      top = Math.max(12, Math.min(88, top));
+      left = Math.max(12, Math.min(88, left));
+
+      positions.push({ top, left });
+    }
+  };
+
+  addRingPositions(outerCount, outerRadius);
+
+  if (useDualRing) {
+    // Offset the inner ring slightly so chips interleave rather than stack.
+    addRingPositions(innerCount, innerRadius, arcSpan / (outerCount + innerCount));
+  }
+
+  return positions;
+}
 
 export default function WorksWithYourStackSection(): JSX.Element {
   const { preHeadline, headline, body, categories } = homeContent.ecosystem;
@@ -94,7 +155,12 @@ export default function WorksWithYourStackSection(): JSX.Element {
       <div class='relative z-10 grid gap-10 text-left sm:grid-cols-2'>
         {categories.map((category, categoryIndex) => {
           const accent = quadrantAccents[categoryIndex % quadrantAccents.length];
-          const layout = layoutPresets[category.title] ?? [];
+          const layout = layoutPresets[category.title] ?? {};
+          const positions = computePositions(
+            category.items.length,
+            categoryIndex,
+            layout,
+          );
           return (
             <section
               key={category.title}
@@ -105,32 +171,32 @@ export default function WorksWithYourStackSection(): JSX.Element {
                 class={`pointer-events-none absolute -inset-10 rounded-[3rem] opacity-70 blur-[120px] transition-opacity duration-300 group-hover:opacity-95 ${accent.glow}`}
               />
 
-              <header class='relative z-10 space-y-2 text-center'>
-                <h3 class='text-xl font-semibold text-neutral-900 dark:text-white'>{category.title}</h3>
+              <header class='relative z-10 flex justify-center sm:hidden'>
+                <span class='inline-flex items-center gap-3 rounded-full border border-white/40 bg-gradient-to-r from-white/95 via-white/80 to-white/70 px-5 py-2 text-sm font-semibold uppercase tracking-[0.28em] text-neutral-900 shadow-[0_0_22px_rgba(129,140,248,0.4)] backdrop-blur dark:border-white/15 dark:bg-gradient-to-r dark:from-slate-950/90 dark:via-slate-950/85 dark:to-slate-900/75 dark:text-white'>
+                  <span class='h-2 w-2 rounded-full bg-gradient-to-br from-neon-blue-500 via-neon-purple-500 to-neon-pink-500 shadow-[0_0_10px_rgba(129,140,248,0.6)]' />
+                  {category.title}
+                </span>
               </header>
 
-              <div class='relative z-10 hidden h-[240px] w-full sm:block'>
+              <div class='relative z-10 hidden h-[260px] w-full sm:block'>
+                <div class='absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center'>
+                  <div class='absolute -inset-12 rounded-full bg-[radial-gradient(circle,_rgba(129,140,248,0.18),rgba(255,255,255,0)_78%)] opacity-75 blur-[90px] dark:bg-[radial-gradient(circle,_rgba(88,28,135,0.32),rgba(6,10,25,0)_80%)]' />
+                  <h3 class='relative inline-flex items-center gap-3 rounded-full border border-white/45 bg-gradient-to-r from-white/96 via-white/90 to-white/70 px-8 py-3.5 text-sm font-semibold uppercase tracking-[0.34em] text-neutral-900 shadow-[0_0_35px_rgba(129,140,248,0.48)] backdrop-blur dark:border-white/20 dark:bg-gradient-to-r dark:from-slate-950/95 dark:via-slate-950/90 dark:to-slate-900/80 dark:text-white dark:shadow-[0_0_42px_rgba(129,140,248,0.55)]'>
+                    <span class='h-2.5 w-2.5 rounded-full bg-gradient-to-br from-neon-blue-500 via-neon-purple-500 to-neon-pink-500 shadow-[0_0_12px_rgba(129,140,248,0.65)]' />
+                    {category.title}
+                  </h3>
+                </div>
                 {category.items.map((item, itemIndex) => {
-                  const coordinates = layout[itemIndex] ?? {};
-                  const top = coordinates.top ?? `${8 + itemIndex * 18}%`;
+                  const coordinates = positions[itemIndex];
+                  const top = coordinates.top;
                   const left = coordinates.left;
-                  const right = coordinates.right;
-                  const fallbackHorizontal = categoryIndex % 2 === 0 ? 'left:12%' : 'right:12%';
-
-                  const style = [
-                    `top:${top}`,
-                    left ? `left:${left}` : undefined,
-                    right ? `right:${right}` : undefined,
-                    !left && !right ? fallbackHorizontal : undefined,
-                  ]
-                    .filter(Boolean)
-                    .join(';');
+                  const style = `top:${top}%;left:${left}%`;
 
                   return (
                     <span
                       key={item}
                       style={style}
-                      class={`absolute inline-flex translate-y-0 items-center gap-3 rounded-full border border-white/10 bg-neutral-900/70 px-4 py-2 text-sm font-medium text-neutral-100 backdrop-blur transition-all duration-300 hover:scale-[1.02] ${accent.shadow}`}
+                      class={`absolute inline-flex translate-y-0 items-center gap-3 rounded-full border border-white/35 bg-gradient-to-r from-white/95 via-white/85 to-white/75 px-4 py-2 text-sm font-semibold text-neutral-900 shadow-[0_0_25px_rgba(59,130,246,0.25)] backdrop-blur transition-all duration-300 hover:scale-[1.03] dark:border-white/15 dark:bg-gradient-to-r dark:from-slate-950/90 dark:via-slate-950/80 dark:to-slate-900/75 dark:text-white ${accent.shadow}`}
                     >
                       <span class={`h-2.5 w-2.5 rounded-full ${accent.dot}`} />
                       {item}
@@ -139,11 +205,11 @@ export default function WorksWithYourStackSection(): JSX.Element {
                 })}
               </div>
 
-              <div class='relative z-10 flex flex-col gap-3 text-sm text-neutral-600 sm:hidden dark:text-neutral-200'>
+              <div class='relative z-10 flex flex-col gap-3 text-sm text-neutral-700 sm:hidden dark:text-neutral-200'>
                 {category.items.map((item) => (
                   <span
                     key={item}
-                    class={`inline-flex items-center gap-3 self-start rounded-full border border-white/10 bg-neutral-900/70 px-4 py-2 font-medium text-neutral-100 ${accent.shadow}`}
+                    class={`inline-flex items-center gap-3 self-center rounded-full border border-white/35 bg-gradient-to-r from-white/95 via-white/80 to-white/70 px-4 py-2 font-semibold text-neutral-900 shadow-[0_0_18px_rgba(59,130,246,0.22)] backdrop-blur dark:border-white/15 dark:bg-gradient-to-r dark:from-slate-950/90 dark:via-slate-950/80 dark:to-slate-900/70 dark:text-white ${accent.shadow}`}
                   >
                     <span class={`h-2.5 w-2.5 rounded-full ${accent.dot}`} />
                     {item}
