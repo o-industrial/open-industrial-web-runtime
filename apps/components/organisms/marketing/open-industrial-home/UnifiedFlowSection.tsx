@@ -115,8 +115,8 @@ export default function UnifiedFlowSection(): JSX.Element {
             <div aria-hidden='true' class='hidden lg:block absolute left-[-7rem] top-1/2 h-px w-[5.5rem] -translate-y-1/2 bg-gradient-to-r from-transparent via-neon-blue-400/40 to-neon-purple-400/70' />
             <div aria-hidden='true' class='hidden lg:block absolute right-[-7rem] top-1/2 h-px w-[5.5rem] -translate-y-1/2 bg-gradient-to-r from-neon-purple-400/70 via-neon-pink-400/40 to-transparent' />
 
-            <article class='relative overflow-hidden rounded-[32px] border border-neutral-200/70 bg-gradient-to-br from-[#dffbff] via-white to-[#eff8ff] px-10 py-12 text-center shadow-[0_40px_140px_-90px_rgba(56,189,248,0.35)] backdrop-blur-sm dark:border-white/10 dark:bg-gradient-to-br dark:from-[#062029] dark:via-[#041721] dark:to-[#030f19] dark:shadow-[0_55px_180px_-110px_rgba(56,189,248,0.5)]'>
-              <div class='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,_rgba(45,212,191,0.18),rgba(255,255,255,0)_74%)] opacity-70 blur-[150px] dark:bg-[radial-gradient(circle,_rgba(56,189,248,0.28),rgba(3,14,22,0)_78%)]' />
+            <article class='relative overflow-hidden rounded-[32px] border border-neutral-200/70 bg-gradient-to-br from-[#12ffe9] via-[#0ad8ff] to-[#28f2ff] px-10 py-12 text-center shadow-[0_55px_160px_-85px_rgba(10,216,232,0.62)] backdrop-blur-sm dark:border-white/10 dark:bg-gradient-to-br dark:from-[#00a6be] dark:via-[#007a90] dark:to-[#025068] dark:shadow-[0_65px_195px_-110px_rgba(10,216,232,0.78)]'>
+              <div class='pointer-events-none absolute inset-0 bg-[radial-gradient(circle,_rgba(18,255,233,0.48),rgba(255,255,255,0)_72%)] opacity-85 blur-[150px] dark:bg-[radial-gradient(circle,_rgba(10,216,232,0.5),rgba(0,19,28,0)_76%)]' />
 
               <div class='relative z-10 space-y-5'>
                 <span class='inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-neon-blue-500/15 via-neon-purple-500/15 to-neon-pink-500/15 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-neutral-600 dark:text-neutral-200'>

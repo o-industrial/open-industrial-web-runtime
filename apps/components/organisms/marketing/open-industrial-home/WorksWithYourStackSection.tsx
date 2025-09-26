@@ -49,6 +49,8 @@ type PolarPosition = {
   left?: number;
   right?: number;
   bottom?: number;
+  centerX?: boolean;
+  centerY?: boolean;
 };
 
 type QuadrantLayoutConfig = {
@@ -67,8 +69,8 @@ const layoutPresets: Record<string, QuadrantLayoutConfig> = {
     customPositions: [
       { top: 10, left: 10 },
       { top: 10, right: 10 },
-      { top: 82, left: 10 },
-      { top: 82, right: 10 },
+      { bottom: 10, left: 10 },
+      { bottom: 10, right: 10 },
     ],
   },
   Middleware: {
@@ -76,13 +78,36 @@ const layoutPresets: Record<string, QuadrantLayoutConfig> = {
     angleOffset: Math.PI * 0.3,
     arcSpan: Math.PI * 0.85,
     customPositions: [
-      { top: 10, left: 50 },
-      { top: 72, left: 20 },
-      { top: 72, right: 20 },
+      { top: 12, centerX: true },
+      { top: 72, left: 20, centerY: true },
+      { top: 72, right: 20, centerY: true },
     ],
   },
-  Systems: { radius: 40, innerRadius: 30, angleOffset: Math.PI * 1.2, arcSpan: Math.PI },
-  Apps: { radius: 34, angleOffset: Math.PI * 0.4, arcSpan: Math.PI * 0.9 },
+  Systems: {
+    radius: 40,
+    innerRadius: 30,
+    angleOffset: Math.PI * 1.2,
+    arcSpan: Math.PI,
+    customPositions: [
+      { top: 27, left: 33 },
+      { top: 27, left: 67 },
+      { top: 50, left: 84 },
+      { top: 73, left: 67 },
+      { top: 73, left: 33 },
+      { top: 50, left: 16 },
+    ],
+  },
+  Apps: {
+    radius: 34,
+    angleOffset: Math.PI * 0.4,
+    arcSpan: Math.PI * 0.9,
+    customPositions: [
+      { top: 18, centerX: true },
+      { top: 50, right: 18, centerY: true },
+      { top: 50, left: 18, centerY: true },
+      { bottom: 18, centerX: true },
+    ],
+  },
 };
 
 const quadrantAngleOffsets = [Math.PI * 0.85, Math.PI * 0.15, Math.PI * 1.15, Math.PI * 0.35];
@@ -114,6 +139,14 @@ function computePositions(
 
       if (typeof position.right === 'number') {
         normalized.right = Math.max(8, Math.min(92, position.right));
+      }
+
+      if (position.centerX) {
+        normalized.centerX = true;
+      }
+
+      if (position.centerY) {
+        normalized.centerY = true;
       }
 
       return normalized;
@@ -238,6 +271,7 @@ export default function WorksWithYourStackSection(): JSX.Element {
                 {category.items.map((item, itemIndex) => {
                   const coordinates = positions[itemIndex];
                   const styleParts: string[] = [];
+                  const transforms: string[] = [];
 
                   if (typeof coordinates.top === 'number') {
                     styleParts.push(`top:${coordinates.top}%`);
@@ -255,13 +289,25 @@ export default function WorksWithYourStackSection(): JSX.Element {
                     styleParts.push(`right:${coordinates.right}%`);
                   }
 
+                  if (coordinates.centerX) {
+                    transforms.push('translateX(-50%)');
+                  }
+
+                  if (coordinates.centerY) {
+                    transforms.push('translateY(-50%)');
+                  }
+
+                  if (transforms.length) {
+                    styleParts.push(`transform:${transforms.join(' ')}`);
+                  }
+
                   const style = styleParts.join(';');
 
                   return (
                     <span
                       key={item}
                       style={style}
-                      class={`absolute inline-flex translate-y-0 items-center gap-3 rounded-full border border-white/35 bg-gradient-to-r from-white/95 via-white/85 to-white/75 px-4 py-2 text-sm font-semibold text-neutral-900 shadow-[0_0_25px_rgba(59,130,246,0.25)] backdrop-blur transition-all duration-300 hover:scale-[1.03] dark:border-white/15 dark:bg-gradient-to-r dark:from-slate-950/90 dark:via-slate-950/80 dark:to-slate-900/75 dark:text-white ${accent.shadow}`}
+                      class={`absolute inline-flex translate-y-0 items-center gap-3 rounded-full border border-white/35 bg-gradient-to-r from-white/95 via-white/85 to-white/75 px-4 py-2 text-sm font-semibold text-neutral-900 shadow-[0_0_25px_rgba(59,130,246,0.25)] backdrop-blur transition-all duration-300 hover:scale-[1.03] whitespace-nowrap dark:border-white/15 dark:bg-gradient-to-r dark:from-slate-950/90 dark:via-slate-950/80 dark:to-slate-900/75 dark:text-white ${accent.shadow}`}
                     >
                       <span class={`h-2.5 w-2.5 rounded-full ${accent.dot}`} />
                       {item}
@@ -274,7 +320,7 @@ export default function WorksWithYourStackSection(): JSX.Element {
                 {category.items.map((item) => (
                   <span
                     key={item}
-                    class={`inline-flex items-center gap-3 self-center rounded-full border border-white/35 bg-gradient-to-r from-white/95 via-white/80 to-white/70 px-4 py-2 font-semibold text-neutral-900 shadow-[0_0_18px_rgba(59,130,246,0.22)] backdrop-blur dark:border-white/15 dark:bg-gradient-to-r dark:from-slate-950/90 dark:via-slate-950/80 dark:to-slate-900/70 dark:text-white ${accent.shadow}`}
+                    class={`inline-flex items-center gap-3 self-center rounded-full border border-white/35 bg-gradient-to-r from-white/95 via-white/80 to-white/70 px-4 py-2 font-semibold text-neutral-900 shadow-[0_0_18px_rgba(59,130,246,0.22)] backdrop-blur whitespace-nowrap dark:border-white/15 dark:bg-gradient-to-r dark:from-slate-950/90 dark:via-slate-950/80 dark:to-slate-900/70 dark:text-white ${accent.shadow}`}
                   >
                     <span class={`h-2.5 w-2.5 rounded-full ${accent.dot}`} />
                     {item}
