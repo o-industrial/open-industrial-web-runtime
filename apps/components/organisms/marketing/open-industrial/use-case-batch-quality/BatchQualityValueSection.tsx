@@ -17,7 +17,7 @@ export default function BatchQualityValueSection(): JSX.Element {
       items={batchQualityHowHelpItems}
       columns={2}
       variant='dark'
-      class='bg-gradient-to-br from-[#050914] via-[#0b1228] to-[#060916] py-24'
+      class='relative overflow-hidden border border-white/10 bg-gradient-to-br from-[#050914] via-[#0b1228] to-[#060916] py-24 shadow-[0_120px_280px_-180px_rgba(129,140,248,0.45)]'
     />
   );
 }

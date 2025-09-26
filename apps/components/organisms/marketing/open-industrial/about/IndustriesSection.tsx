@@ -1,24 +1,27 @@
 import { JSX } from 'preact';
 
-import { SectionSurface } from '@o-industrial/common/atomic/atoms';
-import { ChecklistGroup, SectionHeader } from '@o-industrial/common/atomic/molecules';
+import { ChecklistGroup } from '@o-industrial/common/atomic/molecules';
 
+import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
 import { industriesServed } from '../../../../../../src/marketing/about.ts';
 
 export default function IndustriesSection(): JSX.Element {
   return (
-    <SectionSurface
-      tone='default'
-      class='bg-gradient-to-br from-[#f6f8ff] via-white to-[#f4efff] dark:from-[#06091b] dark:via-[#0c1129] dark:to-[#06091b]'
-    >
-      <div class='space-y-10'>
-        <SectionHeader
-          title='Who we serve'
-          description='We partner with OT engineers, process automation leads, lab managers, and industrial IT teams across manufacturing, life sciences, energy, utilities, and more.'
-          align='center'
-        />
-        <ChecklistGroup items={industriesServed} columns={3} />
+    <MarketingSectionShell variant='neutral'>
+      <div class='space-y-12 text-neutral-700 dark:text-neutral-200'>
+        <div class='mx-auto max-w-3xl space-y-4 text-center'>
+          <MarketingPreHeadline value='Industries' />
+          <h2 class='text-balance text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl dark:text-white'>
+            Who we serve
+          </h2>
+          <p class='text-base leading-relaxed text-neutral-700 sm:text-lg dark:text-neutral-300'>
+            We partner with OT engineers, process automation leads, lab managers, and industrial IT teams across manufacturing, life sciences, energy, utilities, and more.
+          </p>
+        </div>
+
+        <ChecklistGroup items={industriesServed} columns={3} variant='light' />
       </div>
-    </SectionSurface>
+    </MarketingSectionShell>
   );
 }

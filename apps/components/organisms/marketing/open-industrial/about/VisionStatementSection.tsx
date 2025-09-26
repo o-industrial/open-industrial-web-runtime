@@ -1,17 +1,21 @@
 import { JSX } from 'preact';
 
-import { SectionSurface } from '@o-industrial/common/atomic/atoms';
-import { SectionHeader } from '@o-industrial/common/atomic/molecules';
-
+import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
 import { visionCopy } from '../../../../../../src/marketing/about.ts';
 
 export default function VisionStatementSection(): JSX.Element {
   return (
-    <SectionSurface
-      tone='muted'
-      class='bg-gradient-to-r from-white via-[#f2f6ff] to-white dark:from-[#060a1d] dark:via-[#0a1029] dark:to-[#060a1d]'
-    >
-      <SectionHeader {...visionCopy} />
-    </SectionSurface>
+    <MarketingSectionShell variant='lavender'>
+      <div class='mx-auto max-w-3xl space-y-5 text-center text-neutral-700 dark:text-neutral-200'>
+        <MarketingPreHeadline value='Vision' />
+        <h2 class='text-balance text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl dark:text-white'>
+          {visionCopy.title}
+        </h2>
+        <p class='text-base leading-relaxed text-neutral-700 sm:text-lg dark:text-neutral-300'>
+          {visionCopy.description}
+        </p>
+      </div>
+    </MarketingSectionShell>
   );
 }

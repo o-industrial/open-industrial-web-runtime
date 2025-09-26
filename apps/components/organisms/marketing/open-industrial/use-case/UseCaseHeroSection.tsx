@@ -1,24 +1,34 @@
 import { JSX } from 'preact';
 
-import { SectionSurface } from '@o-industrial/common/atomic/atoms';
-import { SectionHeader } from '@o-industrial/common/atomic/molecules';
+import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
 
 export default function UseCaseHeroSection(): JSX.Element {
   return (
-    <SectionSurface
-      tone='default'
-      class='bg-gradient-to-br from-[#070a1e] via-[#111536] to-[#050716] py-24 text-white shadow-[0_70px_200px_-90px_rgba(10,16,42,0.85)]'
-    >
-      <div class='mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-6 text-center'>
-        <span class='inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white/70'>
-          Use Cases
-        </span>
-        <SectionHeader
-          title='Explore industrial intelligence in action'
-          description='Dive into curated stories that show how Open Industrial unlocks governed insights across batch quality, maintenance, and production performance.'
-          align='center'
-        />
+    <MarketingSectionShell variant='midnight' width='wide'>
+      <div class='mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-2 text-center text-white/80'>
+        <MarketingPreHeadline value='Use cases' tone='inverse' />
+        <h1 class='text-balance text-4xl font-semibold tracking-tight text-white sm:text-5xl'>
+          Explore industrial intelligence in action
+        </h1>
+        <p class='text-base leading-relaxed text-white/75 sm:text-lg'>
+          Dive into curated stories that show how Open Industrial unlocks governed insights across batch quality, maintenance, and production performance.
+        </p>
+        <div class='flex flex-wrap items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-white/60'>
+          <span class='inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-white/80'>
+            <span class='h-2 w-2 rounded-full bg-neon-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.7)]' />
+            Batch quality
+          </span>
+          <span class='inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-white/80'>
+            <span class='h-2 w-2 rounded-full bg-neon-purple-400 shadow-[0_0_10px_rgba(139,92,246,0.7)]' />
+            Maintenance
+          </span>
+          <span class='inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-white/80'>
+            <span class='h-2 w-2 rounded-full bg-neon-pink-400 shadow-[0_0_10px_rgba(236,72,153,0.7)]' />
+            Performance
+          </span>
+        </div>
       </div>
-    </SectionSurface>
+    </MarketingSectionShell>
   );
 }

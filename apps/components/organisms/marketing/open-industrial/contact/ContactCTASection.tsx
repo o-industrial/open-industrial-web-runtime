@@ -1,14 +1,66 @@
 import { JSX } from 'preact';
 
-import { CTADeepLinkSection } from '@o-industrial/common/atomic/organisms';
+import { Action, ActionStyleTypes } from '@o-industrial/common/atomic/atoms';
 
+import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
 import { contactCTA } from '../../../../../../src/marketing/contact.ts';
+
+function mapIntent(intent?: 'primary' | 'secondary' | 'ghost'): ActionStyleTypes {
+  switch (intent) {
+    case 'secondary':
+      return ActionStyleTypes.Outline | ActionStyleTypes.Rounded;
+    case 'ghost':
+      return ActionStyleTypes.Thin | ActionStyleTypes.Link;
+    case 'primary':
+    default:
+      return ActionStyleTypes.Solid | ActionStyleTypes.Rounded;
+  }
+}
 
 export default function ContactCTASection(): JSX.Element {
   return (
-    <CTADeepLinkSection
-      content={contactCTA}
-      class='bg-gradient-to-br from-[#f5f7ff] via-white to-[#f4efff] py-20 dark:from-[#080c1f] dark:via-[#13143b] dark:to-[#050818]'
-    />
+    <MarketingSectionShell variant='midnight'>
+      <div class='mx-auto flex w-full max-w-3xl flex-col items-center gap-6 text-center text-white/80'>
+        <MarketingPreHeadline value='Take action' tone='inverse' />
+        <h2 class='text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl'>
+          {contactCTA.title}
+        </h2>
+        {contactCTA.description
+          ? (
+            <p class='text-base leading-relaxed text-white/75 sm:text-lg'>
+              {contactCTA.description}
+            </p>
+          )
+          : null}
+
+        <div class='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center'>
+          {contactCTA.primaryAction
+            ? (
+              <Action
+                href={contactCTA.primaryAction.href}
+                styleType={mapIntent(contactCTA.primaryAction.intent)}
+                target={contactCTA.primaryAction.external ? '_blank' : undefined}
+                rel={contactCTA.primaryAction.external ? 'noopener noreferrer' : undefined}
+              >
+                {contactCTA.primaryAction.label}
+              </Action>
+            )
+            : null}
+          {contactCTA.secondaryAction
+            ? (
+              <Action
+                href={contactCTA.secondaryAction.href}
+                styleType={mapIntent(contactCTA.secondaryAction.intent)}
+                target={contactCTA.secondaryAction.external ? '_blank' : undefined}
+                rel={contactCTA.secondaryAction.external ? 'noopener noreferrer' : undefined}
+              >
+                {contactCTA.secondaryAction.label}
+              </Action>
+            )
+            : null}
+        </div>
+      </div>
+    </MarketingSectionShell>
   );
 }

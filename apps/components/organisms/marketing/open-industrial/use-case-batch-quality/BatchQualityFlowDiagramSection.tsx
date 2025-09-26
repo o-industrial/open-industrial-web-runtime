@@ -15,7 +15,7 @@ export default function BatchQualityFlowDiagramSection(): JSX.Element {
         align: 'center',
       }}
       content={batchQualityIntegrationDiagram}
-      class='bg-gradient-to-b from-[#060918] via-[#0c1028] to-[#060918] py-24'
+      class='relative overflow-hidden border border-white/10 bg-gradient-to-br from-[#050914] via-[#0b1228] to-[#060916] py-24 shadow-[0_120px_280px_-180px_rgba(59,130,246,0.55)]'
     />
   );
 }
