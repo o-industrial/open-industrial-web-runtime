@@ -105,7 +105,7 @@ export default function WorksWithYourStackSection(): JSX.Element {
                 class={`pointer-events-none absolute -inset-10 rounded-[3rem] opacity-70 blur-[120px] transition-opacity duration-300 group-hover:opacity-95 ${accent.glow}`}
               />
 
-              <header class='relative z-10 space-y-2'>
+              <header class='relative z-10 space-y-2 text-center'>
                 <h3 class='text-xl font-semibold text-neutral-900 dark:text-white'>{category.title}</h3>
               </header>
 

@@ -214,7 +214,7 @@ export const homeContent: HomeContent = {
       },
       {
         title: 'Apps',
-        items: ['Mobius Suite', 'ProofCheck', 'AlertTrack+', 'QuickView+'],
+        items: ['Historian Dashboards', 'Alarm Management', 'Batch Reporting', 'Maintenance Planning'],
       },
     ],
   },
