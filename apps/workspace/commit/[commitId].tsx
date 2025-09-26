@@ -92,8 +92,7 @@ export default function CommitStatusPage({
     if (!workspaceMgr) return;
 
     (async () => {
-      const commits = workspaceMgr.UseCommits();
-      const cs = await commits.GetCommitStatus(commitId);
+      const cs = await workspaceMgr.GetCommitStatus(commitId!);
       setStatus(cs);
     })();
   }, [workspaceMgr, commitId]);

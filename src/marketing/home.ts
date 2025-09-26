@@ -46,6 +46,13 @@ type UnifiedHubContent = {
   bullets: string[];
 };
 
+type IntegrationEcosystemContent = {
+  preHeadline: string;
+  headline: string;
+  body: string;
+  categories: { title: string; items: string[] }[];
+};
+
 type WhyOiContent = {
   preHeadline: string;
   headline: string;
@@ -92,6 +99,7 @@ type HomeContent = {
   azi: AziContent;
   useCases: UseCasesContent;
   unifiedHub: UnifiedHubContent;
+  ecosystem: IntegrationEcosystemContent;
   whyOi: WhyOiContent;
   cloud: CloudContent;
   future: FutureVisionContent;
@@ -185,6 +193,30 @@ export const homeContent: HomeContent = {
     headline: 'Data In -> Insight Out',
     subhead: 'Trace governed telemetry from ingestion to instant APIs.',
     bullets: ['Real-time ingestion', 'Natural language queries', 'Instant API generation'],
+  },
+  ecosystem: {
+    preHeadline: 'Integration ecosystem',
+    headline: 'Connect Seamlessly To Your Current Industrial Systems',
+    body:
+      'Pre-built connectors map protocols, middleware, and execution systems into a single hub.',
+    categories: [
+      {
+        title: 'Protocols',
+        items: ['HTTP', 'MQTT', 'AMQP', 'OPC UA'],
+      },
+      {
+        title: 'Middleware',
+        items: ['HighByte', 'HiveMQ', 'FBxEdge'],
+      },
+      {
+        title: 'Systems',
+        items: ['DCS', 'MES', 'SCADA', 'LIMS', 'DeltaV', 'Syncade'],
+      },
+      {
+        title: 'Apps',
+        items: ['Mobius Suite', 'ProofCheck', 'AlertTrack+', 'QuickView+'],
+      },
+    ],
   },
   whyOi: {
     preHeadline: 'Why Open Industrial',

@@ -11,6 +11,7 @@ import WhyOiGuardrailsSection from '../components/organisms/marketing/open-indus
 import CloudOptionsSection from '../components/organisms/marketing/open-industrial-home/CloudOptionsSection.tsx';
 import FutureVisionSection from '../components/organisms/marketing/open-industrial-home/FutureVisionSection.tsx';
 import ReadyCTASection from '../components/organisms/marketing/open-industrial-home/ReadyCTASection.tsx';
+import WorksWithYourStackSection from '../components/organisms/marketing/open-industrial-home/WorksWithYourStackSection.tsx';
 
 import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 
@@ -44,6 +45,7 @@ export default function HomePage({}: PageProps<HomepageData>) {
       <AIConversationsSection />
       <ValueDeliverySection />
       <UnifiedFlowSection />
+      <WorksWithYourStackSection />
       <WhyOiGuardrailsSection />
       <CloudOptionsSection />
       <FutureVisionSection />
