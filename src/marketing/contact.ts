@@ -1,16 +1,10 @@
-import { AgentIcon, ConnectionIcon, SignalIcon } from '@o-industrial/common/atomic/icons';
-import type {
-  CTAContent,
-  FeatureItemContent,
-  HeroContent,
-  SectionHeaderContent,
-} from './content.ts';
+import type { CTAContent, HeroContent, SectionHeaderContent } from './content.ts';
 
 export const contactHero: HeroContent = {
   eyebrow: 'Contact Open Industrial',
-  title: "Let's connect",
+  title: 'Connect With Us',
   description:
-    'Discuss how Open Industrial unifies your OT systems, streams telemetry, and delivers insights you can trust.',
+    'We\'d love to hear from you - whether you\'re exploring Open Industrial, want to organize a demo, or just curious to learn more.',
   primaryAction: {
     label: 'Get Started',
     href: 'https://www.openindustrial.co/workspace',
@@ -29,53 +23,18 @@ export const contactHero: HeroContent = {
   },
 };
 
-export const contactIntro: SectionHeaderContent = {
-  eyebrow: 'Talk with the team',
-  title: 'Choose the path that matches your industrial goals',
-  description:
-    'Partner with specialists who understand historians, MES, lab systems, and the automation guardrails your operations require.',
-  align: 'center',
-};
-
-export const contactMethods: FeatureItemContent[] = [
-  {
-    title: 'Sales & solution design',
-    description:
-      'Plan your deployment, model integrations, and define success metrics with our OT specialists.',
-    highlights: ['hello@openindustrial.co', 'Schedule a guided demo'],
-    icon: ConnectionIcon,
-    intent: 'purple',
-  },
-  {
-    title: 'Customer success & support',
-    description:
-      'Coordinate onboarding, workspace configuration, and governed access for every plant stakeholder.',
-    highlights: ['support@openindustrial.co', 'Workspace enablement kits'],
-    icon: AgentIcon,
-    intent: 'blue',
-  },
-  {
-    title: 'Platform partnerships',
-    description:
-      'Explore integrations, co-sell motions, and OEM licensing for joint industrial offerings.',
-    highlights: ['partners@openindustrial.co', 'Azure marketplace alignment'],
-    icon: SignalIcon,
-    intent: 'green',
-  },
-];
-
 export const contactFormHeader: SectionHeaderContent = {
-  eyebrow: 'Get in touch',
-  title: 'Tell us about your operations',
+  eyebrow: 'Form',
+  title: 'Get in touch',
   description:
-    'Share your systems, data priorities, and desired outcomes. Our team will tailor a plan within one business day.',
+    'Fill out the form and our team will get back to you shortly.',
   align: 'center',
 };
 
 export const contactCTA: CTAContent = {
-  title: 'Ready to unify your operational data?',
+  title: 'See Open Industrial in Action',
   description:
-    'Industrial teams choose Open Industrial to connect OT systems and deliver governed, explainable insights.',
+    'Start your journey with Open Industrial today.',
   primaryAction: {
     label: 'Get Started',
     href: 'https://www.openindustrial.co/workspace',
@@ -83,8 +42,10 @@ export const contactCTA: CTAContent = {
     external: true,
   },
   secondaryAction: {
-    label: 'Schedule a demo',
-    href: '/contact#form',
+    label: 'View Documentation',
+    href: 'https://www.openindustrial.co/docs/',
     intent: 'secondary',
+    external: true,
   },
 };
+

@@ -2,7 +2,6 @@ import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 
 import ContactCTASection from '../../components/organisms/marketing/open-industrial/contact/ContactCTASection.tsx';
-import ContactChannelsSection from '../../components/organisms/marketing/open-industrial/contact/ContactChannelsSection.tsx';
 import ContactFormSection from '../../components/organisms/marketing/open-industrial/contact/ContactFormSection.tsx';
 import ContactHeroSection from '../../components/organisms/marketing/open-industrial/contact/ContactHeroSection.tsx';
 import { MarketingPageFrame } from '../../components/shared/MarketingPageFrame.tsx';
@@ -23,12 +22,10 @@ export default function ContactPage({}: PageProps<ContactPageData>) {
   return (
     <MarketingPageFrame>
       <ContactHeroSection />
-
-      <ContactChannelsSection />
-
       <ContactFormSection />
 
       <ContactCTASection />
     </MarketingPageFrame>
   );
 }
+
