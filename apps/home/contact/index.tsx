@@ -5,6 +5,7 @@ import ContactCTASection from '../../components/organisms/marketing/open-industr
 import ContactChannelsSection from '../../components/organisms/marketing/open-industrial/contact/ContactChannelsSection.tsx';
 import ContactFormSection from '../../components/organisms/marketing/open-industrial/contact/ContactFormSection.tsx';
 import ContactHeroSection from '../../components/organisms/marketing/open-industrial/contact/ContactHeroSection.tsx';
+import { MarketingPageFrame } from '../../components/shared/MarketingPageFrame.tsx';
 import { OpenIndustrialWebState } from '../../../src/state/OpenIndustrialWebState.ts';
 
 export const IsIsland = true;
@@ -20,7 +21,7 @@ export const handler: EaCRuntimeHandlerSet<
 
 export default function ContactPage({}: PageProps<ContactPageData>) {
   return (
-    <div class='flex flex-col'>
+    <MarketingPageFrame>
       <ContactHeroSection />
 
       <ContactChannelsSection />
@@ -28,6 +29,6 @@ export default function ContactPage({}: PageProps<ContactPageData>) {
       <ContactFormSection />
 
       <ContactCTASection />
-    </div>
+    </MarketingPageFrame>
   );
 }

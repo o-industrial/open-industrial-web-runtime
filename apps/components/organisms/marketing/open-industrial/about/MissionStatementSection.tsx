@@ -1,17 +1,21 @@
 import { JSX } from 'preact';
 
-import { SectionSurface } from '@o-industrial/common/atomic/atoms';
-import { SectionHeader } from '@o-industrial/common/atomic/molecules';
-
+import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
 import { missionCopy } from '../../../../../../src/marketing/about.ts';
 
 export default function MissionStatementSection(): JSX.Element {
   return (
-    <SectionSurface
-      tone='muted'
-      class='bg-gradient-to-r from-white via-[#f0f5ff] to-white dark:from-[#060a1f] dark:via-[#0a1028] dark:to-[#050814]'
-    >
-      <SectionHeader {...missionCopy} />
-    </SectionSurface>
+    <MarketingSectionShell variant='lavender'>
+      <div class='mx-auto max-w-3xl space-y-5 text-center text-neutral-700 dark:text-neutral-200'>
+        <MarketingPreHeadline value='Mission' />
+        <h2 class='text-balance text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl dark:text-white'>
+          {missionCopy.title}
+        </h2>
+        <p class='text-base leading-relaxed text-neutral-700 sm:text-lg dark:text-neutral-300'>
+          {missionCopy.description}
+        </p>
+      </div>
+    </MarketingSectionShell>
   );
 }

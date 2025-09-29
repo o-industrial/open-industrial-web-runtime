@@ -8,6 +8,7 @@ import BatchQualityIntegrationOverviewSection from '../../../components/organism
 import BatchQualityProblemSection from '../../../components/organisms/marketing/open-industrial/use-case-batch-quality/BatchQualityProblemSection.tsx';
 import BatchQualityToggleSection from '../../../components/organisms/marketing/open-industrial/use-case-batch-quality/BatchQualityToggleSection.tsx';
 import BatchQualityValueSection from '../../../components/organisms/marketing/open-industrial/use-case-batch-quality/BatchQualityValueSection.tsx';
+import { MarketingPageFrame } from '../../../components/shared/MarketingPageFrame.tsx';
 import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebState.ts';
 
 export const IsIsland = true;
@@ -23,7 +24,7 @@ export const handler: EaCRuntimeHandlerSet<
 
 export default function BatchQualityPage({}: PageProps<BatchQualityPageData>) {
   return (
-    <div class='flex flex-col'>
+    <MarketingPageFrame>
       <BatchQualityHeroSection />
 
       <BatchQualityProblemSection />
@@ -37,6 +38,6 @@ export default function BatchQualityPage({}: PageProps<BatchQualityPageData>) {
       <BatchQualityToggleSection />
 
       <BatchQualityCTASection />
-    </div>
+    </MarketingPageFrame>
   );
 }

@@ -1,9 +1,9 @@
 import type { JSX } from 'preact';
 
 import { Action, ActionStyleTypes, SectionSurface } from '@o-industrial/common/atomic/atoms';
-import type { MarketingAction } from '../../../../../src/marketing/content.ts';
+import type { MarketingAction } from '../../../../../../src/marketing/content.ts';
 
-import { homeContent } from '../../../../../src/marketing/home.ts';
+import { homeContent } from '../../../../../../src/marketing/home.ts';
 
 const ACCENT_PHRASE = 'Instant Insight';
 

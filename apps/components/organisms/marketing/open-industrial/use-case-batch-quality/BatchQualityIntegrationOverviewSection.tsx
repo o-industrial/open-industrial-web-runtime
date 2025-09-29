@@ -1,37 +1,53 @@
 import { JSX } from 'preact';
 
-import { SectionSurface } from '@o-industrial/common/atomic/atoms';
-import { SectionHeader } from '@o-industrial/common/atomic/molecules';
-
+import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
 import { batchQualityIntegrationSteps } from '../../../../../../src/marketing/use-case-batch-quality.ts';
+
+const stepAccentGradients = [
+  'from-neon-blue-500 via-cyan-400 to-teal-400',
+  'from-neon-purple-500 via-neon-blue-500 to-neon-pink-500',
+  'from-neon-green-500 via-teal-400 to-cyan-400',
+  'from-neon-pink-500 via-neon-purple-500 to-neon-blue-500',
+  'from-neon-orange-500 via-neon-pink-500 to-neon-purple-500',
+];
 
 export default function BatchQualityIntegrationOverviewSection(): JSX.Element {
   return (
-    <SectionSurface
-      tone='default'
-      class='bg-gradient-to-br from-[#f7f9ff] via-white to-[#f4efff] py-20 dark:from-[#080c1f] dark:via-[#0f1533] dark:to-[#060916]'
-    >
-      <div class='mx-auto flex w-full max-w-6xl flex-col gap-16 px-6'>
-        <div class='space-y-8 text-center'>
-          <SectionHeader
-            title='Unified system integration'
-            description='Open Industrial connects across ERP, MES, QMS, and LIMS to unify the electronic batch record into a governed query layer.'
-            align='center'
-          />
-          <ol class='mx-auto grid w-full max-w-3xl gap-3 text-left text-sm text-neutral-700 dark:text-neutral-300 sm:grid-cols-2'>
-            {batchQualityIntegrationSteps.map((step, index) => (
-              <li
-                key={step}
-                class='flex items-center gap-3 rounded-2xl border border-neutral-200/70 bg-white/80 px-4 py-3 shadow-sm dark:border-white/10 dark:bg-neutral-900/60'
-              >
-                <span class='inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-neon-blue-500 to-neon-purple-500 text-sm font-semibold text-white'>
+    <MarketingSectionShell variant='neutral'>
+      <div class='space-y-12 text-neutral-700 dark:text-neutral-200'>
+        <div class='mx-auto max-w-3xl space-y-4 text-center'>
+          <MarketingPreHeadline value='System integration' />
+          <h2 class='text-balance text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl dark:text-white'>
+            Unite every batch system in one governed layer
+          </h2>
+          <p class='text-base leading-relaxed text-neutral-700 sm:text-lg dark:text-neutral-300'>
+            Open Industrial connects ERP, MES, QMS, LIMS, and DMS to create an explainable electronic batch record ready for investigations and audits.
+          </p>
+        </div>
+
+        <ol class='mx-auto grid w-full max-w-4xl gap-4 text-left sm:grid-cols-2'>
+          {batchQualityIntegrationSteps.map((step, index) => (
+            <li
+              key={step}
+              class='relative overflow-hidden rounded-3xl border border-neutral-200/70 bg-white/90 px-5 py-5 shadow-[0_38px_140px_-110px_rgba(59,130,246,0.3)] transition-transform duration-200 hover:-translate-y-1 dark:border-white/10 dark:bg-neutral-900/80 dark:shadow-[0_55px_180px_-130px_rgba(129,140,248,0.45)]'
+            >
+              <div
+                class={`pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${
+                  stepAccentGradients[index % stepAccentGradients.length]
+                } opacity-95`}
+              />
+              <div class='flex items-start gap-4'>
+                <span class='mt-1 inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-neon-blue-500/20 via-neon-purple-500/20 to-neon-pink-500/20 text-sm font-semibold text-neutral-700 dark:text-neutral-200'>
                   {index + 1}
                 </span>
-                <span class='text-sm font-medium'>{step}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
+                <span class='text-sm font-medium leading-relaxed text-neutral-700 dark:text-neutral-200'>
+                  {step}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ol>
 
         <div class='overflow-hidden rounded-3xl border border-neutral-200/60 bg-white shadow-[0_35px_120px_-80px_rgba(40,44,82,0.35)] dark:border-white/10 dark:bg-neutral-900/60'>
           <img
@@ -42,6 +58,6 @@ export default function BatchQualityIntegrationOverviewSection(): JSX.Element {
           />
         </div>
       </div>
-    </SectionSurface>
+    </MarketingSectionShell>
   );
 }

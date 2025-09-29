@@ -1,23 +1,23 @@
 import { JSX } from 'preact';
 
-import { SectionSurface } from '@o-industrial/common/atomic/atoms';
-import { SectionHeader, ToggleQueryCard } from '@o-industrial/common/atomic/molecules';
+import { ToggleQueryCard } from '@o-industrial/common/atomic/molecules';
 
+import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
 import { batchQualityToggleQueries } from '../../../../../../src/marketing/use-case-batch-quality.ts';
 
 export default function BatchQualityToggleSection(): JSX.Element {
   return (
-    <SectionSurface
-      tone='default'
-      class='bg-gradient-to-br from-[#f5f7ff] via-white to-[#f3efff] py-24 dark:from-[#080c1f] dark:via-[#13143b] dark:to-[#050818]'
-    >
-      <div class='mx-auto flex w-full max-w-6xl flex-col gap-10 px-6'>
-        <div class='space-y-4 text-center'>
-          <SectionHeader
-            title='Ask batch quality questions in natural language'
-            description='Use Azi, our AI query assistant, to ask questions about batch quality in plain English. Azi generates structured KQL to extract unified insights from real-time telemetry.'
-            align='center'
-          />
+    <MarketingSectionShell variant='midnight'>
+      <div class='space-y-12 text-white/80'>
+        <div class='mx-auto max-w-4xl space-y-4 text-center'>
+          <MarketingPreHeadline value='Azi warm queries' tone='inverse' />
+          <h2 class='text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl'>
+            Ask batch quality questions in natural language
+          </h2>
+          <p class='text-base leading-relaxed text-white/75 sm:text-lg'>
+            Use Azi to translate plain-English requests into governed KQL. Switch between English and KQL to see the explainable query every answer is built on.
+          </p>
         </div>
 
         <div class='grid gap-6 md:grid-cols-2'>
@@ -29,10 +29,11 @@ export default function BatchQualityToggleSection(): JSX.Element {
               description={toggle.description}
               options={toggle.options}
               copy={toggle.copy}
+              class='relative overflow-hidden border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-white/10 text-white shadow-[0_45px_160px_-110px_rgba(236,72,153,0.45)] backdrop-blur-md'
             />
           ))}
         </div>
       </div>
-    </SectionSurface>
+    </MarketingSectionShell>
   );
 }
