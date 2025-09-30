@@ -10,7 +10,13 @@ const cardGradients = [
   'from-neon-blue-500 via-neon-purple-500 to-neon-pink-500',
   'from-neon-green-500 via-teal-400 to-cyan-400',
   'from-neon-purple-500 via-neon-blue-500 to-neon-pink-500',
+  'from-neon-orange-500 via-neon-pink-500 to-neon-purple-500',
+  'from-neon-teal-500 via-neon-blue-500 to-neon-green-500',
 ];
+
+function getCtaLabel(title: string, label?: string): string {
+  return label ?? `Explore ${title}`;
+}
 
 export default function UseCaseListSection(): JSX.Element {
   return (
@@ -64,10 +70,10 @@ export default function UseCaseListSection(): JSX.Element {
 
               <div class='mt-auto pt-2'>
                 <Action
-                  href='/use-case/batch-quality'
+                  href={useCase.href}
                   styleType={ActionStyleTypes.Solid | ActionStyleTypes.Rounded}
                 >
-                  Explore batch quality use case
+                  {getCtaLabel(useCase.title, useCase.ctaLabel)}
                 </Action>
               </div>
             </article>

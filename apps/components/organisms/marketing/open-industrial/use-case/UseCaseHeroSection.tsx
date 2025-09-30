@@ -13,7 +13,7 @@ export default function UseCaseHeroSection(): JSX.Element {
         </h1>
         <p class='text-base leading-relaxed text-white/75 sm:text-lg'>
           Dive into curated stories that show how Open Industrial unlocks governed insights across
-          batch quality, maintenance, and production performance.
+          batch quality, maintenance, production, and data onboarding.
         </p>
         <div class='flex flex-wrap items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-white/60'>
           <span class='inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-white/80'>
@@ -21,12 +21,16 @@ export default function UseCaseHeroSection(): JSX.Element {
             Batch quality
           </span>
           <span class='inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-white/80'>
-            <span class='h-2 w-2 rounded-full bg-neon-purple-400 shadow-[0_0_10px_rgba(139,92,246,0.7)]' />
-            Maintenance
+            <span class='h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.7)]' />
+            Asset health
           </span>
           <span class='inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-white/80'>
-            <span class='h-2 w-2 rounded-full bg-neon-pink-400 shadow-[0_0_10px_rgba(236,72,153,0.7)]' />
-            Performance
+            <span class='h-2 w-2 rounded-full bg-neon-purple-400 shadow-[0_0_10px_rgba(139,92,246,0.7)]' />
+            Production
+          </span>
+          <span class='inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-white/80'>
+            <span class='h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.7)]' />
+            Device governance
           </span>
         </div>
       </div>

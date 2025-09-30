@@ -96,6 +96,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             },
             ApplicationResolvers: {
+              adb2c: {
+                PathPattern: '/adb2c*',
+                Priority: 500,
+              },
               automateConference: {
                 PathPattern: '/automateconference*',
                 Priority: 500,
@@ -115,8 +119,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               docs: {
                 PathPattern: '/docs*',
                 Priority: 500,
-                IsPrivate: true,
-                IsTriggerSignIn: true,
               },
               home: {
                 PathPattern: '*',
@@ -125,11 +127,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               home_plasmic: {
                 PathPattern: '/landing*',
                 Priority: 300,
-              },
-              licensingApi: {
-                PathPattern: '/workspace/api/o-industrial/licensing/*',
-                Priority: 700,
-                IsPrivate: true,
               },
               msal: {
                 PathPattern: '/azure/oauth/*',
@@ -144,16 +141,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               tailwind: {
                 PathPattern: '/tailwind*',
                 Priority: 500,
-              },
-              workspace: {
-                PathPattern: '/workspace*',
-                Priority: 500,
-                IsPrivate: true,
-                IsTriggerSignIn: true,
-              },
-              wkspcOauth: {
-                PathPattern: '/workspace/oauth/*',
-                Priority: 700,
               },
             },
           },
@@ -314,7 +301,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 MSALSignInOptions: {
                   Scopes: ['https://management.azure.com/user_impersonation'],
                   RedirectURI: '/azure/oauth/callback',
-                  SuccessRedirect: '/workspace',
+                  SuccessRedirect: '/',
                 },
                 MSALSignOutOptions: {
                   ClearSession: false,
@@ -357,37 +344,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
               },
             } as EaCTailwindProcessor,
-          },
-          workspace: {
-            Details: {
-              Name: 'Workspace Site',
-              Description: 'Workspace site.',
-            },
-            ModifierResolvers: {
-              baseHref: {
-                Priority: 10000,
-              },
-            },
-            Processor: {
-              Type: 'PreactApp',
-              AppDFSLookup: 'local:apps/workspace',
-              ComponentDFSLookups: [
-                ['local:apps/components', ['tsx']],
-                ['local:apps/workspace', ['tsx']],
-                ['jsr:@fathym/atomic', ['tsx']],
-                ['jsr:@fathym/atomic-design-kit', ['tsx']],
-              ],
-            } as EaCPreactAppProcessor,
-          },
-          wkspcOauth: {
-            Details: {
-              Name: 'OAuth Site',
-              Description: 'The site for use in OAuth workflows for a user',
-            },
-            Processor: {
-              Type: 'OAuth',
-              ProviderLookup: 'adb2c',
-            } as EaCOAuthProcessor,
           },
         },
         DenoKVs: {
@@ -465,14 +421,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'Local',
               FileRoot: './src/',
-            } as EaCLocalDistributedFileSystemDetails,
-          },
-          'local:apps/workspace': {
-            Details: {
-              Type: 'Local',
-              FileRoot: './apps/workspace/',
-              DefaultFile: 'index.tsx',
-              Extensions: ['tsx'],
             } as EaCLocalDistributedFileSystemDetails,
           },
           // 'local:apps/islands': {

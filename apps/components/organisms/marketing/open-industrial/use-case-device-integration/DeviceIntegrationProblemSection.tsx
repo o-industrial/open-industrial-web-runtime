@@ -1,0 +1,25 @@
+import { JSX } from 'preact';
+
+import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
+import { deviceIntegrationProblem } from '../../../../../../src/marketing/use-case-device-integration.ts';
+
+export default function DeviceIntegrationProblemSection(): JSX.Element {
+  return (
+    <MarketingSectionShell variant='cyan'>
+      <div class='mx-auto max-w-4xl space-y-5 text-center text-neutral-700 dark:text-neutral-200'>
+        <MarketingPreHeadline value={deviceIntegrationProblem.eyebrow} />
+        <h2 class='text-balance text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl dark:text-white'>
+          {deviceIntegrationProblem.title}
+        </h2>
+        {deviceIntegrationProblem.description
+          ? (
+            <p class='text-base leading-relaxed text-neutral-700 sm:text-lg dark:text-neutral-300'>
+              {deviceIntegrationProblem.description}
+            </p>
+          )
+          : null}
+      </div>
+    </MarketingSectionShell>
+  );
+}

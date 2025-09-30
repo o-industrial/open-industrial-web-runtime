@@ -10,7 +10,7 @@ Shared runtime-specific organisms and sections reused across multiple apps. Thes
 
 ## Project Map
 
-- `organisms/` - Primary directory for reusable sections. Subdirectories group by usage (e.g., marketing, docs, workspace).
+- `organisms/` - Primary directory for reusable sections. Subdirectories group by usage (e.g., marketing, docs).
 - `organisms/*/*.tsx` - Component implementations; follow naming `<Feature>Section.tsx` or similar.
 - Future directories (molecules, templates) can be added as reuse grows; document structure here when created.
 
@@ -46,7 +46,7 @@ Shared runtime-specific organisms and sections reused across multiple apps. Thes
 ## Dependencies & Integrations
 
 - Depend on atomic library exports and Tailwind configuration.
-- Consumed by marketing (`apps/home`, `apps/blog`), docs, and workspace surfaces.
+- Consumed by marketing (`apps/home`, `apps/blog`) and docs surfaces (workspace runtime consumes these via the shared package).
 
 ## Related Docs
 
