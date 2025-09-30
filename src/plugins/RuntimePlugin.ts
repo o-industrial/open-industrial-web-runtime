@@ -153,7 +153,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
               wkspcOauth: {
                 PathPattern: '/workspace/oauth/*',
-                Priority: 500,
+                Priority: 700,
               },
             },
           },
