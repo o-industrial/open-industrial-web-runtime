@@ -6,7 +6,10 @@ import { assetManagementProblem } from '../../../../../../src/marketing/use-case
 
 export default function AssetManagementProblemSection(): JSX.Element {
   return (
-    <MarketingSectionShell variant='mint'>
+    <MarketingSectionShell
+      variant='neutral'
+      class='bg-gradient-to-br from-emerald-50 via-white to-cyan-50 dark:from-[#041912] dark:via-[#072319] dark:to-[#020d10]'
+    >
       <div class='mx-auto max-w-4xl space-y-5 text-center text-neutral-700 dark:text-neutral-200'>
         <MarketingPreHeadline value={assetManagementProblem.eyebrow} />
         <h2 class='text-balance text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl dark:text-white'>

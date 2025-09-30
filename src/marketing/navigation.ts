@@ -1,13 +1,8 @@
 import type { MarketingNavCTA, MarketingNavLink } from '@o-industrial/common/atomic/organisms';
 
 export const primaryNavLinks: MarketingNavLink[] = [
-  { label: 'About', href: '/about' },
   { label: 'Use Cases', href: '/use-case' },
-  { label: 'Quality Mgmt', href: '/use-case/quality-management' },
-  { label: 'Asset Mgmt', href: '/use-case/asset-management' },
-  { label: 'Production', href: '/use-case/production-management' },
-  { label: 'Device Data', href: '/use-case/device-integration' },
-  { label: 'Batch Quality', href: '/use-case/batch-quality' },
+  { label: 'About', href: '/about' },
   {
     label: 'Docs',
     href: '/docs',
