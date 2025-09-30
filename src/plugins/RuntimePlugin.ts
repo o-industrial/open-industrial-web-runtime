@@ -151,6 +151,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 IsPrivate: true,
                 IsTriggerSignIn: true,
               },
+              wkspcOauth: {
+                PathPattern: '/workspace/oauth/*',
+                Priority: 500,
+              },
             },
           },
         },
@@ -374,6 +378,16 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 ['jsr:@fathym/atomic-design-kit', ['tsx']],
               ],
             } as EaCPreactAppProcessor,
+          },
+          wkspcOauth: {
+            Details: {
+              Name: 'OAuth Site',
+              Description: 'The site for use in OAuth workflows for a user',
+            },
+            Processor: {
+              Type: 'OAuth',
+              ProviderLookup: 'adb2c',
+            } as EaCOAuthProcessor,
           },
         },
         DenoKVs: {
