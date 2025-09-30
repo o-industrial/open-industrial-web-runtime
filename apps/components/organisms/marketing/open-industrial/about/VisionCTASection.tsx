@@ -26,11 +26,13 @@ export default function VisionCTASection(): JSX.Element {
         <h2 class='text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl'>
           {visionCTA.title}
         </h2>
-        {visionCTA.description ? (
-          <p class='text-base leading-relaxed text-white/75 sm:text-lg'>
-            {visionCTA.description}
-          </p>
-        ) : null}
+        {visionCTA.description
+          ? (
+            <p class='text-base leading-relaxed text-white/75 sm:text-lg'>
+              {visionCTA.description}
+            </p>
+          )
+          : null}
 
         <div class='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center'>
           {visionCTA.primaryAction

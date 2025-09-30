@@ -53,4 +53,3 @@ export default function CapabilitiesSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
