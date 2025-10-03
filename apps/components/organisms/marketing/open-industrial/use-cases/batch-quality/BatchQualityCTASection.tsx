@@ -2,9 +2,9 @@ import { JSX } from 'preact';
 
 import { Action, ActionStyleTypes } from '@o-industrial/atomic/atoms';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { batchQualityOutcome } from '../../../../../../../../src/marketing/use-case/batch-quality.ts';
+import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { batchQualityOutcome } from '../../../../../../../src/marketing/use-case/batch-quality.ts';
 
 function mapIntent(intent?: 'primary' | 'secondary' | 'ghost'): ActionStyleTypes {
   switch (intent) {

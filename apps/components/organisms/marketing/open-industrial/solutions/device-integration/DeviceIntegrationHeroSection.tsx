@@ -6,7 +6,7 @@ import { IntentTypes } from '@o-industrial/common/types';
 import {
   deviceIntegrationHero,
   deviceIntegrationQueryExample,
-} from '../../../../../../../../src/marketing/solutions/device-integration.ts';
+} from '../../../../../../../src/marketing/solutions/device-integration.ts';
 
 function mapIntent(intent?: 'primary' | 'secondary' | 'ghost'): ActionStyleTypes {
   switch (intent) {

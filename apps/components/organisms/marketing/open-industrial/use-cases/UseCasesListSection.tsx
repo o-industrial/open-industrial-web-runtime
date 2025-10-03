@@ -3,7 +3,7 @@ import { JSX } from 'preact';
 import { Action, ActionStyleTypes } from '@o-industrial/atomic/atoms';
 
 import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { useCaseOverview } from '../../../../../../../../src/marketing/use-cases.ts';
+import { useCaseOverview } from '../../../../../../src/marketing/use-cases.ts';
 
 const cardGradients = [
   'from-neon-blue-500 via-neon-purple-500 to-neon-pink-500',

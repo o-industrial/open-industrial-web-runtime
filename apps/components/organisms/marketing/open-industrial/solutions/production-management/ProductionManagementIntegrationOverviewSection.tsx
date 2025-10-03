@@ -1,8 +1,8 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { productionManagementIntegrationSteps } from '../../../../../../../../src/marketing/solutions/production-management.ts';
+import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { productionManagementIntegrationSteps } from '../../../../../../../src/marketing/solutions/production-management.ts';
 
 const stepAccentGradients = [
   'from-violet-500 via-purple-500 to-fuchsia-500',

@@ -6,7 +6,7 @@ import { IntentTypes } from '@o-industrial/common/types';
 import {
   assetManagementHero,
   assetManagementQueryExample,
-} from '../../../../../../../../src/marketing/solutions/asset-management.ts';
+} from '../../../../../../../src/marketing/solutions/asset-management.ts';
 
 function mapIntent(intent?: 'primary' | 'secondary' | 'ghost'): ActionStyleTypes {
   switch (intent) {

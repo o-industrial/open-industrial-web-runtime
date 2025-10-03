@@ -1,8 +1,8 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { assetManagementProblem } from '../../../../../../../../src/marketing/solutions/asset-management.ts';
+import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { assetManagementProblem } from '../../../../../../../src/marketing/solutions/asset-management.ts';
 
 export default function AssetManagementProblemSection(): JSX.Element {
   return (

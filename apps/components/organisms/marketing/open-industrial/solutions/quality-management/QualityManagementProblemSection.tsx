@@ -1,8 +1,8 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { qualityManagementProblem } from '../../../../../../../../src/marketing/solutions/quality-management.ts';
+import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { qualityManagementProblem } from '../../../../../../../src/marketing/solutions/quality-management.ts';
 
 export default function QualityManagementProblemSection(): JSX.Element {
   return (

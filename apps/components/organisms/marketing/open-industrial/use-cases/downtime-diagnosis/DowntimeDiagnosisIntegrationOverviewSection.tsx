@@ -1,8 +1,8 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { downtimeDiagnosisIntegrationSteps } from '../../../../../../../../src/marketing/use-case/downtime-diagnosis.ts';
+import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { downtimeDiagnosisIntegrationSteps } from '../../../../../../../src/marketing/use-case/downtime-diagnosis.ts';
 
 const stepAccentGradients = [
   'from-neon-blue-500 via-cyan-400 to-teal-400',

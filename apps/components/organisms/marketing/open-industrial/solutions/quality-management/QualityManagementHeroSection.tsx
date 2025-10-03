@@ -6,7 +6,7 @@ import { IntentTypes } from '@o-industrial/common/types';
 import {
   qualityManagementHero,
   qualityManagementQueryExample,
-} from '../../../../../../../../src/marketing/solutions/quality-management.ts';
+} from '../../../../../../../src/marketing/solutions/quality-management.ts';
 
 function mapIntent(intent?: 'primary' | 'secondary' | 'ghost'): ActionStyleTypes {
   switch (intent) {

@@ -6,7 +6,7 @@ import { IntentTypes } from '@o-industrial/common/types';
 import {
   downtimeDiagnosisHero,
   downtimeDiagnosisQueryExample,
-} from '../../../../../../../../src/marketing/use-case/downtime-diagnosis.ts';
+} from '../../../../../../../src/marketing/use-case/downtime-diagnosis.ts';
 
 function mapIntent(intent?: 'primary' | 'secondary' | 'ghost'): ActionStyleTypes {
   switch (intent) {

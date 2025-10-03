@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 
 import { ValueGridSection } from '@o-industrial/atomic/organisms';
 
-import { assetManagementHowHelpItems } from '../../../../../../../../src/marketing/solutions/asset-management.ts';
+import { assetManagementHowHelpItems } from '../../../../../../../src/marketing/solutions/asset-management.ts';
 
 export default function AssetManagementValueSection(): JSX.Element {
   return (

@@ -2,9 +2,9 @@ import { JSX } from 'preact';
 
 import { ToggleQueryCard } from '@o-industrial/atomic/molecules';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { qualityManagementToggleQueries } from '../../../../../../../../src/marketing/solutions/quality-management.ts';
+import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { qualityManagementToggleQueries } from '../../../../../../../src/marketing/solutions/quality-management.ts';
 
 export default function QualityManagementToggleSection(): JSX.Element {
   return (

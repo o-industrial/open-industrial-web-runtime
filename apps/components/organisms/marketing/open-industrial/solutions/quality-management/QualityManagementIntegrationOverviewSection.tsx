@@ -1,8 +1,8 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { qualityManagementIntegrationSteps } from '../../../../../../../../src/marketing/solutions/quality-management.ts';
+import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { qualityManagementIntegrationSteps } from '../../../../../../../src/marketing/solutions/quality-management.ts';
 
 const stepAccentGradients = [
   'from-neon-blue-500 via-cyan-400 to-teal-400',

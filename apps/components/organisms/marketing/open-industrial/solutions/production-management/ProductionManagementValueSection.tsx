@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 
 import { ValueGridSection } from '@o-industrial/atomic/organisms';
 
-import { productionManagementHowHelpItems } from '../../../../../../../../src/marketing/solutions/production-management.ts';
+import { productionManagementHowHelpItems } from '../../../../../../../src/marketing/solutions/production-management.ts';
 
 export default function ProductionManagementValueSection(): JSX.Element {
   return (

@@ -1,8 +1,8 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { assetManagementIntegrationSteps } from '../../../../../../../../src/marketing/solutions/asset-management.ts';
+import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { assetManagementIntegrationSteps } from '../../../../../../../src/marketing/solutions/asset-management.ts';
 
 const stepAccentGradients = [
   'from-emerald-400 via-teal-300 to-cyan-300',

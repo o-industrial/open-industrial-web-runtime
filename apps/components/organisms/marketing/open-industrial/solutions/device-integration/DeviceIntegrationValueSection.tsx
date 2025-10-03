@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 
 import { ValueGridSection } from '@o-industrial/atomic/organisms';
 
-import { deviceIntegrationHowHelpItems } from '../../../../../../../../src/marketing/solutions/device-integration.ts';
+import { deviceIntegrationHowHelpItems } from '../../../../../../../src/marketing/solutions/device-integration.ts';
 
 export default function DeviceIntegrationValueSection(): JSX.Element {
   return (

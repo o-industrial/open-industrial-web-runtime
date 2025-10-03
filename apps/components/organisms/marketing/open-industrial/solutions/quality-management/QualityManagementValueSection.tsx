@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 
 import { ValueGridSection } from '@o-industrial/atomic/organisms';
 
-import { qualityManagementHowHelpItems } from '../../../../../../../../src/marketing/solutions/quality-management.ts';
+import { qualityManagementHowHelpItems } from '../../../../../../../src/marketing/solutions/quality-management.ts';
 
 export default function QualityManagementValueSection(): JSX.Element {
   return (

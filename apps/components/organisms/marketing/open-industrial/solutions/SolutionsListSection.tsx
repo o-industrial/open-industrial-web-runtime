@@ -4,7 +4,7 @@ import { Action, ActionStyleTypes } from '@o-industrial/atomic/atoms';
 
 import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
 import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { solutionOverview } from '../../../../../../../src/marketing/solutions.ts';
+import { solutionOverview } from '../../../../../../src/marketing/solutions.ts';
 
 const cardGradients = [
   'from-neon-blue-500 via-neon-purple-500 to-neon-pink-500',

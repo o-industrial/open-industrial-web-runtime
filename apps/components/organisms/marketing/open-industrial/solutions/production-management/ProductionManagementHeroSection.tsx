@@ -6,7 +6,7 @@ import { IntentTypes } from '@o-industrial/common/types';
 import {
   productionManagementHero,
   productionManagementQueryExample,
-} from '../../../../../../../../src/marketing/solutions/production-management.ts';
+} from '../../../../../../../src/marketing/solutions/production-management.ts';
 
 function mapIntent(intent?: 'primary' | 'secondary' | 'ghost'): ActionStyleTypes {
   switch (intent) {

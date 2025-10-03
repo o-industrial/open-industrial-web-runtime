@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 
 import { ValueGridSection } from '@o-industrial/atomic/organisms';
 
-import { downtimeDiagnosisHowHelpItems } from '../../../../../../../../src/marketing/use-case/downtime-diagnosis.ts';
+import { downtimeDiagnosisHowHelpItems } from '../../../../../../../src/marketing/use-case/downtime-diagnosis.ts';
 
 export default function DowntimeDiagnosisValueSection(): JSX.Element {
   return (

@@ -18,32 +18,35 @@ type MenuGroup = {
   items: MarketingNavLink[];
 };
 
-const buildMenuGroups = (): MenuGroup[] => {
-  const groups: MenuGroup[] = [
-    {
-      title: 'Solutions',
-      items: [
-        { label: 'Overview', href: '/solutions' },
-        ...solutionOverview.map((solution) => ({
-          label: solution.title,
-          href: solution.href,
-        })),
-      ],
-    },
-  ];
+const solutionsMenuItems = [
+  { label: 'Overview', href: '/solutions' },
+  ...solutionOverview.map((solution) => ({
+    label: solution.title,
+    href: solution.href,
+  })),
+];
 
-  if (useCaseOverview.length) {
-    groups.push({
-      title: 'Use Cases',
-      items: useCaseOverview.map((useCase) => ({
-        label: useCase.title,
-        href: useCase.href,
-      })),
-    });
-  }
+const useCaseMenuItems = [
+  { label: 'Overview', href: '/use-cases' },
+  ...useCaseOverview.map((useCase) => ({
+    label: useCase.title,
+    href: useCase.href,
+  })),
+];
 
-  return groups;
-};
+const menuGroups: MenuGroup[] = [
+  {
+    title: 'Solutions',
+    items: solutionsMenuItems,
+  },
+];
+
+if (useCaseOverview.length) {
+  menuGroups.push({
+    title: 'Use Cases',
+    items: useCaseMenuItems,
+  });
+}
 
 const cn = (...classes: Array<string | undefined | null | false>): string =>
   classes.filter(Boolean).join(' ');
@@ -75,72 +78,103 @@ export default function MarketingNavigationIsland({
   class: className,
   ...rest
 }: MarketingNavigationProps): JSX.Element {
-  const menuGroups = useMemo(buildMenuGroups, []);
-  const flatMenuItems = useMemo(
-    () => menuGroups.flatMap((group) => group.items),
-    [menuGroups],
-  );
+  const mobileMenuGroups = useMemo(() => menuGroups, []);
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
+  const [useCasesOpen, setUseCasesOpen] = useState(false);
 
-  const menuItemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
-  const solutionsButtonRef = useRef<HTMLButtonElement | null>(null);
+  const solutionsItemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const useCasesItemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const solutionsButtonRef = useRef<HTMLButtonButtonElement | null>(null);
+  const useCasesButtonRef = useRef<HTMLButtonElement | null>(null);
   const solutionsContainerRef = useRef<HTMLDivElement | null>(null);
+  const useCasesContainerRef = useRef<HTMLDivElement | null>(null);
   const solutionsMenuRef = useRef<HTMLDivElement | null>(null);
-  const hoverCloseTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const useCasesMenuRef = useRef<HTMLDivElement | null>(null);
+  const solutionsHoverTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const useCasesHoverTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     return () => {
-      if (hoverCloseTimeout.current !== undefined) {
-        clearTimeout(hoverCloseTimeout.current);
+      if (solutionsHoverTimeout.current !== undefined) {
+        clearTimeout(solutionsHoverTimeout.current);
+      }
+
+      if (useCasesHoverTimeout.current !== undefined) {
+        clearTimeout(useCasesHoverTimeout.current);
       }
     };
   }, []);
 
   const solutionsLink = links.find((link) => link.href === '/solutions');
-  const otherLinks = links.filter((link) => link.href !== '/solutions');
+  const useCasesLink = links.find((link) => link.href === '/use-cases');
+  const otherLinks = links.filter(
+    (link) => link.href !== '/solutions' && link.href !== '/use-cases',
+  );
 
   const toggleMobile = () => setMobileOpen((open) => !open);
   const closeMobile = () => setMobileOpen(false);
 
-  const clearHoverCloseTimeout = () => {
-    if (hoverCloseTimeout.current !== undefined) {
-      clearTimeout(hoverCloseTimeout.current);
-      hoverCloseTimeout.current = undefined;
+  const clearSolutionsHoverTimeout = () => {
+    if (solutionsHoverTimeout.current !== undefined) {
+      clearTimeout(solutionsHoverTimeout.current);
+      solutionsHoverTimeout.current = undefined;
+    }
+  };
+
+  const clearUseCasesHoverTimeout = () => {
+    if (useCasesHoverTimeout.current !== undefined) {
+      clearTimeout(useCasesHoverTimeout.current);
+      useCasesHoverTimeout.current = undefined;
     }
   };
 
   const openSolutionsFlyout = () => {
-    clearHoverCloseTimeout();
+    clearSolutionsHoverTimeout();
+    setUseCasesOpen(false);
     setSolutionsOpen(true);
   };
 
+  const openUseCasesFlyout = () => {
+    clearUseCasesHoverTimeout();
+    setSolutionsOpen(false);
+    setUseCasesOpen(true);
+  };
+
   const scheduleSolutionsClose = () => {
-    clearHoverCloseTimeout();
-    hoverCloseTimeout.current = setTimeout(() => {
+    clearSolutionsHoverTimeout();
+    solutionsHoverTimeout.current = setTimeout(() => {
       setSolutionsOpen(false);
     }, 150);
   };
 
+  const scheduleUseCasesClose = () => {
+    clearUseCasesHoverTimeout();
+    useCasesHoverTimeout.current = setTimeout(() => {
+      setUseCasesOpen(false);
+    }, 150);
+  };
+
   const closeSolutionsFlyout = () => {
-    clearHoverCloseTimeout();
+    clearSolutionsHoverTimeout();
     setSolutionsOpen(false);
   };
 
-  const toggleSolutionsFlyout = () => {
-    if (solutionsOpen) {
-      closeSolutionsFlyout();
-    } else {
-      openSolutionsFlyout();
-    }
+  const closeUseCasesFlyout = () => {
+    clearUseCasesHoverTimeout();
+    setUseCasesOpen(false);
   };
-
-  const highlightSolutions = flatMenuItems.some((item) => isActiveLink(item.href, currentPath));
 
   const focusFirstSolutionsLink = () => {
     queueMicrotask(() => {
-      menuItemRefs.current[0]?.focus();
+      solutionsItemRefs.current[0]?.focus();
+    });
+  };
+
+  const focusFirstUseCaseLink = () => {
+    queueMicrotask(() => {
+      useCasesItemRefs.current[0]?.focus();
     });
   };
 
@@ -149,20 +183,58 @@ export default function MarketingNavigationIsland({
   ) => {
     switch (event.key) {
       case 'Enter':
-      case ' ':
+      case ' ': {
+        event.preventDefault();
+        if (solutionsOpen) {
+          closeSolutionsFlyout();
+        } else {
+          openSolutionsFlyout();
+          focusFirstSolutionsLink();
+        }
+        break;
+      }
+      case 'ArrowDown': {
         event.preventDefault();
         openSolutionsFlyout();
         focusFirstSolutionsLink();
         break;
-      case 'ArrowDown':
-        event.preventDefault();
-        openSolutionsFlyout();
-        focusFirstSolutionsLink();
-        break;
-      case 'Escape':
-        event.preventDefault();
+      }
+      case 'Escape': {
         closeSolutionsFlyout();
+        solutionsButtonRef.current?.focus();
         break;
+      }
+      default:
+        break;
+    }
+  };
+
+  const handleUseCasesButtonKeyDown = (
+    event: JSX.TargetedKeyboardEvent<HTMLButtonElement>,
+  ) => {
+    switch (event.key) {
+      case 'Enter':
+      case ' ': {
+        event.preventDefault();
+        if (useCasesOpen) {
+          closeUseCasesFlyout();
+        } else {
+          openUseCasesFlyout();
+          focusFirstUseCaseLink();
+        }
+        break;
+      }
+      case 'ArrowDown': {
+        event.preventDefault();
+        openUseCasesFlyout();
+        focusFirstUseCaseLink();
+        break;
+      }
+      case 'Escape': {
+        closeUseCasesFlyout();
+        useCasesButtonRef.current?.focus();
+        break;
+      }
       default:
         break;
     }
@@ -181,6 +253,30 @@ export default function MarketingNavigationIsland({
 
     closeSolutionsFlyout();
   };
+
+  const handleUseCasesBlur = (event: JSX.TargetedFocusEvent<HTMLAnchorElement>) => {
+    const next = event.relatedTarget as HTMLElement | null;
+
+    if (
+      !next ||
+      useCasesContainerRef.current?.contains(next) ||
+      useCasesMenuRef.current?.contains(next)
+    ) {
+      return;
+    }
+
+    closeUseCasesFlyout();
+  };
+
+  const highlightSolutions = solutionsMenuItems.some((item) =>
+    isActiveLink(item.href, currentPath)
+  );
+  const highlightUseCases = useCaseOverview.length
+    ? useCaseMenuItems.some((item) => isActiveLink(item.href, currentPath))
+    : false;
+
+  solutionsItemRefs.current.length = solutionsMenuItems.length;
+  useCasesItemRefs.current.length = useCaseMenuItems.length;
 
   return (
     <nav
@@ -208,7 +304,11 @@ export default function MarketingNavigationIsland({
             aria-expanded={solutionsOpen}
             onClick={(event) => {
               event.preventDefault();
-              toggleSolutionsFlyout();
+              if (solutionsOpen) {
+                closeSolutionsFlyout();
+              } else {
+                openSolutionsFlyout();
+              }
             }}
             onKeyDown={handleSolutionsButtonKeyDown}
             onFocus={openSolutionsFlyout}
@@ -244,52 +344,139 @@ export default function MarketingNavigationIsland({
             onMouseEnter={openSolutionsFlyout}
             onMouseLeave={scheduleSolutionsClose}
           >
-            <div class='flex flex-col gap-4'>
-              {menuGroups.map((group) => (
-                <div key={group.title} class='flex flex-col gap-1.5'>
-                  <span class='px-2 text-xs font-semibold uppercase tracking-[0.28em] text-neutral-500 dark:text-neutral-400'>
-                    {group.title}
-                  </span>
-                  <div class='flex flex-col gap-1'>
-                    {group.items.map((item) => {
-                      const active = isActiveLink(item.href, currentPath);
+            <div class='flex flex-col gap-1'>
+              {solutionsMenuItems.map((item, index) => {
+                const active = isActiveLink(item.href, currentPath);
 
-                      return (
-                        <a
-                          key={item.href}
-                          ref={(anchor) => {
-                            const index = flatMenuItems.indexOf(item);
-                            if (index >= 0) {
-                              menuItemRefs.current[index] = anchor;
-                            }
-                          }}
-                          href={item.href}
-                          class={cn(
-                            'flex flex-col gap-0.5 rounded-2xl border border-transparent px-4 py-3 text-left transition-colors',
-                            active
-                              ? 'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-white'
-                              : 'text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:hover:text-white',
-                          )}
-                          onClick={() => closeSolutionsFlyout()}
-                          onKeyDown={(event) => {
-                            if (event.key === 'Escape') {
-                              event.preventDefault();
-                              closeSolutionsFlyout();
-                              solutionsButtonRef.current?.focus();
-                            }
-                          }}
-                          onBlur={handleSolutionsBlur}
-                        >
-                          <span class='text-sm font-medium'>{item.label}</span>
-                        </a>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
+                return (
+                  <a
+                    key={item.href}
+                    ref={(anchor) => {
+                      solutionsItemRefs.current[index] = anchor;
+                    }}
+                    href={item.href}
+                    class={cn(
+                      'flex flex-col gap-0.5 rounded-2xl border border-transparent px-4 py-3 text-left transition-colors',
+                      active
+                        ? 'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-white'
+                        : 'text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:hover:text-white',
+                    )}
+                    onClick={() => closeSolutionsFlyout()}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Escape') {
+                        event.preventDefault();
+                        closeSolutionsFlyout();
+                        solutionsButtonRef.current?.focus();
+                      }
+                    }}
+                    onBlur={handleSolutionsBlur}
+                  >
+                    <span class='text-sm font-medium'>{item.label}</span>
+                  </a>
+                );
+              })}
             </div>
           </div>
         </div>
+
+        {useCaseOverview.length
+          ? (
+            <div
+              ref={useCasesContainerRef}
+              class='relative'
+              onMouseEnter={openUseCasesFlyout}
+              onMouseLeave={scheduleUseCasesClose}
+              onBlurCapture={handleUseCasesBlur}
+            >
+              <button
+                ref={useCasesButtonRef}
+                type='button'
+                class={cn(
+                  'inline-flex items-center gap-1.5 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-950',
+                  highlightUseCases
+                    ? 'text-neutral-900 dark:text-white'
+                    : 'text-neutral-700 hover:text-neutral-900 dark:text-neutral-200 dark:hover:text-white',
+                )}
+                aria-haspopup='menu'
+                aria-expanded={useCasesOpen}
+                onClick={(event) => {
+                  event.preventDefault();
+                  if (useCasesOpen) {
+                    closeUseCasesFlyout();
+                  } else {
+                    openUseCasesFlyout();
+                  }
+                }}
+                onKeyDown={handleUseCasesButtonKeyDown}
+                onFocus={openUseCasesFlyout}
+              >
+                {useCasesLink?.label ?? 'Use Cases'}
+                <svg
+                  class={cn(
+                    'h-3 w-3 transition-transform duration-150',
+                    useCasesOpen ? 'rotate-180' : 'rotate-0',
+                  )}
+                  viewBox='0 0 10 6'
+                  aria-hidden='true'
+                >
+                  <path
+                    d='M1 1l4 4 4-4'
+                    fill='none'
+                    stroke='currentColor'
+                    stroke-width='1.5'
+                    stroke-linecap='round'
+                    stroke-linejoin='round'
+                  />
+                </svg>
+              </button>
+
+              <div
+                ref={useCasesMenuRef}
+                class={cn(
+                  'absolute left-0 top-full z-40 mt-4 w-80 rounded-3xl border border-neutral-200/70 bg-white/95 p-4 shadow-[0_30px_120px_-60px_rgba(15,23,42,0.35)] backdrop-blur-lg transition-all duration-150 dark:border-white/10 dark:bg-neutral-900/95 dark:shadow-[0_40px_160px_-80px_rgba(129,140,248,0.45)]',
+                  useCasesOpen
+                    ? 'pointer-events-auto translate-y-0 opacity-100'
+                    : 'pointer-events-none -translate-y-2 opacity-0',
+                )}
+                onMouseEnter={openUseCasesFlyout}
+                onMouseLeave={scheduleUseCasesClose}
+              >
+                <div class='flex flex-col gap-1'>
+                  {useCaseMenuItems.map((item, index) => {
+                    const active = isActiveLink(item.href, currentPath);
+
+                    return (
+                      <a
+                        key={item.href}
+                        ref={(anchor) => {
+                          useCasesItemRefs.current[index] = anchor;
+                        }}
+                        href={item.href}
+                        class={cn(
+                          'flex flex-col gap-0.5 rounded-2xl border border-transparent px-4 py-3 text-left transition-colors',
+                          active
+                            ? 'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-white'
+                            : 'text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:hover:text-white',
+                        )}
+                        onClick={() => closeUseCasesFlyout()}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Escape') {
+                            event.preventDefault();
+                            closeUseCasesFlyout();
+                            useCasesButtonRef.current?.focus();
+                          }
+                        }}
+                        onBlur={handleUseCasesBlur}
+                      >
+                        <span class='text-sm font-medium'>{item.label}</span>
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )
+          : null}
 
         {otherLinks.map((link) => {
           const active = isActiveLink(link.href, currentPath);
@@ -363,7 +550,7 @@ export default function MarketingNavigationIsland({
         ? (
           <div class='absolute left-0 top-full z-40 mt-3 w-full rounded-3xl border border-neutral-200 bg-white/95 p-5 shadow-[0_35px_160px_-90px_rgba(15,23,42,0.45)] backdrop-blur-lg dark:border-white/10 dark:bg-neutral-900/95 dark:shadow-[0_45px_200px_-110px_rgba(129,140,248,0.55)] md:hidden'>
             <div class='flex flex-col gap-6'>
-              {menuGroups.map((group) => (
+              {mobileMenuGroups.map((group) => (
                 <div key={group.title} class='flex flex-col gap-2'>
                   <span class='text-xs font-semibold uppercase tracking-[0.28em] text-neutral-500 dark:text-neutral-400'>
                     {group.title}

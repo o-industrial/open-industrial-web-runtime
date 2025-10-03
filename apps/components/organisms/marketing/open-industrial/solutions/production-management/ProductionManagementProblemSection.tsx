@@ -1,8 +1,8 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { productionManagementProblem } from '../../../../../../../../src/marketing/solutions/production-management.ts';
+import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { productionManagementProblem } from '../../../../../../../src/marketing/solutions/production-management.ts';
 
 export default function ProductionManagementProblemSection(): JSX.Element {
   return (

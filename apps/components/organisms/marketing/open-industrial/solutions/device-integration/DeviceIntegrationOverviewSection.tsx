@@ -1,8 +1,8 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { deviceIntegrationIntegrationSteps } from '../../../../../../../../src/marketing/solutions/device-integration.ts';
+import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { deviceIntegrationIntegrationSteps } from '../../../../../../../src/marketing/solutions/device-integration.ts';
 
 const stepAccentGradients = [
   'from-sky-500 via-blue-500 to-indigo-500',

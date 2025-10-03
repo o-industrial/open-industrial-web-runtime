@@ -5,7 +5,7 @@ import { Action, ActionStyleTypes } from '@o-industrial/atomic/atoms';
 import {
   batchQualityHero,
   batchQualityQueryExample,
-} from '../../../../../../../../src/marketing/use-case/batch-quality.ts';
+} from '../../../../../../../src/marketing/use-case/batch-quality.ts';
 import { IntentTypes } from '@o-industrial/common/types';
 
 function mapIntent(intent?: 'primary' | 'secondary' | 'ghost'): ActionStyleTypes {

@@ -2,9 +2,9 @@ import { JSX } from 'preact';
 
 import { ToggleQueryCard } from '@o-industrial/atomic/molecules';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { downtimeDiagnosisToggleQueries } from '../../../../../../../../src/marketing/use-case/downtime-diagnosis.ts';
+import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { downtimeDiagnosisToggleQueries } from '../../../../../../../src/marketing/use-case/downtime-diagnosis.ts';
 
 export default function DowntimeDiagnosisToggleSection(): JSX.Element {
   return (

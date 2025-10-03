@@ -1,8 +1,8 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { batchQualityProblem } from '../../../../../../../../src/marketing/use-case/batch-quality.ts';
+import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { batchQualityProblem } from '../../../../../../../src/marketing/use-case/batch-quality.ts';
 
 export default function BatchQualityProblemSection(): JSX.Element {
   return (

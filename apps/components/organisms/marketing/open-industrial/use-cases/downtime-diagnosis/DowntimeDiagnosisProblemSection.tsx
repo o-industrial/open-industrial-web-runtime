@@ -1,8 +1,8 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
-import { downtimeDiagnosisProblem } from '../../../../../../../../src/marketing/use-case/downtime-diagnosis.ts';
+import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
+import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { downtimeDiagnosisProblem } from '../../../../../../../src/marketing/use-case/downtime-diagnosis.ts';
 
 export default function DowntimeDiagnosisProblemSection(): JSX.Element {
   return (
