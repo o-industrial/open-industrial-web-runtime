@@ -6,3 +6,4 @@ export default {
   presets: [openIndustrialTailwindPreset],
 } satisfies Config;
 
+

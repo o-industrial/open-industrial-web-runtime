@@ -79,7 +79,7 @@
     "@fathym/msal": "jsr:@fathym/msal@0.0.58",
     // "@fathym/msal": "../msal/mod.ts",
 
-    "@o-industrial/common": "jsr:@o-industrial/common@0.0.473-integration",
+    "@o-industrial/common": "jsr:@o-industrial/common@0.0.475-integration",
 
     // "@o-industrial/atomic": "jsr:@o-industrial/atomic@0",
     "@o-industrial/atomic/atoms": "../open-industrial-atomic/src/atoms/.exports.ts",
@@ -89,6 +89,9 @@
     "@o-industrial/atomic/templates": "../open-industrial-atomic/src/templates/.exports.ts",
     "@o-industrial/atomic/tailwind/preset": "../open-industrial-atomic/configs/tailwind/preset.ts",
     "@o-industrial/atomic/utils": "../open-industrial-atomic/src/utils/.exports.ts",
+
+    "events": "npm:events@3.3.0",
+    "events/": "npm:/events@3.3.0/",
 
     "immer": "npm:immer@10.1.1",
     "json-schema": "npm:json-schema@0.4.0",

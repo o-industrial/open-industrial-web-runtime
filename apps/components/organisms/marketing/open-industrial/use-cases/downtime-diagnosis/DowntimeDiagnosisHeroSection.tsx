@@ -87,3 +87,4 @@ export default function DowntimeDiagnosisHeroSection(): JSX.Element {
     </section>
   );
 }
+

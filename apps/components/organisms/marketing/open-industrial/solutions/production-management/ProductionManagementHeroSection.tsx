@@ -87,3 +87,4 @@ export default function ProductionManagementHeroSection(): JSX.Element {
     </section>
   );
 }
+

@@ -39,3 +39,4 @@ export default function DowntimeDiagnosisToggleSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+

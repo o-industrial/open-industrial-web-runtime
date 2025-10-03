@@ -169,3 +169,4 @@ export const qualityManagementOutcome: CTAContent = {
     external: true,
   },
 };
+

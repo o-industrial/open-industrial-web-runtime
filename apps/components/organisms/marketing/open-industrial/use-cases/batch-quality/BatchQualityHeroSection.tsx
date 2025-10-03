@@ -87,3 +87,4 @@ export default function BatchQualityHeroSection(): JSX.Element {
     </section>
   );
 }
+

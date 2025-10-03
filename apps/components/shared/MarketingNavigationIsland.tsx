@@ -34,7 +34,7 @@ const useCaseMenuItems = [
   })),
 ];
 
-const menuGroups: MenuGroup[] = [
+const menuGroups = [
   {
     title: 'Solutions',
     items: solutionsMenuItems,
@@ -86,7 +86,7 @@ export default function MarketingNavigationIsland({
 
   const solutionsItemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
   const useCasesItemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
-  const solutionsButtonRef = useRef<HTMLButtonButtonElement | null>(null);
+  const solutionsButtonRef = useRef<HTMLButtonElement | null>(null);
   const useCasesButtonRef = useRef<HTMLButtonElement | null>(null);
   const solutionsContainerRef = useRef<HTMLDivElement | null>(null);
   const useCasesContainerRef = useRef<HTMLDivElement | null>(null);
@@ -634,3 +634,4 @@ export default function MarketingNavigationIsland({
     </nav>
   );
 }
+
