@@ -1,7 +1,7 @@
 import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 
-import { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 import AssetManagementCTASection from '../../../components/organisms/marketing/open-industrial/solutions/asset-management/AssetManagementCTASection.tsx';
 import AssetManagementFlowDiagramSection from '../../../components/organisms/marketing/open-industrial/solutions/asset-management/AssetManagementFlowDiagramSection.tsx';
@@ -39,3 +39,4 @@ export default function AssetManagementPage({}: PageProps<AssetManagementPageDat
     </MarketingPageFrame>
   );
 }
+

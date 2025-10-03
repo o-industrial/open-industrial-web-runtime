@@ -9,7 +9,7 @@ import BatchQualityProblemSection from '../../../components/organisms/marketing/
 import BatchQualityToggleSection from '../../../components/organisms/marketing/open-industrial/use-cases/batch-quality/BatchQualityToggleSection.tsx';
 import BatchQualityValueSection from '../../../components/organisms/marketing/open-industrial/use-cases/batch-quality/BatchQualityValueSection.tsx';
 import { MarketingPageFrame } from '../../../components/shared/MarketingPageFrame.tsx';
-import { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 
@@ -41,3 +41,4 @@ export default function BatchQualityPage({}: PageProps<BatchQualityPageData>) {
     </MarketingPageFrame>
   );
 }
+

@@ -14,7 +14,7 @@ import ReadyCTASection from '../components/organisms/marketing/open-industrial/h
 import WorksWithYourStackSection from '../components/organisms/marketing/open-industrial/home/WorksWithYourStackSection.tsx';
 import { MarketingPageFrame } from '../components/shared/MarketingPageFrame.tsx';
 
-import { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 

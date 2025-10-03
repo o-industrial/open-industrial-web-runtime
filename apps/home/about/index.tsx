@@ -9,7 +9,7 @@ import NonNegotiablesSection from '../../components/organisms/marketing/open-ind
 import VisionCTASection from '../../components/organisms/marketing/open-industrial/about/VisionCTASection.tsx';
 import VisionStatementSection from '../../components/organisms/marketing/open-industrial/about/VisionStatementSection.tsx';
 import { MarketingPageFrame } from '../../components/shared/MarketingPageFrame.tsx';
-import { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 
@@ -42,3 +42,4 @@ export default function AboutPage({}: PageProps<AboutPageData>) {
     </MarketingPageFrame>
   );
 }
+

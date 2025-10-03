@@ -1,6 +1,6 @@
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
-import { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 // deno-lint-ignore ban-types
 type ADB2CExceptionPageData = {};
@@ -17,3 +17,4 @@ export const handler: EaCRuntimeHandlerSet<
 export default function ADB2CException({}: PageProps<ADB2CExceptionPageData>) {
   return <div id='api' role='main'></div>;
 }
+

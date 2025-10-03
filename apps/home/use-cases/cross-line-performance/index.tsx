@@ -9,7 +9,7 @@ import CrossLinePerformanceProblemSection from '../../../components/organisms/ma
 import CrossLinePerformanceToggleSection from '../../../components/organisms/marketing/open-industrial/use-cases/cross-line-performance/CrossLinePerformanceToggleSection.tsx';
 import CrossLinePerformanceValueSection from '../../../components/organisms/marketing/open-industrial/use-cases/cross-line-performance/CrossLinePerformanceValueSection.tsx';
 import { MarketingPageFrame } from '../../../components/shared/MarketingPageFrame.tsx';
-import { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 
@@ -41,3 +41,4 @@ export default function CrossLinePerformancePage({}: PageProps<CrossLinePerforma
     </MarketingPageFrame>
   );
 }
+

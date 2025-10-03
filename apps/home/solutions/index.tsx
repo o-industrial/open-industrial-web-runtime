@@ -4,7 +4,7 @@ import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import SolutionsHeroSection from '../../components/organisms/marketing/open-industrial/solutions/SolutionsHeroSection.tsx';
 import SolutionsListSection from '../../components/organisms/marketing/open-industrial/solutions/SolutionsListSection.tsx';
 import { MarketingPageFrame } from '../../components/shared/MarketingPageFrame.tsx';
-import { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 
@@ -26,3 +26,4 @@ export default function SolutionsPage({}: PageProps<SolutionsPageData>) {
     </MarketingPageFrame>
   );
 }
+

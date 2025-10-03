@@ -5,7 +5,7 @@ import ContactCTASection from '../../components/organisms/marketing/open-industr
 import ContactFormSection from '../../components/organisms/marketing/open-industrial/contact/ContactFormSection.tsx';
 import ContactHeroSection from '../../components/organisms/marketing/open-industrial/contact/ContactHeroSection.tsx';
 import { MarketingPageFrame } from '../../components/shared/MarketingPageFrame.tsx';
-import { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 
@@ -28,3 +28,4 @@ export default function ContactPage({}: PageProps<ContactPageData>) {
     </MarketingPageFrame>
   );
 }
+

@@ -9,7 +9,7 @@ import DowntimeDiagnosisProblemSection from '../../../components/organisms/marke
 import DowntimeDiagnosisToggleSection from '../../../components/organisms/marketing/open-industrial/use-cases/downtime-diagnosis/DowntimeDiagnosisToggleSection.tsx';
 import DowntimeDiagnosisValueSection from '../../../components/organisms/marketing/open-industrial/use-cases/downtime-diagnosis/DowntimeDiagnosisValueSection.tsx';
 import { MarketingPageFrame } from '../../../components/shared/MarketingPageFrame.tsx';
-import { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 
@@ -41,3 +41,4 @@ export default function DowntimeDiagnosisPage({}: PageProps<DowntimeDiagnosisPag
     </MarketingPageFrame>
   );
 }
+

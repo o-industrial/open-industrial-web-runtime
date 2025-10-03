@@ -9,7 +9,7 @@ import ProductionManagementProblemSection from '../../../components/organisms/ma
 import ProductionManagementToggleSection from '../../../components/organisms/marketing/open-industrial/solutions/production-management/ProductionManagementToggleSection.tsx';
 import ProductionManagementValueSection from '../../../components/organisms/marketing/open-industrial/solutions/production-management/ProductionManagementValueSection.tsx';
 import { MarketingPageFrame } from '../../../components/shared/MarketingPageFrame.tsx';
-import { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 
@@ -38,3 +38,4 @@ export default function ProductionManagementPage({}: PageProps<ProductionManagem
     </MarketingPageFrame>
   );
 }
+
