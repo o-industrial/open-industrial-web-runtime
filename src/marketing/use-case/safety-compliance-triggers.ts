@@ -1,4 +1,4 @@
-import { CheckIcon, ShieldIcon, SignalIcon, TriggerMatchIcon } from '@o-industrial/atomic/icons';
+import { BlockedIcon, CheckIcon, SignalIcon, TriggerMatchIcon } from '@o-industrial/atomic/icons';
 import type {
   CTAContent,
   FeatureItemContent,
@@ -86,7 +86,7 @@ export const safetyComplianceTriggersHowHelpItems: FeatureItemContent[] = [
   {
     title: 'Ensure Operator Safety',
     description: 'Detect risks in real time to protect personnel and critical equipment.',
-    icon: ShieldIcon,
+    icon: BlockedIcon,
     intent: 'orange',
   },
   {
