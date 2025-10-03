@@ -1,6 +1,6 @@
 import { IntentTypes } from '@o-industrial/common/types';
-import { getIntentStyles } from '@o-industrial/common/atomic/utils';
-import { SystemMindset, ThematicPrincipleBlock } from '@o-industrial/common/atomic/molecules';
+import { getIntentStyles } from '@o-industrial/atomic/utils';
+import { SystemMindset, ThematicPrincipleBlock } from '@o-industrial/atomic/molecules';
 
 export default function StructureFirstThinking() {
   const codeColor = getIntentStyles(IntentTypes.Primary).text;
@@ -35,3 +35,4 @@ export default function StructureFirstThinking() {
     </section>
   );
 }
+

@@ -1,6 +1,6 @@
 import type { JSX } from 'preact';
 
-import { Action, ActionStyleTypes, SectionSurface } from '@o-industrial/common/atomic/atoms';
+import { Action, ActionStyleTypes, SectionSurface } from '@o-industrial/atomic/atoms';
 import type { MarketingAction } from '../../../../../../src/marketing/content.ts';
 
 import { homeContent } from '../../../../../../src/marketing/home.ts';
@@ -119,3 +119,4 @@ export default function HeroExperienceSection(): JSX.Element {
     </section>
   );
 }
+

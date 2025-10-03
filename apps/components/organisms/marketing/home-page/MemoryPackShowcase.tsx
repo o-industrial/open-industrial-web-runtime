@@ -1,5 +1,5 @@
 import { IntentTypes } from '@o-industrial/common/types';
-import { AziInnerVoice, FigureImage, SystemMindset } from '@o-industrial/common/atomic/molecules';
+import { AziInnerVoice, FigureImage, SystemMindset } from '@o-industrial/atomic/molecules';
 
 export default function MemoryPackShowcase() {
   return (
@@ -33,3 +33,4 @@ export default function MemoryPackShowcase() {
     </section>
   );
 }
+

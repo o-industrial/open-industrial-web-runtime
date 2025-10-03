@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 
-import { SectionSurface } from '@o-industrial/common/atomic/atoms';
-import { SectionHeader } from '@o-industrial/common/atomic/molecules';
+import { SectionSurface } from '@o-industrial/atomic/atoms';
+import { SectionHeader } from '@o-industrial/atomic/molecules';
 
 import type {
   LegalDocumentContent,
@@ -119,3 +119,4 @@ export function LegalDocument({ document }: LegalDocumentProps): JSX.Element {
     </div>
   );
 }
+

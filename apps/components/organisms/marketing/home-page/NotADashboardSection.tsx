@@ -1,6 +1,6 @@
 import { IntentTypes } from '@o-industrial/common/types';
-import { getIntentStyles } from '@o-industrial/common/atomic/utils';
-import { SystemMindset } from '@o-industrial/common/atomic/molecules';
+import { getIntentStyles } from '@o-industrial/atomic/utils';
+import { SystemMindset } from '@o-industrial/atomic/molecules';
 
 export default function NotADashboardSection() {
   const legacyText = getIntentStyles(IntentTypes.Warning).text;
@@ -43,3 +43,4 @@ export default function NotADashboardSection() {
     </section>
   );
 }
+

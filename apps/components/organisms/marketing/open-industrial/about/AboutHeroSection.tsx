@@ -1,6 +1,6 @@
 import { JSX } from 'preact';
 
-import { HeroShowcase } from '@o-industrial/common/atomic/organisms';
+import { HeroShowcase } from '@o-industrial/atomic/organisms';
 
 import { aboutHero } from '../../../../../../src/marketing/about.ts';
 
@@ -29,3 +29,4 @@ export default function AboutHeroSection(): JSX.Element {
     </HeroShowcase>
   );
 }
+

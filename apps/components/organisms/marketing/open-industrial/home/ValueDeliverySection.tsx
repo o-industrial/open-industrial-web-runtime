@@ -1,12 +1,12 @@
 import type { JSX } from 'preact';
 
-import { SectionSurface } from '@o-industrial/common/atomic/atoms';
+import { SectionSurface } from '@o-industrial/atomic/atoms';
 import {
   CompositeSchemaIcon,
   SignalIcon,
   TimelineIcon,
   VisibilityIcon,
-} from '@o-industrial/common/atomic/icons';
+} from '@o-industrial/atomic/icons';
 
 import { homeContent } from '../../../../../../src/marketing/home.ts';
 
@@ -70,3 +70,4 @@ export default function ValueDeliverySection(): JSX.Element {
     </SectionSurface>
   );
 }
+

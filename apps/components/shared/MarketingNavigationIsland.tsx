@@ -1,24 +1,49 @@
 import { JSX } from 'preact';
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 
-import { Action, ActionStyleTypes } from '@o-industrial/common/atomic/atoms';
+import { Action, ActionStyleTypes } from '@o-industrial/atomic/atoms';
 import type {
   MarketingNavCTA,
   MarketingNavigationProps,
   MarketingNavLink,
-} from '@o-industrial/common/atomic/organisms';
+} from '@o-industrial/atomic/organisms';
 
+import { solutionOverview } from '../../../src/marketing/solutions.ts';
 import { useCaseOverview } from '../../../src/marketing/use-cases.ts';
 
 export const IsIsland = true;
 
-const useCaseMenuItems: MarketingNavLink[] = [
-  { label: 'Overview', href: '/use-case' },
-  ...useCaseOverview.map((useCase) => ({
-    label: useCase.title,
-    href: useCase.href,
-  })),
-];
+type MenuGroup = {
+  title: string;
+  items: MarketingNavLink[];
+};
+
+const buildMenuGroups = (): MenuGroup[] => {
+  const groups: MenuGroup[] = [
+    {
+      title: 'Solutions',
+      items: [
+        { label: 'Overview', href: '/solutions' },
+        ...solutionOverview.map((solution) => ({
+          label: solution.title,
+          href: solution.href,
+        })),
+      ],
+    },
+  ];
+
+  if (useCaseOverview.length) {
+    groups.push({
+      title: 'Use Cases',
+      items: useCaseOverview.map((useCase) => ({
+        label: useCase.title,
+        href: useCase.href,
+      })),
+    });
+  }
+
+  return groups;
+};
 
 const cn = (...classes: Array<string | undefined | null | false>): string =>
   classes.filter(Boolean).join(' ');
@@ -50,13 +75,19 @@ export default function MarketingNavigationIsland({
   class: className,
   ...rest
 }: MarketingNavigationProps): JSX.Element {
+  const menuGroups = useMemo(buildMenuGroups, []);
+  const flatMenuItems = useMemo(
+    () => menuGroups.flatMap((group) => group.items),
+    [menuGroups],
+  );
+
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [useCaseOpen, setUseCaseOpen] = useState(false);
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
 
   const menuItemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
-  const useCaseButtonRef = useRef<HTMLButtonElement | null>(null);
-  const useCaseContainerRef = useRef<HTMLDivElement | null>(null);
-  const useCaseMenuRef = useRef<HTMLDivElement | null>(null);
+  const solutionsButtonRef = useRef<HTMLButtonElement | null>(null);
+  const solutionsContainerRef = useRef<HTMLDivElement | null>(null);
+  const solutionsMenuRef = useRef<HTMLDivElement | null>(null);
   const hoverCloseTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
@@ -67,8 +98,8 @@ export default function MarketingNavigationIsland({
     };
   }, []);
 
-  const useCasesLink = links.find((link) => link.href === '/use-case');
-  const otherLinks = links.filter((link) => link.href !== '/use-case');
+  const solutionsLink = links.find((link) => link.href === '/solutions');
+  const otherLinks = links.filter((link) => link.href !== '/solutions');
 
   const toggleMobile = () => setMobileOpen((open) => !open);
   const closeMobile = () => setMobileOpen(false);
@@ -80,80 +111,75 @@ export default function MarketingNavigationIsland({
     }
   };
 
-  const openUseCaseFlyout = () => {
+  const openSolutionsFlyout = () => {
     clearHoverCloseTimeout();
-    setUseCaseOpen(true);
+    setSolutionsOpen(true);
   };
 
-  const scheduleUseCaseClose = () => {
+  const scheduleSolutionsClose = () => {
     clearHoverCloseTimeout();
     hoverCloseTimeout.current = setTimeout(() => {
-      setUseCaseOpen(false);
+      setSolutionsOpen(false);
     }, 150);
   };
 
-  const closeUseCaseFlyout = () => {
+  const closeSolutionsFlyout = () => {
     clearHoverCloseTimeout();
-    setUseCaseOpen(false);
+    setSolutionsOpen(false);
   };
 
-  const toggleUseCaseFlyout = () => {
-    if (useCaseOpen) {
-      closeUseCaseFlyout();
+  const toggleSolutionsFlyout = () => {
+    if (solutionsOpen) {
+      closeSolutionsFlyout();
     } else {
-      openUseCaseFlyout();
+      openSolutionsFlyout();
     }
   };
 
-  const highlightUseCases = useCaseMenuItems.some((item) => isActiveLink(item.href, currentPath));
+  const highlightSolutions = flatMenuItems.some((item) => isActiveLink(item.href, currentPath));
 
-  const focusFirstUseCaseLink = () => {
+  const focusFirstSolutionsLink = () => {
     queueMicrotask(() => {
       menuItemRefs.current[0]?.focus();
     });
   };
 
-  const handleUseCaseButtonKeyDown = (
+  const handleSolutionsButtonKeyDown = (
     event: JSX.TargetedKeyboardEvent<HTMLButtonElement>,
   ) => {
     switch (event.key) {
       case 'Enter':
       case ' ':
         event.preventDefault();
-        openUseCaseFlyout();
-        focusFirstUseCaseLink();
+        openSolutionsFlyout();
+        focusFirstSolutionsLink();
         break;
       case 'ArrowDown':
         event.preventDefault();
-        openUseCaseFlyout();
-        focusFirstUseCaseLink();
+        openSolutionsFlyout();
+        focusFirstSolutionsLink();
         break;
       case 'Escape':
         event.preventDefault();
-        closeUseCaseFlyout();
+        closeSolutionsFlyout();
         break;
       default:
         break;
     }
   };
 
-  const handleUseCaseBlur = (
-    event: JSX.TargetedFocusEvent<HTMLElement>,
-  ) => {
-    const next = event.relatedTarget as Node | null;
-    if (!next) {
-      closeUseCaseFlyout();
-      return;
-    }
+  const handleSolutionsBlur = (event: JSX.TargetedFocusEvent<HTMLAnchorElement>) => {
+    const next = event.relatedTarget as HTMLElement | null;
 
     if (
-      useCaseContainerRef.current?.contains(next) ||
-      useCaseMenuRef.current?.contains(next)
+      !next ||
+      solutionsContainerRef.current?.contains(next) ||
+      solutionsMenuRef.current?.contains(next)
     ) {
       return;
     }
 
-    closeUseCaseFlyout();
+    closeSolutionsFlyout();
   };
 
   return (
@@ -163,35 +189,35 @@ export default function MarketingNavigationIsland({
     >
       <div class='hidden items-center gap-8 md:flex'>
         <div
-          ref={useCaseContainerRef}
+          ref={solutionsContainerRef}
           class='relative'
-          onMouseEnter={openUseCaseFlyout}
-          onMouseLeave={scheduleUseCaseClose}
-          onBlurCapture={handleUseCaseBlur}
+          onMouseEnter={openSolutionsFlyout}
+          onMouseLeave={scheduleSolutionsClose}
+          onBlurCapture={handleSolutionsBlur}
         >
           <button
-            ref={useCaseButtonRef}
+            ref={solutionsButtonRef}
             type='button'
             class={cn(
               'inline-flex items-center gap-1.5 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-950',
-              highlightUseCases
+              highlightSolutions
                 ? 'text-neutral-900 dark:text-white'
                 : 'text-neutral-700 hover:text-neutral-900 dark:text-neutral-200 dark:hover:text-white',
             )}
             aria-haspopup='menu'
-            aria-expanded={useCaseOpen}
+            aria-expanded={solutionsOpen}
             onClick={(event) => {
               event.preventDefault();
-              toggleUseCaseFlyout();
+              toggleSolutionsFlyout();
             }}
-            onKeyDown={handleUseCaseButtonKeyDown}
-            onFocus={openUseCaseFlyout}
+            onKeyDown={handleSolutionsButtonKeyDown}
+            onFocus={openSolutionsFlyout}
           >
-            {useCasesLink?.label ?? 'Use Cases'}
+            {solutionsLink?.label ?? 'Solutions'}
             <svg
               class={cn(
                 'h-3 w-3 transition-transform duration-150',
-                useCaseOpen ? 'rotate-180' : 'rotate-0',
+                solutionsOpen ? 'rotate-180' : 'rotate-0',
               )}
               viewBox='0 0 10 6'
               aria-hidden='true'
@@ -208,45 +234,59 @@ export default function MarketingNavigationIsland({
           </button>
 
           <div
-            ref={useCaseMenuRef}
+            ref={solutionsMenuRef}
             class={cn(
-              'absolute left-0 top-full z-40 mt-4 w-72 rounded-3xl border border-neutral-200/70 bg-white/95 p-4 shadow-[0_30px_120px_-60px_rgba(15,23,42,0.35)] backdrop-blur-lg transition-all duration-150 dark:border-white/10 dark:bg-neutral-900/95 dark:shadow-[0_40px_160px_-80px_rgba(129,140,248,0.45)]',
-              useCaseOpen
+              'absolute left-0 top-full z-40 mt-4 w-80 rounded-3xl border border-neutral-200/70 bg-white/95 p-4 shadow-[0_30px_120px_-60px_rgba(15,23,42,0.35)] backdrop-blur-lg transition-all duration-150 dark:border-white/10 dark:bg-neutral-900/95 dark:shadow-[0_40px_160px_-80px_rgba(129,140,248,0.45)]',
+              solutionsOpen
                 ? 'pointer-events-auto translate-y-0 opacity-100'
                 : 'pointer-events-none -translate-y-2 opacity-0',
             )}
-            onMouseEnter={openUseCaseFlyout}
-            onMouseLeave={scheduleUseCaseClose}
+            onMouseEnter={openSolutionsFlyout}
+            onMouseLeave={scheduleSolutionsClose}
           >
-            <div class='flex flex-col gap-1.5'>
-              {useCaseMenuItems.map((item, index) => {
-                const active = isActiveLink(item.href, currentPath);
+            <div class='flex flex-col gap-4'>
+              {menuGroups.map((group) => (
+                <div key={group.title} class='flex flex-col gap-1.5'>
+                  <span class='px-2 text-xs font-semibold uppercase tracking-[0.28em] text-neutral-500 dark:text-neutral-400'>
+                    {group.title}
+                  </span>
+                  <div class='flex flex-col gap-1'>
+                    {group.items.map((item) => {
+                      const active = isActiveLink(item.href, currentPath);
 
-                return (
-                  <a
-                    key={item.href}
-                    ref={(anchor) => (menuItemRefs.current[index] = anchor)}
-                    href={item.href}
-                    class={cn(
-                      'flex flex-col gap-0.5 rounded-2xl border border-transparent px-4 py-3 text-left transition-colors',
-                      active
-                        ? 'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-white'
-                        : 'text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:hover:text-white',
-                    )}
-                    onClick={() => closeUseCaseFlyout()}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Escape') {
-                        event.preventDefault();
-                        closeUseCaseFlyout();
-                        useCaseButtonRef.current?.focus();
-                      }
-                    }}
-                    onBlur={handleUseCaseBlur}
-                  >
-                    <span class='text-sm font-medium'>{item.label}</span>
-                  </a>
-                );
-              })}
+                      return (
+                        <a
+                          key={item.href}
+                          ref={(anchor) => {
+                            const index = flatMenuItems.indexOf(item);
+                            if (index >= 0) {
+                              menuItemRefs.current[index] = anchor;
+                            }
+                          }}
+                          href={item.href}
+                          class={cn(
+                            'flex flex-col gap-0.5 rounded-2xl border border-transparent px-4 py-3 text-left transition-colors',
+                            active
+                              ? 'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-white'
+                              : 'text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:hover:text-white',
+                          )}
+                          onClick={() => closeSolutionsFlyout()}
+                          onKeyDown={(event) => {
+                            if (event.key === 'Escape') {
+                              event.preventDefault();
+                              closeSolutionsFlyout();
+                              solutionsButtonRef.current?.focus();
+                            }
+                          }}
+                          onBlur={handleSolutionsBlur}
+                        >
+                          <span class='text-sm font-medium'>{item.label}</span>
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -266,7 +306,6 @@ export default function MarketingNavigationIsland({
                   ? 'text-neutral-900 dark:text-white'
                   : 'text-neutral-700 hover:text-neutral-900 dark:text-neutral-200 dark:hover:text-white',
               )}
-              onClick={closeUseCaseFlyout}
             >
               {link.label}
             </a>
@@ -324,32 +363,34 @@ export default function MarketingNavigationIsland({
         ? (
           <div class='absolute left-0 top-full z-40 mt-3 w-full rounded-3xl border border-neutral-200 bg-white/95 p-5 shadow-[0_35px_160px_-90px_rgba(15,23,42,0.45)] backdrop-blur-lg dark:border-white/10 dark:bg-neutral-900/95 dark:shadow-[0_45px_200px_-110px_rgba(129,140,248,0.55)] md:hidden'>
             <div class='flex flex-col gap-6'>
-              <div class='flex flex-col gap-2'>
-                <span class='text-xs font-semibold uppercase tracking-[0.28em] text-neutral-500 dark:text-neutral-400'>
-                  Use Cases
-                </span>
-                <div class='flex flex-col gap-1.5'>
-                  {useCaseMenuItems.map((item) => {
-                    const active = isActiveLink(item.href, currentPath);
+              {menuGroups.map((group) => (
+                <div key={group.title} class='flex flex-col gap-2'>
+                  <span class='text-xs font-semibold uppercase tracking-[0.28em] text-neutral-500 dark:text-neutral-400'>
+                    {group.title}
+                  </span>
+                  <div class='flex flex-col gap-1.5'>
+                    {group.items.map((item) => {
+                      const active = isActiveLink(item.href, currentPath);
 
-                    return (
-                      <a
-                        key={item.href}
-                        href={item.href}
-                        class={cn(
-                          'rounded-2xl px-3 py-2 text-sm transition-colors',
-                          active
-                            ? 'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-white'
-                            : 'text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:hover:text-white',
-                        )}
-                        onClick={closeMobile}
-                      >
-                        {item.label}
-                      </a>
-                    );
-                  })}
+                      return (
+                        <a
+                          key={item.href}
+                          href={item.href}
+                          class={cn(
+                            'rounded-2xl px-3 py-2 text-sm transition-colors',
+                            active
+                              ? 'bg-neutral-100 text-neutral-900 dark:bg-neutral-800 dark:text-white'
+                              : 'text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800 dark:hover:text-white',
+                          )}
+                          onClick={closeMobile}
+                        >
+                          {item.label}
+                        </a>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              ))}
 
               <div class='flex flex-col gap-2'>
                 <span class='text-xs font-semibold uppercase tracking-[0.28em] text-neutral-500 dark:text-neutral-400'>

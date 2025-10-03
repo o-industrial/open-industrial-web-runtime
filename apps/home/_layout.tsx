@@ -1,6 +1,6 @@
 import { PageProps } from '@fathym/eac-applications/preact';
 import MarketingNavigationIsland from '../components/shared/MarketingNavigationIsland.tsx';
-import type { MarketingNavCTA, MarketingNavLink } from '@o-industrial/common/atomic/organisms';
+import type { MarketingNavCTA, MarketingNavLink } from '@o-industrial/atomic/organisms';
 import {
   ctaLinks as baseCtaLinks,
   footerPrimaryLinks,
@@ -157,3 +157,4 @@ export default function HomeLayout({
     </html>
   );
 }
+

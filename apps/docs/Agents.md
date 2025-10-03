@@ -58,9 +58,10 @@ Product documentation surface delivering technical guides, reference material, a
 
 - Parent overview: [Apps guide](../Agents.md).
 - Contributing guidelines: pending addition to `docs/CONTRIBUTING.md` (Phase 3).
-- Design references: [Atomic templates](../../../open-industrial-reference-architecture/atomic/templates/Agents.md).
+- Design references: [Atomic templates](../../open-industrial-atomic/src/templates/Agents.md).
 
 ## Changelog Expectations
 
 - Update this guide when navigation structure changes or new doc families launch.
 - Perform quarterly audits to prune stale content and sync with product releases.
+

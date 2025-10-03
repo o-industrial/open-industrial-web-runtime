@@ -1,5 +1,5 @@
 import { IntentTypes } from '@o-industrial/common/types';
-import { SystemMindset } from '@o-industrial/common/atomic/molecules';
+import { SystemMindset } from '@o-industrial/atomic/molecules';
 
 const journeys = [
   {
@@ -52,3 +52,4 @@ export default function ExecutionJourneyCards() {
     </section>
   );
 }
+

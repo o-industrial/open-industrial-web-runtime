@@ -1,8 +1,8 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
-import { ImpulseIcon, SchemaIcon, SignalIcon } from '@o-industrial/common/atomic/icons';
-import { getIntentStyles } from '@o-industrial/common/atomic/utils';
-import { FigureImage } from '@o-industrial/common/atomic/molecules';
+import { ImpulseIcon, SchemaIcon, SignalIcon } from '@o-industrial/atomic/icons';
+import { getIntentStyles } from '@o-industrial/atomic/utils';
+import { FigureImage } from '@o-industrial/atomic/molecules';
 
 const systemSteps = [
   {
@@ -110,3 +110,4 @@ const SystemProofSection: FunctionalComponent = () => {
 };
 
 export default SystemProofSection;
+

@@ -1,6 +1,6 @@
 import type { JSX } from 'preact';
 
-import { SectionSurface } from '@o-industrial/common/atomic/atoms';
+import { SectionSurface } from '@o-industrial/atomic/atoms';
 
 import { homeContent } from '../../../../../../src/marketing/home.ts';
 
@@ -86,3 +86,4 @@ export default function FutureVisionSection(): JSX.Element {
     </SectionSurface>
   );
 }
+

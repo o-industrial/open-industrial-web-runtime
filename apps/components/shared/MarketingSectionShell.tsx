@@ -1,6 +1,6 @@
 import type { ComponentChildren, JSX } from 'preact';
 
-import { SectionSurface } from '@o-industrial/common/atomic/atoms';
+import { SectionSurface } from '@o-industrial/atomic/atoms';
 
 type MarketingSectionShellVariant = 'neutral' | 'lavender' | 'midnight';
 
@@ -66,3 +66,4 @@ export function MarketingSectionShell({
     </SectionSurface>
   );
 }
+

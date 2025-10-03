@@ -5,8 +5,8 @@ import {
   AppIcon,
   CompositeSchemaIcon,
   SignalIcon,
-} from '@o-industrial/common/atomic/icons';
-import { getIntentStyles } from '@o-industrial/common/atomic/utils';
+} from '@o-industrial/atomic/icons';
+import { getIntentStyles } from '@o-industrial/atomic/utils';
 
 type UseCase = {
   icon: FunctionalComponent<{ class?: string }>;
@@ -91,3 +91,4 @@ const UseCaseShowcaseSection: FunctionalComponent = () => {
 };
 
 export default UseCaseShowcaseSection;
+

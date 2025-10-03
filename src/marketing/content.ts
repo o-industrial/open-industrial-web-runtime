@@ -1,6 +1,6 @@
 import type { ComponentType } from 'preact';
 import type { JSX } from 'preact';
-import type { GradientIntent } from '@o-industrial/common/atomic/atoms';
+import type { GradientIntent } from '@o-industrial/atomic/atoms';
 
 export type MarketingActionIntent = 'primary' | 'secondary' | 'ghost';
 
@@ -136,3 +136,4 @@ export interface LegalDocumentContent {
   intro?: string[];
   sections: LegalSectionContent[];
 }
+

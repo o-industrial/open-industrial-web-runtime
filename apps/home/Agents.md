@@ -57,10 +57,11 @@ Marketing landing experience for Open Industrial. Focuses on storytelling, lead 
 ## Related Docs
 
 - Parent: [Apps overview](../Agents.md).
-- Upstream styling: [Atomic templates guide](../../../open-industrial-reference-architecture/atomic/templates/Agents.md).
+- Upstream styling: [Atomic templates guide](../../open-industrial-atomic/src/templates/Agents.md).
 - Marketing content process docs (see corporate wiki link to add in future revision).
 
 ## Changelog Expectations
 
 - Update when campaigns, brand guidelines, or analytics integrations change.
 - Review quarterly with marketing to ensure content freshness.
+

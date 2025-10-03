@@ -1,7 +1,8 @@
-import type { MarketingNavCTA, MarketingNavLink } from '@o-industrial/common/atomic/organisms';
+import type { MarketingNavCTA, MarketingNavLink } from '@o-industrial/atomic/organisms';
 
 export const primaryNavLinks: MarketingNavLink[] = [
-  { label: 'Use Cases', href: '/use-case' },
+  { label: 'Solutions', href: '/solutions' },
+  { label: 'Use Cases', href: '/use-cases' },
   { label: 'About', href: '/about' },
   {
     label: 'Docs',
@@ -20,12 +21,13 @@ export const ctaLinks: MarketingNavCTA[] = [
 ];
 
 export const footerPrimaryLinks: MarketingNavLink[] = [
-  { label: 'Use Cases', href: '/use-case' },
-  { label: 'Quality Mgmt', href: '/use-case/quality-management' },
-  { label: 'Asset Mgmt', href: '/use-case/asset-management' },
-  { label: 'Production', href: '/use-case/production-management' },
-  { label: 'Device Data', href: '/use-case/device-integration' },
-  { label: 'Batch Quality', href: '/use-case/batch-quality' },
+  { label: 'Solutions', href: '/solutions' },
+  { label: 'Quality Mgmt', href: '/solutions/quality-management' },
+  { label: 'Asset Mgmt', href: '/solutions/asset-management' },
+  { label: 'Production', href: '/solutions/production-management' },
+  { label: 'Device Data', href: '/solutions/device-integration' },
+  { label: 'Use Cases', href: '/use-cases' },
+  { label: 'Batch Quality', href: '/use-cases/batch-quality' },
   { label: 'Privacy', href: '/privacy' },
   { label: 'Terms', href: '/terms' },
   { label: 'Contact', href: '/contact' },

@@ -1,7 +1,7 @@
 import type { JSX } from 'preact';
 
-import { SectionSurface } from '@o-industrial/common/atomic/atoms';
-import { ConnectionIcon, StackIcon, WarmQueryIcon } from '@o-industrial/common/atomic/icons';
+import { SectionSurface } from '@o-industrial/atomic/atoms';
+import { ConnectionIcon, StackIcon, WarmQueryIcon } from '@o-industrial/atomic/icons';
 
 import { homeContent } from '../../../../../../src/marketing/home.ts';
 
@@ -61,3 +61,4 @@ export default function GovernedFlowSection(): JSX.Element {
     </SectionSurface>
   );
 }
+

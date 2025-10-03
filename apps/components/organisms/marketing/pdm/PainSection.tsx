@@ -7,8 +7,8 @@ import {
   FrustratedIcon,
   NoAccessIcon,
   OutdatedIcon,
-} from '@o-industrial/common/atomic/icons';
-import { getIntentStyles } from '@o-industrial/common/atomic/utils';
+} from '@o-industrial/atomic/icons';
+import { getIntentStyles } from '@o-industrial/atomic/utils';
 
 const painPoints = [
   {
@@ -86,3 +86,4 @@ const PainSection: FunctionalComponent = () => {
 };
 
 export default PainSection;
+

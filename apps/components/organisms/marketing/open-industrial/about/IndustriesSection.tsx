@@ -1,6 +1,6 @@
 import { JSX } from 'preact';
 
-import { ChecklistGroup } from '@o-industrial/common/atomic/molecules';
+import { ChecklistGroup } from '@o-industrial/atomic/molecules';
 
 import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
 import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
@@ -26,3 +26,4 @@ export default function IndustriesSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+

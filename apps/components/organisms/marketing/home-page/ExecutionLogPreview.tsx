@@ -1,5 +1,5 @@
 import { IntentTypes } from '@o-industrial/common/types';
-import { AziInnerVoice, SystemMindset } from '@o-industrial/common/atomic/molecules';
+import { AziInnerVoice, SystemMindset } from '@o-industrial/atomic/molecules';
 
 export default function ExecutionLogPreview() {
   return (
@@ -33,3 +33,4 @@ export default function ExecutionLogPreview() {
     </section>
   );
 }
+

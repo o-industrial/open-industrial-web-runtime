@@ -51,9 +51,10 @@ Shared runtime-specific organisms and sections reused across multiple apps. Thes
 ## Related Docs
 
 - Parent: [Apps overview](../Agents.md).
-- Atomic references: [Atomic molecules](../../../open-industrial-reference-architecture/atomic/molecules/Agents.md).
+- Atomic references: [Atomic molecules](../../open-industrial-atomic/src/molecules/Agents.md).
 
 ## Changelog Expectations
 
 - Review whenever new section families are added or shared props change significantly.
 - Coordinate versioning with marketing and docs teams to reflect updated design patterns.
+

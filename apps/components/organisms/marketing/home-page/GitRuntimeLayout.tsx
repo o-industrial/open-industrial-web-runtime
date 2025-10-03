@@ -1,5 +1,5 @@
 import { IntentTypes } from '@o-industrial/common/types';
-import { FigureImage, SystemMindset } from '@o-industrial/common/atomic/molecules';
+import { FigureImage, SystemMindset } from '@o-industrial/atomic/molecules';
 
 export default function GitRuntimeLayout() {
   return (
@@ -33,3 +33,4 @@ export default function GitRuntimeLayout() {
     </section>
   );
 }
+

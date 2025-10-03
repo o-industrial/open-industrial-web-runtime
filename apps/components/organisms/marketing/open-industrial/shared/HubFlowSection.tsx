@@ -1,6 +1,6 @@
 import type { JSX } from 'preact';
 
-import { SectionSurface } from '@o-industrial/common/atomic/atoms';
+import { SectionSurface } from '@o-industrial/atomic/atoms';
 
 import type { HubFlowContent } from '../../../../../../src/marketing/content.ts';
 
@@ -289,3 +289,4 @@ export default function HubFlowSection({
     </SectionSurface>
   );
 }
+

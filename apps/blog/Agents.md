@@ -58,9 +58,10 @@ Editorial surface for thought leadership, release announcements, and stories. Po
 
 - Parent: [Apps overview](../Agents.md).
 - Content operations playbook (link TBD) for editorial workflow.
-- Atomic inspiration: [Templates guide](../../../open-industrial-reference-architecture/atomic/templates/Agents.md).
+- Atomic inspiration: [Templates guide](../../open-industrial-atomic/src/templates/Agents.md).
 
 ## Changelog Expectations
 
 - Update when workflow changes (e.g., migrating to CMS) or when new metadata requirements appear.
 - Quarterly review to archive outdated announcements or refresh evergreen posts.
+
