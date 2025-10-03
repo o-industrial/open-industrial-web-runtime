@@ -64,4 +64,3 @@ Marketing landing experience for Open Industrial. Focuses on storytelling, lead 
 
 - Update when campaigns, brand guidelines, or analytics integrations change.
 - Review quarterly with marketing to ensure content freshness.
-

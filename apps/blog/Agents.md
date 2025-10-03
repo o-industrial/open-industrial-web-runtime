@@ -64,4 +64,3 @@ Editorial surface for thought leadership, release announcements, and stories. Po
 
 - Update when workflow changes (e.g., migrating to CMS) or when new metadata requirements appear.
 - Quarterly review to archive outdated announcements or refresh evergreen posts.
-

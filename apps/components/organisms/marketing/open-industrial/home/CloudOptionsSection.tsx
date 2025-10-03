@@ -76,5 +76,3 @@ export default function CloudOptionsSection(): JSX.Element {
     </SectionSurface>
   );
 }
-
-

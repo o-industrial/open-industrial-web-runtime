@@ -87,4 +87,3 @@ export default function CrossLinePerformanceHeroSection(): JSX.Element {
     </section>
   );
 }
-

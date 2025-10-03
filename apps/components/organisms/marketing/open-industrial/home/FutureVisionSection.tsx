@@ -86,5 +86,3 @@ export default function FutureVisionSection(): JSX.Element {
     </SectionSurface>
   );
 }
-
-

@@ -39,4 +39,3 @@ export default function QualityManagementToggleSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-

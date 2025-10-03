@@ -141,4 +141,3 @@ export const assetManagementOutcome: CTAContent = {
     external: true,
   },
 };
-

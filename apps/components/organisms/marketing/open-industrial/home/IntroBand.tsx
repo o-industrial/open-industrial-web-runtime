@@ -24,5 +24,3 @@ export default function IntroBand(): JSX.Element {
     </SectionSurface>
   );
 }
-
-

@@ -1,11 +1,6 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
-import {
-  AgentIcon,
-  AppIcon,
-  CompositeSchemaIcon,
-  SignalIcon,
-} from '@o-industrial/atomic/icons';
+import { AgentIcon, AppIcon, CompositeSchemaIcon, SignalIcon } from '@o-industrial/atomic/icons';
 import { getIntentStyles } from '@o-industrial/atomic/utils';
 
 type UseCase = {
@@ -91,5 +86,3 @@ const UseCaseShowcaseSection: FunctionalComponent = () => {
 };
 
 export default UseCaseShowcaseSection;
-
-

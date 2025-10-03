@@ -236,4 +236,3 @@ export default function ADB2CLayout({ Data, Component, Revision }: PageProps) {
     </html>
   );
 }
-

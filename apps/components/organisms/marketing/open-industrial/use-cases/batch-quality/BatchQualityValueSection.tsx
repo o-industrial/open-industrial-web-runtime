@@ -21,4 +21,3 @@ export default function BatchQualityValueSection(): JSX.Element {
     />
   );
 }
-

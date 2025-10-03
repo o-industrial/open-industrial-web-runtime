@@ -87,4 +87,3 @@ export default function SafetyComplianceTriggersHeroSection(): JSX.Element {
     </section>
   );
 }
-

@@ -39,4 +39,3 @@ export default function CrossLinePerformanceToggleSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-

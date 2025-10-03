@@ -26,4 +26,3 @@ export default function ADB2CUnified({}: PageProps<ADB2CUnifiedPageData>) {
     </div>
   );
 }
-

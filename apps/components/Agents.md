@@ -57,4 +57,3 @@ Shared runtime-specific organisms and sections reused across multiple apps. Thes
 
 - Review whenever new section families are added or shared props change significantly.
 - Coordinate versioning with marketing and docs teams to reflect updated design patterns.
-

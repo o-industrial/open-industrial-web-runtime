@@ -119,5 +119,3 @@ export default function HeroExperienceSection(): JSX.Element {
     </section>
   );
 }
-
-

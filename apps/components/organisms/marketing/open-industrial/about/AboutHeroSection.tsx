@@ -29,5 +29,3 @@ export default function AboutHeroSection(): JSX.Element {
     </HeroShowcase>
   );
 }
-
-

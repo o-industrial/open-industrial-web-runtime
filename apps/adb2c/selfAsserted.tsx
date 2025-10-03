@@ -17,4 +17,3 @@ export const handler: EaCRuntimeHandlerSet<
 export default function ADB2CSelfAsserted({}: PageProps<ADB2CSelfAssertedPageData>) {
   return <div id='api' role='main'></div>;
 }
-

@@ -29,5 +29,3 @@ const CallToAction: FunctionalComponent = () => {
 };
 
 export default CallToAction;
-
-

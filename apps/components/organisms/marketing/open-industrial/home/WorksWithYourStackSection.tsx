@@ -335,5 +335,3 @@ export default function WorksWithYourStackSection(): JSX.Element {
     </SectionSurface>
   );
 }
-
-

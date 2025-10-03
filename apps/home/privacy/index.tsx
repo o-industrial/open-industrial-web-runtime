@@ -23,4 +23,3 @@ export default function PrivacyPage({}: PageProps<PrivacyPageData>) {
     </MarketingPageFrame>
   );
 }
-

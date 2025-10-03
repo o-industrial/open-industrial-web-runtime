@@ -78,4 +78,3 @@ export default function UseCasesListSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-

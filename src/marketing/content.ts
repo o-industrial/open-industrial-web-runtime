@@ -136,5 +136,3 @@ export interface LegalDocumentContent {
   intro?: string[];
   sections: LegalSectionContent[];
 }
-
-

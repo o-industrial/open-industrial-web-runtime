@@ -119,5 +119,3 @@ export function LegalDocument({ document }: LegalDocumentProps): JSX.Element {
     </div>
   );
 }
-
-

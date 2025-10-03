@@ -52,5 +52,3 @@ export default function ExecutionJourneyCards() {
     </section>
   );
 }
-
-

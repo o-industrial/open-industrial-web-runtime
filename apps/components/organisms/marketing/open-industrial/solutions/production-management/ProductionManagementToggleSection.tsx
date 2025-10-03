@@ -39,4 +39,3 @@ export default function ProductionManagementToggleSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-

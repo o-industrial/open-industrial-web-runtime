@@ -96,5 +96,3 @@ const JourneySection: FunctionalComponent = () => {
 };
 
 export default JourneySection;
-
-

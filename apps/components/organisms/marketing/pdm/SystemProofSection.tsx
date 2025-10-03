@@ -109,5 +109,3 @@ const SystemProofSection: FunctionalComponent = () => {
 };
 
 export default SystemProofSection;
-
-

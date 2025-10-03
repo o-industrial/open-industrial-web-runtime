@@ -68,4 +68,3 @@ export default function AssetManagementCTASection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-

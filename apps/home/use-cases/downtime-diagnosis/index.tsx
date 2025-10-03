@@ -41,4 +41,3 @@ export default function DowntimeDiagnosisPage({}: PageProps<DowntimeDiagnosisPag
     </MarketingPageFrame>
   );
 }
-

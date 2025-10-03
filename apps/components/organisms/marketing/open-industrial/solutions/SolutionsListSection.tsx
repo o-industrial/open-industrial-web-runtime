@@ -83,4 +83,3 @@ export default function SolutionsListSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-

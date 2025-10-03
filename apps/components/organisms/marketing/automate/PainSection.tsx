@@ -85,5 +85,3 @@ const PainSection: FunctionalComponent = () => {
 };
 
 export default PainSection;
-
-

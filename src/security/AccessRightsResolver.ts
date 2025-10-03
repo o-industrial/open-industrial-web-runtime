@@ -1,1 +1,1 @@
-export { resolveAccessRights } from '@o-industrial/common/runtimes/security/AccessRightsResolver.ts';
+export { resolveAccessRights } from '@o-industrial/common/runtimes';

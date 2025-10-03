@@ -23,4 +23,3 @@ export default function TermsPage({}: PageProps<TermsPageData>) {
     </MarketingPageFrame>
   );
 }
-
