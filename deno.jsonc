@@ -79,7 +79,7 @@
     "@fathym/msal": "jsr:@fathym/msal@0.0.58",
     // "@fathym/msal": "../msal/mod.ts",
 
-    "@o-industrial/common": "jsr:@o-industrial/common@0.0.470-hmis",
+    "@o-industrial/common": "jsr:@o-industrial/common@0.0.473-integration",
 
     "immer": "npm:immer@10.1.1",
     "json-schema": "npm:json-schema@0.4.0",
