@@ -111,7 +111,7 @@ export default function ADB2CLayout({ Data, Component, Revision }: PageProps) {
   ].join(' ');
 
   return (
-    <html lang='en' class='dark'>
+    <html lang='en'>
       <head>
         <meta charset='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
@@ -148,89 +148,94 @@ export default function ADB2CLayout({ Data, Component, Revision }: PageProps) {
         />
       </head>
 
-      <body class='min-h-screen bg-[#040714] font-sans text-white antialiased selection:bg-neon-blue-500/30 selection:text-white'>
-        <div class='relative min-h-screen overflow-hidden'>
-          <div aria-hidden='true' class='pointer-events-none absolute inset-0 overflow-hidden'>
-            <div class='absolute left-[-18%] top-[-22%] h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,_rgba(59,130,246,0.32),rgba(4,7,20,0)_70%)] blur-[150px]' />
-            <div class='absolute right-[-16%] top-[12%] h-[460px] w-[460px] rounded-full bg-[radial-gradient(circle,_rgba(236,72,153,0.28),rgba(5,8,22,0)_72%)] blur-[160px]' />
-            <div class='absolute left-1/2 bottom-[-28%] h-[520px] w-[620px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(34,211,238,0.28),rgba(4,6,18,0)_72%)] blur-[180px]' />
-          </div>
+      <body>
+        <div class='min-h-screen bg-[#040714] font-sans text-white antialiased selection:bg-neon-blue-500/30 selection:text-white'>
+          <div class='relative min-h-screen overflow-hidden'>
+            <div
+              aria-hidden='true'
+              class='pointer-events-none absolute inset-0 overflow-hidden'
+            >
+              <div class='absolute left-[-18%] top-[-22%] h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,_rgba(59,130,246,0.32),rgba(4,7,20,0)_70%)] blur-[150px]' />
+              <div class='absolute right-[-16%] top-[12%] h-[460px] w-[460px] rounded-full bg-[radial-gradient(circle,_rgba(236,72,153,0.28),rgba(5,8,22,0)_72%)] blur-[160px]' />
+              <div class='absolute left-1/2 bottom-[-28%] h-[520px] w-[620px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(34,211,238,0.28),rgba(4,6,18,0)_72%)] blur-[180px]' />
+            </div>
 
-          <main class='relative z-10 flex min-h-screen items-center justify-center px-4 py-10 sm:px-6 lg:px-10'>
-            <div class='w-full max-w-6xl'>
-              <div class='relative flex w-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#050b19]/80 shadow-[0_40px_140px_-60px_rgba(34,211,238,0.8)] backdrop-blur-2xl ring-1 ring-white/10 lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)]'>
-                <div class='relative hidden min-h-[420px] overflow-hidden border-b border-white/5 bg-[#060d1f]/80 lg:flex lg:flex-col'>
-                  <div class='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.32),rgba(4,7,20,0)_72%)] blur-[140px]' />
-                  <img
-                    src={`${baseURL}/assets/logos/RetroArcadeCyberPunkOpenIndustrial.png`}
-                    alt='Open Industrial neon skyline'
-                    class='relative z-10 h-full w-full object-cover object-center'
-                  />
-                  <div class='pointer-events-none absolute inset-0 bg-[linear-gradient(160deg,rgba(5,8,22,0.1) 0%,rgba(5,8,22,0.65) 55%,rgba(5,8,22,0.92) 100%)]' />
-                  <div class='relative z-20 mt-auto flex flex-col gap-3 border-t border-white/5 bg-[#040714]/70 p-8 backdrop-blur-sm'>
-                    <span class='text-xs font-semibold uppercase tracking-[0.42em] text-neon-blue-300'>
-                      Open Industrial
-                    </span>
-                    <p class='text-lg font-semibold text-white/90'>
-                      Telemetry intelligence, neon-fast.
-                    </p>
-                    <p class='text-sm text-neutral-300/90'>
-                      Secure docs, runtime insights, and governed execution signals in one neon
-                      surface.
-                    </p>
-                  </div>
-                </div>
-
-                <div class='relative flex flex-col gap-6 p-6 sm:p-10'>
-                  <div class='flex items-center gap-3'>
-                    <img
-                      src={`${baseURL}/assets/logos/openIndustrialLogoWhiteOpen.svg`}
-                      alt='Open Industrial'
-                      class='h-10 w-auto drop-shadow-[0_0_22px_rgba(59,130,246,0.6)]'
-                    />
-                  </div>
-
-                  <div class='flex flex-col gap-3'>
-                    <p class='text-xs uppercase tracking-[0.38em] text-neon-blue-300'>
-                      Docs Access
-                    </p>
-                    <h1 class='text-3xl font-semibold tracking-tight text-white sm:text-4xl'>
-                      Welcome back.
-                    </h1>
-                    <p class='text-sm text-neutral-300 sm:text-base'>
-                      Sign in with your Open Industrial account to unlock secured documentation and
-                      runtime telemetry.
-                    </p>
-                  </div>
-
-                  <div class='relative -mx-2 flex h-44 overflow-hidden rounded-2xl border border-white/10 bg-[#060d1f]/60 lg:hidden'>
+            <main class='relative z-10 flex min-h-screen items-center justify-center px-4 py-10 sm:px-6 lg:px-10'>
+              <div class='w-full max-w-6xl'>
+                <div class='relative flex w-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#050b19]/80 shadow-[0_40px_140px_-60px_rgba(34,211,238,0.8)] backdrop-blur-2xl ring-1 ring-white/10 lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)]'>
+                  <div class='relative hidden min-h-[420px] overflow-hidden border-b border-white/5 bg-[#060d1f]/80 lg:flex lg:flex-col'>
+                    <div class='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.32),rgba(4,7,20,0)_72%)] blur-[140px]' />
                     <img
                       src={`${baseURL}/assets/logos/RetroArcadeCyberPunkOpenIndustrial.png`}
                       alt='Open Industrial neon skyline'
-                      class='h-full w-full object-cover object-center'
+                      class='relative z-10 h-full w-full object-cover object-center'
                     />
-                    <div class='pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,22,0) 0%,rgba(5,8,22,0.85) 75%)]' />
+                    <div class='pointer-events-none absolute inset-0 bg-[linear-gradient(160deg,rgba(5,8,22,0.1) 0%,rgba(5,8,22,0.65) 55%,rgba(5,8,22,0.92) 100%)]' />
+                    <div class='relative z-20 mt-auto flex flex-col gap-3 border-t border-white/5 bg-[#040714]/70 p-8 backdrop-blur-sm'>
+                      <span class='text-xs font-semibold uppercase tracking-[0.42em] text-neon-blue-300'>
+                        Open Industrial
+                      </span>
+                      <p class='text-lg font-semibold text-white/90'>
+                        Telemetry intelligence, neon-fast.
+                      </p>
+                      <p class='text-sm text-neutral-300/90'>
+                        Secure docs, runtime insights, and governed execution signals in one neon
+                        surface.
+                      </p>
+                    </div>
                   </div>
 
-                  <div
-                    class={`relative isolate max-h-[70vh] overflow-y-auto rounded-2xl border border-white/10 bg-[#060d1f]/70 px-3 py-4 pr-4 shadow-[0_25px_65px_-35px_rgba(59,130,246,0.75)] sm:px-5 sm:py-6 md:max-h-[68vh] lg:max-h-[78vh] ${formEnhancements}`}
-                  >
-                    <Component />
-                  </div>
+                  <div class='relative flex flex-col gap-6 p-6 sm:p-10'>
+                    <div class='flex items-center gap-3'>
+                      <img
+                        src={`${baseURL}/assets/logos/openIndustrialLogoWhiteOpen.svg`}
+                        alt='Open Industrial'
+                        class='h-10 w-auto drop-shadow-[0_0_22px_rgba(59,130,246,0.6)]'
+                      />
+                    </div>
 
-                  <p class='text-xs text-neutral-400'>
-                    Need help?{' '}
-                    <a
-                      class='text-neon-blue-300 underline underline-offset-4 transition-colors duration-200 hover:text-neon-blue-200'
-                      href='mailto:support@openindustrial.ai'
+                    <div class='flex flex-col gap-3'>
+                      <p class='text-xs uppercase tracking-[0.38em] text-neon-blue-300'>
+                        Docs Access
+                      </p>
+                      <h1 class='text-3xl font-semibold tracking-tight text-white sm:text-4xl'>
+                        Welcome back.
+                      </h1>
+                      <p class='text-sm text-neutral-300 sm:text-base'>
+                        Sign in with your Open Industrial account to unlock secured documentation
+                        and runtime telemetry.
+                      </p>
+                    </div>
+
+                    <div class='relative -mx-2 flex h-44 overflow-hidden rounded-2xl border border-white/10 bg-[#060d1f]/60 lg:hidden'>
+                      <img
+                        src={`${baseURL}/assets/logos/RetroArcadeCyberPunkOpenIndustrial.png`}
+                        alt='Open Industrial neon skyline'
+                        class='h-full w-full object-cover object-center'
+                      />
+                      <div class='pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,22,0) 0%,rgba(5,8,22,0.85) 75%)]' />
+                    </div>
+
+                    <div
+                      class={`relative isolate max-h-[70vh] overflow-y-auto rounded-2xl border border-white/10 bg-[#060d1f]/70 px-3 py-4 pr-4 shadow-[0_25px_65px_-35px_rgba(59,130,246,0.75)] sm:px-5 sm:py-6 md:max-h-[68vh] lg:max-h-[78vh] ${formEnhancements}`}
                     >
-                      support@openindustrial.ai
-                    </a>
-                  </p>
+                      <Component />
+                    </div>
+
+                    <p class='text-xs text-neutral-400'>
+                      Need help?{' '}
+                      <a
+                        class='text-neon-blue-300 underline underline-offset-4 transition-colors duration-200 hover:text-neon-blue-200'
+                        href='mailto:support@openindustrial.ai'
+                      >
+                        support@openindustrial.ai
+                      </a>
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </main>
+            </main>
+          </div>
         </div>
       </body>
     </html>
