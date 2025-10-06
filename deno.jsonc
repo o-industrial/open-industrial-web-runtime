@@ -93,9 +93,6 @@
     // "@o-industrial/atomic/tailwind/preset": "../open-industrial-atomic/configs/tailwind/preset.ts",
     // "@o-industrial/atomic/utils": "../open-industrial-atomic/src/utils/.exports.ts",
 
-    "events": "npm:events@3.3.0",
-    "events/": "npm:/events@3.3.0/",
-
     "immer": "npm:immer@10.1.1",
     "json-schema": "npm:json-schema@0.4.0",
     "pdfjs-dist": "npm:pdfjs-dist@5.2.133",
