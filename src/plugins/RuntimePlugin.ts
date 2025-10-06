@@ -10,7 +10,6 @@ import {
   EaCDFSProcessor,
   EaCOAuthProcessor,
   EaCPreactAppProcessor,
-  EaCProxyProcessor,
   EaCRedirectProcessor,
   EaCTailwindProcessor,
 } from '@fathym/eac-applications/processors';
@@ -124,10 +123,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 PathPattern: '*',
                 Priority: 100,
               },
-              home_plasmic: {
-                PathPattern: '/landing*',
-                Priority: 300,
-              },
               msal: {
                 PathPattern: '/azure/oauth/*',
                 Priority: 500,
@@ -237,39 +232,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 ['local:apps/docs', ['tsx']],
               ],
             } as EaCPreactAppProcessor,
-          },
-          home_new: {
-            Details: {
-              Name: 'Synaptic',
-              Description: 'The API for accessing synaptic cricuits',
-            },
-            ModifierResolvers: {},
-            Processor: {
-              Type: 'Proxy',
-              ProxyRoot: 'https://vercel.com/kilian-carrolls-projects/v0-open-industrial-homepage',
-            } as EaCProxyProcessor,
-          },
-          home_plasmic: {
-            Details: {
-              Name: 'Marketing Plasmic Site',
-              Description: 'Marketing Plasmic Home site.',
-            },
-            ModifierResolvers: {
-              baseHref: {
-                Priority: 10000,
-              },
-            },
-            Processor: {
-              Type: 'DFS',
-              DFSLookup: 'abs:public-web',
-              CacheControl: {
-                'text\\/html': `private, max-age=${60 * 5}`,
-                'image\\/': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/javascript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/typescript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-              },
-            } as EaCDFSProcessor,
           },
           home: {
             Details: {

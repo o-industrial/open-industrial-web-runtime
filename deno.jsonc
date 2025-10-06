@@ -29,7 +29,6 @@
   },
   "imports": {
     "@fathym/atomic": "jsr:@fathym/atomic@0.0.185",
-    "@fathym/atomic-design-kit": "jsr:@fathym/atomic-design-kit@0",
     "@fathym/atomic-icons": "jsr:@fathym/atomic-icons@0.0.103",
 
     // "jsr:@fathym/common@0.2.274/http": "../reference-architecture/src/common/http/.exports.ts",
