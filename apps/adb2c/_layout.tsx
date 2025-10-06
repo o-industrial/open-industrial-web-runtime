@@ -19,96 +19,113 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
 export default function ADB2CLayout({ Data, Component, Revision }: PageProps) {
   const baseURL = Data.BaseURL ?? '';
 
-  const formEnhancements = [
-    '[&>#api]:space-y-6',
-    '[&>#api]:text-left',
-    '[&>#api_.heading]:text-3xl',
-    '[&>#api_.heading]:sm:text-4xl',
-    '[&>#api_.heading]:font-semibold',
-    '[&>#api_.heading]:tracking-tight',
-    '[&>#api_.heading]:text-white',
-    '[&>#api_.intro]:text-base',
-    '[&>#api_.intro]:text-neutral-300',
-    '[&>#api_.intro]:max-w-[32ch]',
-    '[&>#api_.error]:mt-2',
-    '[&>#api_.error]:rounded-xl',
-    '[&>#api_.error]:border',
-    '[&>#api_.error]:border-neon-pink-500/40',
-    '[&>#api_.error]:bg-neon-pink-500/10',
-    '[&>#api_.error]:px-4',
-    '[&>#api_.error]:py-3',
-    '[&>#api_.error]:text-neon-pink-200',
-    '[&>#api_.error]:shadow-[0_18px_45px_-25px_rgba(236,72,153,0.65)]',
-    '[&>#api_.error.pageLevel]:text-base',
-    '[&>#api_.error.itemLevel]:text-sm',
-    '[&>#api_.helpLink]:text-neon-blue-300',
-    '[&>#api_.helpLink]:underline',
-    '[&>#api_.helpLink]:underline-offset-4',
-    '[&>#api_form]:mt-6',
-    '[&>#api_form]:space-y-5',
-    '[&>#api_form_label]:text-[0.65rem]',
-    '[&>#api_form_label]:font-semibold',
-    '[&>#api_form_label]:uppercase',
-    '[&>#api_form_label]:tracking-[0.32em]',
-    '[&>#api_form_label]:text-neon-blue-200',
-    '[&>#api_form_input]:mt-2',
-    '[&>#api_form_input]:w-full',
-    '[&>#api_form_input]:rounded-xl',
-    '[&>#api_form_input]:border',
-    '[&>#api_form_input]:border-white/15',
-    '[&>#api_form_input]:bg-white/5',
-    '[&>#api_form_input]:px-4',
-    '[&>#api_form_input]:py-3',
-    '[&>#api_form_input]:text-white',
-    '[&>#api_form_input]:placeholder:text-neutral-400',
-    '[&>#api_form_input]:focus:border-neon-blue-400',
-    '[&>#api_form_input]:focus:outline-none',
-    '[&>#api_form_input]:focus:ring-2',
-    '[&>#api_form_input]:focus:ring-neon-blue-500/60',
-    '[&>#api_form>.entry]:space-y-4',
-    '[&>#api_.buttons]:mt-8',
-    '[&>#api_.buttons>button]:w-full',
-    '[&>#api_.buttons>button]:rounded-xl',
-    '[&>#api_.buttons>button]:px-4',
-    '[&>#api_.buttons>button]:py-3',
-    '[&>#api_.buttons>button]:text-base',
-    '[&>#api_.buttons>button]:font-semibold',
-    '[&>#api_.buttons>button]:tracking-[0.15em]',
-    '[&>#api_.buttons>button]:uppercase',
-    '[&>#api_.buttons>button]:bg-gradient-to-r',
-    '[&>#api_.buttons>button]:from-neon-blue-500',
-    '[&>#api_.buttons>button]:to-neon-purple-500',
-    '[&>#api_.buttons>button]:text-white',
-    '[&>#api_.buttons>button]:shadow-[0_20px_55px_-25px_rgba(59,130,246,0.75)]',
-    '[&>#api_.buttons>button]:transition',
-    '[&>#api_.buttons>button]:duration-200',
-    '[&>#api_.buttons>button]:hover:shadow-[0_28px_70px_-25px_rgba(59,130,246,0.9)]',
-    '[&>#api_.buttons>button:not(:first-child)]:mt-3',
-    '[&>#api_.buttons>button:not(:first-child)]:bg-transparent',
-    '[&>#api_.buttons>button:not(:first-child)]:border',
-    '[&>#api_.buttons>button:not(:first-child)]:border-white/25',
-    '[&>#api_.buttons>button:not(:first-child)]:text-neutral-200',
-    '[&>#api_.buttons>button:not(:first-child)]:shadow-none',
-    '[&>#api_.buttons>button:not(:first-child)]:hover:bg-white/10',
-    '[&>#api_.buttons>button:not(:first-child)]:hover:text-white',
-    '[&>#api_.buttons>button:#emailVerificationControl_but_verify_code]:bg-gradient-to-r',
-    '[&>#api_.buttons>button:#emailVerificationControl_but_verify_code]:from-neon-blue-500',
-    '[&>#api_.buttons>button:#emailVerificationControl_but_verify_code]:to-neon-purple-500',
-    '[&>#api_#forgotPassword]:mt-2',
-    '[&>#api_#forgotPassword]:text-neon-blue-300',
-    '[&>#api_#forgotPassword]:underline',
-    '[&>#api_#forgotPassword]:underline-offset-4',
-    '[&>#api_#forgotPassword]:transition-colors',
-    '[&>#api_#forgotPassword]:duration-200',
-    '[&>#api_#forgotPassword]:hover:text-neon-blue-200',
-    '[&>#api_.create]:mt-6',
-    '[&>#api_.create_#createAccount]:ml-2',
-    '[&>#api_.create_#createAccount]:text-neon-blue-300',
-    '[&>#api_.create_#createAccount]:underline',
-    '[&>#api_.create_#createAccount]:underline-offset-4',
-    '[&>#api_.create_#createAccount]:transition-colors',
-    '[&>#api_.create_#createAccount]:hover:text-neon-blue-200',
-  ].join(' ');
+  const visibleErrorState =
+    ':not(:empty):not([style*="display:none"]):not([style*="display: none"]):not([aria-hidden="true"])';
+
+  const formEnhancements = `
+                [&>#api]:space-y-6
+                [&>#api]:text-left
+
+                [&>#api_.heading]:text-3xl
+                [&>#api_.heading]:sm:text-4xl
+                [&>#api_.heading]:font-semibold
+                [&>#api_.heading]:tracking-tight
+                [&>#api_.heading]:text-white
+
+                [&>#api_.intro]:text-base
+                [&>#api_.intro]:text-neutral-300
+                [&>#api_.intro]:max-w-[32ch]
+
+                [&>#api_.error${visibleErrorState}]:mt-2
+                [&>#api_.error${visibleErrorState}]:rounded-xl
+                [&>#api_.error${visibleErrorState}]:border
+                [&>#api_.error${visibleErrorState}]:border-neon-pink-500/40
+                [&>#api_.error${visibleErrorState}]:bg-neon-pink-500/10
+                [&>#api_.error${visibleErrorState}]:px-4
+                [&>#api_.error${visibleErrorState}]:py-3
+                [&>#api_.error${visibleErrorState}]:text-neon-pink-200
+                [&>#api_.error${visibleErrorState}]:shadow-[0_18px_45px_-25px_rgba(236,72,153,0.65)]
+
+                  [&>#api_.error.pageLevel${visibleErrorState}]:text-base
+                  [&>#api_.error.itemLevel${visibleErrorState}]:text-sm
+
+                [&>#api_.helpLink]:text-neon-blue-300
+                [&>#api_.helpLink]:underline
+                [&>#api_.helpLink]:underline-offset-4
+
+                [&>#api_form]:mt-6
+                  [&>#api_form]:space-y-5
+
+                  [&>#api_form_label]:text-[0.65rem]
+                  [&>#api_form_label]:font-semibold
+                  [&>#api_form_label]:uppercase
+                  [&>#api_form_label]:tracking-[0.32em]
+                  [&>#api_form_label]:text-neon-blue-200
+
+                  [&>#api_form_input]:mt-2
+                  [&>#api_form_input]:w-full
+                  [&>#api_form_input]:rounded-xl
+                  [&>#api_form_input]:border
+                  [&>#api_form_input]:border-white/15
+                  [&>#api_form_input]:bg-white/5
+                  [&>#api_form_input]:px-4
+                  [&>#api_form_input]:py-3
+                  [&>#api_form_input]:text-white
+                  [&>#api_form_input]:placeholder:text-neutral-400
+                  [&>#api_form_input]:focus:border-neon-blue-400
+                  [&>#api_form_input]:focus:outline-none
+                  [&>#api_form_input]:focus:ring-2
+                  [&>#api_form_input]:focus:ring-neon-blue-500/60
+
+                  [&>#api_form>.entry]:space-y-4
+
+                [&>#api_.buttons]:mt-8
+                  [&>#api_.buttons>button]:w-full
+                  [&>#api_.buttons>button]:rounded-xl
+                  [&>#api_.buttons>button]:px-4
+                  [&>#api_.buttons>button]:py-3
+                  [&>#api_.buttons>button]:text-base
+                  [&>#api_.buttons>button]:font-semibold
+                  [&>#api_.buttons>button]:tracking-[0.15em]
+                  [&>#api_.buttons>button]:uppercase
+                  [&>#api_.buttons>button]:bg-gradient-to-r
+                  [&>#api_.buttons>button]:from-neon-blue-500
+                  [&>#api_.buttons>button]:to-neon-purple-500
+                  [&>#api_.buttons>button]:text-white
+                  [&>#api_.buttons>button]:shadow-[0_20px_55px_-25px_rgba(59,130,246,0.75)]
+                  [&>#api_.buttons>button]:transition
+                  [&>#api_.buttons>button]:duration-200
+                  [&>#api_.buttons>button]:hover:shadow-[0_28px_70px_-25px_rgba(59,130,246,0.9)]
+
+                    [&>#api_.buttons>button:not(:first-child)]:mt-3
+                    [&>#api_.buttons>button:not(:first-child)]:bg-transparent
+                    [&>#api_.buttons>button:not(:first-child)]:border
+                    [&>#api_.buttons>button:not(:first-child)]:border-white/25
+                    [&>#api_.buttons>button:not(:first-child)]:text-neutral-200
+                    [&>#api_.buttons>button:not(:first-child)]:shadow-none
+                    [&>#api_.buttons>button:not(:first-child)]:hover:bg-white/10
+                    [&>#api_.buttons>button:not(:first-child)]:hover:text-white
+
+                    [&>#api_.buttons>button:#emailVerificationControl_but_verify_code]:bg-gradient-to-r
+                    [&>#api_.buttons>button:#emailVerificationControl_but_verify_code]:from-neon-blue-500
+                    [&>#api_.buttons>button:#emailVerificationControl_but_verify_code]:to-neon-purple-500
+
+                [&>#api_#forgotPassword]:mt-2
+                [&>#api_#forgotPassword]:text-neon-blue-300
+                [&>#api_#forgotPassword]:underline
+                [&>#api_#forgotPassword]:underline-offset-4
+                [&>#api_#forgotPassword]:transition-colors
+                [&>#api_#forgotPassword]:duration-200
+                [&>#api_#forgotPassword]:hover:text-neon-blue-200
+
+                [&>#api_.create]:mt-6
+                  [&>#api_.create_#createAccount]:ml-2
+                  [&>#api_.create_#createAccount]:text-neon-blue-300
+                  [&>#api_.create_#createAccount]:underline
+                  [&>#api_.create_#createAccount]:underline-offset-4
+                  [&>#api_.create_#createAccount]:transition-colors
+                  [&>#api_.create_#createAccount]:hover:text-neon-blue-200
+  `;
 
   return (
     <html lang='en'>
@@ -176,11 +193,10 @@ export default function ADB2CLayout({ Data, Component, Revision }: PageProps) {
                         Open Industrial
                       </span>
                       <p class='text-lg font-semibold text-white/90'>
-                        Telemetry intelligence, neon-fast.
+                        Telemetry Intelligence, Always On
                       </p>
                       <p class='text-sm text-neutral-300/90'>
-                        Secure docs, runtime insights, and governed execution signals in one neon
-                        surface.
+                        Step back into your Open Industrial &mdash; where insight glows brighter.
                       </p>
                     </div>
                   </div>
@@ -202,8 +218,7 @@ export default function ADB2CLayout({ Data, Component, Revision }: PageProps) {
                         Welcome back.
                       </h1>
                       <p class='text-sm text-neutral-300 sm:text-base'>
-                        Sign in with your Open Industrial account to unlock secured documentation
-                        and runtime telemetry.
+                        Sign in to access your telemetry insights.
                       </p>
                     </div>
 
