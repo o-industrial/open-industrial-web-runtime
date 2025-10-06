@@ -212,10 +212,10 @@ export default function ADB2CLayout({ Data, Component, Revision }: PageProps) {
 
                     <div class='flex flex-col gap-3'>
                       <p class='text-xs uppercase tracking-[0.38em] text-neon-blue-300'>
-                        Docs Access
+                        Data In &mdash; Insights Out
                       </p>
                       <h1 class='text-3xl font-semibold tracking-tight text-white sm:text-4xl'>
-                        Welcome back.
+                        Welcome.
                       </h1>
                       <p class='text-sm text-neutral-300 sm:text-base'>
                         Sign in to access your telemetry insights.
@@ -243,7 +243,7 @@ export default function ADB2CLayout({ Data, Component, Revision }: PageProps) {
                         class='text-neon-blue-300 underline underline-offset-4 transition-colors duration-200 hover:text-neon-blue-200'
                         href='mailto:support@openindustrial.ai'
                       >
-                        support@openindustrial.ai
+                        support@openindustrial.co
                       </a>
                     </p>
                   </div>
