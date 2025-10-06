@@ -287,6 +287,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               ComponentDFSLookups: [
                 ['local:apps/components', ['tsx']],
                 ['local:apps/home', ['tsx']],
+                ['jsr:@o-industrial/atomic', ['tsx']],
               ],
             } as EaCPreactAppProcessor,
           },
@@ -333,10 +334,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 'local:apps/docs',
                 'local:apps/home',
                 'local:apps/src',
-                // 'local:apps/islands',
-                'jsr:@fathym/atomic',
-                'jsr:@fathym/atomic-design-kit',
-                'jsr:@o-industrial/common',
+                'jsr:@o-industrial/atomic',
               ],
               ConfigPath: './tailwind.config.ts',
               StylesTemplatePath: './apps/tailwind/styles.css',
@@ -423,33 +421,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               FileRoot: './src/',
             } as EaCLocalDistributedFileSystemDetails,
           },
-          // 'local:apps/islands': {
-          //   Details: {
-          //     Type: 'Local',
-          //     FileRoot: './apps/islands/',
-          //     Extensions: ['tsx'],
-          //   } as EaCLocalDistributedFileSystemDetails,
-          // },
-          'jsr:@fathym/atomic': {
+          'jsr:@o-industrial/atomic': {
             Details: {
               Type: 'JSR',
-              Package: '@fathym/atomic',
-              Version: '',
-              WorkerPath: import.meta.resolve('@fathym/eac/dfs/workers/jsr'),
-            } as EaCJSRDistributedFileSystemDetails,
-          },
-          'jsr:@fathym/atomic-design-kit': {
-            Details: {
-              Type: 'JSR',
-              Package: '@fathym/atomic-design-kit',
-              Version: '',
-              WorkerPath: import.meta.resolve('@fathym/eac/dfs/workers/jsr'),
-            } as EaCJSRDistributedFileSystemDetails,
-          },
-          'jsr:@o-industrial/common': {
-            Details: {
-              Type: 'JSR',
-              Package: '@o-industrial/common',
+              Package: '@o-industrial/atomic',
               Version: '',
               // FileRoot: './atomic',
               Extensions: ['tsx'],
@@ -458,7 +433,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             //   Type: 'Local',
             //   FileRoot: fromFileUrl(
             //     import.meta.resolve(
-            //       '../../../open-industrial-reference-architecture/'
+            //       '../../../open-industrial-atomic/'
             //     )
             //   ),
             //   Extensions: ['tsx'],
