@@ -1,6 +1,6 @@
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
-import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 // import { ADB2CTestSignIn } from '../components/test-signin.tsx';
 // import { ADB2CTestSignUp } from '../components/test-signup.tsx';
 // import { ADB2CTestPasswordReset } from '../components/test-resetpassword.tsx';

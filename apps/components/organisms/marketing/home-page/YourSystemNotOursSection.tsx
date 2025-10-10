@@ -3,7 +3,7 @@ import {
   AziInnerVoice,
   SystemMindset,
   ThematicPrincipleBlock,
-} from '@o-industrial/common/atomic/molecules';
+} from '@o-industrial/atomic/molecules';
 
 export default function YourSystemNotOursSection() {
   return (

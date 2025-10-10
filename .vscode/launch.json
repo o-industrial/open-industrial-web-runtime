@@ -20,7 +20,7 @@
         "test",
         "--inspect-wait",
         "-A",
-        "tests/tests.ts"
+        "tests/.tests.ts"
       ],
       "attachSimplePort": 9229
     }

@@ -1,7 +1,7 @@
 import { IntentTypes } from '@o-industrial/common/types';
 import { HubspotForm } from '../HubspotForm.tsx';
-import { getIntentStyles } from '@o-industrial/common/atomic/utils';
-import { AziInnerVoice, ThematicPrincipleBlock } from '@o-industrial/common/atomic/molecules';
+import { getIntentStyles } from '@o-industrial/atomic/utils';
+import { AziInnerVoice, ThematicPrincipleBlock } from '@o-industrial/atomic/molecules';
 
 export default function HeroExecutionDeclaration() {
   const primaryText = getIntentStyles(IntentTypes.Primary).text;

@@ -1,6 +1,6 @@
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
-import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 // deno-lint-ignore ban-types
 type ADB2CExceptionPageData = {};

@@ -1,74 +1,49 @@
 # Open Industrial Web Runtime
 
-Admin and workspace web runtime for Open Industrial, built on Deno + Preact and Fathym EaC. It ships a modular admin UI, a workspace portal, and opinionated licensing flows powered by EaC.
+Marketing runtime for Open Industrial built on Deno, Preact, and Fathym EaC. Workspace and admin experiences now live in [open-industrial-workspace-runtime](../open-industrial-workspace-runtime) and [open-industrial-admin-runtime](../open-industrial-admin-runtime).
 
-Highlights
-- Preact + Atomic UI: Uses Fathym Atomic Design Kit components and templates.
-- Deno-first: No install step, type-checking, linting, and formatting via `deno task`.
-- Admin layout: Central `AdminDashboardTemplate` and `AdminNav` live in `apps/admin/_layout.tsx`.
-- Workspaces: ‚ÄúEnterprises‚Äù page is now ‚ÄúWorkspaces‚Äù at `/admin/workspaces`.
-- Licensing UX: Nested, form-first pages with server APIs that redirect on success/failure.
+## Highlights
+- Preact + Atomic UI backed by the shared reference architecture components.
+- Deno-first toolchain (deno task dev/test/check) with Tailwind styling.
+- Public marketing, docs, and blog surfaces under apps/home, apps/docs, apps/blog.
 
-Getting Started
-- Prereqs: Deno (v1.45+ recommended), optional Docker.
-- Configure env: Create `.env` in the repo root. See the existing `.env` for local dev examples; do not use production secrets in development.
-- Run dev: `deno task dev`
-- Run tests: `deno task test`
-- Lint/format/type-check: `deno task build` or individually `deno fmt`, `deno lint`, `deno check **/*.ts{,x}`
+## Getting Started
+1. Install Deno (v1.45+ recommended).
+2. Copy .env (see provided sample) and configure API/auth keys needed for marketing/docs flows.
+3. Run deno task dev for watch mode, or deno task start for a one-off run.
+4. Validate with deno task check and deno task test before committing.
 
-Useful Tasks
-- `deno task dev` ‚Äì Start the dev server with watch.
-- `deno task start` ‚Äì Run the server (no watch).
-- `deno task build` ‚Äì Format, lint, publish dry-run, and test.
-- `deno task check` ‚Äì Format check, lint, type-check TS/TSX.
-- `deno task build:docker` / `deno task deploy:docker` ‚Äì Build and run the Docker image.
+## Key Tasks
+- deno task dev ñ start dev server with file watching.
+- deno task check ñ format check, lint, and type-check.
+- deno task test ñ execute runtime test suite.
+- deno task build ñ run full build validations.
+- Docker helpers: deno task build:docker, deno task refresh:docker.
 
-Project Structure (selected)
-- `apps/admin/_layout.tsx` ‚Äì Admin layout that wraps all admin pages with the dashboard template + nav.
-- `apps/admin/index.tsx` ‚Äì Admin dashboard cards/metrics.
-- `apps/admin/workspaces/index.tsx` ‚Äì Workspaces list and search.
-- `apps/admin/licenses/` ‚Äì Licensing admin pages (see below).
-- `apps/workspace/` ‚Äì Workspace-facing pages.
-- `src/state/OpenIndustrialWebState.ts` ‚Äì Runtime state shared across requests; includes `AdminNavItems` for layout.
+## Project Structure
+- apps/home, apps/docs, apps/blog ñ public marketing & learning content.
+- apps/adb2c ñ Azure AD B2C layout templates.
+- apps/components ñ runtime-specific shared UI pieces.
+- apps/assets ñ static assets served by the runtime.
+- src/plugins ñ runtime plugins (atomic icons, analytics, docs auth).
+- src/state/OpenIndustrialWebState.ts ñ shared request/session state.
 
-Licensing Admin Flow
-The licensing admin has been refactored into nested, form-first pages. Each page posts to a small server API that performs an EaC commit and then redirects back to the next page. Errors are returned via `?error=...` query string.
+## Related Runtimes
+- Workspace UX: [open-industrial-workspace-runtime](../open-industrial-workspace-runtime).
+- Admin dashboards: [open-industrial-admin-runtime](../open-industrial-admin-runtime).
 
-Pages
-- Licenses overview: `apps/admin/licenses/index.tsx`
-- License details + plans + coupons: `apps/admin/licenses/[licLookup]/index.tsx`
-- Plan details + prices: `apps/admin/licenses/[licLookup]/[planLookup]/index.tsx`
-- Price details: `apps/admin/licenses/[licLookup]/[planLookup]/[priceLookup]/index.tsx`
+## Docker
+- Build image: deno task build:docker
+- Create network (optional local compose): deno task network:docker
+- Run container: deno task deploy:docker
 
-APIs (redirect on success/failure)
-- Update license details: `POST /admin/licenses/[licLookup]/api/update`
-  - Accepts form or JSON body with subset of `EaCLicenseStripeDetails` fields (Name, Description, Enabled, PublishableKey, SecretKey, WebhookSecret).
-- Create plan: `POST /admin/licenses/[licLookup]/plans/api/create`
-  - Body: `PlanLookup`
-- Update plan details: `POST /admin/licenses/[licLookup]/[planLookup]/api/update`
-  - Body supports updates for `EaCLicensePlanDetails` fields (Name, Description, Features, Priority, TrialPeriodDays, Featured).
-- Create price: `POST /admin/licenses/[licLookup]/[planLookup]/prices/api/create`
-  - Body: `PriceLookup`
-- Update price details: `POST /admin/licenses/[licLookup]/[planLookup]/[priceLookup]/api/update`
-  - Body supports updates for `EaCLicensePriceDetails` fields (Name, Currency, Interval, Value, Discount).
-- Legacy endpoints updated to redirect
-  - `apps/admin/licenses/api/commit.ts` ‚Äì commit license via form or JSON then redirect.
-  - `apps/admin/licenses/api/delete.ts` ‚Äì delete license via form or JSON then redirect.
+## Troubleshooting
+- Type errors: run deno task check and follow reported locations.
+- Styling: ensure Tailwind output (tailwind/styles.css) is available; dev server injects it automatically.
+- Env vars: confirm .env values match local API endpoints.
 
-UI Conventions
-- Inputs use components from `@o-industrial/common/atomic/atoms` (`Input`, `CheckboxRow`, etc.).
-- For multi-line text, use `<Input multiline />`.
-- Admin pages do not render their own `AdminDashboardTemplate`; the admin layout wraps them.
-
-Docker (optional)
-- Build: `deno task build:docker`
-- Network (local compose): `deno task network:docker`
-- Run: `deno task deploy:docker`
-
-Troubleshooting
-- Type-check failures: run `deno task check` and fix reported files.
-- Styling not applied: ensure Tailwind build is available (dev server injects `tailwind/styles.css`).
-- Env vars: verify `.env` values match your local API endpoints.
-
-License
+## License
 MIT
+
+
+

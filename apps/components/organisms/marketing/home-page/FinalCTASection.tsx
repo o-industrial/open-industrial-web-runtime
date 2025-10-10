@@ -1,6 +1,6 @@
 import { IntentTypes } from '@o-industrial/common/types';
-import { Action, ActionStyleTypes } from '@o-industrial/common/atomic/atoms';
-import { AziInnerVoice } from '@o-industrial/common/atomic/molecules';
+import { Action, ActionStyleTypes } from '@o-industrial/atomic/atoms';
+import { AziInnerVoice } from '@o-industrial/atomic/molecules';
 
 export default function FinalCTASection() {
   return (

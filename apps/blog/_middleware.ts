@@ -1,5 +1,5 @@
 import { EaCRuntimeHandler } from '@fathym/eac/runtime/pipelines';
-import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 // import { agreementsBlockerMiddleware } from '../../src/agreements/agreementsBlockerMiddleware.ts';
 
 export default [

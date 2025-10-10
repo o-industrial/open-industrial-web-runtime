@@ -1,12 +1,7 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
-import {
-  AgentIcon,
-  AppIcon,
-  CompositeSchemaIcon,
-  SignalIcon,
-} from '@o-industrial/common/atomic/icons';
-import { getIntentStyles } from '@o-industrial/common/atomic/utils';
+import { AgentIcon, AppIcon, CompositeSchemaIcon, SignalIcon } from '@o-industrial/atomic/icons';
+import { getIntentStyles } from '@o-industrial/atomic/utils';
 
 type UseCase = {
   icon: FunctionalComponent<{ class?: string }>;

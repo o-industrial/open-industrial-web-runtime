@@ -1,13 +1,20 @@
 import { PageProps } from '@fathym/eac-applications/preact';
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
-import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
 
-import HeroSection from '../components/organisms/marketing/automate/HeroSection.tsx';
-import PainSection from '../components/organisms/marketing/automate/PainSection.tsx';
-import SystemProofSection from '../components/organisms/marketing/automate/SystemProofSection.tsx';
-import JourneySection from '../components/organisms/marketing/automate/JourneySection.tsx';
-import CallToAction from '../components/organisms/marketing/automate/CallToAction.tsx';
-import UseCaseShowcaseSection from '../components/organisms/marketing/automate/UseCaseShowcaseSection.tsx';
+import HeroExperienceSection from '../components/organisms/marketing/open-industrial/home/HeroExperienceSection.tsx';
+import IntroBand from '../components/organisms/marketing/open-industrial/home/IntroBand.tsx';
+import GovernedFlowSection from '../components/organisms/marketing/open-industrial/home/GovernedFlowSection.tsx';
+import AIConversationsSection from '../components/organisms/marketing/open-industrial/home/AIConversationsSection.tsx';
+import ValueDeliverySection from '../components/organisms/marketing/open-industrial/home/ValueDeliverySection.tsx';
+import UnifiedFlowSection from '../components/organisms/marketing/open-industrial/home/UnifiedFlowSection.tsx';
+import WhyOiGuardrailsSection from '../components/organisms/marketing/open-industrial/home/WhyOiGuardrailsSection.tsx';
+import CloudOptionsSection from '../components/organisms/marketing/open-industrial/home/CloudOptionsSection.tsx';
+import FutureVisionSection from '../components/organisms/marketing/open-industrial/home/FutureVisionSection.tsx';
+import ReadyCTASection from '../components/organisms/marketing/open-industrial/home/ReadyCTASection.tsx';
+import WorksWithYourStackSection from '../components/organisms/marketing/open-industrial/home/WorksWithYourStackSection.tsx';
+import { MarketingPageFrame } from '../components/shared/MarketingPageFrame.tsx';
+
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 
@@ -24,20 +31,20 @@ export const handler: EaCRuntimeHandlerSet<
   },
 };
 
-export default function HomepageAttempt2({}: PageProps<HomepageData>) {
+export default function HomePage({}: PageProps<HomepageData>) {
   return (
-    <div class='flex flex-col'>
-      <HeroSection />
-
-      <PainSection />
-
-      <SystemProofSection />
-
-      <JourneySection />
-
-      <UseCaseShowcaseSection />
-
-      <CallToAction />
-    </div>
+    <MarketingPageFrame variant='aurora'>
+      <HeroExperienceSection />
+      <IntroBand />
+      <GovernedFlowSection />
+      <AIConversationsSection />
+      <ValueDeliverySection />
+      <UnifiedFlowSection />
+      <WorksWithYourStackSection />
+      <WhyOiGuardrailsSection />
+      <CloudOptionsSection />
+      <FutureVisionSection />
+      <ReadyCTASection />
+    </MarketingPageFrame>
   );
 }

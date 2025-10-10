@@ -1,9 +1,7 @@
 import { EaCRuntimeHandler } from '@fathym/eac/runtime/pipelines';
-import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
-import { agreementsBlockerMiddleware } from '../../src/agreements/agreementsBlockerMiddleware.ts';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export default [
-  agreementsBlockerMiddleware,
   (_req, ctx) => {
     ctx.Data.CurrentPath = ctx.Runtime.URLMatch.Path;
 

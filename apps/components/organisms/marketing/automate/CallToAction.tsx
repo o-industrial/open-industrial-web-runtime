@@ -1,7 +1,7 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
 import { HubspotForm } from '../HubspotForm.tsx';
-import { getIntentStyles } from '@o-industrial/common/atomic/utils';
+import { getIntentStyles } from '@o-industrial/atomic/utils';
 
 const CallToAction: FunctionalComponent = () => {
   const primary = getIntentStyles(IntentTypes.Primary);

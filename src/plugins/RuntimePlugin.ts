@@ -10,14 +10,15 @@ import {
   EaCDFSProcessor,
   EaCOAuthProcessor,
   EaCPreactAppProcessor,
-  EaCProxyProcessor,
   EaCRedirectProcessor,
   EaCTailwindProcessor,
 } from '@fathym/eac-applications/processors';
 import { EaCDenoKVDetails, EverythingAsCodeDenoKV } from '@fathym/eac-deno-kv';
 import {
   EaCBaseHREFModifierDetails,
+  EaCGoogleTagMgrModifierDetails,
   EaCKeepAliveModifierDetails,
+  EaCMSAppInsightsModifierDetails,
   EaCOAuthModifierDetails,
 } from '@fathym/eac-applications/modifiers';
 import {
@@ -26,10 +27,13 @@ import {
   EaCLocalDistributedFileSystemDetails,
 } from '@fathym/eac/dfs';
 import { EaCAzureADB2CProviderDetails, EaCAzureADProviderDetails } from '@fathym/eac-identity';
-import OpenIndustrialLicensingPlugin from './OpenIndustrialLicensingPlugin.ts';
-import OpenIndustrialMSALPlugin from './OpenIndustrialMSALPlugin.ts';
+import {
+  OpenIndustrialLicensingPlugin,
+  OpenIndustrialMSALPlugin,
+} from '@o-industrial/common/runtimes';
+
 import { EaCMSALProcessor } from '@fathym/msal';
-import { resolveAccessRights } from '../security/AccessRightsResolver.ts';
+import { resolveAccessRights } from '@o-industrial/common/runtimes';
 
 export default class RuntimePlugin implements EaCRuntimePlugin {
   constructor() {}
@@ -77,7 +81,13 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             },
             ModifierResolvers: {
+              googleTagMgr: {
+                Priority: 5000,
+              },
               keepAlive: {
+                Priority: 5000,
+              },
+              msAppInsights: {
                 Priority: 5000,
               },
               oauth: {
@@ -85,12 +95,9 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               },
             },
             ApplicationResolvers: {
-              admin: {
-                PathPattern: '/admin*',
+              adb2c: {
+                PathPattern: '/adb2c*',
                 Priority: 500,
-                IsPrivate: true,
-                IsTriggerSignIn: true,
-                AccessRightLookups: ['Godmin'],
               },
               automateConference: {
                 PathPattern: '/automateconference*',
@@ -111,21 +118,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               docs: {
                 PathPattern: '/docs*',
                 Priority: 500,
-                IsPrivate: true,
-                IsTriggerSignIn: true,
               },
               home: {
                 PathPattern: '*',
                 Priority: 100,
-              },
-              home_plasmic: {
-                PathPattern: '/landing*',
-                Priority: 300,
-              },
-              licensingApi: {
-                PathPattern: '/workspace/api/o-industrial/licensing/*',
-                Priority: 700,
-                IsPrivate: true,
               },
               msal: {
                 PathPattern: '/azure/oauth/*',
@@ -141,12 +137,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 PathPattern: '/tailwind*',
                 Priority: 500,
               },
-              workspace: {
-                PathPattern: '/workspace*',
-                Priority: 500,
-                IsPrivate: true,
-                IsTriggerSignIn: true,
-              },
             },
           },
         },
@@ -161,27 +151,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               AppDFSLookup: 'local:apps/adb2c',
               BypassEaCBase: true,
               ComponentDFSLookups: [['local:apps/adb2c', ['tsx']]],
-            } as EaCPreactAppProcessor,
-          },
-          admin: {
-            Details: {
-              Name: 'Admin Site',
-              Description: 'Admin site.',
-            },
-            ModifierResolvers: {
-              baseHref: {
-                Priority: 10000,
-              },
-            },
-            Processor: {
-              Type: 'PreactApp',
-              AppDFSLookup: 'local:apps/admin',
-              ComponentDFSLookups: [
-                ['local:apps/components', ['tsx']],
-                ['local:apps/admin', ['tsx']],
-                ['jsr:@fathym/atomic', ['tsx']],
-                ['jsr:@fathym/atomic-design-kit', ['tsx']],
-              ],
             } as EaCPreactAppProcessor,
           },
           assets: {
@@ -266,39 +235,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
           },
           home: {
             Details: {
-              Name: 'Synaptic',
-              Description: 'The API for accessing synaptic cricuits',
-            },
-            ModifierResolvers: {},
-            Processor: {
-              Type: 'Proxy',
-              ProxyRoot: 'https://vercel.com/kilian-carrolls-projects/v0-open-industrial-homepage',
-            } as EaCProxyProcessor,
-          },
-          home_plasmic: {
-            Details: {
-              Name: 'Marketing Plasmic Site',
-              Description: 'Marketing Plasmic Home site.',
-            },
-            ModifierResolvers: {
-              baseHref: {
-                Priority: 10000,
-              },
-            },
-            Processor: {
-              Type: 'DFS',
-              DFSLookup: 'abs:public-web',
-              CacheControl: {
-                'text\\/html': `private, max-age=${60 * 5}`,
-                'image\\/': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/javascript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'application\\/typescript': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-                'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
-              },
-            } as EaCDFSProcessor,
-          },
-          home_old: {
-            Details: {
               Name: 'Home Site',
               Description: 'Home site.',
             },
@@ -313,6 +249,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               ComponentDFSLookups: [
                 ['local:apps/components', ['tsx']],
                 ['local:apps/home', ['tsx']],
+                ['jsr:@o-industrial/atomic', ['tsx']],
               ],
             } as EaCPreactAppProcessor,
           },
@@ -327,7 +264,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 MSALSignInOptions: {
                   Scopes: ['https://management.azure.com/user_impersonation'],
                   RedirectURI: '/azure/oauth/callback',
-                  SuccessRedirect: '/workspace',
+                  SuccessRedirect: '/',
                 },
                 MSALSignOutOptions: {
                   ClearSession: false,
@@ -359,10 +296,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 'local:apps/docs',
                 'local:apps/home',
                 'local:apps/src',
-                // 'local:apps/islands',
-                'jsr:@fathym/atomic',
-                'jsr:@fathym/atomic-design-kit',
-                'jsr:@o-industrial/common',
+                'jsr:@o-industrial/atomic',
               ],
               ConfigPath: './tailwind.config.ts',
               StylesTemplatePath: './apps/tailwind/styles.css',
@@ -370,27 +304,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
                 'text\\/css': `public, max-age=${60 * 60 * 24 * 365}, immutable`,
               },
             } as EaCTailwindProcessor,
-          },
-          workspace: {
-            Details: {
-              Name: 'Workspace Site',
-              Description: 'Workspace site.',
-            },
-            ModifierResolvers: {
-              baseHref: {
-                Priority: 10000,
-              },
-            },
-            Processor: {
-              Type: 'PreactApp',
-              AppDFSLookup: 'local:apps/workspace',
-              ComponentDFSLookups: [
-                ['local:apps/components', ['tsx']],
-                ['local:apps/workspace', ['tsx']],
-                ['jsr:@fathym/atomic', ['tsx']],
-                ['jsr:@fathym/atomic-design-kit', ['tsx']],
-              ],
-            } as EaCPreactAppProcessor,
           },
         },
         DenoKVs: {
@@ -425,14 +338,6 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             Details: {
               Type: 'Local',
               FileRoot: './apps/adb2c/',
-            } as EaCLocalDistributedFileSystemDetails,
-          },
-          'local:apps/admin': {
-            Details: {
-              Type: 'Local',
-              FileRoot: './apps/admin/',
-              DefaultFile: 'index.tsx',
-              Extensions: ['tsx'],
             } as EaCLocalDistributedFileSystemDetails,
           },
           'local:apps/assets': {
@@ -478,41 +383,10 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               FileRoot: './src/',
             } as EaCLocalDistributedFileSystemDetails,
           },
-          'local:apps/workspace': {
-            Details: {
-              Type: 'Local',
-              FileRoot: './apps/workspace/',
-              DefaultFile: 'index.tsx',
-              Extensions: ['tsx'],
-            } as EaCLocalDistributedFileSystemDetails,
-          },
-          // 'local:apps/islands': {
-          //   Details: {
-          //     Type: 'Local',
-          //     FileRoot: './apps/islands/',
-          //     Extensions: ['tsx'],
-          //   } as EaCLocalDistributedFileSystemDetails,
-          // },
-          'jsr:@fathym/atomic': {
+          'jsr:@o-industrial/atomic': {
             Details: {
               Type: 'JSR',
-              Package: '@fathym/atomic',
-              Version: '',
-              WorkerPath: import.meta.resolve('@fathym/eac/dfs/workers/jsr'),
-            } as EaCJSRDistributedFileSystemDetails,
-          },
-          'jsr:@fathym/atomic-design-kit': {
-            Details: {
-              Type: 'JSR',
-              Package: '@fathym/atomic-design-kit',
-              Version: '',
-              WorkerPath: import.meta.resolve('@fathym/eac/dfs/workers/jsr'),
-            } as EaCJSRDistributedFileSystemDetails,
-          },
-          'jsr:@o-industrial/common': {
-            Details: {
-              Type: 'JSR',
-              Package: '@o-industrial/common',
+              Package: '@o-industrial/atomic',
               Version: '',
               // FileRoot: './atomic',
               Extensions: ['tsx'],
@@ -521,7 +395,7 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
             //   Type: 'Local',
             //   FileRoot: fromFileUrl(
             //     import.meta.resolve(
-            //       '../../../open-industrial-reference-architecture/'
+            //       '../../../open-industrial-atomic/'
             //     )
             //   ),
             //   Extensions: ['tsx'],
@@ -536,6 +410,14 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Description: 'Adjusts the base HREF of a response based on configureation.',
             } as EaCBaseHREFModifierDetails,
           },
+          googleTagMgr: {
+            Details: {
+              Type: 'GoogleTagMgr',
+              Name: 'Google Tag Manager',
+              Description: 'Adds code to pages to support Google Analytics and other actions',
+              GoogleID: Deno.env.get('GOOGLE_TAGS_ID')!,
+            } as EaCGoogleTagMgrModifierDetails,
+          },
           keepAlive: {
             Details: {
               Type: 'KeepAlive',
@@ -543,6 +425,15 @@ export default class RuntimePlugin implements EaCRuntimePlugin {
               Description: 'Lightweight cache to use that stores data in a DenoKV database.',
               KeepAlivePath: '/_eac/alive',
             } as EaCKeepAliveModifierDetails,
+          },
+          msAppInsights: {
+            Details: {
+              Type: 'MSAppInsights',
+              Name: 'Microsoft Application Insights',
+              Description:
+                'Adds code to pages to support Microsoft Azure Application Insights and other actions',
+              InstrumentationKey: Deno.env.get('APP_INSIGHTS_INSTRUMENTATION_KEY')!,
+            } as EaCMSAppInsightsModifierDetails,
           },
           oauth: {
             Details: {

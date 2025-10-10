@@ -1,6 +1,6 @@
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
 import { PageProps } from '@fathym/eac-applications/preact';
-import { OpenIndustrialWebState } from '../../src/state/OpenIndustrialWebState.ts';
+import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
   async GET(_req, ctx) {
@@ -17,145 +17,239 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
 };
 
 export default function ADB2CLayout({ Data, Component, Revision }: PageProps) {
+  const baseURL = Data.BaseURL ?? '';
+
+  const visibleErrorState =
+    ':not(:empty):not([style*="display:none"]):not([style*="display: none"]):not([aria-hidden="true"])';
+
+  const formEnhancements = `
+                [&>#api]:space-y-6
+                [&>#api]:text-left
+
+                [&>#api_.heading]:text-3xl
+                [&>#api_.heading]:sm:text-4xl
+                [&>#api_.heading]:font-semibold
+                [&>#api_.heading]:tracking-tight
+                [&>#api_.heading]:text-white
+
+                [&>#api_.intro]:text-base
+                [&>#api_.intro]:text-neutral-300
+                [&>#api_.intro]:max-w-[32ch]
+
+                [&>#api_.error${visibleErrorState}]:mt-2
+                [&>#api_.error${visibleErrorState}]:rounded-xl
+                [&>#api_.error${visibleErrorState}]:border
+                [&>#api_.error${visibleErrorState}]:border-neon-pink-500/40
+                [&>#api_.error${visibleErrorState}]:bg-neon-pink-500/10
+                [&>#api_.error${visibleErrorState}]:px-4
+                [&>#api_.error${visibleErrorState}]:py-3
+                [&>#api_.error${visibleErrorState}]:text-neon-pink-200
+                [&>#api_.error${visibleErrorState}]:shadow-[0_18px_45px_-25px_rgba(236,72,153,0.65)]
+
+                  [&>#api_.error.pageLevel${visibleErrorState}]:text-base
+                  [&>#api_.error.itemLevel${visibleErrorState}]:text-sm
+
+                [&>#api_.helpLink]:text-neon-blue-300
+                [&>#api_.helpLink]:underline
+                [&>#api_.helpLink]:underline-offset-4
+
+                [&>#api_form]:mt-6
+                  [&>#api_form]:space-y-5
+
+                  [&>#api_form_label]:text-[0.65rem]
+                  [&>#api_form_label]:font-semibold
+                  [&>#api_form_label]:uppercase
+                  [&>#api_form_label]:tracking-[0.32em]
+                  [&>#api_form_label]:text-neon-blue-200
+
+                  [&>#api_form_input]:mt-2
+                  [&>#api_form_input]:w-full
+                  [&>#api_form_input]:rounded-xl
+                  [&>#api_form_input]:border
+                  [&>#api_form_input]:border-white/15
+                  [&>#api_form_input]:bg-white/5
+                  [&>#api_form_input]:px-4
+                  [&>#api_form_input]:py-3
+                  [&>#api_form_input]:text-white
+                  [&>#api_form_input]:placeholder:text-neutral-400
+                  [&>#api_form_input]:focus:border-neon-blue-400
+                  [&>#api_form_input]:focus:outline-none
+                  [&>#api_form_input]:focus:ring-2
+                  [&>#api_form_input]:focus:ring-neon-blue-500/60
+
+                  [&>#api_form>.entry]:space-y-4
+
+                [&>#api_.buttons]:mt-8
+                  [&>#api_.buttons>button]:w-full
+                  [&>#api_.buttons>button]:rounded-xl
+                  [&>#api_.buttons>button]:px-4
+                  [&>#api_.buttons>button]:py-3
+                  [&>#api_.buttons>button]:text-base
+                  [&>#api_.buttons>button]:font-semibold
+                  [&>#api_.buttons>button]:tracking-[0.15em]
+                  [&>#api_.buttons>button]:uppercase
+                  [&>#api_.buttons>button]:bg-gradient-to-r
+                  [&>#api_.buttons>button]:from-neon-blue-500
+                  [&>#api_.buttons>button]:to-neon-purple-500
+                  [&>#api_.buttons>button]:text-white
+                  [&>#api_.buttons>button]:shadow-[0_20px_55px_-25px_rgba(59,130,246,0.75)]
+                  [&>#api_.buttons>button]:transition
+                  [&>#api_.buttons>button]:duration-200
+                  [&>#api_.buttons>button]:hover:shadow-[0_28px_70px_-25px_rgba(59,130,246,0.9)]
+
+                    [&>#api_.buttons>button:not(:first-child)]:mt-3
+                    [&>#api_.buttons>button:not(:first-child)]:bg-transparent
+                    [&>#api_.buttons>button:not(:first-child)]:border
+                    [&>#api_.buttons>button:not(:first-child)]:border-white/25
+                    [&>#api_.buttons>button:not(:first-child)]:text-neutral-200
+                    [&>#api_.buttons>button:not(:first-child)]:shadow-none
+                    [&>#api_.buttons>button:not(:first-child)]:hover:bg-white/10
+                    [&>#api_.buttons>button:not(:first-child)]:hover:text-white
+
+                    [&>#api_.buttons>button:#emailVerificationControl_but_verify_code]:bg-gradient-to-r
+                    [&>#api_.buttons>button:#emailVerificationControl_but_verify_code]:from-neon-blue-500
+                    [&>#api_.buttons>button:#emailVerificationControl_but_verify_code]:to-neon-purple-500
+
+                [&>#api_#forgotPassword]:mt-2
+                [&>#api_#forgotPassword]:text-neon-blue-300
+                [&>#api_#forgotPassword]:underline
+                [&>#api_#forgotPassword]:underline-offset-4
+                [&>#api_#forgotPassword]:transition-colors
+                [&>#api_#forgotPassword]:duration-200
+                [&>#api_#forgotPassword]:hover:text-neon-blue-200
+
+                [&>#api_.create]:mt-6
+                  [&>#api_.create_#createAccount]:ml-2
+                  [&>#api_.create_#createAccount]:text-neon-blue-300
+                  [&>#api_.create_#createAccount]:underline
+                  [&>#api_.create_#createAccount]:underline-offset-4
+                  [&>#api_.create_#createAccount]:transition-colors
+                  [&>#api_.create_#createAccount]:hover:text-neon-blue-200
+  `;
+
   return (
-    <html>
+    <html lang='en'>
       <head>
         <meta charset='utf-8' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
 
-        <title>Pirata Games - Sign In and Sign Up</title>
+        <title>Open Industrial - Secure Sign In</title>
+        <meta
+          name='description'
+          content='Sign in with your Open Industrial identity to access secured documentation, telemetry, and runtime tooling.'
+        />
+        <meta name='theme-color' content='#050816' />
 
         <link
           rel='shortcut icon'
           type='image/png'
-          href={`${Data.BaseURL}/assets/PirataForsaken.png`}
+          href={`${baseURL}/assets/favicon.ico`}
           data-eac-bypass-base
         />
 
+        <link rel='preconnect' href='https://fonts.googleapis.com' />
+        <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
         <link
-          href='https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap'
-          rel='stylesheet'
-        />
-        <link
-          href='https://fonts.googleapis.com/css2?family=Pirata+One&display=swap'
+          href='https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@300;400;500;600;700&display=swap'
           rel='stylesheet'
         />
 
         <link
           rel='stylesheet'
-          href={`${Data.BaseURL}/tailwind/styles.css?Revision=${Revision}`}
+          href={`${baseURL}/tailwind/styles.css?Revision=${Revision}`}
         />
 
         <link
           rel='stylesheet'
-          href={`${Data.BaseURL}/assets/adb2c/page/layouts/styles.css?Revision=${Revision}`}
+          href={`${baseURL}/assets/adb2c/page/layouts/styles.css?Revision=${Revision}`}
         />
       </head>
 
       <body>
-        <div class='font-merriweather bg-slate-50 dark:bg-slate-900 text-black dark:text-white h-full overflow-hidden'>
-          <div
-            class='relative w-screen h-screen bg-cover bg-center bg-no-repeat'
-            style={{
-              backgroundImage: `url('${Data.BaseURL}/assets/open-industrial-background.png')`,
-            }}
-          >
-            <div class='flex items-center justify-center h-full overflow-hidden'>
-              <div class='bg-white dark:bg-slate-800 shadow-lg rounded-lg px-4 pb-2 md:px-8 md:pb-4 max-h-[95%] sm:max-h-[80%] md:max-h-[65%] landscape:max-h-[95%] max-w-[95%] sm:max-w-md md:max-w-lg w-full transform transition-transform duration-300 hover:scale-115 hover:shadow-2xl overflow-auto relative'>
-                <div class='w-full sticky landscape:relative top-0 bg-white dark:bg-slate-800'>
-                  <img
-                    class='companyLogo w-[80%] landscape:w-[60%] m-auto '
-                    data-tenant-branding-logo='true'
-                    src={`${Data.BaseURL}/assets/logos/openIndustrialLogo.svg`}
-                    alt='Pirata Games'
-                  />
-                </div>
+        <div class='min-h-screen bg-[#040714] font-sans text-white antialiased selection:bg-neon-blue-500/30 selection:text-white'>
+          <div class='relative min-h-screen overflow-hidden'>
+            <div
+              aria-hidden='true'
+              class='pointer-events-none absolute inset-0 overflow-hidden'
+            >
+              <div class='absolute left-[-18%] top-[-22%] h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,_rgba(59,130,246,0.32),rgba(4,7,20,0)_70%)] blur-[150px]' />
+              <div class='absolute right-[-16%] top-[12%] h-[460px] w-[460px] rounded-full bg-[radial-gradient(circle,_rgba(236,72,153,0.28),rgba(5,8,22,0)_72%)] blur-[160px]' />
+              <div class='absolute left-1/2 bottom-[-28%] h-[520px] w-[620px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(34,211,238,0.28),rgba(4,6,18,0)_72%)] blur-[180px]' />
+            </div>
 
-                <div class='
-                    m-1
-                    [&>#api_.error]:text-red-500
+            <main class='relative z-10 flex min-h-screen items-center justify-center px-4 py-10 sm:px-6 lg:px-10'>
+              <div class='w-full max-w-6xl'>
+                <div class='relative flex w-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#050b19]/80 shadow-[0_40px_140px_-60px_rgba(34,211,238,0.8)] backdrop-blur-2xl ring-1 ring-white/10 lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)]'>
+                  <div class='relative hidden min-h-[420px] overflow-hidden border-b border-white/5 bg-[#060d1f]/80 lg:flex lg:flex-col'>
+                    <div class='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.32),rgba(4,7,20,0)_72%)] blur-[140px]' />
+                    <img
+                      src={`${baseURL}/assets/logos/RetroArcadeCyberPunkOpenIndustrial.png`}
+                      alt='Open Industrial neon skyline'
+                      class='relative z-10 h-full w-full object-cover object-center'
+                    />
+                    <div class='pointer-events-none absolute inset-0 bg-[linear-gradient(160deg,rgba(5,8,22,0.1) 0%,rgba(5,8,22,0.65) 55%,rgba(5,8,22,0.92) 100%)]' />
+                    <div class='relative z-20 mt-auto flex flex-col gap-3 border-t border-white/5 bg-[#040714]/70 p-8 backdrop-blur-sm'>
+                      <span class='text-xs font-semibold uppercase tracking-[0.42em] text-neon-blue-300'>
+                        Open Industrial
+                      </span>
+                      <p class='text-lg font-semibold text-white/90'>
+                        Telemetry Intelligence, Always On
+                      </p>
+                      <p class='text-sm text-neutral-300/90'>
+                        Step back into your Open Industrial &mdash; where insight glows brighter.
+                      </p>
+                    </div>
+                  </div>
 
-                    [&>#api_.error.pageLevel]:text-lg 
-                    
-                    [&>#api_.error.itemLevel]:text-base 
-                      
-                    [&>#api_.helpLink]:text-blue-600 
-                    [&>#api_.helpLink]:text-base 
-                    dark:[&>#api_.helpLink]:text-blue-400 
-                      
-                    [&>#api_.heading]:font-semibold  
-                    [&>#api_.heading]:font-pirata  
-                    [&>#api_.heading]:text-xl  
-                    [&>#api_.heading]:tracking-wide
-                          
-                    [&>#api_.intro]:font-semibold  
-                    [&>#api_.intro]:font-pirata  
-                    [&>#api_.intro]:text-lg  
-                    [&>#api_.intro]:tracking-wide
+                  <div class='relative flex flex-col gap-6 p-6 sm:p-10'>
+                    <div class='flex items-center gap-3'>
+                      <img
+                        src={`${baseURL}/assets/logos/openIndustrialLogoWhiteOpen.svg`}
+                        alt='Open Industrial'
+                        class='h-10 w-auto drop-shadow-[0_0_22px_rgba(59,130,246,0.6)]'
+                      />
+                    </div>
 
-                    [&>#api_form]:mt-2 
-                      [&>#api_form_label]:font-bold  
-                      [&>#api_form_label]:font-pirata  
-                      [&>#api_form_label]:text-2xl  
-                      [&>#api_form_label]:tracking-wider
+                    <div class='flex flex-col gap-3'>
+                      <p class='text-xs uppercase tracking-[0.38em] text-neon-blue-300'>
+                        Data In &mdash; Insights Out
+                      </p>
+                      <h1 class='text-3xl font-semibold tracking-tight text-white sm:text-4xl'>
+                        Welcome.
+                      </h1>
+                      <p class='text-sm text-neutral-300 sm:text-base'>
+                        Sign in to access your telemetry insights.
+                      </p>
+                    </div>
 
-                      [&>#api_form_input]:border 
-                      [&>#api_form_input]:border-gray-300 
-                      [&>#api_form_input]:focus:border-blue-500 
-                      [&>#api_form_input]:focus:ring-blue-500 
-                      [&>#api_form_input]:px-4 
-                      [&>#api_form_input]:py-2 
-                      [&>#api_form_input]:rounded-md 
-                      [&>#api_form_input]:text-black
-                      [&>#api_form_input]:w-full 
-                      dark:[&>#api_form_input]:border-gray-600 
-                      
-                      [&>#api_form>.entry]:mt-2
-                        [&>#api_form>.entry>.entry-item]:mt-4
-                        
-                      [&>#api_form_.Password]:mt-2
-                        [&>#api_form_.Password>.attrEntry]:mt-4
+                    <div class='relative -mx-2 flex h-44 overflow-hidden rounded-2xl border border-white/10 bg-[#060d1f]/60 lg:hidden'>
+                      <img
+                        src={`${baseURL}/assets/logos/RetroArcadeCyberPunkOpenIndustrial.png`}
+                        alt='Open Industrial neon skyline'
+                        class='h-full w-full object-cover object-center'
+                      />
+                      <div class='pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,22,0) 0%,rgba(5,8,22,0.85) 75%)]' />
+                    </div>
 
-                      [&>#api_form>.divider]:hidden 
-                      
-                    [&>#api_.buttons]:mt-4 
-                    [&>#api_.buttons>button]:bg-blue-600 
-                    [&>#api_.buttons>button]:font-pirata 
-                    [&>#api_.buttons>button]:font-semibold 
-                    [&>#api_.buttons>button]:hover:bg-blue-700 
-                    [&>#api_.buttons>button]:py-2 
-                    [&>#api_.buttons>button]:rounded-md 
-                    [&>#api_.buttons>button]:text-white 
-                    [&>#api_.buttons>button]:text-xl 
-                    [&>#api_.buttons>button]:w-full 
-                      [&>#api_.buttons>button:not(:first-child)]:mt-1  
-                      [&>#api_.buttons>button:not(:first-child)]:bg-transparent 
-                      [&>#api_.buttons>button:not(:first-child)]:border 
-                      [&>#api_.buttons>button:not(:first-child)]:border-gray-500 
-                      [&>#api_.buttons>button:not(:first-child)]:hover:bg-gray-100 
-                      dark:[&>#api_.buttons>button:not(:first-child)]:border-gray-400 
-                      dark:[&>#api_.buttons>button:not(:first-child)]:hover:bg-gray-700
+                    <div
+                      class={`relative isolate max-h-[70vh] overflow-y-auto rounded-2xl border border-white/10 bg-[#060d1f]/70 px-3 py-4 pr-4 shadow-[0_25px_65px_-35px_rgba(59,130,246,0.75)] sm:px-5 sm:py-6 md:max-h-[68vh] lg:max-h-[78vh] ${formEnhancements}`}
+                    >
+                      <Component />
+                    </div>
 
-                      [&>#api_.buttons>button:#emailVerificationControl_but_verify_code]:mt-1  
-                      [&>#api_.buttons>button:#emailVerificationControl_but_verify_code]:bg-blue-600 
-                      [&>#api_.buttons>button:#emailVerificationControl_but_verify_code]:hover:bg-blue-700 
-                      [&>#api_.buttons>button:#emailVerificationControl_but_verify_code]:border-none
-
-                    [&>#api_#forgotPassword]:ml-2  
-                    [&>#api_#forgotPassword]:text-blue-600 
-                    [&>#api_#forgotPassword]:text-base 
-                    dark:[&>#api_#forgotPassword]:text-blue-400 
-                    
-                    [&>#api_.create]:mt-2 
-                      [&>#api_.create_#createAccount]:ml-2  
-                      [&>#api_.create_#createAccount]:text-blue-600 
-                      [&>#api_.create_#createAccount]:text-base 
-                      dark:[&>#api_.create_#createAccount]:text-blue-400 
-                  '>
-                  <Component />
+                    <p class='text-xs text-neutral-400'>
+                      Need help?{' '}
+                      <a
+                        class='text-neon-blue-300 underline underline-offset-4 transition-colors duration-200 hover:text-neon-blue-200'
+                        href='mailto:support@openindustrial.ai'
+                      >
+                        support@openindustrial.co
+                      </a>
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </main>
           </div>
         </div>
       </body>
