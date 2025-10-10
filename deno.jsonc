@@ -75,7 +75,7 @@
 
     "@fathym/ioc": "jsr:@fathym/ioc@0.0.15",
 
-    "@fathym/msal": "jsr:@fathym/msal@0.0.58",
+    "@fathym/msal": "jsr:@fathym/msal@0.0.59",
     // "@fathym/msal": "../msal/mod.ts",
 
     "@o-industrial/common": "jsr:@o-industrial/common@0.0.487",
