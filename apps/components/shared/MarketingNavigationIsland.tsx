@@ -12,6 +12,18 @@ import { useCaseOverview } from '../../../src/marketing/use-cases.ts';
 
 export const IsIsland = true;
 
+function normalizeHref(href: string): string {
+  if (!href) {
+    return '';
+  }
+
+  if (href === '/') {
+    return '/';
+  }
+
+  return href.replace(/\/+$/, '') || '/';
+}
+
 const solutionsMenuItems = [
   { label: 'Overview', href: '/solutions' },
   ...solutionOverview.map((solution) => ({
@@ -50,25 +62,26 @@ export default function MarketingNavigationIsland(
   const { links, megaMenuGroups: incomingGroups, ...rest } = props;
 
   const mergedGroups = useMemo(() => {
-    const hrefs = new Set(links.map((link) => link.href));
+    const hrefs = new Set(links.map((link) => normalizeHref(link.href)));
     const groups = new Map<string, MarketingNavMegaMenuGroup>();
 
     for (const group of incomingGroups ?? []) {
-      if (hrefs.has(group.triggerHref) && group.items.length) {
-        groups.set(group.triggerHref, group);
+      const triggerHref = normalizeHref(group.triggerHref);
+      if (hrefs.has(triggerHref) && group.items.length) {
+        groups.set(triggerHref, group);
       }
     }
 
-    if (hrefs.has(solutionsGroup.triggerHref) && solutionsGroup.items.length) {
-      groups.set(solutionsGroup.triggerHref, solutionsGroup);
+    const normalizedSolutionsHref = normalizeHref(solutionsGroup.triggerHref);
+    if (hrefs.has(normalizedSolutionsHref) && solutionsGroup.items.length) {
+      groups.set(normalizedSolutionsHref, solutionsGroup);
     }
 
-    if (
-      useCasesGroup &&
-      hrefs.has(useCasesGroup.triggerHref) &&
-      useCasesGroup.items.length
-    ) {
-      groups.set(useCasesGroup.triggerHref, useCasesGroup);
+    if (useCasesGroup && useCasesGroup.items.length) {
+      const normalizedUseCasesHref = normalizeHref(useCasesGroup.triggerHref);
+      if (hrefs.has(normalizedUseCasesHref)) {
+        groups.set(normalizedUseCasesHref, useCasesGroup);
+      }
     }
 
     return Array.from(groups.values());

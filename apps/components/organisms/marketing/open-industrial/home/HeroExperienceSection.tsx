@@ -57,7 +57,7 @@ export default function HeroExperienceSection(): JSX.Element {
         tone='default'
         width='wide'
         contentClass='relative mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 pb-24 pt-20 text-white lg:flex-row lg:items-center lg:gap-16'
-        class='relative overflow-hidden rounded-b-[56px] border border-white/10 bg-gradient-to-br from-[#050713] via-[#0c1030] to-[#04060f] shadow-[0_140px_320px_-180px_rgba(236,72,153,0.55)]'
+        class='relative overflow-hidden border border-white/10 bg-gradient-to-br from-[#050713] via-[#0c1030] to-[#04060f] shadow-[0_140px_320px_-180px_rgba(236,72,153,0.55)]'
       >
         <div aria-hidden='true' class='pointer-events-none absolute inset-0'>
           <div class='absolute left-[-10%] top-[-20%] h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,_rgba(236,72,153,0.35),rgba(7,8,20,0)_78%)] blur-[190px]' />

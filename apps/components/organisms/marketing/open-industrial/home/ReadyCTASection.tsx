@@ -55,7 +55,7 @@ export default function ReadyCTASection(): JSX.Element {
       tone='default'
       width='wide'
       contentClass='relative mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-6 py-20 text-center'
-      class='relative overflow-hidden rounded-t-[48px] border border-neutral-200/70 bg-white shadow-[0_50px_150px_-110px_rgba(15,23,42,0.2)] dark:border-white/10 dark:bg-slate-950 dark:shadow-[0_70px_210px_-130px_rgba(15,23,42,0.75)]'
+      class='relative overflow-hidden border border-neutral-200/70 bg-white shadow-[0_50px_150px_-110px_rgba(15,23,42,0.2)] dark:border-white/10 dark:bg-slate-950 dark:shadow-[0_70px_210px_-130px_rgba(15,23,42,0.75)]'
     >
       <div class='pointer-events-none absolute inset-0 opacity-60'>
         <div class='absolute left-1/2 top-[-12%] h-64 w-64 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,_rgba(129,140,248,0.16),_rgba(255,255,255,0)_72%)] blur-[150px] dark:bg-[radial-gradient(circle,_rgba(129,140,248,0.28),_rgba(8,12,26,0)_72%)]' />
