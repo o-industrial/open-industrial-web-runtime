@@ -1,6 +1,6 @@
 import type { JSX } from 'preact';
 
-import { SectionSurface } from '@o-industrial/atomic/atoms';
+import { GlowPill, SectionSurface } from '@o-industrial/atomic/atoms';
 
 import { homeContent } from '../../../../../../src/marketing/home.ts';
 
@@ -10,10 +10,19 @@ function PreHeadline({ value }: { value?: string }): JSX.Element | null {
   }
 
   return (
-    <span class='inline-flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-[0.32em] text-neutral-600 dark:text-neutral-300'>
-      <span class='h-2 w-2 rounded-full bg-gradient-to-br from-neon-blue-500 via-neon-purple-500 to-neon-pink-500 shadow-[0_0_12px_rgba(129,140,248,0.55)]' />
+    <GlowPill
+      size='sm'
+      uppercase
+      accentDotClass='bg-gradient-to-br from-neon-blue-500 via-neon-purple-500 to-neon-pink-500 shadow-[0_0_12px_rgba(129,140,248,0.55)]'
+      backgroundClass='bg-transparent'
+      borderClass='border-0'
+      textClass='text-[0.65rem] font-semibold text-neutral-600 dark:text-neutral-300'
+      shadowClass='shadow-none'
+      paddingClass='px-0 py-0 text-[0.65rem] font-semibold'
+      class='gap-2'
+    >
       {value}
-    </span>
+    </GlowPill>
   );
 }
 
@@ -255,19 +264,36 @@ export default function WorksWithYourStackSection(): JSX.Element {
               />
 
               <header class='relative z-10 flex justify-center sm:hidden'>
-                <span class='inline-flex items-center gap-3 rounded-full border border-white/40 bg-gradient-to-r from-white/95 via-white/80 to-white/70 px-5 py-2 text-sm font-semibold uppercase tracking-[0.28em] text-neutral-900 shadow-[0_0_22px_rgba(129,140,248,0.4)] backdrop-blur dark:border-white/15 dark:bg-gradient-to-r dark:from-slate-950/90 dark:via-slate-950/85 dark:to-slate-900/75 dark:text-white'>
-                  <span class='h-2 w-2 rounded-full bg-gradient-to-br from-neon-blue-500 via-neon-purple-500 to-neon-pink-500 shadow-[0_0_10px_rgba(129,140,248,0.6)]' />
+                <GlowPill
+                  uppercase
+                  accentDotClass='bg-gradient-to-br from-neon-blue-500 via-neon-purple-500 to-neon-pink-500 shadow-[0_0_10px_rgba(129,140,248,0.6)]'
+                  backgroundClass='bg-gradient-to-r from-white/95 via-white/80 to-white/70 dark:from-slate-950/90 dark:via-slate-950/85 dark:to-slate-900/75'
+                  borderClass='border border-white/40 dark:border-white/15'
+                  textClass='text-sm font-semibold text-neutral-900 dark:text-white'
+                  shadowClass='shadow-[0_0_22px_rgba(129,140,248,0.4)]'
+                  paddingClass='px-5 py-2 text-sm font-semibold'
+                  class='justify-center'
+                >
                   {category.title}
-                </span>
+                </GlowPill>
               </header>
 
               <div class='relative z-10 hidden h-[260px] w-full sm:block'>
                 <div class='absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center'>
                   <div class='absolute -inset-12 rounded-full bg-[radial-gradient(circle,_rgba(129,140,248,0.18),rgba(255,255,255,0)_78%)] opacity-75 blur-[90px] dark:bg-[radial-gradient(circle,_rgba(88,28,135,0.32),rgba(6,10,25,0)_80%)]' />
-                  <h3 class='relative inline-flex items-center gap-3 rounded-full border border-white/45 bg-gradient-to-r from-white/96 via-white/90 to-white/70 px-8 py-3.5 text-sm font-semibold uppercase tracking-[0.34em] text-neutral-900 shadow-[0_0_35px_rgba(129,140,248,0.48)] backdrop-blur dark:border-white/20 dark:bg-gradient-to-r dark:from-slate-950/95 dark:via-slate-950/90 dark:to-slate-900/80 dark:text-white dark:shadow-[0_0_42px_rgba(129,140,248,0.55)]'>
-                    <span class='h-2.5 w-2.5 rounded-full bg-gradient-to-br from-neon-blue-500 via-neon-purple-500 to-neon-pink-500 shadow-[0_0_12px_rgba(129,140,248,0.65)]' />
+                  <GlowPill
+                    as='h3'
+                    uppercase
+                    accentDotClass='bg-gradient-to-br from-neon-blue-500 via-neon-purple-500 to-neon-pink-500 shadow-[0_0_12px_rgba(129,140,248,0.65)]'
+                    backgroundClass='bg-gradient-to-r from-white/96 via-white/90 to-white/70 dark:from-slate-950/95 dark:via-slate-950/90 dark:to-slate-900/80'
+                    borderClass='border border-white/45 dark:border-white/20'
+                    textClass='text-sm font-semibold text-neutral-900 dark:text-white'
+                    shadowClass='shadow-[0_0_35px_rgba(129,140,248,0.48)] dark:shadow-[0_0_42px_rgba(129,140,248,0.55)]'
+                    paddingClass='px-8 py-3.5 text-sm font-semibold uppercase tracking-[0.34em]'
+                    class='gap-3'
+                  >
                     {category.title}
-                  </h3>
+                  </GlowPill>
                 </div>
                 {category.items.map((item, itemIndex) => {
                   const coordinates = positions[itemIndex];
@@ -305,27 +331,37 @@ export default function WorksWithYourStackSection(): JSX.Element {
                   const style = styleParts.join(';');
 
                   return (
-                    <span
+                    <GlowPill
                       key={item}
                       style={style}
-                      class={`absolute inline-flex translate-y-0 items-center gap-3 rounded-full border border-white/35 bg-gradient-to-r from-white/95 via-white/85 to-white/75 px-4 py-2 text-sm font-semibold text-neutral-900 shadow-[0_0_25px_rgba(59,130,246,0.25)] backdrop-blur transition-all duration-300 hover:scale-[1.03] whitespace-nowrap dark:border-white/15 dark:bg-gradient-to-r dark:from-slate-950/90 dark:via-slate-950/80 dark:to-slate-900/75 dark:text-white ${accent.shadow}`}
+                      backgroundClass='bg-gradient-to-r from-white/95 via-white/85 to-white/75 dark:from-slate-950/90 dark:via-slate-950/80 dark:to-slate-900/75'
+                      borderClass='border border-white/35 dark:border-white/15'
+                      textClass='text-sm font-semibold text-neutral-900 dark:text-white'
+                      shadowClass={accent.shadow}
+                      paddingClass='px-4 py-2 text-sm font-semibold'
+                      accentDotClass={accent.dot}
+                      class='absolute translate-y-0 whitespace-nowrap transition-all duration-300 hover:scale-[1.03]'
                     >
-                      <span class={`h-2.5 w-2.5 rounded-full ${accent.dot}`} />
                       {item}
-                    </span>
+                    </GlowPill>
                   );
                 })}
               </div>
 
               <div class='relative z-10 flex flex-col gap-3 text-sm text-neutral-700 sm:hidden dark:text-neutral-200'>
                 {category.items.map((item) => (
-                  <span
+                  <GlowPill
                     key={item}
-                    class={`inline-flex items-center gap-3 self-center rounded-full border border-white/35 bg-gradient-to-r from-white/95 via-white/80 to-white/70 px-4 py-2 font-semibold text-neutral-900 shadow-[0_0_18px_rgba(59,130,246,0.22)] backdrop-blur whitespace-nowrap dark:border-white/15 dark:bg-gradient-to-r dark:from-slate-950/90 dark:via-slate-950/80 dark:to-slate-900/70 dark:text-white ${accent.shadow}`}
+                    backgroundClass='bg-gradient-to-r from-white/95 via-white/80 to-white/70 dark:from-slate-950/90 dark:via-slate-950/80 dark:to-slate-900/70'
+                    borderClass='border border-white/35 dark:border-white/15'
+                    textClass='font-semibold text-neutral-900 dark:text-white'
+                    shadowClass={`${accent.shadow} shadow-[0_0_18px_rgba(59,130,246,0.22)]`}
+                    paddingClass='px-4 py-2 text-sm font-semibold'
+                    accentDotClass={accent.dot}
+                    class='self-center whitespace-nowrap'
                   >
-                    <span class={`h-2.5 w-2.5 rounded-full ${accent.dot}`} />
                     {item}
-                  </span>
+                  </GlowPill>
                 ))}
               </div>
             </section>

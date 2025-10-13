@@ -1,6 +1,7 @@
 import type { JSX } from 'preact';
 
 import { SectionSurface } from '@o-industrial/atomic/atoms';
+import { MarketingHighlightCard } from '@o-industrial/atomic/molecules';
 import {
   CompositeSchemaIcon,
   SignalIcon,
@@ -50,20 +51,15 @@ export default function ValueDeliverySection(): JSX.Element {
           const Icon = cardIcons[index % cardIcons.length];
 
           return (
-            <article
+            <MarketingHighlightCard
               key={card.title}
-              class='group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 px-6 py-8 text-left shadow-[0_30px_120px_-70px_rgba(236,72,153,0.55)] backdrop-blur-md transition-transform duration-200 hover:-translate-y-1'
-            >
-              <div class='absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-neon-blue-500 via-neon-purple-500 to-neon-pink-500 opacity-70' />
-              <div class='mb-5 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-neon-blue-500/30 via-neon-purple-500/30 to-neon-pink-500/30 text-white shadow-[0_18px_42px_-20px_rgba(236,72,153,0.6)]'>
-                <Icon class='h-5 w-5' />
-              </div>
-              <h3 class='text-lg font-semibold text-white'>{card.title}</h3>
-              <p class='mt-3 text-sm font-semibold uppercase tracking-[0.18em] text-neon-purple-200'>
-                {card.prompt}
-              </p>
-              <p class='mt-3 text-sm text-white/70'>{card.body}</p>
-            </article>
+              variant='midnight'
+              accentGradient='from-neon-blue-500 via-neon-purple-500 to-neon-pink-500'
+              title={card.title}
+              prompt={card.prompt}
+              description={card.body}
+              icon={<Icon class='h-5 w-5' />}
+            />
           );
         })}
       </div>
