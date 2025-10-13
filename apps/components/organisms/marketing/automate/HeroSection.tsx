@@ -1,14 +1,20 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
-import { HubspotForm } from '../HubspotForm.tsx';
+import { HubspotForm } from '@o-industrial/atomic/organisms';
 import { getIntentStyles } from '@o-industrial/atomic/utils';
 import { FigureImage } from '@o-industrial/atomic/molecules';
 import { Action, ActionStyleTypes } from '@o-industrial/atomic/atoms';
+import { buildHubspotTrackingHandlers } from '../../../../../src/marketing/forms/hubspotTracking.ts';
 
 const HeroSection: FunctionalComponent = () => {
   const primary = getIntentStyles(IntentTypes.Primary);
 
   const info = getIntentStyles(IntentTypes.Info);
+  const hubspotFormId = 'bb2d84f4-0fc3-45df-8db3-ed0b2d14b717';
+  const hubspotTracking = buildHubspotTrackingHandlers({
+    location: 'automate:hero',
+    formId: hubspotFormId,
+  });
 
   return (
     <section
@@ -23,13 +29,13 @@ const HeroSection: FunctionalComponent = () => {
         <h1 class='text-4xl text-neutral-50 font-extrabold tracking-tight sm:text-6xl leading-tight'>
           Compose your intelligence. <br />
           <span class={info.text}>
-            Take back your stack — for the age of AI.
+            Take back your stack -- for the age of AI.
           </span>
         </h1>
 
         {/* Subheadline */}
         <p class='mt-6 text-lg leading-8 text-neutral-300 max-w-2xl mx-auto'>
-          Compose forkable logic, connect real-time telemetry, and evolve agents — all inside your
+          Compose forkable logic, connect real-time telemetry, and evolve agents -- all inside your
           own runtime.
         </p>
 
@@ -41,8 +47,8 @@ const HeroSection: FunctionalComponent = () => {
 
         {/* Azi Intro */}
         <p class='text-sm leading-6 text-neutral-400 max-w-md mx-auto italic'>
-          <strong class='text-white'>OpenIndustrial’s Azi™</strong>{' '}
-          isn’t just an agent — she’s a runtime-aware co-designer who helps you version logic,
+          <strong class='text-white'>OpenIndustrial's Azi</strong>{' '}
+          isn't just an agent -- she's a runtime-aware co-designer who helps you version logic,
           govern decisions, and evolve automation flows over time.
         </p>
 
@@ -65,7 +71,7 @@ const HeroSection: FunctionalComponent = () => {
           class={`max-w-xl mx-auto rounded-2xl border p-12 text-center shadow-lg ring-2 ring-inset ${primary.ring} ${primary.glow} bg-neutral-50 dark:bg-neutral-900 border-neutral-200 dark:border-neutral-50/10`}
         >
           <h2 class='text-xl sm:text-2xl font-bold text-neutral-900 dark:text-neutral-50 mb-4 max-w-md mx-auto'>
-            We’re Launching Soon. Want a First Look?
+            We're Launching Soon. Want a First Look?
           </h2>
           <p class='text-md text-neutral-600 dark:text-neutral-300 max-w-sm mx-auto mb-10'>
             Enter your email address to be the first to get access. For a demo, reach out to{' '}
@@ -83,7 +89,8 @@ const HeroSection: FunctionalComponent = () => {
             {/* <Action> buttons available if re-enabled later */}
             <HubspotForm
               id='hero-hubspot-form'
-              formId='bb2d84f4-0fc3-45df-8db3-ed0b2d14b717'
+              formId={hubspotFormId}
+              {...hubspotTracking}
             />
           </div>
         </div>

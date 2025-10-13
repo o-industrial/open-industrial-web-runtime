@@ -10,7 +10,7 @@ import AssetManagementIntegrationOverviewSection from '../../../components/organ
 import AssetManagementProblemSection from '../../../components/organisms/marketing/open-industrial/solutions/asset-management/AssetManagementProblemSection.tsx';
 import AssetManagementToggleSection from '../../../components/organisms/marketing/open-industrial/solutions/asset-management/AssetManagementToggleSection.tsx';
 import AssetManagementValueSection from '../../../components/organisms/marketing/open-industrial/solutions/asset-management/AssetManagementValueSection.tsx';
-import { MarketingPageFrame } from '../../../components/shared/MarketingPageFrame.tsx';
+import { MarketingPageFrame } from '@o-industrial/atomic/templates';
 
 export const IsIsland = true;
 
@@ -39,3 +39,4 @@ export default function AssetManagementPage({}: PageProps<AssetManagementPageDat
     </MarketingPageFrame>
   );
 }
+

@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 
 export default function UseCasesHeroSection(): JSX.Element {
   return (
@@ -13,9 +13,11 @@ export default function UseCasesHeroSection(): JSX.Element {
         </h1>
         <p class='text-base leading-relaxed text-white/75 sm:text-lg'>
           Dive into outcome-driven walkthroughs that pair real telemetry, warm queries, and demo
-          steps�so you can experience Open Industrial value in minutes.
+          steps -- so you can experience Open Industrial value in minutes.
         </p>
       </div>
     </MarketingSectionShell>
   );
 }
+
+

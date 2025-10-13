@@ -1,13 +1,19 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
-import { HubspotForm } from '../HubspotForm.tsx';
+import { HubspotForm } from '@o-industrial/atomic/organisms';
 import { getIntentStyles } from '@o-industrial/atomic/utils';
 import { FigureImage } from '@o-industrial/atomic/molecules';
 import { Action, ActionStyleTypes } from '@o-industrial/atomic/atoms';
+import { buildHubspotTrackingHandlers } from '../../../../../src/marketing/forms/hubspotTracking.ts';
 
 const HeroSection: FunctionalComponent = () => {
   const primary = getIntentStyles(IntentTypes.Primary);
   const info = getIntentStyles(IntentTypes.Info);
+  const hubspotFormId = 'bb2d84f4-0fc3-45df-8db3-ed0b2d14b717';
+  const hubspotTracking = buildHubspotTrackingHandlers({
+    location: 'pdm:hero',
+    formId: hubspotFormId,
+  });
 
   return (
     <section
@@ -28,14 +34,14 @@ const HeroSection: FunctionalComponent = () => {
 
         {/* Subheadline */}
         <p class='mt-6 text-lg leading-8 text-neutral-300 max-w-2xl mx-auto'>
-          Just like PDM versioned the design layer — Open Industrial governs the runtime. Reflex
+          Just like PDM versioned the design layer -- Open Industrial governs the runtime. Reflex
           logic. Forkable agents. Structured memory. All inside your own system.
         </p>
 
         <p class='text-sm leading-6 text-neutral-400 max-w-md mx-auto italic'>
           <strong class='text-white'>Azi</strong>{' '}
-          helps you scaffold logic, propose schema changes, and evolve your runtime — but when she
-          steps away, your system keeps running. That’s sovereignty.
+          helps you scaffold logic, propose schema changes, and evolve your runtime -- but when she
+          steps away, your system keeps running. That's sovereignty.
         </p>
 
         {/* Visual */}
@@ -74,7 +80,8 @@ const HeroSection: FunctionalComponent = () => {
           <div class='flex flex-col sm:flex-row justify-center gap-6'>
             <HubspotForm
               id='hero-hubspot-form'
-              formId='bb2d84f4-0fc3-45df-8db3-ed0b2d14b717'
+              formId={hubspotFormId}
+              {...hubspotTracking}
             />
           </div>
         </div>

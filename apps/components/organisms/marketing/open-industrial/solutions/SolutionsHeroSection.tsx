@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 
 export default function SolutionsHeroSection(): JSX.Element {
   return (
@@ -12,7 +12,7 @@ export default function SolutionsHeroSection(): JSX.Element {
           Match Open Industrial to your operations focus
         </h1>
         <p class='text-base leading-relaxed text-white/75 sm:text-lg'>
-          Start with the domain where you need governed insight most�then branch into the
+          Start with the domain where you need governed insight most -- then branch into the
           workflow-level use cases and demo paths that deliver value fastest.
         </p>
         <div class='flex flex-wrap items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.28em] text-white/60'>
@@ -37,3 +37,5 @@ export default function SolutionsHeroSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+
+

@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 import { assetManagementIntegrationSteps } from '../../../../../../../src/marketing/solutions/asset-management.ts';
 
 const stepAccentGradients = [
@@ -63,3 +63,5 @@ export default function AssetManagementIntegrationOverviewSection(): JSX.Element
     </MarketingSectionShell>
   );
 }
+
+

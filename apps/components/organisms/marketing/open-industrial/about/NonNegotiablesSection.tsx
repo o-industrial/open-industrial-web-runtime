@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 import { nonNegotiables } from '../../../../../../src/marketing/about.ts';
 
 export default function NonNegotiablesSection(): JSX.Element {
@@ -34,3 +34,5 @@ export default function NonNegotiablesSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+
+

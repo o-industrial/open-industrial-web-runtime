@@ -2,8 +2,8 @@ import { JSX } from 'preact';
 
 import { ToggleQueryCard } from '@o-industrial/atomic/molecules';
 
-import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 import { assetManagementToggleQueries } from '../../../../../../../src/marketing/solutions/asset-management.ts';
 
 export default function AssetManagementToggleSection(): JSX.Element {
@@ -39,3 +39,5 @@ export default function AssetManagementToggleSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+
+

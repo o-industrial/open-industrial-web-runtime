@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 
 import { Action, ActionStyleTypes } from '@o-industrial/atomic/atoms';
 
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 import { useCaseOverview } from '../../../../../../src/marketing/use-cases.ts';
 
 const cardGradients = [
@@ -78,3 +78,4 @@ export default function UseCasesListSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+

@@ -2,8 +2,8 @@ import { JSX } from 'preact';
 
 import { ToggleQueryCard } from '@o-industrial/atomic/molecules';
 
-import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 import { deviceIntegrationToggleQueries } from '../../../../../../../src/marketing/solutions/device-integration.ts';
 
 export default function DeviceIntegrationToggleSection(): JSX.Element {
@@ -39,3 +39,5 @@ export default function DeviceIntegrationToggleSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+
+

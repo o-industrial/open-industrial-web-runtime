@@ -1,10 +1,14 @@
 import { FunctionalComponent } from 'preact';
 import { IntentTypes } from '@o-industrial/common/types';
-import { HubspotForm } from '../HubspotForm.tsx';
+import { HubspotForm } from '@o-industrial/atomic/organisms';
 import { getIntentStyles } from '@o-industrial/atomic/utils';
+import { buildHubspotTrackingHandlers } from '../../../../../src/marketing/forms/hubspotTracking.ts';
 
 const CallToAction: FunctionalComponent = () => {
   const primary = getIntentStyles(IntentTypes.Primary);
+  const hubspotTracking = buildHubspotTrackingHandlers({
+    location: 'automate:cta',
+  });
 
   return (
     <section class='bg-neutral-100 dark:bg-neutral-950 py-32 px-6 lg:px-8'>
@@ -15,13 +19,16 @@ const CallToAction: FunctionalComponent = () => {
           Ready to compose your intelligence?
         </h2>
         <p class='text-lg text-neutral-600 dark:text-neutral-300 max-w-xl mx-auto mb-10'>
-          Azi helps you structure logic, deploy reflexes, and evolve agents — all inside your own
+          Azi helps you structure logic, deploy reflexes, and evolve agents -- all inside your own
           runtime.
         </p>
 
         <div class='flex flex-col sm:flex-row justify-center gap-6'>
           {/* <Action> buttons available if re-enabled later */}
-          <HubspotForm id='cta-hubspot-form' />
+          <HubspotForm
+            id='cta-hubspot-form'
+            {...hubspotTracking}
+          />
         </div>
       </div>
     </section>

@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 import { safetyComplianceTriggersProblem } from '../../../../../../../src/marketing/use-case/safety-compliance-triggers.ts';
 
 export default function SafetyComplianceTriggersProblemSection(): JSX.Element {
@@ -23,3 +23,5 @@ export default function SafetyComplianceTriggersProblemSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+
+

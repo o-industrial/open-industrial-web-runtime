@@ -8,7 +8,7 @@ import QualityManagementIntegrationOverviewSection from '../../../components/org
 import QualityManagementProblemSection from '../../../components/organisms/marketing/open-industrial/solutions/quality-management/QualityManagementProblemSection.tsx';
 import QualityManagementToggleSection from '../../../components/organisms/marketing/open-industrial/solutions/quality-management/QualityManagementToggleSection.tsx';
 import QualityManagementValueSection from '../../../components/organisms/marketing/open-industrial/solutions/quality-management/QualityManagementValueSection.tsx';
-import { MarketingPageFrame } from '../../../components/shared/MarketingPageFrame.tsx';
+import { MarketingPageFrame } from '@o-industrial/atomic/templates';
 import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
@@ -38,3 +38,4 @@ export default function QualityManagementPage({}: PageProps<QualityManagementPag
     </MarketingPageFrame>
   );
 }
+
