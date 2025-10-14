@@ -1,4 +1,4 @@
-﻿# Agents Guide - Web Runtime Apps
+# Agents Guide - Web Runtime Apps
 
 Directory-level guide for marketing-facing apps that remain in the Open Industrial web runtime. Workspace UX now lives in [open-industrial-workspace-runtime](../../open-industrial-workspace-runtime/apps/Agents.md).
 

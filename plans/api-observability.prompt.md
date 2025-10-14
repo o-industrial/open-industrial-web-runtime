@@ -1,19 +1,22 @@
 # API Velocity & Observability Landing Page Prompt
 
 ## Objective
+
 Deliver detailed landing-page copy and marketing collateral for the “API Velocity & Observability” campaign, strictly following `plans/api-observability.plan.md` and the liberty narrative in `plans/seed.md`.
 
 ## Pre-Work
+
 1. Review:
    - `plans/seed.md` (“APIs & Observability,” “Interfaces,” “Azi” sections).
    - `plans/api-observability.plan.md`.
    - `src/marketing/home.ts` (`homeContent.howItWorks`, `homeContent.whyOi`).
    - `src/marketing/solutions/device-integration.ts` (token scopes).
-   - Route target: build page at `apps/home/workspace-liberty/api-observability.tsx`.
+   - Route target: build page at `apps/home/liberty/api-observability.tsx`.
 2. Extract proof statements: 40% faster launch, “no approval chains, no gatekeepers,” warm/cold query definitions, Azi guidance examples.
 3. Note required assets: `/assets/docs/oi-apis.png`, `/assets/docs/oi-observability.png`, CLI snippet graphic, API reference pack PDF.
 
 ## Landing Page Deliverables
+
 Craft final copy for each section:
 
 1. **Hero Module**
@@ -51,6 +54,7 @@ Craft final copy for each section:
     - Table marking each checklist item (Complete/Pending/Owner).
 
 ## Marketing Deliverables
+
 Prepare copy/outlines for each channel noted in the plan:
 
 1. **LinkedIn Developer Post**
@@ -71,7 +75,9 @@ Prepare copy/outlines for each channel noted in the plan:
 Include UTMs, asset requirements, security/legal dependencies, and developer advocate coordination notes.
 
 ## Output Format
+
 Respond with numbered sections:
+
 1. **Landing Page Copy** (modules in sequence).
 2. **Asset & Proof Log**.
 3. **SEO & Analytics Plan**.

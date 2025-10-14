@@ -1,18 +1,21 @@
 # Simulation & Connections Landing Page Prompt
 
 ## Objective
+
 Generate the full landing page and marketing collateral for “Simulation & Connection Management – Day Zero Liberty,” guided by `plans/simulation-connections.plan.md` and the narrative in `plans/seed.md`.
 
 ## Prep Work
+
 1. Read:
    - `plans/seed.md` (focus on “Simulation & Connection Management,” “APIs & Observability,” InlineUXTip/SystemMindset statements).
    - `plans/simulation-connections.plan.md`.
    - `src/marketing/solutions/device-integration.ts` (provisioning, token scope).
    - `/apps/docs/meet-azi/spin-up-sim.mdx` for resource linkage.
-   - Route target: landing page file `apps/home/workspace-liberty/simulation-connections.tsx`.
+   - Route target: landing page file `apps/home/liberty/simulation-connections.tsx`.
 2. Collect metrics: “simulate 2,000 devices,” “$120K downtime saved,” protocol support list, Azi prompt examples, InlineUXTip “your system, your rules.”
 
 ## Landing Page Deliverables
+
 Create detailed copy for each section:
 
 1. **Hero Narrative**
@@ -44,6 +47,7 @@ Create detailed copy for each section:
     - Status table for each checklist item (Complete/Pending/Owner).
 
 ## Marketing Collateral Deliverables
+
 Draft or outline content for channels listed in the marketing plan:
 
 1. **LinkedIn Targeted Post**
@@ -64,7 +68,9 @@ Draft or outline content for channels listed in the marketing plan:
 Include UTMs, visual requests, asset deadlines, and community moderation notes (for Reddit/IoT forums).
 
 ## Output Expectations
+
 Respond with sections:
+
 1. **Landing Page Copy** (with subheadings per module).
 2. **Asset & Proof Log**.
 3. **SEO & Analytics Plan**.

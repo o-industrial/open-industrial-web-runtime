@@ -1,22 +1,25 @@
 # Governed Collaboration Landing Page Prompt
 
 ## Objective
+
 Develop full landing-page copy and campaign collateral for “Governed Collaboration,” guided by `plans/governed-collaboration.plan.md` and the source narrative in `plans/seed.md`.
 
 ## Preparation Steps
+
 1. Study:
    - `plans/seed.md` (focus on “Users & Teams,” “Azi,” “Conclusion”).
    - `plans/governed-collaboration.plan.md`.
    - `src/marketing/home.ts` (`homeContent.whyOi`, guardrails messaging).
    - `src/marketing/solutions/device-integration.ts` for token-scope and audit examples.
    - `src/marketing/solutions/quality-management.ts` for compliance stories.
-   - Routing target: new page lives at `apps/home/workspace-liberty/governed-collaboration.tsx`.
+   - Routing target: new page lives at `apps/home/liberty/governed-collaboration.tsx`.
 2. Capture quotes and phrases:
    - “Invite, assign, and empower—no gatekeepers required.”
    - Guardrail trio: “Governed from the Start / Explainable by Default / Instant Activation.”
    - AziInnerVoice cadence for governance scenario.
 
 ## Landing Page Deliverables
+
 Produce copy for every section in the plan, ensuring pain → liberty → solution structure.
 
 1. **Hero & Value Proposition**
@@ -53,6 +56,7 @@ Produce copy for every section in the plan, ensuring pain → liberty → soluti
     - Table showing Complete/Pending/Owner.
 
 ## Marketing Collateral Deliverables
+
 Following the Marketing Content Plan, draft first-pass copy or outlines for:
 
 1. **LinkedIn Executive Brief**
@@ -73,7 +77,9 @@ Following the Marketing Content Plan, draft first-pass copy or outlines for:
 Include recommended UTMs, design needs (role matrix graphic, checklist PDF), and any dependencies (legal review, compliance validation).
 
 ## Output Structure
+
 Respond with clearly labeled sections:
+
 1. **Landing Page Copy** (subsections per module).
 2. **Asset & Proof References** (visuals, citations).
 3. **SEO & Analytics Plan**.

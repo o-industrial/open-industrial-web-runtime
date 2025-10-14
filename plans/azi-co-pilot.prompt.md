@@ -1,19 +1,22 @@
 # Azi Co-Pilot Landing Page Prompt
 
 ## Objective
+
 Create landing-page copy and marketing collateral for the “Azi Co-Pilot” campaign, obeying `plans/azi-co-pilot.plan.md` and rooted in the liberty narrative from `plans/seed.md`.
 
 ## Preparation
+
 1. Read:
    - `plans/seed.md` (“Case Study,” “Azi,” “Conclusion” sections).
    - `plans/azi-co-pilot.plan.md`.
    - `src/marketing/home.ts` (`homeContent.azi`, `homeContent.howItWorks`, `homeContent.whyOi` guardrails).
    - `src/marketing/solutions/device-integration.ts` (governance references).
-   - Route target: implement at `apps/home/workspace-liberty/azi-co-pilot.tsx`.
+   - Route target: implement at `apps/home/liberty/azi-co-pilot.tsx`.
 2. Record key quotes/metrics: 30-minute deployment, AziInnerVoice lines, guardrail statements, ownership/l liberty phrasing.
 3. Confirm asset needs: Azi chat screenshot/gif, recommendation path diagram, FAQ copy.
 
 ## Landing Page Deliverables
+
 Produce finalized copy for:
 
 1. **Hero Statement**
@@ -47,6 +50,7 @@ Produce finalized copy for:
     - Table showing progress per checklist item (Complete/Pending/Owner).
 
 ## Marketing Collateral Deliverables
+
 Draft or outline content for:
 
 1. **LinkedIn Executive Video Script** (60-sec narrative, scenes, on-screen text).
@@ -60,7 +64,9 @@ Draft or outline content for:
 Include UTMs, testimonial needs, legal/privacy approvals, nurture automation requirements.
 
 ## Output Structure
+
 Respond with:
+
 1. **Landing Page Copy** (modules in order).
 2. **Asset & Proof Log**.
 3. **SEO & Analytics Plan**.

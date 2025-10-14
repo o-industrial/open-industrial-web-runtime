@@ -27,10 +27,10 @@ Industrial data once lived in silos—locked inside spreadsheets, black-box soft
 
 **Solutions:**
 
-* **Targeted Workspaces** — Partition by purpose: a plant, a product, a process.
-* **Multi-Source Inputs** — Connect databases, lakes, ingestion pipelines, and streams at will.
-* **Commit History & Rollback** — Trace every action, revert safely, and never lose ownership.
-* **Save → Commit → Deploy** — The loop that turns exploration into operation.
+- **Targeted Workspaces** — Partition by purpose: a plant, a product, a process.
+- **Multi-Source Inputs** — Connect databases, lakes, ingestion pipelines, and streams at will.
+- **Commit History & Rollback** — Trace every action, revert safely, and never lose ownership.
+- **Save → Commit → Deploy** — The loop that turns exploration into operation.
 
 <FigureImage src="/assets/docs/oi-workspaces.png" alt="Workspace overview." caption="Workspaces turned a two-week validation cycle into an afternoon—real ownership of iteration." intentType={IntentTypes.Info} glow shadow="2xl" />
 
@@ -52,10 +52,10 @@ OpenIndustrial’s security model enforces trust by invitation, not by bureaucra
 
 **Solutions:**
 
-* **Profile & Access Management** — Simple, auditable, unified identity.
-* **Invite-Only Membership** — Build teams by trust, not default permissions.
-* **Role-Based Controls** — Configure who authors, who reviews, and who deploys.
-* **Audit Trails** — Complete accountability by design.
+- **Profile & Access Management** — Simple, auditable, unified identity.
+- **Invite-Only Membership** — Build teams by trust, not default permissions.
+- **Role-Based Controls** — Configure who authors, who reviews, and who deploys.
+- **Audit Trails** — Complete accountability by design.
 
 <FigureImage src="/assets/docs/oi-teams.png" alt="Team permissions view." caption="Invite-only workspaces create true data sovereignty—no inherited risks, no arbitrary access." intentType={IntentTypes.Info} />
 
@@ -73,18 +73,18 @@ Most enterprise clouds keep you at arm’s length from your own infrastructure. 
 
 ### Design
 
-* **Infrastructure Definitions** — Author compute, storage, and network blueprints inline.
-* **Service Principals & Secrets** — Connect external systems securely without red tape.
+- **Infrastructure Definitions** — Author compute, storage, and network blueprints inline.
+- **Service Principals & Secrets** — Connect external systems securely without red tape.
 
 ### Deploy
 
-* **Provisioning & CI/CD** — Build and roll out pipelines on your own cadence.
-* **Templates & Geo-Regions** — Deploy across locations and reuse your architecture.
+- **Provisioning & CI/CD** — Build and roll out pipelines on your own cadence.
+- **Templates & Geo-Regions** — Deploy across locations and reuse your architecture.
 
 ### Observe
 
-* **Built-in Observability** — Link logs, traces, and telemetry to every component.
-* **Secret Vaults** — Manage credentials under your own authority.
+- **Built-in Observability** — Link logs, traces, and telemetry to every component.
+- **Secret Vaults** — Manage credentials under your own authority.
 
 <FigureImage src="/assets/docs/oi-cloud.png" alt="Cloud topology view." caption="From commit to deployment in hours, not weeks—your infrastructure, liberated." intentType={IntentTypes.Primary} glow />
 
@@ -100,10 +100,10 @@ OpenIndustrial gives teams the liberty to test before touching a live wire. Mode
 
 **Solutions:**
 
-* **Variable Definitions** — Define parameters, types, and ranges for clarity.
-* **Digital Twins** — Emulate devices for safe iteration.
-* **Protocols** — Standard HTTP, MQTT, AMQP for broad compatibility.
-* **Provisioning Service** — Scale connections without outside dependency.
+- **Variable Definitions** — Define parameters, types, and ranges for clarity.
+- **Digital Twins** — Emulate devices for safe iteration.
+- **Protocols** — Standard HTTP, MQTT, AMQP for broad compatibility.
+- **Provisioning Service** — Scale connections without outside dependency.
 
 <FigureImage src="/assets/docs/oi-connections.png" alt="Connection manager." caption="Teams identify errors before deployment—real liberty through foresight." intentType={IntentTypes.Info} />
 
@@ -117,11 +117,11 @@ OpenIndustrial gives teams the liberty to test before touching a live wire. Mode
 
 **Solutions:**
 
-* **Automation & CLI Tools** — Move from idea to deployment with one script.
-* **JWT Management** — Two-click token configuration with precise scoping.
-* **Warm Query APIs** — Real-time dashboards and alerts for live data.
-* **Cold Query APIs** — Historical analysis for ML and long-range insight.
-* **Auto-Generated Documentation** — Every endpoint includes curl and TypeScript examples.
+- **Automation & CLI Tools** — Move from idea to deployment with one script.
+- **JWT Management** — Two-click token configuration with precise scoping.
+- **Warm Query APIs** — Real-time dashboards and alerts for live data.
+- **Cold Query APIs** — Historical analysis for ML and long-range insight.
+- **Auto-Generated Documentation** — Every endpoint includes curl and TypeScript examples.
 
 <FigureImage src="/assets/docs/oi-apis.png" alt="API explorer." caption="Developers launch APIs 40% faster—no approval chains, no gatekeepers." intentType={IntentTypes.Info} />
 
@@ -133,9 +133,9 @@ OpenIndustrial gives teams the liberty to test before touching a live wire. Mode
 
 Data isn’t free until it’s visible and interactive. Interfaces make liberty tangible.
 
-* **Import Tools** — Bring in data from any format, no middleware.
-* **Visualization** — Craft dashboards that reflect your perspective.
-* **Scripting Console** — Build logic without layers of permission.
+- **Import Tools** — Bring in data from any format, no middleware.
+- **Visualization** — Craft dashboards that reflect your perspective.
+- **Scripting Console** — Build logic without layers of permission.
 
 <SystemMindset intentType={IntentTypes.Tertiary}>
   Every interface is an expression of liberty—the right to create, visualize, and iterate without interference.
@@ -153,10 +153,10 @@ Azi isn’t an overlord AI. She’s the co-author that reminds you: liberty stil
 
 **Capabilities:**
 
-* **Azi + Workspace** — Recommends optimal deployment paths.
-* **Azi + Data** — Suggests pipelines and explains schema trade-offs.
-* **Azi + Cloud** — Provisions or scales infra with your confirmation.
-* **Azi + Global** — Keeps every action visible, reversible, and accountable.
+- **Azi + Workspace** — Recommends optimal deployment paths.
+- **Azi + Data** — Suggests pipelines and explains schema trade-offs.
+- **Azi + Cloud** — Provisions or scales infra with your confirmation.
+- **Azi + Global** — Keeps every action visible, reversible, and accountable.
 
 <AziInnerVoice intentType={IntentTypes.Tertiary}>
   “Here are three deployment paths. The fastest saves time, the safest minimizes cost. Which liberty matters most today?”

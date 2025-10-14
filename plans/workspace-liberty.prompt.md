@@ -1,18 +1,23 @@
 # Workspace Liberty Landing Page Prompt
 
 ## Objective
+
 Produce comprehensive landing-page copy and supporting marketing deliverables for the “Workspace Liberty” campaign, using `plans/workspace-liberty.plan.md` as the execution checklist and `plans/seed.md` as the canonical narrative source.
 
 ## Preparation
+
 1. Open and study:
    - `plans/seed.md` (focus on “Case Study”, “Workspaces”, “The Road Ahead”, “Conclusion”).
-   - `plans/workspace-liberty.plan.md`.
-   - `src/marketing/home.ts` for existing messaging, especially `homeContent.howItWorks`, `homeContent.hero`, and `homeContent.unifiedHub`.
-   - `src/marketing/about.ts` for governance/credibility language.
-   - Routing target: implement page at `apps/home/workspace-liberty/index.tsx` with modular section components.
+
+- `plans/workspace-liberty.plan.md`.
+- `src/marketing/home.ts` for existing messaging, especially `homeContent.howItWorks`, `homeContent.hero`, and `homeContent.unifiedHub`.
+- `src/marketing/about.ts` for governance/credibility language.
+- Routing target: implement page at `apps/home/liberty/index.tsx` with modular section components.
+
 2. Capture key proof points (30-minute deployment, two-week → afternoon validation, governed APIs, Save→Commit→Deploy).
 
 ## Landing Page Deliverables
+
 Create copy for each module listed below. Mirror the structure from the plan and check off tasks as you finish.
 
 1. **Hero Module**
@@ -49,6 +54,7 @@ Create copy for each module listed below. Mirror the structure from the plan and
    - Provide status table (Complete / Pending / Owner) for each checklist item.
 
 ## Marketing Content Deliverables
+
 For each channel in the plan’s Marketing Content section, draft initial copy frameworks:
 
 1. **LinkedIn Thought Leadership Post**
@@ -69,7 +75,9 @@ For each channel in the plan’s Marketing Content section, draft initial copy f
 Provide recommended UTMs and asset dependencies (screenshots, animations) for marketing.
 
 ## Output Format
+
 Deliver a single response structured with clear headings:
+
 1. **Landing Page Copy** – include subheadings for each module.
 2. **SEO & Analytics** – consolidated section.
 3. **Production Checklist** – table with status.

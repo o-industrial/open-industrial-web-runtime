@@ -1,19 +1,22 @@
 # Cloud Sovereignty Landing Page Prompt
 
 ## Objective
+
 Author landing-page copy and marketing collateral for “Cloud Sovereignty,” following `plans/cloud-sovereignty.plan.md` and anchored in the liberty narrative from `plans/seed.md`.
 
 ## Prep Checklist
+
 1. Review:
    - `plans/seed.md` (“Cloud Environment: Design → Deploy → Observe”, “Case Study”, “The Road Ahead”).
    - `plans/cloud-sovereignty.plan.md`.
    - `src/marketing/home.ts` (`homeContent.cloud`, `homeContent.whyOi`).
    - `src/marketing/about.ts` (governance statements).
-   - Route target: implement landing page at `apps/home/workspace-liberty/cloud-sovereignty.tsx`.
+   - Route target: implement landing page at `apps/home/liberty/cloud-sovereignty.tsx`.
 2. Extract key proof points: 30-minute deployment, “your infrastructure, liberated”, deployment option definitions, guardrails.
 3. Note required visuals: `/assets/docs/oi-cloud.png`, deployment matrix graphic, pipeline animation.
 
 ## Landing Page Deliverables
+
 For each section below, draft finalized copy in liberty-centric tone:
 
 1. **Hero Module**
@@ -45,6 +48,7 @@ For each section below, draft finalized copy in liberty-centric tone:
     - Table marking Complete/Pending/Owner per item.
 
 ## Marketing Collateral Tasks
+
 Create first-draft content/outlines for:
 
 1. **LinkedIn Carousel**
@@ -65,7 +69,9 @@ Create first-draft content/outlines for:
 Include UTMs, proof requirements, and partnership approvals inside the marketing plan.
 
 ## Output Formatting
+
 Structure your response as:
+
 1. **Landing Page Copy** (sections in order).
 2. **Asset & Proof References**.
 3. **SEO & Analytics Plan**.
