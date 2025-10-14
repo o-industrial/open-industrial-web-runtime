@@ -1,8 +1,8 @@
 import { EaCRuntimeHandlerSet } from '@fathym/eac/runtime/pipelines';
+import { EaCApplicationsRuntimeContext } from '@fathym/eac-applications/runtime';
 import { loadJwtConfig } from '@fathym/common';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebState.ts';
-import { EaCApplicationsRuntimeContext } from 'jsr:@fathym/eac-applications/runtime';
 
 type DeleteWorkspaceReq = {
   WorkspaceLookup?: string;
@@ -25,7 +25,8 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
       ) {
         const form = await req.formData();
         lookup = (form.get('WorkspaceLookup') as string) ||
-          (form.get('Lookup') as string) || '';
+          (form.get('Lookup') as string) ||
+          '';
       } else {
         // Fallback attempts
         try {
@@ -34,16 +35,21 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
         } catch {
           const form = await req.formData();
           lookup = (form.get('WorkspaceLookup') as string) ||
-            (form.get('Lookup') as string) || '';
+            (form.get('Lookup') as string) ||
+            '';
         }
       }
 
-      if (!lookup) return new Response('Missing workspace lookup', { status: 400 });
+      if (!lookup) {
+        return new Response('Missing workspace lookup', { status: 400 });
+      }
 
       // Prevent deleting the active workspace
       const active = ctx.State.WorkspaceLookup;
       if (active && active === lookup) {
-        return new Response('Cannot delete the active workspace', { status: 400 });
+        return new Response('Cannot delete the active workspace', {
+          status: 400,
+        });
       }
 
       // Create a scoped JWT for the target workspace
@@ -53,7 +59,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
         WorkspaceLookup: lookup,
         EnterpriseLookup: lookup,
         AccessRights: appCtx.Runtime.AccessRights,
-      } as any);
+      });
 
       const oiApiRoot = Deno.env.get('OPEN_INDUSTRIAL_API_ROOT')!;
       const apiBaseUrl = new URL(oiApiRoot);
