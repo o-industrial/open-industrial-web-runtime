@@ -6,6 +6,7 @@ import WorkspaceLibertyCtaBand from '../../components/organisms/marketing/open-i
 import WorkspaceLibertyGovernedFlowSection from '../../components/organisms/marketing/open-industrial/workspace-liberty/GovernedFlowSection.tsx';
 import WorkspaceLibertyHeroSection from '../../components/organisms/marketing/open-industrial/workspace-liberty/HeroSection.tsx';
 import WorkspaceLibertyPersonaProofSection from '../../components/organisms/marketing/open-industrial/workspace-liberty/PersonaProofSection.tsx';
+import WorkspaceLibertyQuickWinsSection from '../../components/organisms/marketing/open-industrial/workspace-liberty/QuickWinsSection.tsx';
 import WorkspaceLibertyWorkspacesSection from '../../components/organisms/marketing/open-industrial/workspace-liberty/WorkspacesSection.tsx';
 import { MarketingPageFrame } from '@o-industrial/atomic/templates';
 import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
@@ -26,6 +27,8 @@ export default function WorkspaceLibertyPage({}: PageProps<WorkspaceLibertyPageD
       <WorkspaceLibertyCaseStudySection />
 
       <WorkspaceLibertyWorkspacesSection />
+
+      <WorkspaceLibertyQuickWinsSection />
 
       <WorkspaceLibertyGovernedFlowSection />
 

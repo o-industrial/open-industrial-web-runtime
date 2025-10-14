@@ -87,9 +87,9 @@
 
 ## Proof & Validation
 
-- [ ] Reference `homeContent.useCases.cards` for quick wins.
+- [x] Reference `homeContent.useCases.cards` for quick wins (WorkspaceLibertyQuickWinsSection + marketing content drafts).
 - [x] Pull regulated language from `src/marketing/about.ts` (“Governance by Design”).
-- [ ] Confirm stats (2-week → afternoon, 30-minute dashboard, 40% faster API) with product team.
+- [ ] Confirm stats (2-week + afternoon, 30-minute dashboard, 40% faster API) with product team (awaiting Product Analytics confirmation).
 
 ## SEO & Metadata
 
@@ -119,16 +119,16 @@
 
 ### Priority Channels
 
-- [ ] **LinkedIn Thought Leadership Post** – long-form post for data architects featuring the “data isn’t useful until it’s alive” story + link to landing page.
-- [ ] **LinkedIn Carousel** – visual walkthrough of Save → Commit → Deploy loop using workspace screenshots (`/assets/docs/oi-workspaces.png`).
-- [ ] **Google Search Ads** – craft headline/description pairs for keywords like “industrial workspace platform”, “governed data hub”, “OT data modernization”.
-- [ ] **Email Nurture (3-touch)** – sequence for webinar or ad leads (Intro story → Workflow deep dive → CTA reminder).
-- [ ] **Technical Blog Cross-Post** – repurpose landing content into a blog for `apps/blog` referencing InlineUXTip language.
-- [ ] **Short Demo Video Script** – 60–90 sec script showing workspace setup to deployment with liberty framing for YouTube/social.
-- [ ] **Retargeting Display Assets** – banner copy + CTA (“Author your own workspace”) for remarketing.
+- [x] **LinkedIn Thought Leadership Post** � draft captured in `plans/workspace-liberty.marketing-content.md`.
+- [x] **LinkedIn Carousel** � slide outline in `plans/workspace-liberty.marketing-content.md`.
+- [x] **Google Search Ads** � headline/description pairs in `plans/workspace-liberty.marketing-content.md`.
+- [x] **Email Nurture (3-touch)** � sequence notes in `plans/workspace-liberty.marketing-content.md`.
+- [x] **Technical Blog Cross-Post** � draft structure in `plans/workspace-liberty.marketing-content.md`.
+- [x] **Short Demo Video Script** � storyboard/script draft in `plans/workspace-liberty.marketing-content.md`.
+- [x] **Retargeting Display Assets** � copy + CTA grid in `plans/workspace-liberty.marketing-content.md`.
 
 ### Supporting Tasks
 
-- [ ] Gather KPI proof (2-week → afternoon) for all ad copy.
-- [ ] Create UTM plan per channel for reporting.
-- [ ] Coordinate with design on carousel + display creatives.
+- [ ] Gather KPI proof (2-week + afternoon) for all ad copy (requested from Product Analytics; pending data refresh).
+- [x] Create UTM plan per channel for reporting (documented in `plans/workspace-liberty.marketing-content.md`).
+- [ ] Coordinate with design on carousel + display creatives (handoff notes ready; schedule sync with Creative Studio).

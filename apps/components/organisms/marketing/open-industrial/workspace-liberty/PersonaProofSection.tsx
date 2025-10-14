@@ -24,7 +24,7 @@ export default function WorkspaceLibertyPersonaProofSection(): JSX.Element {
   const showToggle = personas.length > 1 && !!activePersona;
 
   if (!activePersona) {
-    return <></>;
+    return null;
   }
 
   return (

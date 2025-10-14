@@ -4,6 +4,7 @@ import type {
   MediaContent,
   QuoteItemContent,
 } from './content.ts';
+import { homeContent } from '../home.ts';
 
 type StatBadgeContent = {
   headline: string;
@@ -40,6 +41,20 @@ type WorkspacesModuleContent = {
   inlineTip: string;
   checklist: ChecklistItemContent[];
   media: MediaContent;
+};
+
+type QuickWinCardContent = {
+  title: string;
+  prompt: string;
+  description: string;
+};
+
+type QuickWinsModuleContent = {
+  eyebrow: string;
+  headline: string;
+  intro: string;
+  cards: QuickWinCardContent[];
+  cta: MarketingAction;
 };
 
 type FlowModuleContent = {
@@ -111,6 +126,7 @@ type WorkspaceLibertyContent = {
   hero: HeroModuleContent;
   caseStudy: CaseStudyModuleContent;
   workspaces: WorkspacesModuleContent;
+  quickWins: QuickWinsModuleContent;
   governedFlow: FlowModuleContent;
   personaProof: PersonaModuleContent;
   ctaBand: CtaBandContent;
@@ -119,6 +135,12 @@ type WorkspaceLibertyContent = {
   assets: AssetLog;
   productionChecklist: ProductionChecklistItem[];
 };
+
+const quickWinCards: QuickWinCardContent[] = homeContent.useCases.cards.map((card) => ({
+  title: card.title,
+  prompt: card.prompt,
+  description: card.body,
+}));
 
 const primaryCta: MarketingAction = {
   label: 'Get Started in the Evaluation Workspace',
@@ -209,6 +231,19 @@ export const workspaceLibertyContent: WorkspaceLibertyContent = {
       src: '/assets/docs/oi-workspaces.png',
       alt: 'Workspace overview showing Save, Commit, and Deploy controls.',
       caption: 'Liberty turns a two-week validation cycle into an afternoon.',
+    },
+  },
+  quickWins: {
+    eyebrow: 'Quick Wins',
+    headline: 'Prove Liberty in Days, Not Quarters.',
+    intro:
+      'Reuse guided evaluation workflows that bundle warmed queries and telemetry prompts so your team ships visible proof fast.',
+    cards: quickWinCards,
+    cta: {
+      ...primaryCta,
+      label: 'Launch a Quick Win Workspace',
+      href:
+        '/workspace?utm_source=workspace-liberty-landing&utm_medium=quick-wins&utm_campaign=workspace-liberty',
     },
   },
   governedFlow: {
