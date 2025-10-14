@@ -1,33 +1,33 @@
-# Agents Guide � Web Runtime Apps
+﻿# Agents Guide - Web Runtime Apps
 
 Directory-level guide for marketing-facing apps that remain in the Open Industrial web runtime. Workspace UX now lives in [open-industrial-workspace-runtime](../../open-industrial-workspace-runtime/apps/Agents.md).
 
 ## Scope
 
-- Public marketing, documentation, and blog applications under pps/*.
+- Public marketing, documentation, and blog applications under apps/*.
 - Shared runtime components, middleware, and assets consumed across those public apps.
 
 ## Project Map
 
-- home/ � marketing landing experiences. See [home guide](home/Agents.md).
-- docs/ � developer documentation and product learning paths. See [docs guide](docs/Agents.md).
-- log/ � editorial content hub powered by MDX. See [blog guide](blog/Agents.md).
-- db2c/ � Azure AD B2C templates for auth flows.
-- components/ � shared runtime-specific UI pieces.
-- ssets/ � static assets, marketing images, and diagrams; ensure licensing compliance.
-- ailwind/ � shared Tailwind template used during builds.
+- home/ - marketing landing experiences. See [home guide](home/Agents.md).
+- docs/ - developer documentation and product learning paths. See [docs guide](docs/Agents.md).
+- blog/ - editorial content hub powered by MDX. See [blog guide](blog/Agents.md).
+- adb2c/ - Azure AD B2C templates for auth flows.
+- components/ - shared runtime-specific UI pieces.
+- assets/ - static assets, marketing images, and diagrams; ensure licensing compliance.
+- tailwind/ - shared Tailwind template used during builds.
 
 ## Commands
 
-- deno task dev � launch dev server with watch mode.
-- deno task check � format check, lint, and type-check.
-- deno task test � run runtime test suite.
-- deno task build � production validation.
+- deno task dev - launch dev server with watch mode.
+- deno task check - format check, lint, and type-check.
+- deno task test - run runtime test suite.
+- deno task build - production validation.
 
 ## Patterns
 
 - _layout.tsx can provide marketing shells; _middleware.ts enforces auth when necessary (e.g., docs).
-- UI layers should rely on @o-industrial/common/* exports or pps/components/* to avoid duplication.
+- UI layers should rely on @o-industrial/common/* exports or apps/components/* to avoid duplication.
 - Route handlers use ctx.State.OIClient.* sparingly; most public pages remain static/MDX.
 
 ## Review & Test Checklist
@@ -40,12 +40,12 @@ Directory-level guide for marketing-facing apps that remain in the Open Industri
 ## Safety & Guardrails
 
 - No secrets committed; rely on env files ignored by git.
-- Optimize large assets before adding to ssets/.
-- Shared logic belongs in pps/components or the reference architecture.
+- Optimize large assets before adding to assets/.
+- Shared logic belongs in apps/components or the reference architecture.
 
 ## Ownership Signals
 
-- **Primary owner:** Web Platform Team � Mika Ito.
+- **Primary owner:** Web Platform Team - Mika Ito.
 - **Contact:** #open-industrial-web-runtime Slack channel.
 - **Escalation:** Runtime Architecture Guild (Jordan Blake).
 
