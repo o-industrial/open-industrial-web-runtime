@@ -8,7 +8,7 @@ import DeviceIntegrationOverviewSection from '../../../components/organisms/mark
 import DeviceIntegrationProblemSection from '../../../components/organisms/marketing/open-industrial/solutions/device-integration/DeviceIntegrationProblemSection.tsx';
 import DeviceIntegrationToggleSection from '../../../components/organisms/marketing/open-industrial/solutions/device-integration/DeviceIntegrationToggleSection.tsx';
 import DeviceIntegrationValueSection from '../../../components/organisms/marketing/open-industrial/solutions/device-integration/DeviceIntegrationValueSection.tsx';
-import { MarketingPageFrame } from '../../../components/shared/MarketingPageFrame.tsx';
+import { MarketingPageFrame } from '@o-industrial/atomic/templates';
 import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
@@ -38,3 +38,4 @@ export default function DeviceIntegrationPage({}: PageProps<DeviceIntegrationPag
     </MarketingPageFrame>
   );
 }
+

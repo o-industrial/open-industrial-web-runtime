@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 import { deviceIntegrationIntegrationSteps } from '../../../../../../../src/marketing/solutions/device-integration.ts';
 
 const stepAccentGradients = [
@@ -63,3 +63,5 @@ export default function DeviceIntegrationOverviewSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+
+

@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 import { visionCopy } from '../../../../../../src/marketing/about.ts';
 
 export default function VisionStatementSection(): JSX.Element {
@@ -19,3 +19,5 @@ export default function VisionStatementSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+
+

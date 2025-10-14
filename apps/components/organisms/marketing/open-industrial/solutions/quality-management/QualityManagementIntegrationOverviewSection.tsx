@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 import { qualityManagementIntegrationSteps } from '../../../../../../../src/marketing/solutions/quality-management.ts';
 
 const stepAccentGradients = [
@@ -63,3 +63,5 @@ export default function QualityManagementIntegrationOverviewSection(): JSX.Eleme
     </MarketingSectionShell>
   );
 }
+
+

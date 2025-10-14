@@ -12,7 +12,7 @@ import CloudOptionsSection from '../components/organisms/marketing/open-industri
 import FutureVisionSection from '../components/organisms/marketing/open-industrial/home/FutureVisionSection.tsx';
 import ReadyCTASection from '../components/organisms/marketing/open-industrial/home/ReadyCTASection.tsx';
 import WorksWithYourStackSection from '../components/organisms/marketing/open-industrial/home/WorksWithYourStackSection.tsx';
-import { MarketingPageFrame } from '../components/shared/MarketingPageFrame.tsx';
+import { MarketingPageFrame } from '@o-industrial/atomic/templates';
 
 import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
@@ -48,3 +48,4 @@ export default function HomePage({}: PageProps<HomepageData>) {
     </MarketingPageFrame>
   );
 }
+

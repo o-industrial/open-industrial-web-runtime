@@ -8,7 +8,7 @@ import SafetyComplianceTriggersIntegrationOverviewSection from '../../../compone
 import SafetyComplianceTriggersProblemSection from '../../../components/organisms/marketing/open-industrial/use-cases/safety-compliance-triggers/SafetyComplianceTriggersProblemSection.tsx';
 import SafetyComplianceTriggersToggleSection from '../../../components/organisms/marketing/open-industrial/use-cases/safety-compliance-triggers/SafetyComplianceTriggersToggleSection.tsx';
 import SafetyComplianceTriggersValueSection from '../../../components/organisms/marketing/open-industrial/use-cases/safety-compliance-triggers/SafetyComplianceTriggersValueSection.tsx';
-import { MarketingPageFrame } from '../../../components/shared/MarketingPageFrame.tsx';
+import { MarketingPageFrame } from '@o-industrial/atomic/templates';
 import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
@@ -43,3 +43,4 @@ export default function SafetyComplianceTriggersPage(
     </MarketingPageFrame>
   );
 }
+

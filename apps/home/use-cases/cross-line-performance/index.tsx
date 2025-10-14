@@ -8,7 +8,7 @@ import CrossLinePerformanceIntegrationOverviewSection from '../../../components/
 import CrossLinePerformanceProblemSection from '../../../components/organisms/marketing/open-industrial/use-cases/cross-line-performance/CrossLinePerformanceProblemSection.tsx';
 import CrossLinePerformanceToggleSection from '../../../components/organisms/marketing/open-industrial/use-cases/cross-line-performance/CrossLinePerformanceToggleSection.tsx';
 import CrossLinePerformanceValueSection from '../../../components/organisms/marketing/open-industrial/use-cases/cross-line-performance/CrossLinePerformanceValueSection.tsx';
-import { MarketingPageFrame } from '../../../components/shared/MarketingPageFrame.tsx';
+import { MarketingPageFrame } from '@o-industrial/atomic/templates';
 import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
@@ -41,3 +41,4 @@ export default function CrossLinePerformancePage({}: PageProps<CrossLinePerforma
     </MarketingPageFrame>
   );
 }
+

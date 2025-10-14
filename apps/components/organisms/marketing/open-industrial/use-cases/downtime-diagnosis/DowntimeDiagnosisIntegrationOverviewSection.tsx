@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 import { downtimeDiagnosisIntegrationSteps } from '../../../../../../../src/marketing/use-case/downtime-diagnosis.ts';
 
 const stepAccentGradients = [
@@ -53,3 +53,5 @@ export default function DowntimeDiagnosisIntegrationOverviewSection(): JSX.Eleme
     </MarketingSectionShell>
   );
 }
+
+

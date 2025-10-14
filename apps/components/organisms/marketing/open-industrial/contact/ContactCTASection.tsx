@@ -2,8 +2,8 @@ import { JSX } from 'preact';
 
 import { Action, ActionStyleTypes } from '@o-industrial/atomic/atoms';
 
-import { MarketingPreHeadline } from '../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 import { contactCTA } from '../../../../../../src/marketing/contact.ts';
 
 function mapIntent(intent?: 'primary' | 'secondary' | 'ghost'): ActionStyleTypes {
@@ -64,3 +64,5 @@ export default function ContactCTASection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+
+

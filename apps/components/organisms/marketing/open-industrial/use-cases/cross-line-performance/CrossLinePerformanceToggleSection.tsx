@@ -2,8 +2,8 @@ import { JSX } from 'preact';
 
 import { ToggleQueryCard } from '@o-industrial/atomic/molecules';
 
-import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 import { crossLinePerformanceToggleQueries } from '../../../../../../../src/marketing/use-case/cross-line-performance.ts';
 
 export default function CrossLinePerformanceToggleSection(): JSX.Element {
@@ -39,3 +39,5 @@ export default function CrossLinePerformanceToggleSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+
+

@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 import { qualityManagementProblem } from '../../../../../../../src/marketing/solutions/quality-management.ts';
 
 export default function QualityManagementProblemSection(): JSX.Element {
@@ -23,3 +23,5 @@ export default function QualityManagementProblemSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+
+

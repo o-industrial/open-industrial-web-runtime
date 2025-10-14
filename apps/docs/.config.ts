@@ -1,4 +1,4 @@
-import { DocsConfig } from 'jsr:@fathym/eac-applications@0.0.205/runtime/processors';
+import { DocsConfig } from 'jsr:@fathym/eac-applications@0.0.208/runtime/processors';
 
 /**
  * Asynchronously loads the documentation configuration.

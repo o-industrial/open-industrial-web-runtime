@@ -1,7 +1,7 @@
 import { JSX } from 'preact';
 
-import { MarketingPreHeadline } from '../../../../../shared/MarketingPreHeadline.tsx';
-import { MarketingSectionShell } from '../../../../../shared/MarketingSectionShell.tsx';
+import { MarketingPreHeadline } from '@o-industrial/atomic/atoms';
+import { MarketingSectionShell } from '@o-industrial/atomic/molecules';
 import { deviceIntegrationProblem } from '../../../../../../../src/marketing/solutions/device-integration.ts';
 
 export default function DeviceIntegrationProblemSection(): JSX.Element {
@@ -26,3 +26,5 @@ export default function DeviceIntegrationProblemSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
+
+
