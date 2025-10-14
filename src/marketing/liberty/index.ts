@@ -123,7 +123,7 @@ type WorkspaceLibertyContent = {
 const primaryCta: MarketingAction = {
   label: 'Get Started in the Evaluation Workspace',
   href:
-    '/liberty?utm_source=workspace-liberty-landing&utm_medium=hero-primary&utm_campaign=workspace-liberty',
+    '/workspace?utm_source=workspace-liberty-landing&utm_medium=hero-primary&utm_campaign=workspace-liberty',
   intent: 'primary',
 };
 
@@ -267,7 +267,7 @@ export const workspaceLibertyContent: WorkspaceLibertyContent = {
     primaryCta: {
       ...primaryCta,
       href:
-        '/liberty?utm_source=workspace-liberty-landing&utm_medium=cta-band-primary&utm_campaign=workspace-liberty',
+        '/workspace?utm_source=workspace-liberty-landing&utm_medium=cta-band-primary&utm_campaign=workspace-liberty',
     },
     secondaryCta: {
       ...secondaryCta,
