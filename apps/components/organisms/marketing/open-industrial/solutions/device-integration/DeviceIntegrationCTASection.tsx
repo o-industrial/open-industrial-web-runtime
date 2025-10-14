@@ -68,5 +68,3 @@ export default function DeviceIntegrationCTASection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

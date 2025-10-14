@@ -1,7 +1,4 @@
-import {
-  HubspotFormCreateEvent,
-  HubspotFormLifecycleEvent,
-} from '@o-industrial/atomic/organisms';
+import { HubspotFormCreateEvent, HubspotFormLifecycleEvent } from '@o-industrial/atomic/organisms';
 import { trackEvent } from '../../utils/analytics.ts';
 
 export const DEFAULT_HUBSPOT_PORTAL_ID = '2687377';
@@ -50,9 +47,7 @@ export function buildHubspotTrackingHandlers(
     onCreate: (event) => {
       const payload = {
         ...buildPayload(ctx, event),
-        region: typeof event.options?.region === 'string'
-          ? event.options.region
-          : undefined,
+        region: typeof event.options?.region === 'string' ? event.options.region : undefined,
       };
 
       trackEvent('hubspot.form.create', payload);

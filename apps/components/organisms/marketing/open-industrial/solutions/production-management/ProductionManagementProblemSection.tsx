@@ -23,5 +23,3 @@ export default function ProductionManagementProblemSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

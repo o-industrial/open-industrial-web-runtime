@@ -68,5 +68,3 @@ export default function DowntimeDiagnosisCTASection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

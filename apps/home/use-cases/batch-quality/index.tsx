@@ -41,4 +41,3 @@ export default function BatchQualityPage({}: PageProps<BatchQualityPageData>) {
     </MarketingPageFrame>
   );
 }
-

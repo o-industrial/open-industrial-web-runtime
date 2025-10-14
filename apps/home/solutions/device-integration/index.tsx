@@ -38,4 +38,3 @@ export default function DeviceIntegrationPage({}: PageProps<DeviceIntegrationPag
     </MarketingPageFrame>
   );
 }
-

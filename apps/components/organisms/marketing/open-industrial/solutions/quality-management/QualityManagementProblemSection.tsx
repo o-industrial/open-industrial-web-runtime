@@ -23,5 +23,3 @@ export default function QualityManagementProblemSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

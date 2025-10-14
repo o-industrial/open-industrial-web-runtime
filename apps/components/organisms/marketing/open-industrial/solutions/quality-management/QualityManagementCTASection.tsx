@@ -68,5 +68,3 @@ export default function QualityManagementCTASection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

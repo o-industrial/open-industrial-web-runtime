@@ -63,5 +63,3 @@ export default function ProductionManagementIntegrationOverviewSection(): JSX.El
     </MarketingSectionShell>
   );
 }
-
-

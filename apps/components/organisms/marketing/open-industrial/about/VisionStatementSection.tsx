@@ -19,5 +19,3 @@ export default function VisionStatementSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

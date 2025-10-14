@@ -39,5 +39,3 @@ export default function AssetManagementToggleSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

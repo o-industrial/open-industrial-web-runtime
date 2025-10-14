@@ -26,5 +26,3 @@ export default function AssetManagementProblemSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

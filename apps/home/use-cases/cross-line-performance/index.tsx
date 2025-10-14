@@ -41,4 +41,3 @@ export default function CrossLinePerformancePage({}: PageProps<CrossLinePerforma
     </MarketingPageFrame>
   );
 }
-

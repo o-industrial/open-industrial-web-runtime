@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-window
 export type AnalyticsPayload = Record<string, unknown>;
 
 declare global {
@@ -5,12 +6,18 @@ declare global {
     dataLayer?: unknown[];
     gtag?: (...args: unknown[]) => void;
     appInsights?: {
-      trackEvent?: (event: { name: string }, metrics?: Record<string, unknown>) => void;
+      trackEvent?: (
+        event: { name: string },
+        metrics?: Record<string, unknown>,
+      ) => void;
     };
   }
 }
 
-export function trackEvent(eventName: string, payload: AnalyticsPayload = {}): void {
+export function trackEvent(
+  eventName: string,
+  payload: AnalyticsPayload = {},
+): void {
   if (typeof window === 'undefined') {
     return;
   }

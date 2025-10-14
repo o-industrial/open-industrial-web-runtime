@@ -72,5 +72,3 @@ export default function SafetyComplianceTriggersCTASection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

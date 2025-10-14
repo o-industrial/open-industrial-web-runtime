@@ -19,5 +19,3 @@ export default function UseCasesHeroSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

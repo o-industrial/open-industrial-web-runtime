@@ -37,5 +37,3 @@ export default function SolutionsHeroSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

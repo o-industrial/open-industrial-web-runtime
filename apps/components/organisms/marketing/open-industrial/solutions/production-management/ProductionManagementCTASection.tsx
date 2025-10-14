@@ -68,5 +68,3 @@ export default function ProductionManagementCTASection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

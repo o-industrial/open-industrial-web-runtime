@@ -38,4 +38,3 @@ export default function QualityManagementPage({}: PageProps<QualityManagementPag
     </MarketingPageFrame>
   );
 }
-

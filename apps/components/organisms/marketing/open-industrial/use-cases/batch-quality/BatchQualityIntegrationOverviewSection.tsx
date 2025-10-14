@@ -62,5 +62,3 @@ export default function BatchQualityIntegrationOverviewSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

@@ -63,5 +63,3 @@ export default function DeviceIntegrationOverviewSection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

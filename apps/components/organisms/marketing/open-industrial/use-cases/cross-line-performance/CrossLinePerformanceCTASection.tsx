@@ -68,5 +68,3 @@ export default function CrossLinePerformanceCTASection(): JSX.Element {
     </MarketingSectionShell>
   );
 }
-
-

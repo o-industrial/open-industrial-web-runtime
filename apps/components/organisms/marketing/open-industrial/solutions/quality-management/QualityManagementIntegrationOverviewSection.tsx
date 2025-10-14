@@ -63,5 +63,3 @@ export default function QualityManagementIntegrationOverviewSection(): JSX.Eleme
     </MarketingSectionShell>
   );
 }
-
-
