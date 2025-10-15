@@ -84,4 +84,4 @@ Deliver a single response structured with clear headings:
 4. **Marketing Deliverables** – subsections per channel.
 5. **Open Questions / Dependencies** – list any follow-ups (design, compliance, stats validation).
 
-Ensure copy stays consistent with the liberty/ownership narrative from `plans/seed.md`, citing exact phrases where required. Mention any assumptions or decisions made. Do not execute implementation; provide ready-to-use copy and instructions.
+Ensure copy stays consistent with the liberty/ownership narrative from `plans/seed.md`, citing exact phrases where required. Mention any assumptions or decisions made. Do not execute implementation; provide ready-to-use copy and instructions. Reply with your execution plan for approval before proceeding and wait for explicit go-ahead.

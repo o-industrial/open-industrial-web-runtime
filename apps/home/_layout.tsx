@@ -5,6 +5,7 @@ import {
   ctaLinks as baseCtaLinks,
   footerPrimaryLinks,
   footerSecondaryLinks,
+  libertyPrimaryNavLink,
   marketingTagline,
   primaryNavLinks,
 } from '../../src/marketing/navigation.ts';
@@ -29,11 +30,21 @@ const renderFooterLink = (
   </a>
 );
 
-export default function HomeLayout({
-  Data: _Data,
-  Component,
-  Revision,
-}: PageProps) {
+export default function HomeLayout(props: PageProps) {
+  const { Data: _Data, Component, Revision } = props;
+  const url = (props as { url?: URL }).url;
+  const currentPath = url?.pathname ?? '/';
+  const normalizedPath = currentPath.replace(/\/+$/, '') || '/';
+  const showLibertyNav = normalizedPath === '/liberty' || normalizedPath.startsWith('/liberty/');
+
+  const navLinks: MarketingNavLink[] = showLibertyNav
+    ? [
+      primaryNavLinks[0],
+      libertyPrimaryNavLink,
+      ...primaryNavLinks.slice(1),
+    ]
+    : primaryNavLinks;
+
   return (
     <html>
       <head>
@@ -96,7 +107,7 @@ export default function HomeLayout({
 
               <div class='ml-auto flex flex-1 justify-end'>
                 <MarketingNavigationIsland
-                  links={primaryNavLinks}
+                  links={navLinks}
                   ctas={ctaLinks}
                   class='w-full justify-end'
                 />

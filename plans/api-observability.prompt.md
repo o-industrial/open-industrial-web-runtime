@@ -85,4 +85,4 @@ Respond with numbered sections:
 5. **Marketing Deliverables** (channel subsections).
 6. **Dependencies & Open Questions** (e.g., API reference pack status).
 
-Maintain developer-forward tone while reinforcing liberty and governance. Provide copy and instructions only; no implementation steps.
+Maintain developer-forward tone while reinforcing liberty and governance. Provide copy and instructions only; no implementation steps. Reply with your execution plan for approval before proceeding and wait for explicit go-ahead.

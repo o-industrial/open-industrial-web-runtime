@@ -87,4 +87,4 @@ Respond with clearly labeled sections:
 5. **Marketing Deliverables** (channel subsections).
 6. **Dependencies & Questions** (items needing follow-up).
 
-Maintain liberty-focused tone and compliance precision throughout. Do not execute publication—provide copy, outlines, and instructions ready for implementation.
+Maintain liberty-focused tone and compliance precision throughout. Do not execute publication—provide copy, outlines, and instructions ready for implementation. Reply with your execution plan for approval before proceeding and wait for explicit go-ahead.

@@ -79,4 +79,4 @@ Structure your response as:
 5. **Marketing Deliverables** (channel subsections).
 6. **Dependencies & Open Questions**.
 
-Maintain liberty/sovereignty language consistent with the seed document. Do not publish—deliver copy, scripts, outlines, and implementation guidance ready for execution.
+Maintain liberty/sovereignty language consistent with the seed document. Do not publish—deliver copy, scripts, outlines, and implementation guidance ready for execution. Reply with your execution plan for approval before proceeding and wait for explicit go-ahead.

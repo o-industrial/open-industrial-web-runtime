@@ -17,7 +17,7 @@
 
 ## Audience & Pain Landscape
 
-- [ ] Confirm target roles (VP Operations, Director of Quality, OT Security Lead).
+- [x] Confirm target roles (VP Operations, Director of Quality, OT Security Lead).
 - Pain points sourced from Liberty Edition “Users & Teams” section:
   - Engineers treated like outsiders by enterprise IAM.
   - Excessive access leading to compliance violations.
@@ -26,9 +26,9 @@
 
 ## Messaging Framework
 
-- [ ] Anchor story in “Collaboration Without Compromise”.
-- [ ] Reinforce liberty ≠ chaos; emphasize guardrails from `src/marketing/home.ts:241-274` and `about.ts:92-107`.
-- [ ] Introduce “Sovereign Teams” concept to differentiate from generic RBAC.
+- [x] Anchor story in “Collaboration Without Compromise”.
+- [x] Reinforce liberty ≠ chaos; emphasize guardrails from `src/marketing/home.ts:241-274` and `about.ts:92-107`.
+- [x] Introduce “Sovereign Teams” concept to differentiate from generic RBAC.
 
 ### Pillars
 
@@ -40,72 +40,72 @@
 
 ### 1. Hero & Value Proposition
 
-- [ ] Headline variant: “Governed Teams. Real Liberty.” (test).
-- [ ] Subhead referencing pain (“Stop treating engineers like intruders”).
-- [ ] CTA pairing (Review + Checklist).
-- [ ] Add compliance badge area (SOC-ready logging from `about.ts`).
+- [x] Headline variant: “Governed Teams. Real Liberty.” (test).
+- [x] Subhead referencing pain (“Stop treating engineers like intruders”).
+- [x] CTA pairing (Review + Checklist).
+- [x] Add compliance badge area (SOC-ready logging from `about.ts`).
 
 ### 2. Persona Snapshots
 
-- [ ] Three-card layout (Operations, Quality, Security).
-- [ ] Each card includes personal pain and liberty outcome.
-- [ ] Pull bullet examples from `solutions/quality-management.ts` (audit packages) and `device-integration.ts` (token scopes).
-- [ ] Quote the seed’s “Invite, assign, and empower—no gatekeepers required” line in intro copy.
+- [x] Three-card layout (Operations, Quality, Security).
+- [x] Each card includes personal pain and liberty outcome.
+- [x] Pull bullet examples from `solutions/quality-management.ts` (audit packages) and `device-integration.ts` (token scopes).
+- [x] Quote the seed’s “Invite, assign, and empower—no gatekeepers required” line in intro copy.
 
 ### 3. Governance Model Deep Dive
 
-- [ ] Diagram: Invite-only workspace → Roles → Action boundaries.
-- [ ] Copy modules:
+- [x] Diagram: Invite-only workspace → Roles → Action boundaries.
+- [x] Copy modules:
   - Profiles & Access Management.
   - Role-Based Controls (Viewer, Editor, Maintainer, Admin).
   - Audit Trails.
-- [ ] Link to documentation or upcoming doc page.
+- [x] Link to documentation or upcoming doc page.
 
 ### 4. Guardrails Stories
 
-- [ ] Include “Governed from the Start / Explainable by Default / Instant Activation” from `homeContent.whyOi.guardrails`.
-- [ ] Add compliance scenario (FDA audit, OSHA investigation).
-- [ ] Checklist of controls with status checkboxes for tracking.
+- [x] Include “Governed from the Start / Explainable by Default / Instant Activation” from `homeContent.whyOi.guardrails`.
+- [x] Add compliance scenario (FDA audit, OSHA investigation).
+- [x] Checklist of controls with status checkboxes for tracking.
 
 ### 5. Azi for Governance
 
-- [ ] Describe how Azi explains token decisions / role impacts (pull from Liberty Edition AI section).
-- [ ] Provide sample conversation (“Show contractor scope vs engineer” referencing `device-integration.ts` toggle queries).
-- [ ] Use AziInnerVoice tone from seed to illustrate opinionated but controlled guidance.
+- [x] Describe how Azi explains token decisions / role impacts (pull from Liberty Edition AI section).
+- [x] Provide sample conversation (“Show contractor scope vs engineer” referencing `device-integration.ts` toggle queries).
+- [x] Use AziInnerVoice tone from seed to illustrate opinionated but controlled guidance.
 
 ### 6. CTA Stack
 
-- [ ] Primary CTA: Governance Review (calendar integration).
-- [ ] Secondary CTA: Checklist download (gated PDF).
-- [ ] Add social proof: “Used by regulated manufacturers (Life Sciences, Energy)” referencing `about.ts` industries served.
+- [x] Primary CTA: Governance Review (calendar integration).
+- [x] Secondary CTA: Checklist download (gated PDF).
+- [x] Add social proof: “Used by regulated manufacturers (Life Sciences, Energy)” referencing `about.ts` industries served.
 
 ## Asset Requirements
 
-- [ ] Updated screenshot for `/assets/docs/oi-teams.png` with role matrix.
-- [ ] Flow diagram for invite-only onboarding.
-- [ ] PDF template for governance checklist.
+- [x] Updated screenshot for `/assets/docs/oi-teams.png` with role matrix.
+- [x] Flow diagram for invite-only onboarding.
+- [x] PDF template for governance checklist.
 
 ## Proof & Compliance
 
 - [ ] Align language with legal/compliance team.
-- [ ] Cite audit trail logging capabilities (tie to `solutions/device-integration.ts:69-74` outputs).
+- [x] Cite audit trail logging capabilities (tie to `solutions/device-integration.ts:69-74` outputs).
 - [ ] Add stat if available (e.g., “cut access review time by X%”).
 
 ## SEO & Metadata
 
-- [ ] Title: “Governed Collaboration | Secure Industrial Workspaces”.
-- [ ] Meta description emphasizing invite-only control and audit trails.
-- [ ] Keywords: “industrial RBAC”, “audit-ready workspaces”, “governed OT collaboration”.
+- [x] Title: “Governed Collaboration | Secure Industrial Workspaces”.
+- [x] Meta description emphasizing invite-only control and audit trails.
+- [x] Keywords: “industrial RBAC”, “audit-ready workspaces”, “governed OT collaboration”.
 
 ## Analytics & Testing
 
-- [ ] Track CTA clicks (review vs checklist).
-- [ ] Set up exit intent modal test offering checklist.
-- [ ] Monitor scroll depth to guardrail section.
+- [x] Track CTA clicks (review vs checklist).
+- [x] Set up exit intent modal test offering checklist.
+- [x] Monitor scroll depth to guardrail section.
 
 ## Production Checklist
 
-- [ ] Copy draft
+- [x] Copy draft
 - [ ] Compliance review
 - [ ] Visual approvals
 - [ ] Checklist asset uploaded
@@ -119,13 +119,13 @@
 
 ### Priority Channels
 
-- [ ] **LinkedIn Executive Brief** – post or newsletter targeting operations/compliance leaders highlighting “Invite, assign, and empower—no gatekeepers required”.
-- [ ] **LinkedIn Sponsored Video** – 45 sec explainer on invite-only security + audit trails.
-- [ ] **Industry Newsletter Feature** – article pitch for regulated manufacturing publications focusing on audit-readiness.
-- [ ] **Google Display Ads** – creatives emphasizing “audit-ready workspaces” with CTA to Governance Review.
-- [ ] **ABM Email Sequence (4-touch)** – persona-specific emails (Ops, Quality, Security, Exec) with case stories sourced from seed.
-- [ ] **Downloadable Governance Checklist Promotion** – landing CTA support post (blog snippet + social copy).
-- [ ] **Webinar Outline** – “Governance without gatekeepers” session content plan referencing Azi governance assistance.
+- [x] **LinkedIn Executive Brief** – post or newsletter targeting operations/compliance leaders highlighting “Invite, assign, and empower—no gatekeepers required”.
+- [x] **LinkedIn Sponsored Video** – 45 sec explainer on invite-only security + audit trails.
+- [x] **Industry Newsletter Feature** – article pitch for regulated manufacturing publications focusing on audit-readiness.
+- [x] **Google Display Ads** – creatives emphasizing “audit-ready workspaces” with CTA to Governance Review.
+- [x] **ABM Email Sequence (4-touch)** – persona-specific emails (Ops, Quality, Security, Exec) with case stories sourced from seed.
+- [x] **Downloadable Governance Checklist Promotion** – landing CTA support post (blog snippet + social copy).
+- [x] **Webinar Outline** – “Governance without gatekeepers” session content plan referencing Azi governance assistance.
 
 ### Supporting Tasks
 

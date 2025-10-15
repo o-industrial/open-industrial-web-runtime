@@ -9,6 +9,7 @@ import {
 
 import { solutionOverview } from '../../../src/marketing/solutions.ts';
 import { useCaseOverview } from '../../../src/marketing/use-cases.ts';
+import { libertyNavLinks } from '../../../src/marketing/navigation.ts';
 
 export const IsIsland = true;
 
@@ -42,6 +43,8 @@ const useCaseMenuItems = [
   })),
 ];
 
+const libertyMenuItems = libertyNavLinks;
+
 const solutionsGroup: MarketingNavMegaMenuGroup = {
   triggerHref: '/solutions',
   title: 'Solutions',
@@ -55,6 +58,12 @@ const useCasesGroup: MarketingNavMegaMenuGroup | null = useCaseMenuItems.length 
     items: useCaseMenuItems,
   }
   : null;
+
+const libertyGroup: MarketingNavMegaMenuGroup = {
+  triggerHref: '/liberty',
+  title: 'Liberty',
+  items: libertyMenuItems,
+};
 
 export default function MarketingNavigationIsland(
   props: MarketingNavigationProps,
@@ -82,6 +91,11 @@ export default function MarketingNavigationIsland(
       if (hrefs.has(normalizedUseCasesHref)) {
         groups.set(normalizedUseCasesHref, useCasesGroup);
       }
+    }
+
+    const normalizedLibertyHref = normalizeHref(libertyGroup.triggerHref);
+    if (hrefs.has(normalizedLibertyHref) && libertyGroup.items.length) {
+      groups.set(normalizedLibertyHref, libertyGroup);
     }
 
     return Array.from(groups.values());

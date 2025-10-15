@@ -20,6 +20,16 @@ export const ctaLinks: MarketingNavCTA[] = [
   },
 ];
 
+export const libertyPrimaryNavLink: MarketingNavLink = {
+  label: 'Liberty',
+  href: '/liberty',
+};
+
+export const libertyNavLinks: MarketingNavLink[] = [
+  { label: 'Overview', href: '/liberty' },
+  { label: 'Governed Collaboration', href: '/liberty/governed-collaboration' },
+];
+
 export const footerPrimaryLinks: MarketingNavLink[] = [
   { label: 'Solutions', href: '/solutions' },
   { label: 'Quality Mgmt', href: '/solutions/quality-management' },

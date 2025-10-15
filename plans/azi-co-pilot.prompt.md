@@ -74,4 +74,4 @@ Respond with:
 5. **Marketing Deliverables** (channel subsections).
 6. **Dependencies & Open Questions** (e.g., testimonial source, privacy review).
 
-Maintain the liberty/ownership tone while highlighting Azi’s opinionated transparency. Deliver copy, outlines, and instructions ready for execution—no implementation steps.
+Maintain the liberty/ownership tone while highlighting Azi’s opinionated transparency. Deliver copy, outlines, and instructions ready for execution—no implementation steps. Reply with your execution plan for approval before proceeding and wait for explicit go-ahead.

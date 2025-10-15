@@ -78,4 +78,4 @@ Respond with sections:
 5. **Marketing Deliverables** (channel-specific).
 6. **Dependencies & Open Questions** (toolkit asset readiness, metric validation, community approvals).
 
-Maintain liberty-focused tone and technical credibility throughout. Provide copy and instructions only—no implementation.
+Maintain liberty-focused tone and technical credibility throughout. Provide copy and instructions only—no implementation. Reply with your execution plan for approval before proceeding and wait for explicit go-ahead.

@@ -57,44 +57,44 @@ Use UTMs: `utm_source=google&utm_medium=display&utm_campaign=governed-collaborat
 
 ## ABM Email Sequence (4-touch)
 
-**Touch 1 — Operations Leader (Day 0)**
+**Touch 1 — Operations Leader (Day 0)**\
 
-- Subject: "Invite-only squads without IAM queues"
-- Preview: "Govern changeovers today and keep every action accountable."
-- CTA: Schedule a Governance Review (`utm_source=abm&utm_medium=email&utm_campaign=governed-collaboration&persona=operations`)
-- Highlights:
-  - Change orders cleared same day with invite-only workspaces.
-  - Azi compares contractor vs engineer scopes before approval.
+- Subject: "Invite-only squads without IAM queues"\
+- Preview: "Govern changeovers today and keep every action accountable."\
+- CTA: Schedule a Governance Review (`utm_source=abm&utm_medium=email&utm_campaign=governed-collaboration&persona=operations`)\
+- Highlights:\
+  - Change orders cleared same day with invite-only workspaces.\
+  - Azi compares contractor vs engineer scopes before approval.\
   - Audit packets assemble automatically for every deployment.
 
-**Touch 2 — Director of Quality (Day 4)**
+**Touch 2 — Director of Quality (Day 4)**\
 
-- Subject: "Warm queries ready for your next audit"
-- Preview: "Bundle CAPAs, deviations, and releases into explainable packets."
-- CTA: Download the Governance Checklist (`...&persona=quality`)
-- Highlights:
-  - Deterministic warm queries align MES, LIMS, and QMS context.
-  - Role matrix shows exactly who can touch release logic.
+- Subject: "Warm queries ready for your next audit"\
+- Preview: "Bundle CAPAs, deviations, and releases into explainable packets."\
+- CTA: Download the Governance Checklist (`...&persona=quality`)\
+- Highlights:\
+  - Deterministic warm queries align MES, LIMS, and QMS context.\
+  - Role matrix shows exactly who can touch release logic.\
   - Audit exports deliver in under ten minutes.
 
-**Touch 3 — OT Security Lead (Day 9)**
+**Touch 3 — OT Security Lead (Day 9)**\
 
-- Subject: "Flip access without touching admin creds"
-- Preview: "Token-scoped roles and Azi approvals keep contractors in check."
-- CTA: View Guardrail Stories (`...&persona=security`)
-- Highlights:
-  - Token templates prove least privilege in real time.
-  - Azi surfaces impact diffs before elevation.
+- Subject: "Flip access without touching admin creds"\
+- Preview: "Token-scoped roles and Azi approvals keep contractors in check."\
+- CTA: View Guardrail Stories (`...&persona=security`)\
+- Highlights:\
+  - Token templates prove least privilege in real time.\
+  - Azi surfaces impact diffs before elevation.\
   - Streaming policy logs feed your SIEM.
 
-**Touch 4 — Executive Sponsor (Day 16)**
+**Touch 4 — Executive Sponsor (Day 16)**\
 
-- Subject: "Governed collaboration is your fastest compliance win"
-- Preview: "See how regulated peers invite, assign, and empower without gatekeepers."
-- CTA: Register for Governance Webinar (`...&persona=executive`)
-- Highlights:
-  - Guardrails trio mapped to FDA and OSHA scenarios.
-  - Liberty narrative: own your logic, author your data, command your future.
+- Subject: "Governed collaboration is your fastest compliance win"\
+- Preview: "See how regulated peers invite, assign, and empower without gatekeepers."\
+- CTA: Register for Governance Webinar (`...&persona=executive`)\
+- Highlights:\
+  - Guardrails trio mapped to FDA and OSHA scenarios.\
+  - Liberty narrative: own your logic, author your data, command your future.\
   - Roadmap for scaling invite-only governance across sites.
 
 ## Checklist Promotion Copy
@@ -102,25 +102,25 @@ Use UTMs: `utm_source=google&utm_medium=display&utm_campaign=governed-collaborat
 **Blog Teaser (110 words)**\
 Governed collaboration means every invite, role, and deployment earns its place. We distilled the Guardrails Trio into a practical checklist that walks your teams from invite-only onboarding to automatic audit packets. See how Operations keeps contractors scoped, how Quality bundles deterministic warm queries, and how OT Security flips access without risky admin credentials. The download pairs with Azi prompts so approvals never become a black box. Claim the checklist, follow the runbook, and prove collaboration can stay fast, safe, and audit ready.
 
-**Social Captions**
+**Social Captions**\
 
-- LinkedIn: "Invite, assign, empower—no gatekeepers required. Grab the Governed Collaboration Checklist and see how Liberty stays audit ready. [Download](https://www.openindustrial.co/resources/governance-checklist?utm_source=linkedin&utm_medium=social&utm_campaign=governed-collaboration)"
+- LinkedIn: "Invite, assign, empower—no gatekeepers required. Grab the Governed Collaboration Checklist and see how Liberty stays audit ready. [Download](https://www.openindustrial.co/resources/governance-checklist?utm_source=linkedin&utm_medium=social&utm_campaign=governed-collaboration)"\
 - X/Twitter: "Governed collaboration = invite-only teams + token scopes + instant audit packets. Download the checklist. https://www.openindustrial.co/resources/governance-checklist?utm_source=twitter&utm_medium=social&utm_campaign=governed-collaboration"
 
 ## Webinar Outline
 
-- **Title:** Governance Without Gatekeepers: Invite-Only Collaboration for Regulated Operations
-- **Duration:** 45 minutes
-- **Agenda:**
-  1. Liberty Narrative (5 min) — Mika Ito anchors the pain vs liberty story.
-  2. Guardrails Trio Deep Dive (12 min) — Walk through operations, quality, and security scenarios.
-  3. Azi in the Loop (10 min) — Live demo toggling contractor scopes and exporting audit packets.
-  4. Customer Spotlight (10 min) — Midwest manufacturer shares access review turnaround.
-  5. Q&A + Next Steps (8 min) — Offer governance review and checklist download.
-- **Speaker Notes:**
-  - Highlight invite metadata (purpose, expiration, approver).
-  - Show deterministic warm query replay for auditors.
-  - Emphasize human approvals in Azi recommendations.
+- **Title:** Governance Without Gatekeepers: Invite-Only Collaboration for Regulated Operations\
+- **Duration:** 45 minutes\
+- **Agenda:**\
+  1. Liberty Narrative (5 min) — Mika Ito anchors the pain vs liberty story.\
+  2. Guardrails Trio Deep Dive (12 min) — Walk through operations, quality, and security scenarios.\
+  3. Azi in the Loop (10 min) — Live demo toggling contractor scopes and exporting audit packets.\
+  4. Customer Spotlight (10 min) — Midwest manufacturer shares access review turnaround.\
+  5. Q&A + Next Steps (8 min) — Offer governance review and checklist download.\
+- **Speaker Notes:**\
+  - Highlight invite metadata (purpose, expiration, approver).\
+  - Show deterministic warm query replay for auditors.\
+  - Emphasize human approvals in Azi recommendations.\
 - **CTA:** [Schedule a Governance Review](https://www.openindustrial.co/contact#form?utm_source=webinar&utm_medium=registration&utm_campaign=governed-collaboration)
 
 ## UTM Matrix (Reference)
