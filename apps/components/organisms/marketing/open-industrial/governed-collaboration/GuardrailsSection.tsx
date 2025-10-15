@@ -1,8 +1,19 @@
 import type { JSX } from 'preact';
 
-import { intentToGradient, SectionSurface } from '@o-industrial/atomic/atoms';
+import { SectionSurface } from '@o-industrial/atomic/atoms';
 
 import { governedCollaborationContent } from '../../../../../../src/marketing/liberty/governed-collaboration.ts';
+
+const INTENT_GRADIENTS: Record<string, string> = {
+  emerald:
+    'bg-gradient-to-br from-emerald-500/25 via-emerald-400/20 to-emerald-600/35 shadow-[0_28px_120px_-85px_rgba(16,185,129,0.55)]',
+  gold:
+    'bg-gradient-to-br from-amber-400/30 via-amber-300/20 to-amber-500/35 shadow-[0_28px_120px_-85px_rgba(251,191,36,0.6)]',
+  blue:
+    'bg-gradient-to-br from-sky-500/25 via-blue-500/20 to-indigo-600/35 shadow-[0_28px_120px_-85px_rgba(59,130,246,0.6)]',
+  rose:
+    'bg-gradient-to-br from-rose-500/25 via-pink-500/20 to-fuchsia-600/35 shadow-[0_28px_120px_-85px_rgba(236,72,153,0.6)]',
+};
 
 export default function GovernedCollaborationGuardrailsSection(): JSX.Element {
   const { headline, intro, stories, checklist } = governedCollaborationContent.guardrails;
@@ -68,7 +79,7 @@ export default function GovernedCollaborationGuardrailsSection(): JSX.Element {
         </div>
         <ul class='mt-6 grid gap-3 lg:grid-cols-2'>
           {checklist.map((item) => {
-            const gradient = item.intent ? intentToGradient[item.intent] : undefined;
+            const gradient = item.intent ? INTENT_GRADIENTS[item.intent] : undefined;
 
             return (
               <li

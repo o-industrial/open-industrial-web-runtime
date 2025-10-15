@@ -13,13 +13,18 @@ import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 
-type GovernedCollaborationPageData = Record<string, never>;
+type GovernedCollaborationPageData = {
+  ShouldShowLibertyNav: true;
+};
 
 export const handler: EaCRuntimeHandlerSet<
   OpenIndustrialWebState,
   GovernedCollaborationPageData
 > = {
-  GET: (_req, ctx) => ctx.Render({}),
+  GET: (_req, ctx) =>
+    ctx.Render({
+      ShouldShowLibertyNav: true,
+    }),
 };
 
 export default function GovernedCollaborationPage({}: PageProps<GovernedCollaborationPageData>) {

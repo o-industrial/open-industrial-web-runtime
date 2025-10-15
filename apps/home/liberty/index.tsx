@@ -13,10 +13,15 @@ import type { OpenIndustrialWebState } from '@o-industrial/common/runtimes';
 
 export const IsIsland = true;
 
-type WorkspaceLibertyPageData = Record<string, never>;
+type WorkspaceLibertyPageData = {
+  ShouldShowLibertyNav: true;
+};
 
 export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState, WorkspaceLibertyPageData> = {
-  GET: (_req, ctx) => ctx.Render({}),
+  GET: (_req, ctx) =>
+    ctx.Render({
+      ShouldShowLibertyNav: true,
+    }),
 };
 
 export default function WorkspaceLibertyPage({}: PageProps<WorkspaceLibertyPageData>) {

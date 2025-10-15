@@ -30,12 +30,14 @@ const renderFooterLink = (
   </a>
 );
 
+type HomeLayoutData = {
+  ShouldShowLibertyNav?: boolean;
+};
+
 export default function HomeLayout(props: PageProps) {
-  const { Data: _Data, Component, Revision } = props;
-  const url = (props as { url?: URL }).url;
-  const currentPath = url?.pathname ?? '/';
-  const normalizedPath = currentPath.replace(/\/+$/, '') || '/';
-  const showLibertyNav = normalizedPath === '/liberty' || normalizedPath.startsWith('/liberty/');
+  const { Data, Component, Revision } = props;
+
+  const showLibertyNav = Boolean((Data as HomeLayoutData | undefined)?.ShouldShowLibertyNav);
 
   const navLinks: MarketingNavLink[] = showLibertyNav
     ? [
