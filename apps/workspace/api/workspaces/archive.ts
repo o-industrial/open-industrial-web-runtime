@@ -4,7 +4,7 @@ import { loadJwtConfig } from '@fathym/common';
 import { OpenIndustrialAPIClient } from '@o-industrial/common/api';
 import { OpenIndustrialWebState } from '../../../../src/state/OpenIndustrialWebState.ts';
 
-type DeleteWorkspaceReq = {
+type ArchiveWorkspaceReq = {
   WorkspaceLookup?: string;
   Lookup?: string;
 };
@@ -17,7 +17,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
       let lookup = '';
 
       if (ct.includes('application/json')) {
-        const body = (await req.json()) as DeleteWorkspaceReq;
+        const body = (await req.json()) as ArchiveWorkspaceReq;
         lookup = body.WorkspaceLookup || body.Lookup || '';
       } else if (
         ct.includes('application/x-www-form-urlencoded') ||
@@ -30,7 +30,7 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
       } else {
         // Fallback attempts
         try {
-          const body = (await req.json()) as DeleteWorkspaceReq;
+          const body = (await req.json()) as ArchiveWorkspaceReq;
           lookup = body.WorkspaceLookup || body.Lookup || '';
         } catch {
           const form = await req.formData();
@@ -44,10 +44,10 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
         return new Response('Missing workspace lookup', { status: 400 });
       }
 
-      // Prevent deleting the active workspace
+      // Prevent archiving the active workspace
       const active = ctx.State.WorkspaceLookup;
       if (active && active === lookup) {
-        return new Response('Cannot delete the active workspace', {
+        return new Response('Cannot archive the active workspace', {
           status: 400,
         });
       }
@@ -66,13 +66,13 @@ export const handler: EaCRuntimeHandlerSet<OpenIndustrialWebState> = {
 
       const client = new OpenIndustrialAPIClient(apiBaseUrl, jwt);
 
-      // Archive (delete) the target workspace via API service
+      // Archive the target workspace via API service
       const status = await client.Workspaces.Archive();
 
       return Response.json(status);
     } catch (err) {
-      console.error('Failed to delete workspace:', err);
-      return new Response('Failed to delete workspace', { status: 500 });
+      console.error('Failed to archive workspace:', err);
+      return new Response('Failed to archive workspace', { status: 500 });
     }
   },
 };
